@@ -27,7 +27,7 @@ app.use((req, res, _next) => {
   res.status(404)
     .json({
       message: "404 error",
-      url: req.url
+      url: req.url,
     });
 });
 
