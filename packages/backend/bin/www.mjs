@@ -1,14 +1,15 @@
 #!/usr/bin/env node
+import './dotenv.mjs';
 
-const dotenv = require('dotenv');
-dotenv.config();
 /**
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('board-api-server:server');
-const http = require('http');
+import app from '../app.js';
+import http from 'http';
+
+import debug_constructor from 'debug';
+const debug = debug_constructor('joinify:server');
 
 /**
  * Get port from environment and store in Express.

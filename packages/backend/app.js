@@ -2,7 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import logger from "morgan";
 
-import indexRouter from "./routes/index";
+import indexRouter from "./routes/index.js";
 
 const app = express();
 
@@ -24,9 +24,11 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 
 app.use((req, res, _next) => {
-  console.log("404 error", req.url);
   res.status(404)
-    .json({ message: "404 error" });
+    .json({
+      message: "404 error",
+      url: req.url
+    });
 });
 
 // error handler
@@ -36,4 +38,4 @@ app.use((err, _req, res, _next) => {
     .json({ message: "error" });
 });
 
-module.exports = app;
+export default app;
