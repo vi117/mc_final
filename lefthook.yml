@@ -19,7 +19,7 @@ pre-commit:
     fmt:
       tags: frontend style
       glob: "*.{js,ts,jsx,tsx}"
-      run: npm run format {staged_files}
+      run: npm run format {staged_files} && git add {staged_files}
     frontend-eslint:
       root: packages/frontend
       glob: "*.{js,ts,jsx,tsx}"
