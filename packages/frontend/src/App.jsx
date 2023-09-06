@@ -1,12 +1,16 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./component/layout/Layout";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import HomePage from "./pages/home";
+
 const browserRouter = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { path: "/", element: <h1>Home</h1> },
+      { path: "/", element: <HomePage></HomePage> },
       /**
        * About Page
        */
