@@ -25,6 +25,8 @@
   ],
   "homepage": "https://github.com/vi117/mc_final#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
     "dprint": "^0.40.2",
     "lefthook": "^1.4.9"
   }
