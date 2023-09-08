@@ -1,6 +1,8 @@
 import { Button } from "react-bootstrap";
 import LogoSvg from "../Logo";
 import SearchBar from "../SearchBar";
+import { CgProfile } from "react-icons/cg";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 export function Header() {
   return (
@@ -15,15 +17,19 @@ export function Header() {
             viewBox="0 0 975 115"
           />
         </div>
-        <div className="user_edit">
-          <Button variant="outline-primary">Sign In/Up</Button>
+        <div className="">
+          <p
+            className="header_login_btn"
+          >
+            <CgProfile color="#555555" style={{ marginRight: "5px", width: "20px", height: "20px"}} />
+            로그인/회원가입
+          </p>
         </div>
       </div>
       <div className="header_nav_container">
         <div className="left">
           <div className="nav_item">
-            icon
-            {/* TODO(vi117): Hamburger icon 삽입  */}
+            <RxHamburgerMenu />
           </div>
           <div className="nav_item">
             홈
