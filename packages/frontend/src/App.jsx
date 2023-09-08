@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./component/layout/Layout";
+import FundingsDetail from "./pages/fundings/fundings_detail";
 
 const browserRouter = createBrowserRouter([
   {
@@ -63,7 +64,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글
        */
-      { path: "/fundings/:id", element: <h1>Fundings</h1> },
+      { path: "/fundings/:id", element: <FundingsDetail /> },
       /**
        * 펀딩 글 수정 및 삭제
        */
