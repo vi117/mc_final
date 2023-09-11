@@ -1,6 +1,13 @@
 import { verify } from "argon2";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import {
+  createTokenFromUser,
+  deleteAccessTokenFromCookie,
+  deleteRefreshTokenFromCookie,
+  setAccessTokenToCookie,
+  setRefreshTokenToCookie,
+} from "./jwt";
 import UserRepository from "./model";
 
 const router = Router();
@@ -15,6 +22,8 @@ router.post("/login", async (req, res) => {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: "비밀번호가 일치하지 않습니다." });
   }
   // TODO(vi117): jwt token 설정
+  setAccessTokenToCookie(res, createTokenFromUser(user, false));
+  setRefreshTokenToCookie(res, createTokenFromUser(user, true));
   return res.status(StatusCodes.OK).json({ message: "로그인 성공" });
 });
 
@@ -42,12 +51,13 @@ router.post("/signup", async (req, res) => {
     address,
     phone,
   });
-  return res.status(200).json({ message: "회원가입 성공", user_id });
+  return res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id });
 });
 
 router.get("/logout", (req, res) => {
-  // TODO(vi117): jwt token reset
-  return res.status(200).json({ message: "로그아웃 성공" });
+  deleteAccessTokenFromCookie(res);
+  deleteRefreshTokenFromCookie(res);
+  return res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
 });
 
 router.get("/:id", async (req, res) => {
