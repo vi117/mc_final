@@ -1,8 +1,10 @@
 import assert, { equal } from "node:assert";
 
 import { beginTransaction, disconnectDB } from "@/db/util";
-import { test } from "node:test";
+
+import { afterAll, beforeAll, describe, test } from "@jest/globals";
 import { agent } from "supertest";
+
 import app from "../../app";
 
 function testDBConnection(t: {
@@ -19,14 +21,19 @@ function testDBConnection(t: {
   });
 }
 
-test("login", {
-  timeout: 1000,
-}, async (t) => {
-  testDBConnection(t);
+testDBConnection({
+  before: (fn) => {
+    beforeAll(fn);
+  },
+  after: (fn) => {
+    afterAll(fn);
+  },
+});
 
+describe("login", () => {
   const fetcher = agent(app);
 
-  await t.test("login fail", async (_t) => {
+  test("login fail", async () => {
     const res = await fetcher.post("/api/users/login").send({
       email: "admin@gmail.com",
       password: "wrong_password",
@@ -34,7 +41,7 @@ test("login", {
     equal(res.status, 401);
   });
 
-  await t.test("login success", async (_t) => {
+  test("login success", async () => {
     const res = await fetcher.post("/api/users/login").send({
       email: "admin@gmail.com",
       password: "admin",
@@ -44,20 +51,16 @@ test("login", {
     assert(cookie.length >= 2);
   });
 
-  await t.test("logout", async (_t) => {
+  test("logout", async () => {
     const res = await fetcher.get("/api/users/logout");
     equal(res.status, 200);
   });
 });
 
-test("signup", {
-  timeout: 1000,
-}, async (t) => {
-  testDBConnection(t);
-
+describe("signup", () => {
   const fetcher = agent(app);
 
-  await t.test("signup fail: nickname already exists", async (_t) => {
+  test("signup fail: nickname already exists", async () => {
     const res = await fetcher.post("/api/users/signup").send({
       nickname: "admin",
       email: "test",

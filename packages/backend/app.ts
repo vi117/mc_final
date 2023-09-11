@@ -2,7 +2,7 @@ import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
 import logger from "morgan";
 
-import indexRouter from "./src/routes/index.js";
+import indexRouter from "./src/routes/index";
 
 const app = express();
 
@@ -10,6 +10,7 @@ const app = express();
 app.set("etag", false);
 
 app.use((req, res, next) => {
+  // TODO: add cors
   res.set("access-control-allow-origin", "*");
   res.set("access-control-allow-methods", "*");
   res.set("access-control-allow-headers", "*");

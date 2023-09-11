@@ -8,7 +8,7 @@ module.exports = {
     browser: true,
     node: true,
   },
-  ignorePatterns: [".eslintrc.cjs"],
+  ignorePatterns: [".eslintrc.cjs", "coverage/**"],
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
   settings: {},
   plugins: [],
