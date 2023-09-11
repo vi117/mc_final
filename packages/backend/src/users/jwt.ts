@@ -46,7 +46,7 @@ export function createToken(user: TokenInfo, refresh: boolean = false): string {
       nickname: user.nickname,
       is_admin: user.is_admin,
       email_approved: user.email_approved,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 2, // 2h
+      // exp: Math.floor(Date.now() / 1000) + 60 * 60 * 2, // 2h
     } as TokenInfo,
     process.env.JWT_SECRET as string,
     {

@@ -1,4 +1,4 @@
-import { DB, db } from "@/db/util";
+import { DB, getDB } from "@/db/util";
 import { hash as argon2_hash } from "argon2";
 import { Insertable, Kysely } from "kysely";
 import { UserDTO } from "./dto";
@@ -96,4 +96,7 @@ export class UserRepository {
   }
 }
 
-export default new UserRepository(db);
+export default function getUserRepository() {
+  const db = getDB();
+  return new UserRepository(db);
+}
