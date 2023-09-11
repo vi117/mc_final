@@ -5,7 +5,8 @@
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives --max-warnings 0",
     "start": "node -r @swc-node/register -r dotenv/config ./bin/www",
     "dev": "nodemon -r @swc-node/register --ext ts,js,mjs ./bin/www",
-    "generate-types": "kysely-codegen --out-file ./build/db.d.ts"
+    "generate-types": "kysely-codegen --out-file ./build/db.d.ts",
+    "check": "tsc --noEmit"
   },
   "devDependencies": {
     "@swc-node/register": "^1.6.7",
