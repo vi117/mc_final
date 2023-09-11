@@ -5,18 +5,21 @@
     border: 1px solid #ccc;
     padding: 0px 10px 0px 10px;
     display: flex;
+    align-items: center;
 }
 
 .search_bar{
     border: 0px;
     box-sizing: border-box;
     outline: none;
-    width: 200px;
+    min-width: 160px;
     font-size: 16px;
+    background: transparent;
 }
 
-.search_button {
-    margin-left: -40px;
+.search_bar_button {
+    /* margin-left: -40px; */
     border: 0px;
-    width: 40px;
+    width: 24px;
+    height: 24px;
 }

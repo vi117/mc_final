@@ -3,8 +3,8 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import FundingsDetail from "./pages/fundings/FundingsDetail";
 import HomePage from "./pages/home";
+import FundingsDetail from "./pages/fundings/FundingsDetail";
 
 const browserRouter = createBrowserRouter([
   {
