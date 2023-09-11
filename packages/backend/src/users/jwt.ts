@@ -1,6 +1,5 @@
 import debug_ns from "debug";
 import { NextFunction, Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { UserDTO } from "./dto";
 import "./type";
@@ -103,29 +102,31 @@ function getAccessTokenFrom(req: Request) {
 export function checkMiddleware(req: Request, res: Response, next: NextFunction) {
   const token = getAccessTokenFrom(req);
   if (!token) {
-    debug("no token");
-    return res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
+    req["user"] = null;
+    return next();
   }
-  let access_info = checkToken(token);
+
+  const access_info = checkToken(token);
   if (!access_info) {
     debug("access token is invalid");
+    const new_access_info = getFromRefreshToken();
+    if (new_access_info) {
+      req["user"] = new_access_info;
+    }
+  }
 
+  next();
+  function getFromRefreshToken() {
     const refresh_token = getRefreshTokenFromCookie(req);
-    if (!refresh_token) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
-    }
+    if (!refresh_token) return;
     const refresh_info = checkToken(refresh_token);
-    if (!refresh_info) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
-    }
-    // refresh access token from refresh token
+    if (!refresh_info) return;
     debug("refresh access token");
+    // refresh access token from refresh token
     const new_access_token = createToken(refresh_info, false);
     setAccessTokenToCookie(res, new_access_token);
-    access_info = { ...refresh_info };
+    return { ...refresh_info };
   }
-  req["user"] = access_info;
-  next();
 }
 
 export function setAccessTokenToCookie(res: Response, token: string) {

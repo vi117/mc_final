@@ -1,10 +1,9 @@
-import { AccessTokenInfo, RefreshTokenInfo } from "./jwt";
+import { TokenInfo } from "./jwt";
 
 declare global {
   namespace Express {
     export interface Request {
-      user: AccessTokenInfo;
-      refreshToken: RefreshTokenInfo;
+      user: TokenInfo | null;
     }
   }
 }
