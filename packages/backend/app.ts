@@ -13,7 +13,9 @@ app.use((req, res, next) => {
   // TODO: add cors
   res.set("access-control-allow-origin", "*");
   res.set("access-control-allow-methods", "*");
-  res.set("access-control-allow-headers", "*");
+  res.set("access-control-allow-headers", "content-type, authorization, *");
+  res.set("access-control-credentials", "true");
+
   next();
 });
 

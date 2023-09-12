@@ -1,7 +1,7 @@
 import debug_ns from "debug";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { UserDTO } from "./dto";
+import { UserObject } from "./model";
 import "./type";
 
 const debug = debug_ns("joinify:jwt");
@@ -30,7 +30,7 @@ export function isTokenInfo(obj: object | string): obj is TokenInfo {
     && typeof obj["nickname"] == "string";
 }
 
-export function createTokenFromUser(user: UserDTO, refresh: boolean = false): string {
+export function createTokenFromUser(user: UserObject, refresh: boolean = false): string {
   return createToken({
     id: user.id,
     nickname: user.nickname,

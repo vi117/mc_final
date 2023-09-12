@@ -30,26 +30,34 @@ export function getDB(): Kysely<DB> {
  * @example
  * ```ts
  * import { beginTransaction } from "./util";
- * const [trx, close] = await beginTransaction();
- * trx.execute();
+ * const close = await beginTransaction();;
  * close();
  * ```
  */
-export function beginTransaction(): Promise<() => void> {
+export function beginTransaction(): Promise<(_c: "rollback" | "commit") => void> {
   const original = getDB();
   const trx_builder = original.transaction();
-  let dispose_fn: () => void;
-  const close_promise = new Promise<void>((resolve, _reject) => {
+  let dispose_fn: (_c: "rollback" | "commit") => void;
+  const close_promise = new Promise<"rollback" | "commit">((resolve, _reject) => {
     dispose_fn = resolve;
   });
-  return new Promise((resolve, _reject) => {
+  return new Promise((resolve, reject) => {
     trx_builder.execute(async trx => {
       db = trx;
       resolve(dispose_fn);
       // transaction started
-      await close_promise;
-      // transaction closed
+      const b = await close_promise;
       db = original;
+      if (b === "rollback") {
+        throw new Error("rollback");
+      }
+      // transaction closed
+    }).catch((err) => {
+      if (err instanceof Error && err.message === "rollback") {
+        console.log("rollback");
+        return;
+      }
+      reject(err);
     });
   });
 }
