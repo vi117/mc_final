@@ -1,4 +1,5 @@
 import { getTransport } from "@/mail/service";
+import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
 import { Request, Response, Router } from "express";
@@ -17,7 +18,21 @@ const router = Router();
 
 export async function login(req: Request, res: Response): Promise<void> {
   const userRepository = getUserRepository();
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      email: { type: "string" },
+      password: { type: "string" },
+    },
+    required: ["email", "password"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다.", errors: ajv.errors });
+    return;
+  }
+
   const { email, password } = req.body;
+
   const user = await userRepository.findByEmail(email);
   if (!user) {
     res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
@@ -35,7 +50,21 @@ router.post("/login", RouterCatch(login));
 
 export async function signup(req: Request, res: Response): Promise<void> {
   const userRepository = getUserRepository();
-  // TODO: validate
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      nickname: { type: "string" },
+      email: { type: "string" },
+      password: { type: "string" },
+      address: { type: "string" },
+      phone: { type: "string" },
+    },
+    required: ["nickname", "email", "password", "address", "phone"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다.", errors: ajv.errors });
+    return;
+  }
   const {
     nickname,
     email,
@@ -44,6 +73,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     phone,
   } = req.body;
 
+  // TODO: transaction
   let user = await userRepository.findByEmail(email);
   if (user) {
     res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 유저입니다." });
@@ -62,6 +92,11 @@ export async function signup(req: Request, res: Response): Promise<void> {
     phone,
   });
 
+  if (!user_id) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "서버 에러" });
+    return;
+  }
+
   const verificationCode = getAuthCodeRepository().createVerificationCode(email);
   await getTransport().sendMail({
     // TODO: fix `from` 옵션
@@ -79,6 +114,18 @@ export async function signup(req: Request, res: Response): Promise<void> {
 router.post("/signup", RouterCatch(signup));
 
 export const verifyWithCode = async (req: Request, res: Response) => {
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      code: { type: "string" },
+    },
+    required: ["code"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다.", errors: ajv.errors });
+    return;
+  }
+
   const { code } = req.body;
   const email = getAuthCodeRepository().verify(code);
   if (email === null) {

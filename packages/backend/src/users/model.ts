@@ -103,10 +103,10 @@ export class UserRepository {
    * console.log(id);
    * ```
    */
-  async insert(user: Insertable<DB["users"]>): Promise<bigint> {
+  async insert(user: Insertable<DB["users"]>): Promise<bigint | undefined> {
     user.password = await argon2_hash(user.password);
     const ret = await this.db.insertInto("users").values(user).executeTakeFirst();
-    return ret.insertId as bigint;
+    return ret.insertId;
   }
 
   /**
