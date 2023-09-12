@@ -14,7 +14,7 @@ import {
   setAccessTokenToCookie,
   setRefreshTokenToCookie,
 } from "./jwt";
-import getUserRepository, { UserObject } from "./model";
+import getUserRepository from "./model";
 
 const router = Router();
 
@@ -74,18 +74,17 @@ export async function signup(req: Request, res: Response): Promise<void> {
     phone,
   } = req.body;
 
-  let user: UserObject | undefined = undefined;
-  const isError = await safeTransaction(async trx => {
+  const [isError, user, user_id] = await safeTransaction(async trx => {
     const userRepository = getUserRepository(trx);
-    user = await userRepository.findByEmail(email);
+    let user = await userRepository.findByEmail(email);
     if (!user) {
       res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 유저입니다." });
-      return true;
+      return [true, undefined, undefined];
     }
     user = await userRepository.findByNickname(nickname);
-    if (!user) {
+    if (user === undefined) {
       res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 닉네임입니다." });
-      return true;
+      return [true, undefined, undefined];
     }
     const user_id = await userRepository.insert({
       nickname,
@@ -94,15 +93,19 @@ export async function signup(req: Request, res: Response): Promise<void> {
       address,
       phone,
     });
-    if (!user_id) {
+    if (user_id === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "서버 에러" });
-      return true;
+      return [true, undefined, undefined];
     }
+    return [false, user, user_id];
   });
   if (isError) {
     return;
   }
-  assert(user, "unexpected error");
+
+  assert(user !== undefined, "unexpected error");
+  assert(user_id !== undefined, "unexpected error");
+
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
   res.status(StatusCodes.CREATED).json({ message: "회원가입 성공" });
@@ -118,7 +121,6 @@ export async function signup(req: Request, res: Response): Promise<void> {
     },
   });
   res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id: user_id.toString() });
-  return false;
 }
 router.post("/signup", RouterCatch(signup));
 
