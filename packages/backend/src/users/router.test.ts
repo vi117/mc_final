@@ -6,29 +6,19 @@ import { afterAll, beforeAll, describe, test } from "@jest/globals";
 import { agent } from "supertest";
 
 import app from "../../app";
+import getUserRepository from "./model";
 
-function testDBConnection(t: {
-  before: (_fn: () => void | Promise<void>) => void;
-  after: (_fn: () => void | Promise<void>) => void;
-}) {
-  let dispose_fn: () => void;
-  t.before(async () => {
+function testDBConnection() {
+  let dispose_fn: (_f: "rollback" | "commit") => void;
+  beforeAll(async () => {
     dispose_fn = await beginTransaction();
   });
-  t.after(async () => {
-    await dispose_fn();
+  afterAll(async () => {
+    await dispose_fn("rollback");
     disconnectDB();
   });
 }
-
-testDBConnection({
-  before: (fn) => {
-    beforeAll(fn);
-  },
-  after: (fn) => {
-    afterAll(fn);
-  },
-});
+testDBConnection();
 
 describe("login", () => {
   const fetcher = agent(app);
@@ -69,5 +59,17 @@ describe("signup", () => {
       phone: "test",
     });
     equal(res.status, 409);
+  });
+  test("signup success", async () => {
+    const res = await fetcher.post("/api/users/signup").send({
+      nickname: "test",
+      email: "test@example.com",
+      password: "test",
+      address: "test",
+      phone: "test",
+    });
+    equal(res.status, 200);
+    const user = await getUserRepository().findByEmail("test@example.com");
+    equal(user !== undefined, true);
   });
 });

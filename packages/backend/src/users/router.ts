@@ -1,6 +1,8 @@
+import { getTransport } from "@/mail/service";
 import { verify } from "argon2";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import getAuthCodeRepository from "./authCodeRepo";
 import {
   createTokenFromUser,
   deleteAccessTokenFromCookie,
@@ -32,6 +34,7 @@ router.post("/login", login);
 
 export async function signup(req: Request, res: Response): Promise<void> {
   const userRepository = getUserRepository();
+  // TODO: validate
   const {
     nickname,
     email,
@@ -57,11 +60,39 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
   });
-  // TODO: send verification email using SMTP
-  res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id });
+
+  const verificationCode = getAuthCodeRepository().createVerificationCode(email);
+  await getTransport().sendMail({
+    // TODO: fix `from` 옵션
+    from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
+    to: email,
+    subject: "회원가입 인증 코드",
+    text: `회원가입 인증 코드는 ${verificationCode} 입니다. 이 코드를 입력해주세요.`,
+    headers: {
+      "content-type": "text/plain",
+    },
+  });
+  res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id: user_id.toString() });
   return;
 }
 router.post("/signup", signup);
+
+export const verifyWithCode = async (req: Request, res: Response) => {
+  const { code } = req.body;
+  const email = getAuthCodeRepository().verify(code);
+  if (email === null) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: "인증 코드가 일치하지 않거나 만료 되었습니다." });
+  }
+  const userRepository = getUserRepository();
+  const updated = await userRepository.approveByEmail(email);
+  if (!updated) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "유저를 찾을 수 없습니다." });
+  }
+  res.status(StatusCodes.OK).json({ message: "인증 성공" });
+};
+router.post("/verify", verifyWithCode);
 
 export const logout = (req: Request, res: Response) => {
   deleteAccessTokenFromCookie(res);

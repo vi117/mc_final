@@ -94,6 +94,18 @@ export class UserRepository {
     const ret = await this.db.insertInto("users").values(user).executeTakeFirst();
     return ret.insertId as bigint;
   }
+
+  /**
+   * approve by email
+   * @param email
+   * @returns email exists
+   */
+  async approveByEmail(email: string): Promise<boolean> {
+    const ret = await this.db.updateTable("users")
+      .set({ email_approved: 1 })
+      .where("email", "=", email).executeTakeFirst();
+    return ret.numUpdatedRows === 1n;
+  }
 }
 
 export default function getUserRepository() {
