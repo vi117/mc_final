@@ -1,4 +1,5 @@
 import { getTransport } from "@/mail/service";
+import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -30,7 +31,7 @@ export async function login(req: Request, res: Response): Promise<void> {
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
   res.status(StatusCodes.OK).json({ message: "로그인 성공" });
 }
-router.post("/login", login);
+router.post("/login", RouterCatch(login));
 
 export async function signup(req: Request, res: Response): Promise<void> {
   const userRepository = getUserRepository();
@@ -75,24 +76,26 @@ export async function signup(req: Request, res: Response): Promise<void> {
   res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id: user_id.toString() });
   return;
 }
-router.post("/signup", signup);
+router.post("/signup", RouterCatch(signup));
 
 export const verifyWithCode = async (req: Request, res: Response) => {
   const { code } = req.body;
   const email = getAuthCodeRepository().verify(code);
   if (email === null) {
-    return res.status(StatusCodes.UNAUTHORIZED).json({ message: "인증 코드가 일치하지 않거나 만료 되었습니다." });
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "인증 코드가 일치하지 않거나 만료 되었습니다." });
+    return;
   }
   const userRepository = getUserRepository();
   const updated = await userRepository.approveByEmail(email);
   if (!updated) {
-    return res
+    res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: "유저를 찾을 수 없습니다." });
+    return;
   }
   res.status(StatusCodes.OK).json({ message: "인증 성공" });
 };
-router.post("/verify", verifyWithCode);
+router.post("/verify", RouterCatch(verifyWithCode));
 
 export const logout = (req: Request, res: Response) => {
   deleteAccessTokenFromCookie(res);
@@ -100,23 +103,27 @@ export const logout = (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
   return;
 };
-router.get("/logout", logout);
+
+router.get("/logout", RouterCatch(logout));
 
 export const queryById = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: "숫자가 아닌 id를 받을 수 없습니다" });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "숫자가 아닌 id를 받을 수 없습니다" });
+    return;
   }
   const userRepository = getUserRepository();
   const user = await userRepository.findById(id);
   if (!user) {
-    return res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
+    res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
+    return;
   }
-  return res.status(StatusCodes.OK).json({
+  res.status(StatusCodes.OK).json({
     ...user,
     password: null,
   });
+  return;
 };
-router.get("/:id", queryById);
+router.get("/:id", RouterCatch(queryById));
 
 export default router;
