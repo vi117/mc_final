@@ -49,7 +49,6 @@ export async function login(req: Request, res: Response): Promise<void> {
 router.post("/login", RouterCatch(login));
 
 export async function signup(req: Request, res: Response): Promise<void> {
-  const userRepository = getUserRepository();
   const v = ajv.validate({
     type: "object",
     properties: {
@@ -73,7 +72,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
     phone,
   } = req.body;
 
-  // TODO: transaction
+  // TODO: use transaction
+  const userRepository = getUserRepository();
   let user = await userRepository.findByEmail(email);
   if (user) {
     res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 유저입니다." });
