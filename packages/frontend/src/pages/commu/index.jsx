@@ -4,11 +4,25 @@ import Dropdown from "react-bootstrap/Dropdown";
 import CustomMenu from "./toggle/menu";
 import CustomToggle from "./toggle/toggle";
 import "./commu.css";
-import Pagination from "./pagination";
+import { useState } from "react";
+import sampledata from "./assets/sampledata";
+import Page from "./pagination";
 
 export function Community() {
+  const [state, setState] = useState({
+    data: sampledata,
+    limit: 10,
+    activePage: 1,
+  });
+
+  const handlePageChange = (pageNumber) => {
+    setState((prev) => ({ ...prev, activePage: pageNumber }));
+  };
+
   return (
     <>
+      <div className="App">
+      </div>
       <div class="list-wrap">
         <p style={{ fontSize: "24px", marginBottom: "0px" }}>금주의 베스트</p>
         <Carousel>
@@ -45,25 +59,27 @@ export function Community() {
         </Carousel>
 
         <div class="container">
-          <div class="panel-body">
-            <table class="table table-hover">
+          <div class="board">
+            <table className="board-table">
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>카테고리</th>
-                  <th>글 제목</th>
-                  <th>작성자</th>
-                  <th>조회수</th>
+                  <th scope="col" class="th-num">번호</th>
+                  <th scope="col" class="th-cat">카테고리</th>
+                  <th scope="col" class="th-title">제목</th>
+                  <th scope="col" class="th-author">글쓴이</th>
+                  <th scope="col" class="th-views">조회수</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <th>조류</th>
-                  <td>제목</td>
-                  <td>한윤희</td>
-                  <td>0</td>
-                </tr>
+                {state.data.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.category}</td>
+                    <td class="td-title">{item.title}</td>
+                    <td>{item.author}</td>
+                    <td>{item.views}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -99,8 +115,14 @@ export function Community() {
             </Dropdown>
           </div>
         </div>
-        <div class="pagenation">
-          <Pagination></Pagination>
+
+        <div class="pagination">
+          <Page
+            totalItems={state.data.length} // 총 항목 수
+            itemsPerPage={state.limit} // 페이지당 항목 수
+            activePage={state.activePage}
+            handlePageChange={handlePageChange}
+          />
         </div>
       </div>
     </>
