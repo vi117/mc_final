@@ -1,8 +1,7 @@
-import { Button } from "react-bootstrap";
-import LogoSvg from "../Logo";
-import SearchBar from "../SearchBar";
 import { CgProfile } from "react-icons/cg";
 import { RxHamburgerMenu } from "react-icons/rx";
+import LogoSvg from "../Logo";
+import SearchBar from "../SearchBar";
 
 export function Header() {
   return (
@@ -18,10 +17,8 @@ export function Header() {
           />
         </div>
         <div className="">
-          <p
-            className="header_login_btn"
-          >
-            <CgProfile color="#555555" style={{ marginRight: "5px", width: "20px", height: "20px"}} />
+          <p className="header_login_btn">
+            <CgProfile color="#555555" style={{ marginRight: "5px", width: "20px", height: "20px" }} />
             로그인/회원가입
           </p>
         </div>

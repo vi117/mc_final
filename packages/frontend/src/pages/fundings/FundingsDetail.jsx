@@ -1,39 +1,93 @@
-import { Button, Container, ListGroup } from "react-bootstrap";
+import { Button, ButtonGroup, Carousel, Container, Dropdown, DropdownButton, ListGroup } from "react-bootstrap";
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
+import "./FundingsDetail.css";
+
+const placeholder = "https://via.placeholder.com/850x375";
 
 const FundingsDetail = function() {
-  // const customButtonStyle = { // 을 컨셉색깔로 바꾸려고 해봤는데 실패
-  //   backgroundColor: '#00917C' , // 원하는 색상
-  //   color: 'white' // 텍스트 색상
-  // };
-
   return (
-    <Container style={{ border: "1px solid red" }}>
+    <Container style={{ "padding-top": "20px" }}>
+      <div className="sujung">
+        <Button variant="success">수정</Button>
+      </div>
       <Row>
-        펀딩 제목
+        <Col sm={8} className="fundingName">
+          <h1>펀딩 제목</h1>
+        </Col>
+
+        <Col className="tags">
+          <div>#태그1 #태그2...</div>
+        </Col>
       </Row>
 
       <Row>
-        <Col xs={6} md={4}>
-          썸네일
+        <Col sm={8}>
+          <Carousel slide={false}>
+            <Carousel.Item>
+              <img src={placeholder} text="First slide" />
+              <Carousel.Caption>
+                <h3>썸네일 Carousel or 사진한장</h3>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item>
+              <img src={placeholder} text="Second slide" />
+              <Carousel.Caption>
+                <h3>썸네일 Carousel or 사진한장</h3>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item>
+              <img src={placeholder} text="Third slide" />
+              <Carousel.Caption>
+                <h3>Third slide label</h3>
+              </Carousel.Caption>
+            </Carousel.Item>
+          </Carousel>
         </Col>
-        <Col xs={6} md={4}>
-          <Row>개설기간, 달성도(후원자 명수)</Row>
-          <Row>펀딩 창작자 소개</Row>
+
+        <Col sm={4}>
           <Row>
-            <Col>SNS 공유</Col>
-            <Col>관심 설정</Col>
+            <div></div>개설기간, 달성도(후원자 명수)
+          </Row>
+          <Row>
+            <div></div>펀딩 창작자 소개
+          </Row>
+          <Row style={{ "padding": "10px 0px 10px 0px" }}>
+            <Col className="sns">
+              <ButtonGroup vertical>
+                <DropdownButton
+                  as={ButtonGroup}
+                  title="공유하기💌"
+                  id="bg-vertical-dropdown-1"
+                >
+                  <Dropdown.Item eventKey="1">인스타</Dropdown.Item>
+                  <Dropdown.Item eventKey="2">네이버블로그</Dropdown.Item>
+                  <Dropdown.Item eventKey="3">트위터X</Dropdown.Item>
+                  <Dropdown.Item eventKey="4">페이스북</Dropdown.Item>
+                  <Dropdown.Item eventKey="5">링크</Dropdown.Item>
+                </DropdownButton>
+              </ButtonGroup>
+              {
+                /* <Button variant="light">인</Button>
+                <Button variant="light">트</Button>
+                <Button variant="light">페</Button>
+                <Button variant="light">링</Button> */
+              }
+            </Col>
+            <Col className="wishList">
+              <Button variant="outline-dark">관심설정⭐</Button>
+            </Col>
           </Row>
         </Col>
       </Row>
 
       <Row>
-        <Col xs={6} md={4}>
+        <Col sm={8}>
+          <div></div>
           상세페이지
         </Col>
-        <Col xs={6} md={4}>
-          <Row>
+        <Col sm={4}>
+          <Row className="rewardList">
             <ListGroup>
               <ListGroup.Item action variant="success">
                 리워드제품1<br />
@@ -66,14 +120,22 @@ const FundingsDetail = function() {
             </ListGroup>
           </Row>
 
-          <Row>
-            <Button variant="success">참가버튼</Button>
+          <Row className="joinBtn">
+            <Button variant="success">참가</Button>
           </Row>
         </Col>
       </Row>
 
       <Row>
-        비슷한 토픽의 펀딩
+        <Col>
+          <div></div>비슷한 토픽의 펀딩1
+        </Col>
+        <Col>
+          <div></div>비슷한 토픽의 펀딩2
+        </Col>
+        <Col>
+          <div></div>비슷한 토픽의 펀딩3
+        </Col>
       </Row>
     </Container>
   );
