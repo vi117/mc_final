@@ -25,6 +25,20 @@ export function getDB(): Kysely<DB> {
 }
 
 /**
+ * Executes a transaction in a safe manner.
+ *
+ * @param {Function} fn - The function to be executed within the transaction.
+ * @returns {Promise<T>} return - The result of executing the function within the transaction.
+ */
+export async function safeTransaction<T>(fn: (_trx: Kysely<DB>) => Promise<T>): Promise<T> {
+  const db = getDB();
+  if (db.isTransaction) {
+    return await fn(db);
+  }
+  return await getDB().transaction().execute(fn);
+}
+
+/**
  * Starts a transaction.
  * It is for unit testing.
  * @example
