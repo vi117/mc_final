@@ -99,7 +99,6 @@ export async function signup(req: Request, res: Response): Promise<void> {
 
   const verificationCode = getAuthCodeRepository().createVerificationCode(email);
   await getTransport().sendMail({
-    // TODO: fix `from` 옵션
     from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
     to: email,
     subject: "회원가입 인증 코드",
