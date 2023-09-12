@@ -27,5 +27,8 @@
   "devDependencies": {
     "dprint": "^0.40.2",
     "lefthook": "^1.4.9"
+  },
+  "dependencies": {
+    "firebase": "^10.3.1"
   }
 }
