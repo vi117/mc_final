@@ -1,7 +1,9 @@
+import { safeTransaction } from "@/db/util";
 import { getTransport } from "@/mail/service";
 import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
+import assert from "assert";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import getAuthCodeRepository from "./authCodeRepo";
@@ -12,7 +14,7 @@ import {
   setAccessTokenToCookie,
   setRefreshTokenToCookie,
 } from "./jwt";
-import getUserRepository from "./model";
+import getUserRepository, { UserObject } from "./model";
 
 const router = Router();
 
@@ -72,30 +74,38 @@ export async function signup(req: Request, res: Response): Promise<void> {
     phone,
   } = req.body;
 
-  // TODO: use transaction
-  const userRepository = getUserRepository();
-  let user = await userRepository.findByEmail(email);
-  if (user) {
-    res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 유저입니다." });
-    return;
-  }
-  user = await userRepository.findByNickname(nickname);
-  if (user) {
-    res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 닉네임입니다." });
-    return;
-  }
-  const user_id = await userRepository.insert({
-    nickname,
-    email,
-    password,
-    address,
-    phone,
+  let user: UserObject | undefined = undefined;
+  const isError = await safeTransaction(async trx => {
+    const userRepository = getUserRepository(trx);
+    user = await userRepository.findByEmail(email);
+    if (!user) {
+      res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 유저입니다." });
+      return true;
+    }
+    user = await userRepository.findByNickname(nickname);
+    if (!user) {
+      res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 닉네임입니다." });
+      return true;
+    }
+    const user_id = await userRepository.insert({
+      nickname,
+      email,
+      password,
+      address,
+      phone,
+    });
+    if (!user_id) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "서버 에러" });
+      return true;
+    }
   });
-
-  if (!user_id) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "서버 에러" });
+  if (isError) {
     return;
   }
+  assert(user, "unexpected error");
+  setAccessTokenToCookie(res, createTokenFromUser(user, false));
+  setRefreshTokenToCookie(res, createTokenFromUser(user, true));
+  res.status(StatusCodes.CREATED).json({ message: "회원가입 성공" });
 
   const verificationCode = getAuthCodeRepository().createVerificationCode(email);
   await getTransport().sendMail({
@@ -108,7 +118,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     },
   });
   res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id: user_id.toString() });
-  return;
+  return false;
 }
 router.post("/signup", RouterCatch(signup));
 
