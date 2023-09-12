@@ -1,7 +1,6 @@
 import { DB, getDB } from "@/db/util";
 import { hash as argon2_hash } from "argon2";
 import { Insertable, Kysely } from "kysely";
-import { UserDTO } from "./dto";
 
 export interface FindAllUsersOptions {
   /**
@@ -16,6 +15,21 @@ export interface FindAllUsersOptions {
   offset?: number;
 }
 
+export interface UserObject {
+  id: number;
+  nickname: string;
+  profile_image: string | null;
+  email: string;
+  email_approved: number;
+  is_admin: number;
+  phone: string;
+  address: string;
+  password: string;
+  introduction: string | null;
+  created_at: Date;
+  deleted_at: Date | null;
+}
+
 export class UserRepository {
   db: Kysely<DB>;
   constructor(db: Kysely<DB>) {
@@ -26,7 +40,7 @@ export class UserRepository {
    * find all
    * @returns all users
    */
-  async findAll(options?: FindAllUsersOptions): Promise<UserDTO[]> {
+  async findAll(options?: FindAllUsersOptions): Promise<UserObject[]> {
     options = options ?? {};
     const limit = options.limit ?? 50;
     const offset = options.offset ?? 0;
@@ -39,7 +53,7 @@ export class UserRepository {
    * @param id id of user
    * @returns found user
    */
-  async findById(id: number): Promise<UserDTO | undefined> {
+  async findById(id: number): Promise<UserObject | undefined> {
     const row = await this.db.selectFrom("users")
       .where("id", "=", id).selectAll()
       .executeTakeFirst();
@@ -49,7 +63,7 @@ export class UserRepository {
    * @param email email
    * @returns found user
    */
-  async findByEmail(email: string): Promise<UserDTO | undefined> {
+  async findByEmail(email: string): Promise<UserObject | undefined> {
     const row = await this.db.selectFrom("users")
       .where("email", "=", email).selectAll()
       .executeTakeFirst();
@@ -61,7 +75,7 @@ export class UserRepository {
    * @param nickname nickname
    * @returns found user
    */
-  async findByNickname(nickname: string): Promise<UserDTO | undefined> {
+  async findByNickname(nickname: string): Promise<UserObject | undefined> {
     const row = await this.db.selectFrom("users")
       .where("nickname", "=", nickname).selectAll()
       .executeTakeFirst();
