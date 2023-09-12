@@ -3,8 +3,10 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import HomePage from "./pages/home";
+import Community from "./pages/commu";
+import CommunityWrite from "./pages/commu/Routes/write";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
+import HomePage from "./pages/home";
 
 const browserRouter = createBrowserRouter([
   {
@@ -44,7 +46,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 커뮤니티 홈
        */
-      { path: "/community", element: <h1>Community</h1> },
+      { path: "/community", element: <Community></Community> },
       /**
        * 커뮤니티 글
        */
@@ -52,7 +54,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 커뮤니티 글 수정 및 삭제
        */
-      { path: "/community/:id/edit", element: <h1>Edit Community</h1> },
+      { path: "/community/:id/edit", element: <CommunityWrite></CommunityWrite> },
       /**
        * 커뮤니티 글 작성
        */

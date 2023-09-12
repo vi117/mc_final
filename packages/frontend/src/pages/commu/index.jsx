@@ -5,6 +5,7 @@ import CustomMenu from "./toggle/menu";
 import CustomToggle from "./toggle/toggle";
 import "./commu.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import sampledata from "./assets/sampledata";
 import Page from "./pagination";
 
@@ -17,6 +18,11 @@ export function Community() {
 
   const handlePageChange = (pageNumber) => {
     setState((prev) => ({ ...prev, activePage: pageNumber }));
+  };
+
+  const navigate = useNavigate();
+  const goWrite = () => {
+    navigate("/community/:id/edit");
   };
 
   return (
@@ -76,7 +82,7 @@ export function Community() {
                     <td>{item.id}</td>
                     <td>{item.category}</td>
                     <td class="td-title">{item.title}</td>
-                    <td>{item.author}</td>
+                    <td>{item.createdBy}</td>
                     <td>{item.views}</td>
                   </tr>
                 ))}
@@ -92,7 +98,7 @@ export function Community() {
               좋아요 순
             </div>
             <div class="write">
-              <button>
+              <button onClick={goWrite}>
                 글 작성
               </button>
             </div>
@@ -110,6 +116,7 @@ export function Community() {
                   <Dropdown.Item eventKey="2">파충류</Dropdown.Item>
                   <Dropdown.Item eventKey="2">양서류</Dropdown.Item>
                   <Dropdown.Item eventKey="2">갑각류</Dropdown.Item>
+                  <Dropdown.Item eventKey="2">기타</Dropdown.Item>
                 </Dropdown.Menu>
               </div>
             </Dropdown>
