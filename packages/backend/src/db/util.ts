@@ -41,17 +41,23 @@ export function beginTransaction(): Promise<(_c: "rollback" | "commit") => void>
   const close_promise = new Promise<"rollback" | "commit">((resolve, _reject) => {
     dispose_fn = resolve;
   });
-  return new Promise((resolve, _reject) => {
+  return new Promise((resolve, reject) => {
     trx_builder.execute(async trx => {
       db = trx;
       resolve(dispose_fn);
       // transaction started
       const b = await close_promise;
+      db = original;
       if (b === "rollback") {
         throw new Error("rollback");
       }
       // transaction closed
-      db = original;
+    }).catch((err) => {
+      if (err instanceof Error && err.message === "rollback") {
+        console.log("rollback");
+        return;
+      }
+      reject(err);
     });
   });
 }
