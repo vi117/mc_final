@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Carousel, Container, Dropdown, DropdownButton, ListGroup } from "react-bootstrap";
+import { Badge, Button, ButtonGroup, Carousel, Container, Dropdown, DropdownButton, ListGroup } from "react-bootstrap";
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import "./FundingsDetail.css";
@@ -17,7 +17,10 @@ const FundingsDetail = function() {
         </Col>
 
         <Col className="tags">
-          <div>#태그1 #태그2...</div>
+          <div>
+            <Badge>tag1</Badge>
+            <Badge>tag2</Badge>
+          </div>
         </Col>
       </Row>
 
@@ -46,7 +49,7 @@ const FundingsDetail = function() {
         </Col>
 
         <Col sm={4}>
-          <Row>
+          <Row style={{ margin: "16px" }}>
             <div></div>개설기간, 달성도(후원자 명수)
           </Row>
           <Row>
