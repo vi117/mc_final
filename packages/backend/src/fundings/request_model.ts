@@ -8,7 +8,14 @@ export class FundingRequestsRepository {
   }
 
   async findAll() {
-    return await this.db.selectFrom("funding_requests").selectAll().execute();
+    return await this.db.selectFrom("funding_requests")
+      .innerJoin("users as host", "funding_requests.host_id", "host.id")
+      .select([
+        "host.nickname as host_nickname",
+        "host.profile_image as host_profile_image",
+        "host.email as host_email",
+      ])
+      .selectAll("funding_requests").execute();
   }
 
   async insert(funding: Insertable<DB["funding_requests"]>): Promise<bigint | undefined> {
