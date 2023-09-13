@@ -135,3 +135,5 @@ export class FundingsRepository {
     return ret.insertId;
   }
 }
+
+export default FundingsRepository;
