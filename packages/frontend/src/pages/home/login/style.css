@@ -5,12 +5,11 @@
 }
 body{
   font-size: 14px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto','Noto Sans KR', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
- 
+  height: 60vh; 
 } 
 
 .login-wrapper{
@@ -22,7 +21,7 @@ body{
 
 .login-wrapper > h1{
   font-size: 40px;
-  color: #6A24FE;
+  color: rgb(39, 163, 255);
   margin-bottom: 20px;
 }
 
@@ -41,23 +40,10 @@ body{
 #login-form > input[value="Login"]{
   color: #fff;
   font-size: 16px;
-  background-color: #6A24FE;
-  margin-top: 50px;
+  background-color: rgb(39, 163, 255);
+  margin-top: 40px;
 }
 
-#login-form > input[value="카카오로 시작하기"]{
-  color: #495057;
-  font-size: 16px;
-  background-color: #fee500;
-  margin-top: -5px;
-}
-
-#login-form > input[value="네이버로 시작하기"]{
-  color: #fff;
-  font-size: 16px;
-  background-color: #00d337;
-  margin-top: -5px;
-}
 
 #login-form > input[type="checkbox"]{
   display: none;
@@ -82,11 +68,52 @@ body{
 }
 
 #login-form > span{
-  margin-left: 85px;
+  float: right;  
 }
 
-#login-form > strong{
-  color:#6A24FE;
-  text-decoration: underline;
-  margin-left: 5px;
+#login-form > span > a{ 
+  text-decoration: none;
+  line-height: 24px;
+  color: #070707c4;
+  font-size: 14px;
+
 }
+
+.fmrIwS {
+  width: 17px;
+  height: auto;
+  float: center;
+  margin-left: 45px;
+  margin-top: 10px;
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.lfmFQa > p { 
+ margin-left: 95px;
+}
+
+.bQAztb {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  margin: 50px 0px 0px;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  color: rgb(158, 158, 158);
+}
+
+.bQAztb > span {
+  margin-left: 10px; 
+}
+
+.bQAztb > span > strong > a {
+  color: rgb(39, 163, 255);
+  text-decoration: underline;
+}
+
