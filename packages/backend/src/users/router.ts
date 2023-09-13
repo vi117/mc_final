@@ -44,6 +44,10 @@ export async function login(req: Request, res: Response): Promise<void> {
     res.status(StatusCodes.UNAUTHORIZED).json({ message: "비밀번호가 일치하지 않습니다." });
     return;
   }
+  if (!user.email_approved) {
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "이메일 인증이 되지 않았습니다." });
+    return;
+  }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
   res.status(StatusCodes.OK).json({ message: "로그인 성공" });
@@ -72,7 +76,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
   } = req.body;
-
+  // TODO: implement file upload for profile images
   const userRepository = getUserRepository();
   let user: UserObject | undefined;
   try {

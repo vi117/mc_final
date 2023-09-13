@@ -186,6 +186,10 @@ export function checkLogin({ admin_check = false } = {}) {
       res.status(StatusCodes.UNAUTHORIZED).json({ message: "관리자 계정이 아닙니다." });
       return;
     }
+    if (!user.email_approved) {
+      res.status(StatusCodes.UNAUTHORIZED).json({ message: "이메일 인증이 필요합니다." });
+      return;
+    }
     next();
   };
 }

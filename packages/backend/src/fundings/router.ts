@@ -53,7 +53,6 @@ async function getSingleFundingHandler(req: Request, res: Response) {
 }
 
 async function getAllFundingRequestHandler(req: Request, res: Response) {
-  // TODO: permission check
   const requestRepo = new FundingRequestsRepository(getDB());
   const queryParams = req.query;
   const limit = parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50");
@@ -67,7 +66,6 @@ async function getAllFundingRequestHandler(req: Request, res: Response) {
 }
 
 async function getSingleFundingRequestHandler(req: Request, res: Response) {
-  // TODO: permission check
   const requestRepo = new FundingRequestsRepository(getDB());
 
   const id = parseInt(req.params.id);
@@ -81,7 +79,6 @@ async function getSingleFundingRequestHandler(req: Request, res: Response) {
 }
 
 async function createFundingRequestHandler(req: Request, res: Response) {
-  // TODO: permission check
   const requestRepo = new FundingRequestsRepository(getDB());
   const user = req.user;
   assert(user, "로그인이 필요합니다.");
