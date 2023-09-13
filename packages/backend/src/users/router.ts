@@ -7,6 +7,7 @@ import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import getAuthCodeRepository from "./authCodeRepo";
 import {
+  checkLogin,
   createTokenFromUser,
   deleteAccessTokenFromCookie,
   deleteRefreshTokenFromCookie,
@@ -85,6 +86,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     if (user === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: "서버 에러" });
+      return;
     }
   } catch (e) {
     if (
@@ -173,10 +175,26 @@ export const queryById = async (req: Request, res: Response) => {
   return;
 };
 
+export const queryAll = async (req: Request, res: Response) => {
+  const userRepository = getUserRepository();
+  const queryParams = req.query;
+  const limit = Math.min(
+    parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50"),
+    200,
+  );
+  const offset = parseInt(typeof queryParams.offset === "string" ? queryParams.offset : "0");
+  const users = await userRepository.findAll({
+    limit,
+    offset,
+  });
+  res.status(StatusCodes.OK).json(users);
+};
+
 router.post("/login", RouterCatch(login));
 router.post("/signup", RouterCatch(signup));
 router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/logout", RouterCatch(logout));
 router.get("/:id", RouterCatch(queryById));
+router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 
 export default router;
