@@ -141,14 +141,12 @@ export function deleteRefreshTokenFromCookie(res: Response) {
  */
 export function tokenCheckMiddleware(req: Request, res: Response, next: NextFunction) {
   const token = getAccessTokenFrom(req);
-  if (token == null) {
-    req["user"] = null;
-    return next();
-  }
-  const access_info = checkToken(token);
-  if (access_info && isTokenInfo(access_info)) {
-    req["user"] = access_info;
-    return next();
+  if (token !== null) {
+    const access_info = checkToken(token);
+    if (access_info && isTokenInfo(access_info)) {
+      req["user"] = access_info;
+      return next();
+    }
   }
   // access token is invalid
   debug("access token is invalid");
@@ -156,9 +154,11 @@ export function tokenCheckMiddleware(req: Request, res: Response, next: NextFunc
   const new_access_info = getFromRefreshToken();
   if (new_access_info) {
     req["user"] = new_access_info;
+  } else {
+    req["user"] = null;
   }
-
   next();
+
   function getFromRefreshToken() {
     const refresh_token = getRefreshTokenFromCookie(req);
     if (!refresh_token) return;
