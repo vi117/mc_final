@@ -2,9 +2,13 @@ import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
 import logger from "morgan";
 
+import { testDBConnection } from "@/db/util";
+
 import indexRouter from "./src/routes/index";
 
 const app = express();
+
+testDBConnection();
 
 // disable etag
 app.set("etag", false);

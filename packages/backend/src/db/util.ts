@@ -1,7 +1,7 @@
 import debug_namespace from "debug";
 import { Kysely, MysqlDialect, sql } from "kysely";
 import { createPool } from "mysql2";
-import { DB } from "../../dist/db.js";
+import { DB } from "../../dist/db";
 
 let db: Kysely<DB> | null = null;
 
@@ -87,7 +87,7 @@ export function disconnectDB() {
   db = null;
 }
 
-function testDBConnection() {
+export function testDBConnection() {
   const debug = debug_namespace("joinify:db");
 
   const db = getDB();
@@ -99,7 +99,5 @@ function testDBConnection() {
       debug(err);
     });
 }
-
-testDBConnection();
 
 export { DB };
