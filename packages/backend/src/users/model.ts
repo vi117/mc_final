@@ -132,12 +132,7 @@ export class UserRepository implements IUserRepository {
   }
 }
 
-<<<<<<< HEAD
-export default function getUserRepository(): IUserRepository {
-  const db = getDB();
-=======
 export default function getUserRepository(trx?: Kysely<DB>): UserRepository {
   const db = trx ?? getDB();
->>>>>>> ad392a5 (transaction)
   return new UserRepository(db);
 }
