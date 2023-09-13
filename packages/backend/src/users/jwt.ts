@@ -20,7 +20,7 @@ export interface TokenInfo {
 }
 
 export function isTokenInfo(obj: object | string): obj is TokenInfo {
-  if (typeof obj === "string") return false;
+  if (typeof obj !== "object") return false;
   return "id" in obj
     && "nickname" in obj
     && "is_admin" in obj
@@ -83,10 +83,17 @@ function getRefreshTokenFromCookie(req: Request) {
   return req.cookies.refresh_token;
 }
 
-function getAccessTokenFrom(req: Request) {
+/**
+ * Retrieves the access token from the given request.
+ *
+ * @param {Request} req - The request object from which to retrieve the access token.
+ * @return {string | null} The access token if found, or null if not found.
+ */
+function getAccessTokenFrom(req: Request): string | null {
   if (!req.headers.authorization) {
     // get token from cookie
     const token = getAccessTokenFromCookie(req);
+
     if (token) {
       return token;
     }
@@ -134,18 +141,21 @@ export function deleteRefreshTokenFromCookie(res: Response) {
  */
 export function tokenCheckMiddleware(req: Request, res: Response, next: NextFunction) {
   const token = getAccessTokenFrom(req);
-  if (!token) {
+  if (token == null) {
     req["user"] = null;
     return next();
   }
-
   const access_info = checkToken(token);
-  if (!access_info) {
-    debug("access token is invalid");
-    const new_access_info = getFromRefreshToken();
-    if (new_access_info) {
-      req["user"] = new_access_info;
-    }
+  if (access_info && isTokenInfo(access_info)) {
+    req["user"] = access_info;
+    return next();
+  }
+  // access token is invalid
+  debug("access token is invalid");
+  // attempt to refresh access token
+  const new_access_info = getFromRefreshToken();
+  if (new_access_info) {
+    req["user"] = new_access_info;
   }
 
   next();
@@ -165,11 +175,17 @@ export function tokenCheckMiddleware(req: Request, res: Response, next: NextFunc
 /**
  * check login middleware
  */
-export function checkLogin(req: Request, res: Response, next: NextFunction) {
-  const user = req["user"];
-  if (!user) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
-    return;
-  }
-  next();
+export function checkLogin({ admin_check = false } = {}) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const user = req["user"];
+    if (!user) {
+      res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
+      return;
+    }
+    if (admin_check && !user.is_admin) {
+      res.status(StatusCodes.UNAUTHORIZED).json({ message: "관리자 계정이 아닙니다." });
+      return;
+    }
+    next();
+  };
 }
