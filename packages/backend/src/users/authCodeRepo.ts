@@ -56,5 +56,3 @@ const authCodeRepository: AuthCodeRepository = new AuthCodeRepository();
 export function getAuthCodeRepository(): AuthCodeRepository {
   return authCodeRepository;
 }
-
-export default getAuthCodeRepository;
