@@ -5,7 +5,7 @@ import { verify } from "argon2";
 
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
-import getAuthCodeRepository from "./authCodeRepo";
+import { getAuthCodeRepository } from "./authCodeRepo";
 import {
   checkLogin,
   createTokenFromUser,
@@ -36,12 +36,13 @@ export async function login(req: Request, res: Response): Promise<void> {
   const { email, password } = req.body;
 
   const user = await userRepository.findByEmail(email);
+  const err_msg = "비밀번호가 일치하지 않거나 이메일이 없습니다.";
   if (!user) {
-    res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: err_msg });
     return;
   }
   if (!await verify(user.password, password)) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: "비밀번호가 일치하지 않습니다." });
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: err_msg });
     return;
   }
   if (!user.email_approved) {
