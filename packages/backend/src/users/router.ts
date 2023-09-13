@@ -169,7 +169,7 @@ export const queryById = async (req: Request, res: Response) => {
   const userRepository = getUserRepository();
   const user = await userRepository.findById(id);
   if (!user) {
-    res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
+    res.status(StatusCodes.NOT_FOUND).json();
     return;
   }
   res.status(StatusCodes.OK).json({

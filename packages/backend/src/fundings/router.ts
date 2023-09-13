@@ -49,7 +49,7 @@ async function getSingleFundingHandler(req: Request, res: Response) {
   const result = await fundingRepository.findById(id, {
     user_id: user?.id,
   });
-  res.json(result ?? null).status(StatusCodes.OK);
+  res.json(result).status(result ? StatusCodes.OK : StatusCodes.NOT_FOUND);
 }
 
 async function getAllFundingRequestHandler(req: Request, res: Response) {
@@ -75,7 +75,7 @@ async function getSingleFundingRequestHandler(req: Request, res: Response) {
     return;
   }
   const result = await requestRepo.findById(id);
-  res.json(result ?? null).status(StatusCodes.OK);
+  res.json(result).status(result ? StatusCodes.OK : StatusCodes.NOT_FOUND);
 }
 
 async function createFundingRequestHandler(req: Request, res: Response) {
@@ -108,7 +108,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     target_value,
     thumbnail,
   });
-  res.json(result ?? null).status(StatusCodes.OK);
+  res.json(result).status(StatusCodes.OK);
 }
 async function approveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
