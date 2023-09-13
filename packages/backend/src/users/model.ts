@@ -30,7 +30,17 @@ export interface UserObject {
   deleted_at: Date | null;
 }
 
-export class UserRepository {
+export interface IUserRepository {
+  findAll(options?: FindAllUsersOptions): Promise<UserObject[]>;
+  findById(id: number): Promise<UserObject | undefined>;
+  findByEmail(email: string): Promise<UserObject | undefined>;
+  findByNickname(nickname: string): Promise<UserObject | undefined>;
+
+  insert(user: Insertable<DB["users"]>): Promise<bigint | undefined>;
+  approveByEmail(email: string): Promise<boolean>;
+}
+
+export class UserRepository implements IUserRepository {
   db: Kysely<DB>;
   constructor(db: Kysely<DB>) {
     this.db = db;
@@ -122,7 +132,7 @@ export class UserRepository {
   }
 }
 
-export default function getUserRepository() {
+export default function getUserRepository(): IUserRepository {
   const db = getDB();
   return new UserRepository(db);
 }

@@ -1,24 +1,36 @@
 import assert, { equal } from "node:assert";
-
-import { beginTransaction, disconnectDB } from "@/db/util";
-
-import { afterAll, beforeAll, describe, test } from "@jest/globals";
 import { agent } from "supertest";
 
 import app from "../../app";
+import { MockUserRepository } from "./__mocks__/model";
+import getAuthCodeRepository from "./authCodeRepo";
 import getUserRepository from "./model";
 
-function testDBConnection() {
-  let dispose_fn: (_f: "rollback" | "commit") => void;
-  beforeAll(async () => {
-    dispose_fn = await beginTransaction();
+const insertUser = jest.fn();
+jest.mock("./model", () => {
+  return jest.fn().mockImplementation(() => {
+    return new class extends MockUserRepository {
+      async insert(...args: unknown[]) {
+        return insertUser(...args);
+      }
+    }();
   });
-  afterAll(async () => {
-    await dispose_fn("rollback");
-    disconnectDB();
-  });
-}
-testDBConnection();
+});
+jest.mock("./authCodeRepo");
+jest.mock("./../db/util");
+jest.mock("../mail/service", () => ({
+  getTransport: () => ({
+    sendMail: jest.fn(),
+  }),
+}));
+
+const mockGetUserRepository = getUserRepository as jest.MockedFunction<typeof getUserRepository>;
+const mockGetAuthCodeRepo = getAuthCodeRepository as jest.MockedFunction<typeof getAuthCodeRepository>;
+
+beforeEach(() => {
+  mockGetUserRepository.mockClear();
+  mockGetAuthCodeRepo.mockClear();
+});
 
 describe("login", () => {
   const fetcher = agent(app);
@@ -34,7 +46,7 @@ describe("login", () => {
   test("login success", async () => {
     const res = await fetcher.post("/api/users/login").send({
       email: "admin@gmail.com",
-      password: "admin",
+      password: "test",
     });
     equal(res.status, 200);
     const cookie = res.headers["set-cookie"];
@@ -61,6 +73,20 @@ describe("signup", () => {
     equal(res.status, 409);
   });
   test("signup success", async () => {
+    mockGetAuthCodeRepo.mockImplementation(
+      (
+        () => {
+          return {
+            createVerificationCode(_email: string) {
+              return "6aba8a26-86c0-41f8-a19f-14fa1de41805";
+            },
+            cleanExpired: jest.fn(),
+            verify: jest.fn(),
+          };
+        }
+      ) as unknown as typeof getAuthCodeRepository,
+    );
+    insertUser.mockImplementation(() => 2n);
     const res = await fetcher.post("/api/users/signup").send({
       nickname: "test",
       email: "test@example.com",
@@ -69,7 +95,6 @@ describe("signup", () => {
       phone: "test",
     });
     equal(res.status, 200);
-    const user = await getUserRepository().findByEmail("test@example.com");
-    equal(user !== undefined, true);
+    expect(insertUser).toBeCalledTimes(1);
   });
 });
