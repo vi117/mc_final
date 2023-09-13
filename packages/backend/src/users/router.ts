@@ -7,6 +7,7 @@ import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import getAuthCodeRepository from "./authCodeRepo";
 import {
+  checkLogin,
   createTokenFromUser,
   deleteAccessTokenFromCookie,
   deleteRefreshTokenFromCookie,
@@ -43,6 +44,10 @@ export async function login(req: Request, res: Response): Promise<void> {
     res.status(StatusCodes.UNAUTHORIZED).json({ message: "비밀번호가 일치하지 않습니다." });
     return;
   }
+  if (!user.email_approved) {
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "이메일 인증이 되지 않았습니다." });
+    return;
+  }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
   res.status(StatusCodes.OK).json({ message: "로그인 성공" });
@@ -71,7 +76,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
   } = req.body;
-
+  // TODO: implement file upload for profile images
   const userRepository = getUserRepository();
   let user: UserObject | undefined;
   try {
@@ -85,6 +90,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     if (user === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: "서버 에러" });
+      return;
     }
   } catch (e) {
     if (
@@ -163,7 +169,7 @@ export const queryById = async (req: Request, res: Response) => {
   const userRepository = getUserRepository();
   const user = await userRepository.findById(id);
   if (!user) {
-    res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
+    res.status(StatusCodes.NOT_FOUND).json();
     return;
   }
   res.status(StatusCodes.OK).json({
@@ -173,10 +179,26 @@ export const queryById = async (req: Request, res: Response) => {
   return;
 };
 
+export const queryAll = async (req: Request, res: Response) => {
+  const userRepository = getUserRepository();
+  const queryParams = req.query;
+  const limit = Math.min(
+    parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50"),
+    200,
+  );
+  const offset = parseInt(typeof queryParams.offset === "string" ? queryParams.offset : "0");
+  const users = await userRepository.findAll({
+    limit,
+    offset,
+  });
+  res.status(StatusCodes.OK).json(users);
+};
+
 router.post("/login", RouterCatch(login));
 router.post("/signup", RouterCatch(signup));
 router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/logout", RouterCatch(logout));
 router.get("/:id", RouterCatch(queryById));
+router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 
 export default router;

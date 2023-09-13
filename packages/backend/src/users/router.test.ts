@@ -63,6 +63,17 @@ describe("signup", () => {
   const fetcher = agent(app);
 
   test("signup fail: nickname already exists", async () => {
+    const err = new class extends Error {
+      code = "ER_DUP_ENTRY";
+    }("ER_DUP_ENTRY");
+    insertUser.mockRejectedValue(err);
+    mockGetAuthCodeRepo.mockImplementation(
+      jest.fn().mockReturnValue({
+        createVerificationCode: jest.fn(),
+        cleanExpired: jest.fn(),
+        verify: jest.fn(),
+      }),
+    );
     const res = await fetcher.post("/api/users/signup").send({
       nickname: "admin",
       email: "test",
@@ -77,23 +88,21 @@ describe("signup", () => {
       (
         () => {
           return {
-            createVerificationCode(_email: string) {
-              return "6aba8a26-86c0-41f8-a19f-14fa1de41805";
-            },
+            createVerificationCode: jest.fn().mockReturnValue("6aba8a26-86c0-41f8-a19f-14fa1de41805"),
             cleanExpired: jest.fn(),
             verify: jest.fn(),
           };
         }
       ) as unknown as typeof getAuthCodeRepository,
     );
-    insertUser.mockImplementation(() => ({
+    insertUser.mockReturnValue({
       id: 2,
       nickname: "test",
       email: "test@example.com",
       password: "test",
       address: "test",
       phone: "test",
-    }));
+    });
     const res = await fetcher.post("/api/users/signup").send({
       nickname: "test",
       email: "test@example.com",

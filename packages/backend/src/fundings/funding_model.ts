@@ -147,10 +147,11 @@ export class FundingsRepository {
     return ret;
   }
 
-  async insert(funding: Insertable<DB["fundings"]>): Promise<bigint | undefined> {
-    const ret = await this.db.insertInto("fundings").values(funding).executeTakeFirst();
-    return ret.insertId;
+  async insert(funding: Insertable<DB["fundings"]>): Promise<number> {
+    const ret = await this.db.insertInto("fundings")
+      .values(funding)
+      .returning(["id"])
+      .executeTakeFirstOrThrow();
+    return ret?.id;
   }
 }
-
-export default FundingsRepository;
