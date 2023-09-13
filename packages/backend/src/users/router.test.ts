@@ -86,7 +86,14 @@ describe("signup", () => {
         }
       ) as unknown as typeof getAuthCodeRepository,
     );
-    insertUser.mockImplementation(() => 2n);
+    insertUser.mockImplementation(() => ({
+      id: 2,
+      nickname: "test",
+      email: "test@example.com",
+      password: "test",
+      address: "test",
+      phone: "test",
+    }));
     const res = await fetcher.post("/api/users/signup").send({
       nickname: "test",
       email: "test@example.com",

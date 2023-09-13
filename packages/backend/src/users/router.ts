@@ -13,7 +13,7 @@ import {
   setAccessTokenToCookie,
   setRefreshTokenToCookie,
 } from "./jwt";
-import getUserRepository from "./model";
+import getUserRepository, { UserObject } from "./model";
 
 const router = Router();
 
@@ -73,16 +73,16 @@ export async function signup(req: Request, res: Response): Promise<void> {
   } = req.body;
 
   const userRepository = getUserRepository();
-  let user_id: bigint | undefined;
+  let user: UserObject | undefined;
   try {
-    user_id = await userRepository.insert({
+    user = await userRepository.insert({
       nickname,
       email,
       password,
       address,
       phone,
     });
-    if (user_id === undefined) {
+    if (user === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: "서버 에러" });
     }
@@ -108,7 +108,13 @@ export async function signup(req: Request, res: Response): Promise<void> {
       "content-type": "text/plain",
     },
   });
-  res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id: (user_id ?? "").toString() });
+  res.status(StatusCodes.OK).json({
+    message: "회원가입 성공",
+    user: user === undefined ? null : {
+      ...user,
+      password: null,
+    },
+  });
 }
 
 export const verifyWithCode = async (req: Request, res: Response) => {

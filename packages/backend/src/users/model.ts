@@ -36,7 +36,7 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<UserObject | undefined>;
   findByNickname(nickname: string): Promise<UserObject | undefined>;
 
-  insert(user: Insertable<DB["users"]>): Promise<bigint | undefined>;
+  insert(user: Insertable<DB["users"]>): Promise<UserObject | undefined>;
   approveByEmail(email: string): Promise<boolean>;
 }
 
@@ -96,10 +96,10 @@ export class UserRepository implements IUserRepository {
    * `password` 해쉬 후 user 삽입.
    * (salt는 자동으로 만들어짐.)
    * @param user
-   * @returns inserted id
+   * @returns user
    * @example
    * ```ts
-   * const user = {
+   * const user_info = {
    *     nickname: "test",
    *     profile_image: null,
    *     email: "test",
@@ -109,14 +109,17 @@ export class UserRepository implements IUserRepository {
    *     introduction: null,
    *     deleted_at: null
    * };
-   * const id = await userRepository.insert(user);
-   * console.log(id);
+   * const user = await userRepository.insert(user_info);
+   * console.log(user);
    * ```
    */
-  async insert(user: Insertable<DB["users"]>): Promise<bigint | undefined> {
+  async insert(user: Insertable<DB["users"]>): Promise<UserObject | undefined> {
     user.password = await argon2_hash(user.password);
-    const ret = await this.db.insertInto("users").values(user).executeTakeFirst();
-    return ret.insertId;
+    const ret = await this.db.insertInto("users")
+      .values(user)
+      .returningAll()
+      .executeTakeFirst();
+    return ret;
   }
 
   /**
