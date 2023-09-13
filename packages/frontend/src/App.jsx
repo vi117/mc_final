@@ -3,8 +3,9 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import HomePage from "./pages/home";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
+import HomePage from "./pages/home";
+import LoginPage from "./pages/login";
 
 const browserRouter = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 로그인 페이지
        */
-      { path: "/login", element: <h1>Login</h1> },
+      { path: "/login", element: <LoginPage /> },
       /**
        * 회원가입 페이지
        */
