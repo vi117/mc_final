@@ -29,8 +29,8 @@ export class MockUserRepository implements IUserRepository {
     }
     return undefined;
   }
-  public async insert(_user: Insertable<DB["users"]>): Promise<bigint | undefined> {
-    return 2n;
+  public async insert(_user: Insertable<DB["users"]>): Promise<UserObject | undefined> {
+    return undefined;
   }
   public async approveByEmail(_email: string): Promise<boolean> {
     return true;

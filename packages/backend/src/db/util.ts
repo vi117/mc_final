@@ -1,7 +1,7 @@
 import debug_namespace from "debug";
 import { Kysely, MysqlDialect, sql } from "kysely";
 import { createPool } from "mysql2";
-import { DB } from "../../dist/db.js";
+import { DB } from "../../dist/db";
 
 let db: Kysely<DB> | null = null;
 
@@ -22,6 +22,20 @@ export function getDB(): Kysely<DB> {
     db = createDB();
   }
   return db;
+}
+
+/**
+ * Executes a transaction in a safe manner.
+ *
+ * @param {Function} fn - The function to be executed within the transaction.
+ * @returns {Promise<T>} return - The result of executing the function within the transaction.
+ */
+export async function safeTransaction<T>(fn: (_trx: Kysely<DB>) => Promise<T>): Promise<T> {
+  const db = getDB();
+  if (db.isTransaction) {
+    return await fn(db);
+  }
+  return await getDB().transaction().execute(fn);
 }
 
 /**
@@ -73,7 +87,7 @@ export function disconnectDB() {
   db = null;
 }
 
-function testDBConnection() {
+export function testDBConnection() {
   const debug = debug_namespace("joinify:db");
 
   const db = getDB();
@@ -85,7 +99,5 @@ function testDBConnection() {
       debug(err);
     });
 }
-
-testDBConnection();
 
 export { DB };
