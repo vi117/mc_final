@@ -6,8 +6,8 @@ type VerifyCodeType = string;
  * 사용자가 생성될 때 사용자가 이메일을 가지고 있는지 확인하는 저장소입니다.
  */
 export class AuthCodeRepository {
-  userMap: Map<VerifyCodeType, string>;
-  dateMap: Map<number, VerifyCodeType>;
+  private userMap: Map<VerifyCodeType, string>;
+  private dateMap: Map<number, VerifyCodeType>;
 
   constructor() {
     this.userMap = new Map();

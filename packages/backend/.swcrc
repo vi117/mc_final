@@ -17,7 +17,10 @@
     },
     "transform": {
       "legacyDecorator": false,
-      "decoratorMetadata": false
+      "decoratorMetadata": false,
+      "hidden": {
+        "jest": true
+      }
     },
     "keepClassNames": true,
     "paths": {
