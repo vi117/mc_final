@@ -146,8 +146,8 @@ export const verifyWithCode = async (req: Request, res: Response) => {
   const updated = await userRepository.approveByEmail(email);
   if (!updated) {
     res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "유저를 찾을 수 없습니다." });
+      .status(StatusCodes.CONFLICT)
+      .json({ message: "유저가 이미 인증을 받았습니다." });
     return;
   }
   res.status(StatusCodes.OK).json({ message: "인증 성공" });
