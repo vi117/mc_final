@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { UserObject } from "./model";
 import "./type";
+import { StatusCodes } from "http-status-codes";
 
 const debug = debug_ns("joinify:jwt");
 
@@ -99,7 +100,39 @@ function getAccessTokenFrom(req: Request) {
   return token;
 }
 
-export function checkMiddleware(req: Request, res: Response, next: NextFunction) {
+export function setAccessTokenToCookie(res: Response, token: string) {
+  res.cookie("access_token", token, {
+    maxAge: 1000 * 60 * 60 * 2, // 2h
+    httpOnly: true,
+    sameSite: "strict",
+    path: "/",
+    // secure is for https.
+    // secure: true,
+  });
+}
+
+export function setRefreshTokenToCookie(res: Response, token: string) {
+  res.cookie("refresh_token", token, {
+    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 day
+    httpOnly: true,
+    sameSite: "strict",
+    path: "/",
+    // secure is for https.
+    // secure: true,
+  });
+}
+
+export function deleteAccessTokenFromCookie(res: Response) {
+  res.clearCookie("access_token");
+}
+export function deleteRefreshTokenFromCookie(res: Response) {
+  res.clearCookie("refresh_token");
+}
+
+/**
+ * check access token and set user info to `req.user`
+ */
+export function tokenCheckMiddleware(req: Request, res: Response, next: NextFunction) {
   const token = getAccessTokenFrom(req);
   if (!token) {
     req["user"] = null;
@@ -129,31 +162,14 @@ export function checkMiddleware(req: Request, res: Response, next: NextFunction)
   }
 }
 
-export function setAccessTokenToCookie(res: Response, token: string) {
-  res.cookie("access_token", token, {
-    maxAge: 1000 * 60 * 60 * 2, // 2h
-    httpOnly: true,
-    sameSite: "strict",
-    path: "/",
-    // secure is for https.
-    // secure: true,
-  });
-}
-
-export function setRefreshTokenToCookie(res: Response, token: string) {
-  res.cookie("refresh_token", token, {
-    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 day
-    httpOnly: true,
-    sameSite: "strict",
-    path: "/",
-    // secure is for https.
-    // secure: true,
-  });
-}
-
-export function deleteAccessTokenFromCookie(res: Response) {
-  res.clearCookie("access_token");
-}
-export function deleteRefreshTokenFromCookie(res: Response) {
-  res.clearCookie("refresh_token");
+/**
+ * check login middleware
+ */
+export function checkLogin(req: Request, res: Response, next: NextFunction) {
+  const user = req["user"];
+  if (!user) {
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
+    return;
+  }
+  next();
 }
