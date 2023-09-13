@@ -54,7 +54,7 @@ describe("login", () => {
   });
 
   test("logout", async () => {
-    const res = await fetcher.get("/api/users/logout");
+    const res = await fetcher.post("/api/users/logout");
     equal(res.status, 200);
   });
 });
