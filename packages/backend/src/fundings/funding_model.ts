@@ -6,12 +6,18 @@ export interface FindAllUsersOptions {
   limit?: number;
   offset?: number;
   cursor?: number;
+  /**
+   * 사용자 ID
+   */
+  user_id?: number;
+}
+
+export interface FindOneOptions {
   user_id?: number;
 }
 
 export interface FundingRewards {
   id: number;
-  funding_id: number | null;
   title: string;
   content: string;
   price: number;
@@ -91,19 +97,21 @@ export class FundingsRepository {
    * Retrieves a funding object from the database based on the given ID.
    *
    * @param {number} id - The ID of the funding object to retrieve.
+   * @param {FindOneOptions} [options] - Options for the query.
    * @return {Promise<FundingObject | undefined>} A promise that resolves to the retrieved funding object, or undefined if not found.
    */
-  async findById(id: number): Promise<
+  async findById(id: number, options?: FindOneOptions): Promise<
     FundingObject & {
       rewards: FundingRewards[];
     } | undefined
   > {
+    const user_id = options?.user_id ?? null;
     const ret = await this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
       .leftJoin("user_funding_interest as interest", join =>
         join
           .onRef("interest.funding_id", "=", "fundings.id")
-          .on("interest.user_id", "=", id))
+          .on("interest.user_id", "=", user_id))
       .selectAll(["fundings"])
       .select([
         "host.id as host_id",
@@ -122,7 +130,16 @@ export class FundingsRepository {
         jsonArrayFrom(
           eb.selectFrom("funding_rewards")
             .whereRef("funding_rewards.funding_id", "=", "fundings.id")
-            .selectAll(),
+            .select([
+              "funding_rewards.id",
+              "funding_rewards.title",
+              "funding_rewards.price",
+              "funding_rewards.content",
+              "funding_rewards.reward_count",
+              "funding_rewards.reward_current_count",
+              "funding_rewards.created_at",
+              "funding_rewards.deleted_at",
+            ]),
         ).as("rewards"),
       ])
       .where("fundings.id", "=", id)
