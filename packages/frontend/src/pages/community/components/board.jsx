@@ -78,7 +78,7 @@ const Category = ({ filterData }) => {
 
   const navigate = useNavigate();
   const goWrite = () => {
-    navigate("/community/:id/edit");
+    navigate("/community/:id/post");
   };
   return (
     <>
