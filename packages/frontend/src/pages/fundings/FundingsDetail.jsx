@@ -7,7 +7,7 @@ const placeholder = "https://via.placeholder.com/850x375";
 
 const FundingsDetail = function() {
   return (
-    <Container style={{ "padding-top": "20px" }}>
+    <Container style={{ "padding-top": "20px", "width": "50vw" }}>
       <div className="sujung">
         <Button variant="success">수정</Button>
       </div>
