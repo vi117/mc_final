@@ -36,12 +36,13 @@ export class FundingRequestsRepository {
       .executeTakeFirst();
   }
 
-  async insert(funding: Insertable<DB["funding_requests"]>): Promise<number> {
+  async insert(
+    funding: Insertable<DB["funding_requests"]>,
+  ): Promise<number | undefined> {
     const ret = await this.db.insertInto("funding_requests")
       .values(funding)
-      .returning(["id"])
       .executeTakeFirstOrThrow();
-    return ret?.id;
+    return Number(ret.insertId);
   }
 
   /**

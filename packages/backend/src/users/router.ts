@@ -14,7 +14,7 @@ import {
   setAccessTokenToCookie,
   setRefreshTokenToCookie,
 } from "./jwt";
-import getUserRepository, { UserObject } from "./model";
+import getUserRepository from "./model";
 
 const router = Router();
 
@@ -64,7 +64,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     type: "object",
     properties: {
       nickname: { type: "string" },
-      email: { type: "string" },
+      email: { type: "string", format: "email" },
       password: { type: "string" },
       address: { type: "string" },
       phone: { type: "string" },
@@ -87,16 +87,16 @@ export async function signup(req: Request, res: Response): Promise<void> {
   } = req.body;
   // TODO: implement file upload for profile images
   const userRepository = getUserRepository();
-  let user: UserObject | undefined;
+  let user_id: number | undefined;
   try {
-    user = await userRepository.insert({
+    user_id = await userRepository.insert({
       nickname,
       email,
       password,
       address,
       phone,
     });
-    if (user === undefined) {
+    if (user_id === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: "서버 에러" });
       return;
@@ -128,8 +128,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
   });
   res.status(StatusCodes.OK).json({
     message: "회원가입 성공",
-    user: user === undefined ? null : {
-      ...user,
+    user: user_id === undefined ? null : {
+      user_id,
       password: null,
     },
   });
