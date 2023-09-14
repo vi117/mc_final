@@ -1,0 +1,25 @@
+form input{
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #E5E9F5;
+    background-color: #F6F7FA;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+label {
+    color: #7369AB;
+}
+
+button[type="submit"] {
+    padding: 10px 50px;
+    background-color: #ED4B5E;
+    border-radius: 10px;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #ff6678;
+}

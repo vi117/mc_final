@@ -5,7 +5,6 @@ import { Button } from "@mui/material";
 const Upload = () => {
   const [image, setImage] = useState({
     image_file: "",
-    preview_URL: "img/default_image.png",
   });
 
   let inputRef;
@@ -62,7 +61,7 @@ const Upload = () => {
         style={{ display: "none" }}
       />
       <div className="img-wrapper">
-        <img src={image.preview_URL} />
+        <img className="imgSize" src={image.preview_URL} />
       </div>
 
       <div className="upload-button">

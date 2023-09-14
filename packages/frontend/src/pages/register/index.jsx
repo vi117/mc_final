@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Upload from "../uploadcomponent/Upload";
+import "./registerForm.css";
 
 function RegisterPage() {
   const [Email, setEmail] = useState("");
@@ -63,11 +64,12 @@ function RegisterPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100%",
-        height: "100vh",
       }}
     >
-      <form style={{ display: "flex", flexDirection: "column" }} onSubmit={onSubmitHandler}>
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={onSubmitHandler}
+      >
         <Upload></Upload>
         <label>Email</label>
         <input type="email" value={Email} onChange={onEmailHandler} />
@@ -86,7 +88,7 @@ function RegisterPage() {
         <label>Article</label>
         <input type="text" value={Article} onChange={onArticleHandler} />
         <br />
-        <button formAction="">
+        <button id="form-controls" type="submit" formAction="">
           회원가입
         </button>
       </form>
