@@ -2,17 +2,19 @@ import { getTransport } from "@/mail/service";
 import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
+
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
-import getAuthCodeRepository from "./authCodeRepo";
+import { getAuthCodeRepository } from "./authCodeRepo";
 import {
+  checkLogin,
   createTokenFromUser,
   deleteAccessTokenFromCookie,
   deleteRefreshTokenFromCookie,
   setAccessTokenToCookie,
   setRefreshTokenToCookie,
 } from "./jwt";
-import getUserRepository from "./model";
+import getUserRepository, { UserObject } from "./model";
 
 const router = Router();
 
@@ -34,19 +36,23 @@ export async function login(req: Request, res: Response): Promise<void> {
   const { email, password } = req.body;
 
   const user = await userRepository.findByEmail(email);
+  const err_msg = "비밀번호가 일치하지 않거나 이메일이 없습니다.";
   if (!user) {
-    res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: err_msg });
     return;
   }
   if (!await verify(user.password, password)) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: "비밀번호가 일치하지 않습니다." });
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: err_msg });
+    return;
+  }
+  if (!user.email_approved) {
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "이메일 인증이 되지 않았습니다." });
     return;
   }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
   res.status(StatusCodes.OK).json({ message: "로그인 성공" });
 }
-router.post("/login", RouterCatch(login));
 
 export async function signup(req: Request, res: Response): Promise<void> {
   const v = ajv.validate({
@@ -71,32 +77,34 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
   } = req.body;
-
-  // TODO: use transaction
+  // TODO: implement file upload for profile images
   const userRepository = getUserRepository();
-  let user = await userRepository.findByEmail(email);
-  if (user) {
-    res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 유저입니다." });
-    return;
+  let user: UserObject | undefined;
+  try {
+    user = await userRepository.insert({
+      nickname,
+      email,
+      password,
+      address,
+      phone,
+    });
+    if (user === undefined) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "서버 에러" });
+      return;
+    }
+  } catch (e) {
+    if (
+      e instanceof Error
+      && (e as { code?: string }).code === "ER_DUP_ENTRY"
+    ) {
+      res.status(StatusCodes.CONFLICT)
+        .json({ message: "중복된 닉네임 혹은 이메일" });
+      return;
+    } else {
+      throw e;
+    }
   }
-  user = await userRepository.findByNickname(nickname);
-  if (user) {
-    res.status(StatusCodes.CONFLICT).json({ message: "이미 존재하는 닉네임입니다." });
-    return;
-  }
-  const user_id = await userRepository.insert({
-    nickname,
-    email,
-    password,
-    address,
-    phone,
-  });
-
-  if (!user_id) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "서버 에러" });
-    return;
-  }
-
   const verificationCode = getAuthCodeRepository().createVerificationCode(email);
   await getTransport().sendMail({
     from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
@@ -107,10 +115,14 @@ export async function signup(req: Request, res: Response): Promise<void> {
       "content-type": "text/plain",
     },
   });
-  res.status(StatusCodes.OK).json({ message: "회원가입 성공", user_id: user_id.toString() });
-  return;
+  res.status(StatusCodes.OK).json({
+    message: "회원가입 성공",
+    user: user === undefined ? null : {
+      ...user,
+      password: null,
+    },
+  });
 }
-router.post("/signup", RouterCatch(signup));
 
 export const verifyWithCode = async (req: Request, res: Response) => {
   const v = ajv.validate({
@@ -135,13 +147,12 @@ export const verifyWithCode = async (req: Request, res: Response) => {
   const updated = await userRepository.approveByEmail(email);
   if (!updated) {
     res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "유저를 찾을 수 없습니다." });
+      .status(StatusCodes.CONFLICT)
+      .json({ message: "유저가 이미 인증을 받았습니다." });
     return;
   }
   res.status(StatusCodes.OK).json({ message: "인증 성공" });
 };
-router.post("/verify", RouterCatch(verifyWithCode));
 
 export const logout = (req: Request, res: Response) => {
   deleteAccessTokenFromCookie(res);
@@ -149,8 +160,6 @@ export const logout = (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
   return;
 };
-
-router.get("/logout", RouterCatch(logout));
 
 export const queryById = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
@@ -161,7 +170,7 @@ export const queryById = async (req: Request, res: Response) => {
   const userRepository = getUserRepository();
   const user = await userRepository.findById(id);
   if (!user) {
-    res.status(StatusCodes.NOT_FOUND).json({ message: "유저를 찾을 수 없습니다." });
+    res.status(StatusCodes.NOT_FOUND).json();
     return;
   }
   res.status(StatusCodes.OK).json({
@@ -170,6 +179,27 @@ export const queryById = async (req: Request, res: Response) => {
   });
   return;
 };
+
+export const queryAll = async (req: Request, res: Response) => {
+  const userRepository = getUserRepository();
+  const queryParams = req.query;
+  const limit = Math.min(
+    parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50"),
+    200,
+  );
+  const offset = parseInt(typeof queryParams.offset === "string" ? queryParams.offset : "0");
+  const users = await userRepository.findAll({
+    limit,
+    offset,
+  });
+  res.status(StatusCodes.OK).json(users);
+};
+
+router.post("/login", RouterCatch(login));
+router.post("/signup", RouterCatch(signup));
+router.post("/verify", RouterCatch(verifyWithCode));
+router.post("/logout", RouterCatch(logout));
 router.get("/:id", RouterCatch(queryById));
+router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 
 export default router;

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { UserObject } from "./model";
 import "./type";
+import { StatusCodes } from "http-status-codes";
 
 const debug = debug_ns("joinify:jwt");
 
@@ -19,7 +20,7 @@ export interface TokenInfo {
 }
 
 export function isTokenInfo(obj: object | string): obj is TokenInfo {
-  if (typeof obj === "string") return false;
+  if (typeof obj !== "object") return false;
   return "id" in obj
     && "nickname" in obj
     && "is_admin" in obj
@@ -82,10 +83,17 @@ function getRefreshTokenFromCookie(req: Request) {
   return req.cookies.refresh_token;
 }
 
-function getAccessTokenFrom(req: Request) {
+/**
+ * Retrieves the access token from the given request.
+ *
+ * @param {Request} req - The request object from which to retrieve the access token.
+ * @return {string | null} The access token if found, or null if not found.
+ */
+function getAccessTokenFrom(req: Request): string | null {
   if (!req.headers.authorization) {
     // get token from cookie
     const token = getAccessTokenFromCookie(req);
+
     if (token) {
       return token;
     }
@@ -97,36 +105,6 @@ function getAccessTokenFrom(req: Request) {
   // 임.
   const token = req.headers.authorization.split(" ")[1];
   return token;
-}
-
-export function checkMiddleware(req: Request, res: Response, next: NextFunction) {
-  const token = getAccessTokenFrom(req);
-  if (!token) {
-    req["user"] = null;
-    return next();
-  }
-
-  const access_info = checkToken(token);
-  if (!access_info) {
-    debug("access token is invalid");
-    const new_access_info = getFromRefreshToken();
-    if (new_access_info) {
-      req["user"] = new_access_info;
-    }
-  }
-
-  next();
-  function getFromRefreshToken() {
-    const refresh_token = getRefreshTokenFromCookie(req);
-    if (!refresh_token) return;
-    const refresh_info = checkToken(refresh_token);
-    if (!refresh_info) return;
-    debug("refresh access token");
-    // refresh access token from refresh token
-    const new_access_token = createToken(refresh_info, false);
-    setAccessTokenToCookie(res, new_access_token);
-    return { ...refresh_info };
-  }
 }
 
 export function setAccessTokenToCookie(res: Response, token: string) {
@@ -156,4 +134,62 @@ export function deleteAccessTokenFromCookie(res: Response) {
 }
 export function deleteRefreshTokenFromCookie(res: Response) {
   res.clearCookie("refresh_token");
+}
+
+/**
+ * check access token and set user info to `req.user`
+ */
+export function tokenCheckMiddleware(req: Request, res: Response, next: NextFunction) {
+  const token = getAccessTokenFrom(req);
+  if (token !== null) {
+    const access_info = checkToken(token);
+    if (access_info && isTokenInfo(access_info)) {
+      req["user"] = access_info;
+      return next();
+    }
+  }
+  // access token is invalid
+  debug("access token is invalid");
+  // attempt to refresh access token
+  const new_access_info = getFromRefreshToken();
+  if (new_access_info) {
+    req["user"] = new_access_info;
+  } else {
+    req["user"] = null;
+  }
+  next();
+
+  function getFromRefreshToken() {
+    const refresh_token = getRefreshTokenFromCookie(req);
+    if (!refresh_token) return;
+    const refresh_info = checkToken(refresh_token);
+    if (!refresh_info) return;
+    debug("refresh access token");
+    // refresh access token from refresh token
+    const new_access_token = createToken(refresh_info, false);
+    setAccessTokenToCookie(res, new_access_token);
+    return { ...refresh_info };
+  }
+}
+
+/**
+ * check login middleware
+ */
+export function checkLogin({ admin_check = false } = {}) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const user = req["user"];
+    if (!user) {
+      res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
+      return;
+    }
+    if (admin_check && !user.is_admin) {
+      res.status(StatusCodes.UNAUTHORIZED).json({ message: "관리자 계정이 아닙니다." });
+      return;
+    }
+    if (!user.email_approved) {
+      res.status(StatusCodes.UNAUTHORIZED).json({ message: "이메일 인증이 필요합니다." });
+      return;
+    }
+    next();
+  };
 }
