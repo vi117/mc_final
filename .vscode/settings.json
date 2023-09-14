@@ -1,5 +1,0 @@
-{
-    "jest.rootPath": "packages/backend",
-    "jest.jestCommandLine": "npm run test --",
-    "jest.autoRun": {}
-}
