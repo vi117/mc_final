@@ -3,11 +3,19 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+ community
 import CommunityDetail from "./pages/community/co_detail";
 import CommunityWrite from "./pages/community/co_write";
 import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import HomePage from "./pages/home";
+=======
+import FundingsDetail from "./pages/fundings/FundingsDetail";
+import FundingsWrite from "./pages/fundings/FundingsWrite";
+
+import HomePage from "./pages/home";
+import LoginPage from "./pages/login";
+ main
 
 const browserRouter = createBrowserRouter([
   {
@@ -23,7 +31,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 로그인 페이지
        */
-      { path: "/login", element: <h1>Login</h1> },
+      { path: "/login", element: <LoginPage /> },
       /**
        * 회원가입 페이지
        */
@@ -75,11 +83,11 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 수정 및 삭제
        */
-      { path: "/fundings/:id/edit", element: <h1>Edit Fundings</h1> },
+      { path: "/fundings/:id/edit", element: <h1>edit</h1> },
       /**
        * 펀딩 글 작성
        */
-      { path: "/fundings/:id/post", element: <h1>Post</h1> },
+      { path: "/fundings/:id/post", element: <FundingsWrite /> },
       { path: "*", element: <h1>Not Found</h1> },
     ],
   },

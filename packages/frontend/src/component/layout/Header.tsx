@@ -18,7 +18,14 @@ export function Header() {
         </div>
         <div className="">
           <p className="header_login_btn">
+ community
             <CgProfile color="#555555" style={{ marginRight: "5px", width: "20px", height: "20px" }} />
+=======
+            <CgProfile
+              color="#555555"
+              style={{ marginRight: "5px", width: "20px", height: "20px" }}
+            />
+ main
             로그인/회원가입
           </p>
         </div>

@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json.schemastore.org/swcrc",
+    "sourceMaps": "inline",
+  "module": {
+    "type": "commonjs",
+    "strictMode": true,
+    "noInterop": false
+  },
+  "jsc": {
+    "externalHelpers": false,
+    "target": "esnext",
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true,
+      "decorators": false,
+      "dynamicImport": true
+    },
+    "transform": {
+      "legacyDecorator": false,
+      "decoratorMetadata": false,
+      "hidden": {
+        "jest": true
+      }
+    },
+    "keepClassNames": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "baseUrl": "./"
+  }
+}

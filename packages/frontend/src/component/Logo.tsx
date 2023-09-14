@@ -2,8 +2,17 @@ import React from "react";
 
 export function LogoSvg(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" {...props}>
-      <g transform="translate(0.000000,115.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
+    <svg
+      version="1.0"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+      {...props}
+    >
+      <g
+        transform="translate(0.000000,115.000000) scale(0.100000,-0.100000)"
+        fill="#000000"
+        stroke="none"
+      >
         <path d="M9071 1124 c-85 -23 -136 -49 -186 -95 -71 -66 -90 -108 -89 -204 0
 -96 25 -155 86 -210 58 -53 111 -72 312 -111 100 -20 200 -44 223 -54 105 -46
 110 -170 10 -222 -58 -30 -192 -37 -271 -14 -63 19 -132 73 -142 112 -6 24 -8
