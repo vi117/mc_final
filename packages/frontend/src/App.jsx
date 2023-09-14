@@ -3,8 +3,8 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import Community from "./pages/commu";
-import CommunityWrite from "./pages/commu/Routes/write";
+import CommunityWrite from "./pages/community/co_write";
+import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import HomePage from "./pages/home";
 

@@ -8,7 +8,10 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
       e.preventDefault();
       onClick(e);
     }}
-    style={{ textDecoration: "none", color: "black" }}
+    style={{
+      textDecoration: "none",
+      color: "#3D8361",
+    }}
   >
     {children}
     &#x25bc;

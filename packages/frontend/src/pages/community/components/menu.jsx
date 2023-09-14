@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormControl } from "react-bootstrap";
-import "../commu.css";
+import "../styles/community.css";
 
 const CustomMenu = React.forwardRef(
   ({ children, className, "aria-labelledby": labeledBy }, ref) => {
@@ -9,7 +9,7 @@ const CustomMenu = React.forwardRef(
     return (
       <div
         ref={ref}
-        style={{ width: "150px", marginTop: "35px" }}
+        style={{ width: "150px", marginTop: "45px" }}
         className={className}
         aria-labelledby={labeledBy}
       >

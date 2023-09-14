@@ -1,5 +1,5 @@
 import Pagination from "react-bootstrap/Pagination";
-import "./commu.css";
+import "../styles/community.css";
 
 const Page = ({ totalItems, itemsPerPage, activePage, handlePageChange }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -8,7 +8,6 @@ const Page = ({ totalItems, itemsPerPage, activePage, handlePageChange }) => {
   for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
     pageItems.push(
       <Pagination.Item
-        itemClass="page-item"
         key={pageNumber}
         active={pageNumber === activePage}
         onClick={() => handlePageChange(pageNumber)}
