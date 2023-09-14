@@ -23,7 +23,7 @@ export async function login(req: Request, res: Response): Promise<void> {
   const v = ajv.validate({
     type: "object",
     properties: {
-      email: { type: "string" },
+      email: { type: "string", format: "email" },
       password: { type: "string" },
     },
     required: ["email", "password"],
