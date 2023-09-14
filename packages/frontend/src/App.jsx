@@ -3,11 +3,19 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+ community
+import CommunityDetail from "./pages/community/co_detail";
+import CommunityWrite from "./pages/community/co_write";
+import Community from "./pages/community/community";
+import FundingsDetail from "./pages/fundings/FundingsDetail";
+import HomePage from "./pages/home";
+=======
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
+ main
 
 const browserRouter = createBrowserRouter([
   {
@@ -47,19 +55,19 @@ const browserRouter = createBrowserRouter([
       /**
        * 커뮤니티 홈
        */
-      { path: "/community", element: <h1>Community</h1> },
+      { path: "/community", element: <Community></Community> },
       /**
        * 커뮤니티 글
        */
-      { path: "/community/:id", element: <h1>Community</h1> },
+      { path: "/community/:id", element: <CommunityDetail></CommunityDetail> },
       /**
        * 커뮤니티 글 수정 및 삭제
        */
-      { path: "/community/:id/edit", element: <h1>Edit Community</h1> },
+      { path: "/community/:id/edit", element: <h1>Communityedit</h1> },
       /**
        * 커뮤니티 글 작성
        */
-      { path: "/community/:id/post", element: <h1>Post</h1> },
+      { path: "/community/:id/post", element: <CommunityWrite></CommunityWrite> },
       /**
        * 펀딩 홈
        */

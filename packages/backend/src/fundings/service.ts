@@ -1,5 +1,9 @@
 import { safeTransaction } from "@/db/util";
-import { FundingsRepository } from "./funding_model";
+import {
+  FundingRewardsRepository,
+  FundingsRepository,
+  FundingUsersRepository,
+} from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
 
 export class FundingApproveError extends Error {
@@ -54,5 +58,86 @@ export async function approveFundingRequest(request_id: number) {
     await requestRepo.updateById(request_id, {
       funding_request_id: funding_id,
     });
+  });
+}
+
+export class FundingUsersError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "FundingParticipateError";
+  }
+}
+
+export async function participateFunding({
+  user_id,
+  funding_id,
+  reward_id,
+  address,
+}: {
+  user_id: number;
+  funding_id: number;
+  reward_id: number;
+  address: string;
+}) {
+  return await safeTransaction(async (db) => {
+    try {
+      await new FundingUsersRepository(db).insert({
+        user_id,
+        funding_id,
+        reward_id,
+        address,
+      });
+    } catch (error) {
+      if (
+        error instanceof Error
+        && (error as { code?: string }).code === "ER_DUP_ENTRY"
+      ) {
+        throw new FundingUsersError("already participated");
+      }
+      throw error;
+    }
+
+    const rewardRepo = new FundingRewardsRepository(db);
+    const reward = await rewardRepo.findById(reward_id);
+    if (reward === undefined) {
+      throw new FundingUsersError("reward does not exist");
+    }
+    if (reward.reward_current_count >= reward.reward_count) {
+      throw new FundingUsersError("reward is full");
+    }
+    reward.reward_current_count += 1;
+    rewardRepo.updateById(reward_id, reward);
+
+    const fundingRepo = new FundingsRepository(db);
+    fundingRepo.addCurrentValue(funding_id, reward.price);
+  });
+}
+export async function withdrawFunding({
+  user_id,
+  funding_id,
+  reward_id,
+}: {
+  user_id: number;
+  funding_id: number;
+  reward_id: number;
+}) {
+  return await safeTransaction(async (db) => {
+    await new FundingUsersRepository(db).deleteByUserIdAndFundingId(
+      user_id,
+      funding_id,
+    );
+    const rewardRepo = new FundingRewardsRepository(db);
+    const reward = await rewardRepo.findById(reward_id);
+    if (reward === undefined) {
+      throw new FundingUsersError("reward does not exist");
+    }
+    if (reward.reward_current_count <= 0) {
+      throw new FundingUsersError("reward is empty");
+    }
+    reward.reward_current_count -= 1;
+    rewardRepo.updateById(reward_id, reward);
+
+    const fundingRepo = new FundingsRepository(db);
+    fundingRepo.addCurrentValue(funding_id, -reward.price);
   });
 }

@@ -36,7 +36,7 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<UserObject | undefined>;
   findByNickname(nickname: string): Promise<UserObject | undefined>;
 
-  insert(user: Insertable<DB["users"]>): Promise<UserObject | undefined>;
+  insert(user: Insertable<DB["users"]>): Promise<number | undefined>;
   approveByEmail(email: string): Promise<boolean>;
 }
 
@@ -113,13 +113,12 @@ export class UserRepository implements IUserRepository {
    * console.log(user);
    * ```
    */
-  async insert(user: Insertable<DB["users"]>): Promise<UserObject | undefined> {
+  async insert(user: Insertable<DB["users"]>): Promise<number | undefined> {
     user.password = await argon2_hash(user.password);
     const ret = await this.db.insertInto("users")
       .values(user)
-      .returningAll()
       .executeTakeFirst();
-    return ret;
+    return Number(ret.insertId);
   }
 
   /**
