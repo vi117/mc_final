@@ -29,7 +29,10 @@ export async function login(req: Request, res: Response): Promise<void> {
     required: ["email", "password"],
   }, req.body);
   if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다.", errors: ajv.errors });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
     return;
   }
 
@@ -46,7 +49,9 @@ export async function login(req: Request, res: Response): Promise<void> {
     return;
   }
   if (!user.email_approved) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: "이메일 인증이 되지 않았습니다." });
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      message: "이메일 인증이 되지 않았습니다.",
+    });
     return;
   }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
@@ -67,7 +72,10 @@ export async function signup(req: Request, res: Response): Promise<void> {
     required: ["nickname", "email", "password", "address", "phone"],
   }, req.body);
   if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다.", errors: ajv.errors });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
     return;
   }
   const {
@@ -105,12 +113,15 @@ export async function signup(req: Request, res: Response): Promise<void> {
       throw e;
     }
   }
-  const verificationCode = getAuthCodeRepository().createVerificationCode(email);
+  const verificationCode = getAuthCodeRepository().createVerificationCode(
+    email,
+  );
   await getTransport().sendMail({
     from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
     to: email,
     subject: "회원가입 인증 코드",
-    text: `회원가입 인증 코드는 ${verificationCode} 입니다. 이 코드를 입력해주세요.`,
+    text:
+      `회원가입 인증 코드는 ${verificationCode} 입니다. 이 코드를 입력해주세요.`,
     headers: {
       "content-type": "text/plain",
     },
@@ -133,14 +144,19 @@ export const verifyWithCode = async (req: Request, res: Response) => {
     required: ["code"],
   }, req.body);
   if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다.", errors: ajv.errors });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
     return;
   }
 
   const { code } = req.body;
   const email = getAuthCodeRepository().verify(code);
   if (email === null) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: "인증 코드가 일치하지 않거나 만료 되었습니다." });
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      message: "인증 코드가 일치하지 않거나 만료 되었습니다.",
+    });
     return;
   }
   const userRepository = getUserRepository();
@@ -164,7 +180,9 @@ export const logout = (req: Request, res: Response) => {
 export const queryById = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "숫자가 아닌 id를 받을 수 없습니다" });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "숫자가 아닌 id를 받을 수 없습니다",
+    });
     return;
   }
   const userRepository = getUserRepository();
@@ -187,7 +205,9 @@ export const queryAll = async (req: Request, res: Response) => {
     parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50"),
     200,
   );
-  const offset = parseInt(typeof queryParams.offset === "string" ? queryParams.offset : "0");
+  const offset = parseInt(
+    typeof queryParams.offset === "string" ? queryParams.offset : "0",
+  );
   const users = await userRepository.findAll({
     limit,
     offset,

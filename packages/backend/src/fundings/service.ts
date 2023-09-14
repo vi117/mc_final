@@ -16,7 +16,12 @@ export async function approveFundingRequest(request_id: number) {
     const request = await requestRepo.findById(request_id);
     if (request === undefined) {
       throw new FundingApproveError("존재하지 않는 요청 ID");
+    } else if (request.funding_state === 1) {
+      throw new FundingApproveError("이미 승인된 요청입니다");
+    } else if (request.funding_state === 2) {
+      throw new FundingApproveError("이미 취소된 요청입니다");
     }
+
     let funding_id;
     if (request.funding_request_id) {
       funding_id = request.funding_request_id;

@@ -10,6 +10,17 @@ export interface FindAllUsersOptions {
    * 사용자 ID
    */
   user_id?: number;
+  /**
+   * Specifies the start date for a funding search.
+   * The date from which to begin the search.
+   * @default Date.now()
+   */
+  begin_date?: Date;
+  /**
+   * end_date
+   * @default Date.now()
+   */
+  end_date?: Date;
 }
 
 export interface FindOneOptions {
@@ -63,6 +74,8 @@ export class FundingsRepository {
     const offset = options?.offset ?? 0;
     const cursor = options?.cursor;
     const user_id = options?.user_id ?? null;
+    const begin_date = options?.begin_date ?? new Date();
+    const end_date = options?.end_date ?? new Date();
 
     const query = this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
@@ -80,12 +93,18 @@ export class FundingsRepository {
       .select((eb) => [
         jsonArrayFrom(
           eb.selectFrom("funding_tag_rel")
-            .innerJoin("funding_tags", "funding_tag_rel.tag_id", "funding_tags.id")
+            .innerJoin(
+              "funding_tags",
+              "funding_tag_rel.tag_id",
+              "funding_tags.id",
+            )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
             .select(["funding_tags.tag as tag"]),
         ).as("tags"),
       ])
       .$if(cursor !== undefined, (qb) => qb.where("id", "<", cursor ?? 0))
+      .where("fundings.begin_date", "<", end_date)
+      .where("fundings.end_date", ">=", begin_date)
       .limit(limit)
       .offset(offset);
 
@@ -123,7 +142,11 @@ export class FundingsRepository {
       .select((eb) => [
         jsonArrayFrom(
           eb.selectFrom("funding_tag_rel")
-            .innerJoin("funding_tags", "funding_tag_rel.tag_id", "funding_tags.id")
+            .innerJoin(
+              "funding_tags",
+              "funding_tag_rel.tag_id",
+              "funding_tags.id",
+            )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
             .select(["funding_tags.tag as tag"]),
         ).as("tags"),
@@ -153,5 +176,18 @@ export class FundingsRepository {
       .returning(["id"])
       .executeTakeFirstOrThrow();
     return ret?.id;
+  }
+
+  async setInterest(funding_id: number, user_id: number) {
+    return await this.db.insertInto("user_funding_interest")
+      .values({ funding_id, user_id })
+      .executeTakeFirstOrThrow();
+  }
+
+  async dissetInterest(funding_id: number, user_id: number) {
+    return await this.db.deleteFrom("user_funding_interest")
+      .where("funding_id", "=", funding_id)
+      .where("user_id", "=", user_id)
+      .executeTakeFirstOrThrow();
   }
 }
