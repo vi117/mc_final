@@ -1,0 +1,56 @@
+.fundingName{
+  text-align: center;
+}
+
+.tags{
+  text-align: right;
+  margin-top: 30px; /* 태그를 해당 구역에서 최우하단에 놓고싶은데 어떻게 써야할지 모르곘습니당.. */
+}
+
+.fundingName h1{
+  font-weight: bold;
+}
+
+.sujung{
+  text-align: right;
+}
+
+.sns{
+  /* text-align: left; */
+  margin-left: 50px;
+}
+
+.wishList{
+  text-align: right;
+  margin-right: 55px;
+  /* padding: 10px 0px 10px 0px; */
+}
+
+.rewardList{
+  /* text-align: center; */
+  /* align-items: center; */
+  /* align-items: flex-end; */
+}
+
+.joinBtn{
+  /* width: 415px; */
+  /* justify-items: center; */
+  /* align-items: center; */
+  margin-right: 0px;
+  padding: 10px 0px 10px 0px;
+}
+
+
+
+/* // const customButtonStyle = { // 버튼을 컨셉색깔로 바꾸려고 해봤는데 실패..
+  //   backgroundColor: '#00917C' , // 원하는 색상
+  //   color: 'white' // 텍스트 색상
+  // }; */
+/* 
+
+
+
+<div className="btn-group btn-group-lg" role="group" aria-label="...">...</div>
+
+<Button variant="success"
+style={{"--bs-btn-width":"20000px", "--bs-btn-padding-y":"11rem", "--bs-btn-padding-x":".5rem", "--bs-btn-font-size":".75rem"}}>참가버튼</Button>
