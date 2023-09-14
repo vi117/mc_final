@@ -22,6 +22,18 @@ async function getAllFundingHandler(req: Request, res: Response) {
   const offset = parseInt(typeof queryParams.offset === "string" ? queryParams.offset : "0");
   const user = req.user;
 
+  let begin_date: Date | undefined;
+  let end_date: Date | undefined;
+
+  if (user?.is_admin) {
+    if (typeof queryParams.begin_date === "string") {
+      begin_date = new Date(queryParams.begin_date);
+    }
+    if (typeof queryParams.end_date === "string") {
+      end_date = new Date(queryParams.end_date);
+    }
+  }
+
   let cursor: number | undefined = parseInt(
     typeof queryParams.cursor === "string" ? queryParams.cursor : "NaN",
   );
@@ -31,6 +43,8 @@ async function getAllFundingHandler(req: Request, res: Response) {
     offset,
     cursor,
     user_id: user?.id,
+    begin_date,
+    end_date,
   });
   res.json(result).status(StatusCodes.OK);
 }
@@ -49,6 +63,14 @@ async function getSingleFundingHandler(req: Request, res: Response) {
   const result = await fundingRepository.findById(id, {
     user_id: user?.id,
   });
+  if (!result) {
+    res.status(StatusCodes.NOT_FOUND).json();
+    return;
+  }
+  if (!user?.is_admin && result.begin_date.getTime() >= new Date().getTime()) {
+    res.status(StatusCodes.FORBIDDEN).json({ message: "공개 준비 중인 펀딩입니다." });
+    return;
+  }
   res.json(result).status(result ? StatusCodes.OK : StatusCodes.NOT_FOUND);
 }
 
@@ -67,15 +89,25 @@ async function getAllFundingRequestHandler(req: Request, res: Response) {
 
 async function getSingleFundingRequestHandler(req: Request, res: Response) {
   const requestRepo = new FundingRequestsRepository(getDB());
-
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     debug("unreachable!!! id is NaN");
     res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다." });
     return;
   }
+  const user = req.user;
+  assert(user, "로그인이 필요합니다.");
+
   const result = await requestRepo.findById(id);
-  res.json(result).status(result ? StatusCodes.OK : StatusCodes.NOT_FOUND);
+  if (!result) {
+    res.status(StatusCodes.NOT_FOUND).json();
+    return;
+  }
+  if (!user?.is_admin && result.host_id !== user.id) {
+    res.status(StatusCodes.FORBIDDEN).json({ message: "요청자가 아닙니다." });
+    return;
+  }
+  res.json(result).status(StatusCodes.OK);
 }
 
 async function createFundingRequestHandler(req: Request, res: Response) {
@@ -144,8 +176,8 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
 
 router.get("/", RouterCatch(getAllFundingHandler));
 router.get("/:id(\\d+)", RouterCatch(getSingleFundingHandler));
-router.get("/request/", RouterCatch(getAllFundingRequestHandler));
-router.get("/request/:id(\\d+)", RouterCatch(getSingleFundingRequestHandler));
+router.get("/request/", checkLogin({ admin_check: true }), RouterCatch(getAllFundingRequestHandler));
+router.get("/request/:id(\\d+)", checkLogin(), RouterCatch(getSingleFundingRequestHandler));
 router.post("/request/", checkLogin(), RouterCatch(createFundingRequestHandler));
 router.post("/request/:id(\\d+)/approve", checkLogin({ admin_check: true }), RouterCatch(approveFundingRequestHandler));
 router.post(

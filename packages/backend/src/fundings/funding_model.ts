@@ -10,6 +10,17 @@ export interface FindAllUsersOptions {
    * 사용자 ID
    */
   user_id?: number;
+  /**
+   * Specifies the start date for a funding search.
+   * The date from which to begin the search.
+   * @default Date.now()
+   */
+  begin_date?: Date;
+  /**
+   * end_date
+   * @default Date.now()
+   */
+  end_date?: Date;
 }
 
 export interface FindOneOptions {
@@ -63,6 +74,8 @@ export class FundingsRepository {
     const offset = options?.offset ?? 0;
     const cursor = options?.cursor;
     const user_id = options?.user_id ?? null;
+    const begin_date = options?.begin_date ?? new Date();
+    const end_date = options?.end_date ?? new Date();
 
     const query = this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
@@ -86,6 +99,8 @@ export class FundingsRepository {
         ).as("tags"),
       ])
       .$if(cursor !== undefined, (qb) => qb.where("id", "<", cursor ?? 0))
+      .where("fundings.begin_date", "<", end_date)
+      .where("fundings.end_date", ">=", begin_date)
       .limit(limit)
       .offset(offset);
 
