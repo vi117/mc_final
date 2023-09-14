@@ -4,8 +4,12 @@ import { Layout } from "./component/layout/Layout";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import FundingsDetail from "./pages/fundings/FundingsDetail";
+import FundingsWrite from "./pages/fundings/FundingsWrite";
+
+
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
+
 
 const browserRouter = createBrowserRouter([
   {
@@ -73,11 +77,11 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 수정 및 삭제
        */
-      { path: "/fundings/:id/edit", element: <h1>Edit Fundings</h1> },
+      { path: "/fundings/:id/edit", element: <h1>edit</h1> },
       /**
        * 펀딩 글 작성
        */
-      { path: "/fundings/:id/post", element: <h1>Post</h1> },
+      { path: "/fundings/:id/post", element: <FundingsWrite /> },
       { path: "*", element: <h1>Not Found</h1> },
     ],
   },
