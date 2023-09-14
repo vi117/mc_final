@@ -54,7 +54,10 @@ export class FundingRequestsRepository {
   async updateById(id: number, funding: Updateable<DB["funding_requests"]>) {
     await this.db
       .updateTable("funding_requests")
-      .set(funding)
+      .set({
+        ...funding,
+        updated_at: new Date(),
+      })
       .where("funding_requests.id", "=", id)
       .executeTakeFirstOrThrow();
   }

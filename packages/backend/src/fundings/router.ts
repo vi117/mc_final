@@ -170,7 +170,8 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
   }
   const requestRepo = new FundingRequestsRepository(getDB());
   requestRepo.updateById(id, {
-    funding_state: 3,
+    funding_state: 2,
+    deleted_at: new Date(),
   });
 }
 
