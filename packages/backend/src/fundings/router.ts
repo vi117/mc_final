@@ -15,11 +15,18 @@ import { approveFundingRequest, FundingApproveError } from "./service";
 const debug = debug_fn("joinify:fundings");
 const router = Router();
 
+/**
+ * Retrieves all funding data based on the provided query parameters.
+ */
 async function getAllFundingHandler(req: Request, res: Response) {
   const fundingRepository = new FundingsRepository(getDB());
   const queryParams = req.query;
-  const limit = parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50");
-  const offset = parseInt(typeof queryParams.offset === "string" ? queryParams.offset : "0");
+  const limit = parseInt(
+    typeof queryParams.limit === "string" ? queryParams.limit : "50",
+  );
+  const offset = parseInt(
+    typeof queryParams.offset === "string" ? queryParams.offset : "0",
+  );
   const user = req.user;
 
   let begin_date: Date | undefined;
@@ -56,7 +63,9 @@ async function getSingleFundingHandler(req: Request, res: Response) {
     // It's unreachable. if it happens, it's a bug.
     // when it happens, first check the route path.
     debug("unreachable!!! id is NaN");
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다." });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다.",
+    });
     return;
   }
   const user = req.user;
@@ -68,17 +77,66 @@ async function getSingleFundingHandler(req: Request, res: Response) {
     return;
   }
   if (!user?.is_admin && result.begin_date.getTime() >= new Date().getTime()) {
-    res.status(StatusCodes.FORBIDDEN).json({ message: "공개 준비 중인 펀딩입니다." });
+    res.status(StatusCodes.FORBIDDEN).json({
+      message: "공개 준비 중인 펀딩입니다.",
+    });
     return;
   }
   res.json(result).status(result ? StatusCodes.OK : StatusCodes.NOT_FOUND);
 }
 
+async function interestHandler(req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    debug("unreachable!!! id is NaN");
+    res.json({
+      message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다.",
+    });
+    return;
+  }
+  const disset = req.query.disset === "true";
+
+  const user = req.user;
+  assert(user);
+
+  const fundingRepo = new FundingsRepository(getDB());
+  try {
+    if (disset) {
+      const d = await fundingRepo.dissetInterest(id, user.id);
+      if (d.numDeletedRows === 0n) {
+        res.status(StatusCodes.CONFLICT).json({
+          message: "이미 관심펀딩이 아닙니다.",
+        });
+        return;
+      }
+    } else {
+      await fundingRepo.setInterest(id, user.id);
+    }
+  } catch (error) {
+    if (
+      error instanceof Error
+      && (error as { code?: string }).code === "ER_DUP_ENTRY"
+    ) {
+      res.status(StatusCodes.CONFLICT).json({
+        message: "이미 관심 펀딩입니다.",
+      });
+      return;
+    } else {
+      throw error;
+    }
+  }
+  res.json({ message: "success" }).status(StatusCodes.OK);
+}
+
 async function getAllFundingRequestHandler(req: Request, res: Response) {
   const requestRepo = new FundingRequestsRepository(getDB());
   const queryParams = req.query;
-  const limit = parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50");
-  const offset = parseInt(typeof queryParams.offset === "string" ? queryParams.offset : "0");
+  const limit = parseInt(
+    typeof queryParams.limit === "string" ? queryParams.limit : "50",
+  );
+  const offset = parseInt(
+    typeof queryParams.offset === "string" ? queryParams.offset : "0",
+  );
 
   const result = await requestRepo.findAll({
     limit,
@@ -92,7 +150,9 @@ async function getSingleFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     debug("unreachable!!! id is NaN");
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다." });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다.",
+    });
     return;
   }
   const user = req.user;
@@ -124,13 +184,24 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       target_value: { type: "number" },
       thumbnail: { type: "string" },
     },
-    required: ["title", "content", "begin_date", "end_date", "target_value", "thumbnail"],
+    required: [
+      "title",
+      "content",
+      "begin_date",
+      "end_date",
+      "target_value",
+      "thumbnail",
+    ],
   }, req.body);
   if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다.", errors: ajv.errors });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
     return;
   }
-  const { title, content, begin_date, end_date, target_value, thumbnail } = req.body;
+  const { title, content, begin_date, end_date, target_value, thumbnail } =
+    req.body;
   const result = await requestRepo.insert({
     host_id: user.id,
     title,
@@ -146,7 +217,9 @@ async function approveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     debug("unreachable!!! id is NaN");
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다." });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다.",
+    });
     return;
   }
   try {
@@ -165,7 +238,9 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     debug("unreachable!!! id is NaN");
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다." });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다. id 값이 올바르지 않습니다.",
+    });
     return;
   }
   const requestRepo = new FundingRequestsRepository(getDB());
@@ -177,10 +252,29 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
 
 router.get("/", RouterCatch(getAllFundingHandler));
 router.get("/:id(\\d+)", RouterCatch(getSingleFundingHandler));
-router.get("/request/", checkLogin({ admin_check: true }), RouterCatch(getAllFundingRequestHandler));
-router.get("/request/:id(\\d+)", checkLogin(), RouterCatch(getSingleFundingRequestHandler));
-router.post("/request/", checkLogin(), RouterCatch(createFundingRequestHandler));
-router.post("/request/:id(\\d+)/approve", checkLogin({ admin_check: true }), RouterCatch(approveFundingRequestHandler));
+// router.get("/:id(\\d+)/request", checkLogin({ admin_check: true }), RouterCatch());
+router.post("/:id(\\d+)/interest", checkLogin(), RouterCatch(interestHandler));
+
+router.get(
+  "/request/",
+  checkLogin({ admin_check: true }),
+  RouterCatch(getAllFundingRequestHandler),
+);
+router.get(
+  "/request/:id(\\d+)",
+  checkLogin(),
+  RouterCatch(getSingleFundingRequestHandler),
+);
+router.post(
+  "/request/",
+  checkLogin(),
+  RouterCatch(createFundingRequestHandler),
+);
+router.post(
+  "/request/:id(\\d+)/approve",
+  checkLogin({ admin_check: true }),
+  RouterCatch(approveFundingRequestHandler),
+);
 router.post(
   "/request/:id(\\d+)/disapprove",
   checkLogin({ admin_check: true }),

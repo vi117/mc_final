@@ -32,7 +32,8 @@ export class FundingRequestsRepository {
         "host.profile_image as host_profile_image",
         "host.email as host_email",
       ])
-      .where("funding_requests.id", "=", id).selectAll("funding_requests").executeTakeFirst();
+      .where("funding_requests.id", "=", id).selectAll("funding_requests")
+      .executeTakeFirst();
   }
 
   async insert(funding: Insertable<DB["funding_requests"]>): Promise<number> {

@@ -93,7 +93,11 @@ export class FundingsRepository {
       .select((eb) => [
         jsonArrayFrom(
           eb.selectFrom("funding_tag_rel")
-            .innerJoin("funding_tags", "funding_tag_rel.tag_id", "funding_tags.id")
+            .innerJoin(
+              "funding_tags",
+              "funding_tag_rel.tag_id",
+              "funding_tags.id",
+            )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
             .select(["funding_tags.tag as tag"]),
         ).as("tags"),
@@ -138,7 +142,11 @@ export class FundingsRepository {
       .select((eb) => [
         jsonArrayFrom(
           eb.selectFrom("funding_tag_rel")
-            .innerJoin("funding_tags", "funding_tag_rel.tag_id", "funding_tags.id")
+            .innerJoin(
+              "funding_tags",
+              "funding_tag_rel.tag_id",
+              "funding_tags.id",
+            )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
             .select(["funding_tags.tag as tag"]),
         ).as("tags"),
@@ -168,5 +176,18 @@ export class FundingsRepository {
       .returning(["id"])
       .executeTakeFirstOrThrow();
     return ret?.id;
+  }
+
+  async setInterest(funding_id: number, user_id: number) {
+    return await this.db.insertInto("user_funding_interest")
+      .values({ funding_id, user_id })
+      .executeTakeFirstOrThrow();
+  }
+
+  async dissetInterest(funding_id: number, user_id: number) {
+    return await this.db.deleteFrom("user_funding_interest")
+      .where("funding_id", "=", funding_id)
+      .where("user_id", "=", user_id)
+      .executeTakeFirstOrThrow();
   }
 }
