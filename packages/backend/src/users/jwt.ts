@@ -31,7 +31,10 @@ export function isTokenInfo(obj: object | string): obj is TokenInfo {
     && typeof obj["nickname"] == "string";
 }
 
-export function createTokenFromUser(user: UserObject, refresh: boolean = false): string {
+export function createTokenFromUser(
+  user: UserObject,
+  refresh: boolean = false,
+): string {
   return createToken({
     id: user.id,
     nickname: user.nickname,
@@ -139,7 +142,11 @@ export function deleteRefreshTokenFromCookie(res: Response) {
 /**
  * check access token and set user info to `req.user`
  */
-export function tokenCheckMiddleware(req: Request, res: Response, next: NextFunction) {
+export function tokenCheckMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const token = getAccessTokenFrom(req);
   if (token !== null) {
     const access_info = checkToken(token);
@@ -179,15 +186,21 @@ export function checkLogin({ admin_check = false } = {}) {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = req["user"];
     if (!user) {
-      res.status(StatusCodes.UNAUTHORIZED).json({ message: "로그인이 필요합니다." });
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        message: "로그인이 필요합니다.",
+      });
       return;
     }
     if (admin_check && !user.is_admin) {
-      res.status(StatusCodes.UNAUTHORIZED).json({ message: "관리자 계정이 아닙니다." });
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        message: "관리자 계정이 아닙니다.",
+      });
       return;
     }
     if (!user.email_approved) {
-      res.status(StatusCodes.UNAUTHORIZED).json({ message: "이메일 인증이 필요합니다." });
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        message: "이메일 인증이 필요합니다.",
+      });
       return;
     }
     next();

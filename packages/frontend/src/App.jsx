@@ -6,10 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 
-
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
-
 
 const browserRouter = createBrowserRouter([
   {

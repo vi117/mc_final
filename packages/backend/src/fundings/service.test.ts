@@ -31,6 +31,17 @@ beforeEach(() => {
 });
 
 describe("approveFundingRequest", () => {
+  const request_template = {
+    title: "Request Title",
+    content: "Request Content",
+    thumbnail: "Request Thumbnail",
+    target_value: 1000,
+    begin_date: new Date(),
+    end_date: new Date(),
+    host_id: 789,
+    funding_status: 0,
+  };
+
   it("should throw an error if the request is not found", async () => {
     const request_id = 123;
     findByIdMock.mockResolvedValue(undefined);
@@ -47,16 +58,9 @@ describe("approveFundingRequest", () => {
 
   it("should update an existing funding request", async () => {
     const request_id = 123;
-    const funding_id = 456;
     const request = {
-      funding_request_id: funding_id,
-      title: "Request Title",
-      content: "Request Content",
-      thumbnail: "Request Thumbnail",
-      target_value: 1000,
-      begin_date: new Date(),
-      end_date: new Date(),
-      host_id: 789,
+      ...request_template,
+      funding_request_id: 456,
     };
     findByIdMock.mockResolvedValue(request);
 
@@ -76,15 +80,7 @@ describe("approveFundingRequest", () => {
   it("should insert a new funding request", async () => {
     const request_id = 123;
     const funding_id = 456;
-    const request = {
-      title: "Request Title",
-      content: "Request Content",
-      thumbnail: "Request Thumbnail",
-      target_value: 1000,
-      begin_date: new Date(),
-      end_date: new Date(),
-      host_id: 789,
-    };
+    const request = request_template;
 
     findByIdMock.mockResolvedValue(request);
     insertMock.mockResolvedValue(funding_id);
@@ -108,15 +104,7 @@ describe("approveFundingRequest", () => {
 
   it("should throw an error if the funding insert fails", async () => {
     const request_id = 123;
-    const request = {
-      title: "Request Title",
-      content: "Request Content",
-      thumbnail: "Request Thumbnail",
-      target_value: 1000,
-      begin_date: new Date(),
-      end_date: new Date(),
-      host_id: 789,
-    };
+    const request = request_template;
 
     findByIdMock.mockResolvedValue(request);
     insertMock.mockResolvedValue(undefined);

@@ -1,4 +1,13 @@
-import { Badge, Button, ButtonGroup, Carousel, Container, Dropdown, DropdownButton, ListGroup } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  ButtonGroup,
+  Carousel,
+  Container,
+  Dropdown,
+  DropdownButton,
+  ListGroup,
+} from "react-bootstrap";
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import "./FundingsDetail.css";
