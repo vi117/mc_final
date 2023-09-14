@@ -14,7 +14,7 @@
   --secondary: #d9d9d9;
 
   /*그림자, background, border*/
-  --shadow: #f3f3f3;
+  --border: #f3f3f3;
   --white: #fff;
 
   /*포인트 컬러*/
@@ -49,7 +49,105 @@ weight: 400, (기본)
 
 .container {
   width: 100%;
-  border-top: 1px solid var(--border);
   padding: 0 !important;
-  text-align: center;
+}
+
+.selectedTitle {
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.titleArea {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.detailbtn {
+  justify-content: flex-end;
+  margin-left: auto !important;
+}
+.detailbtn > button {
+  font-size: 12px;
+  margin: 3px;
+  color: var(--green);
+  border: 1px solid var(--green);
+  padding: 3px 10px;
+  border-radius: 8px;
+  background-color: var(--white);
+}
+
+.detailbtn > button:hover {
+  font-size: 12px;
+  margin: 3px;
+  color: var(--white);
+  border: 1px solid var(--green);
+  padding: 3px 10px;
+  border-radius: 8px;
+  background-color: var(--green);
+}
+
+.createdArea {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--border);
+  box-shadow: var(--boxshadow);
+  padding: 10px 5px;
+}
+
+.user {
+  width: 40%;
+  aspect-ratio: 1 / 1;
+  max-width: 45px;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 1px solid var(--secondary);
+  margin-right: 7px;
+}
+
+.createdBy {
+  padding: 0 !important;
+  color: var(--teritary);
+  margin-right: auto !important;
+}
+
+.dateArea {
+  justify-content: flex-end;
+  width: 50%;
+  display: flex;
+  margin-left: auto !important;
+  align-items: center;
+}
+
+.date {
+  margin-right: 7px;
+  color: var(--teritary);
+}
+
+.views {
+  color: var(--teritary);
+}
+
+.content {
+  width: 100%;
+  padding: 30px 10px;
+}
+
+.reportArea {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.reportArea > button {
+  width: 50px;
+  height: 50px;
+
+  border: 1px solid var(--secondary);
+  background-color: var(--white);
+  border-radius: 100%;
+  padding: 10px;
+  margin: 5px;
 }
