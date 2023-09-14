@@ -1,7 +1,7 @@
 import debug_namespace from "debug";
 import { Kysely, MysqlDialect, sql } from "kysely";
 import { createPool } from "mysql2";
-import { DB } from "../../dist/db";
+import { DB } from "./db";
 
 let db: Kysely<DB> | null = null;
 
