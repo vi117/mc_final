@@ -30,7 +30,9 @@ export function getDB(): Kysely<DB> {
  * @param {Function} fn - The function to be executed within the transaction.
  * @returns {Promise<T>} return - The result of executing the function within the transaction.
  */
-export async function safeTransaction<T>(fn: (_trx: Kysely<DB>) => Promise<T>): Promise<T> {
+export async function safeTransaction<T>(
+  fn: (_trx: Kysely<DB>) => Promise<T>,
+): Promise<T> {
   const db = getDB();
   if (db.isTransaction) {
     return await fn(db);
@@ -48,13 +50,17 @@ export async function safeTransaction<T>(fn: (_trx: Kysely<DB>) => Promise<T>): 
  * close();
  * ```
  */
-export function beginTransaction(): Promise<(_c: "rollback" | "commit") => void> {
+export function beginTransaction(): Promise<
+  (_c: "rollback" | "commit") => void
+> {
   const original = getDB();
   const trx_builder = original.transaction();
   let dispose_fn: (_c: "rollback" | "commit") => void;
-  const close_promise = new Promise<"rollback" | "commit">((resolve, _reject) => {
-    dispose_fn = resolve;
-  });
+  const close_promise = new Promise<"rollback" | "commit">(
+    (resolve, _reject) => {
+      dispose_fn = resolve;
+    },
+  );
   return new Promise((resolve, reject) => {
     trx_builder.execute(async trx => {
       db = trx;

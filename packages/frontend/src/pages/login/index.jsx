@@ -5,7 +5,11 @@ export default function LoginPage() {
     <div className={classes["login-container"]}>
       <div className={classes["login-wrapper"]}>
         <h1>Login</h1>
-        <form method="post" action="/login.url" className={classes["login-form"]}>
+        <form
+          method="post"
+          action="/login.url"
+          className={classes["login-form"]}
+        >
           <input type="text" name="userName" placeholder="Email" />
           <input type="password" name="userPassword" placeholder="Password" />
           <label htmlFor="remember-check">
@@ -53,7 +57,12 @@ export default function LoginPage() {
                   </path>
                 </g>
                 <defs>
-                  <rect width="29.75" height="29.75" fill="white" transform="translate(2.125 2.125)">
+                  <rect
+                    width="29.75"
+                    height="29.75"
+                    fill="white"
+                    transform="translate(2.125 2.125)"
+                  >
                   </rect>
                 </defs>
               </svg>
@@ -101,7 +110,11 @@ export default function LoginPage() {
 
           <div className={classes["bQAztb"]}>
             아직 Happytails 계정이 없으신가요?
-            <span color="sub0180" font-weight="500" className={classes["bKXWde"]}>
+            <span
+              color="sub0180"
+              font-weight="500"
+              className={classes["bKXWde"]}
+            >
               <strong>
                 <a href="회원가입.url">회원가입</a>
               </strong>

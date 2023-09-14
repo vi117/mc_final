@@ -131,7 +131,9 @@ describe("signup", () => {
     equal(res.status, StatusCodes.CONFLICT);
   });
   test("signup success", async () => {
-    createVerificationCodeMock.mockReturnValue("6aba8a26-86c0-41f8-a19f-14fa1de41805");
+    createVerificationCodeMock.mockReturnValue(
+      "6aba8a26-86c0-41f8-a19f-14fa1de41805",
+    );
     insertUser.mockReturnValue({
       id: 2,
       ...sample_user,
@@ -166,7 +168,9 @@ describe("verifyWithCode", () => {
     });
 
     expect(res.status).toBe(StatusCodes.UNAUTHORIZED);
-    expect(res.body).toMatchObject({ message: "인증 코드가 일치하지 않거나 만료 되었습니다." });
+    expect(res.body).toMatchObject({
+      message: "인증 코드가 일치하지 않거나 만료 되었습니다.",
+    });
   });
 
   test("User already approved", async () => {
@@ -178,6 +182,8 @@ describe("verifyWithCode", () => {
     });
 
     expect(res.status).toBe(StatusCodes.CONFLICT);
-    expect(res.body).toMatchObject({ message: "유저가 이미 인증을 받았습니다." });
+    expect(res.body).toMatchObject({
+      message: "유저가 이미 인증을 받았습니다.",
+    });
   });
 });

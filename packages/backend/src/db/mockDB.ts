@@ -13,7 +13,9 @@ import { DB } from "../../dist/db";
 class MyDummyConnection implements DatabaseConnection {
   constructor(public queryCollection: CompiledQuery<unknown>[]) {
   }
-  async executeQuery<R>(compiledQuery: CompiledQuery<unknown>): Promise<QueryResult<R>> {
+  async executeQuery<R>(
+    compiledQuery: CompiledQuery<unknown>,
+  ): Promise<QueryResult<R>> {
     this.queryCollection.push(compiledQuery);
     return {
       rows: [],

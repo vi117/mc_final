@@ -122,7 +122,10 @@ const FundingsWrite = function() {
 
       <Row>
         증명등록
-        <Form.Label>증명등록에 필요한 파일을 업로드해주세요.(주민등록증or사업자등록증)(인증서)</Form.Label>
+        <Form.Label>
+          증명등록에 필요한 파일을
+          업로드해주세요.(주민등록증or사업자등록증)(인증서)
+        </Form.Label>
         <Form.Control type="file" multiple />
       </Row>
 
