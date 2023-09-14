@@ -10,7 +10,7 @@ function RegisterPage() {
   const [NickName, setNickName] = useState("");
   const [Phone, setPhone] = useState("");
   const [Address, setAddress] = useState("");
-  const [Article, setArticle] = useState(""); // 소개글
+  const [Article, setArticle] = useState("");
 
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -71,10 +71,10 @@ function RegisterPage() {
         onSubmit={onSubmitHandler}
       >
         <Upload></Upload>
-        <label>Email</label>
-        <input type="email" value={Email} onChange={onEmailHandler} />
         <label>Name</label>
         <input type="text" value={Name} onChange={onNameHandler} />
+        <label>Email</label>
+        <input type="email" value={Email} onChange={onEmailHandler} />
         <label>Password</label>
         <input type="password" value={Password} onChange={onPasswordHandler} />
         <label>Confirm Password</label>
