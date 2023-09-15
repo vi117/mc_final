@@ -23,7 +23,8 @@ export function Header() {
               <CgProfile
                 color="#555555"
                 style={{ marginRight: "5px", width: "20px", height: "20px" }}
-              />로그인/회원가입
+              />
+              로그인/회원가입
             </p>
           </NavLink>
         </div>
@@ -42,7 +43,9 @@ export function Header() {
             카테고리
           </div>
           <div className="nav_item">
-            펀딩
+            <NavLink to={"/fundings"}>
+              펀딩
+            </NavLink>
           </div>
           <div className="nav_item">
             <NavLink to={"/community"}>

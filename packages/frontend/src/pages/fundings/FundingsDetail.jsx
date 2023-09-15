@@ -11,6 +11,7 @@ import {
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import "./FundingsDetail.css";
+import { NavLink } from "react-router-dom";
 
 const placeholder = "https://via.placeholder.com/850x375";
 
@@ -18,7 +19,9 @@ const FundingsDetail = function() {
   return (
     <Container style={{ "padding-top": "20px", "width": "50vw" }}>
       <div className="sujung">
-        <Button variant="success">수정</Button>
+        <NavLink to={"/fundings/1/edit"}>
+          <Button variant="success">수정</Button>
+        </NavLink>
       </div>
       <Row>
         <Col sm={8} className="fundingName">
