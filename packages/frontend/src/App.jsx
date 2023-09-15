@@ -6,14 +6,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import CommunityDetail from "./pages/community/co_detail";
 import CommunityWrite from "./pages/community/co_write";
 import Community from "./pages/community/community";
-import HomePage from "./pages/home";
-import LoginPage from "./pages/login";
-
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
 import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
+import HomePage from "./pages/home";
+import LoginPage from "./pages/login";
 
 const browserRouter = createBrowserRouter([
   {
