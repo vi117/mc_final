@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as Pencil } from "../assets/pencil.svg";
 import Sampledata from "../assets/sampledata";
 import classes from "../styles/community.module.css";
-import CustomMenu from "./menu";
-import CustomToggle from "./toggle";
+import CustomMenu from "./Menu";
+import CustomToggle from "./Toggle";
 
 const Board = () => {
   const [filteredData, setFilteredData] = useState([]);

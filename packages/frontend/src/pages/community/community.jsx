@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Carousel } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import Sampledata from "./assets/sampledata";
-import Board from "./components/board";
-import Page from "./components/pagination";
+import Board from "./components/Board";
+import Page from "./components/Pagination";
 import classes from "./styles/Community.module.css";
 
 export function Community() {
