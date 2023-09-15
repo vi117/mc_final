@@ -9,10 +9,18 @@ import CommunityWrite from "./pages/community/co_write";
 import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 //
+import FundingsEdit from "./pages/fundings/FundingsEdit";
+import FundingsHome from "./pages/fundings/FundingsHome";
+import FundingsSearch from "./pages/fundings/FundingsSearch";
+// HEAD
+//
 import FundingsWrite from "./pages/fundings/FundingsWrite";
-
 import HomePage from "./pages/home";
+// 743e4a890238e2a4781121e83a4e7d52df137c60
+
 import LoginPage from "./pages/login";
+
+import RegisterPage from "./pages/register";
 const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -31,7 +39,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 회원가입 페이지
        */
-      { path: "/register", element: <h1>Register</h1> },
+      { path: "/register", element: <RegisterPage /> },
       /**
        * 비밀번호 찾기
        */
@@ -70,11 +78,11 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 홈
        */
-      { path: "/fundings", element: <h1>Fundings</h1> },
+      { path: "/fundings", element: <FundingsHome /> },
       /**
        * 펀딩 검색 ?q=검색어
        */
-      { path: "/fundings/search", element: <h1>Search</h1> },
+      { path: "/fundings/search", element: <FundingsSearch /> },
       /**
        * 펀딩 글
        */
@@ -82,17 +90,18 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 수정 및 삭제
        */
+      // HEAD
       { path: "/fundings/:id/edit", element: <h1>edit</h1> },
+      //
+      { path: "/fundings/:id/edit", element: <FundingsEdit /> },
+      // 743e4a890238e2a4781121e83a4e7d52df137c60
       /**
        * 펀딩 글 작성
-       */
-      { path: "/fundings/:id/post", element: <FundingsWrite /> },
+       */ { path: "/fundings/:id/post", element: <FundingsWrite /> },
       { path: "*", element: <h1>Not Found</h1> },
     ],
   },
 ]);
-
-import "./App.css";
 
 function App() {
   return <RouterProvider router={browserRouter}></RouterProvider>;

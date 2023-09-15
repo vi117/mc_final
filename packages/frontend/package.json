@@ -11,13 +11,21 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.8",
+    "@mui/styled-engine": "^5.14.8",
+    "axios": "^1.5.0",
     "bootstrap": "^5.3.1",
+    "clsx": "^2.0.0",
+    "hoist-non-react-statics": "^3.3.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-datepicker": "^4.17.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
-    "react-router-dom": "^6.15.0"
+    "react-router-dom": "^6.15.0",
+    "stylis": "^4.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

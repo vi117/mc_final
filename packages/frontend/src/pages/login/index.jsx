@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import classes from "./style.module.css";
 
 export default function LoginPage() {
@@ -116,7 +117,9 @@ export default function LoginPage() {
               className={classes["bKXWde"]}
             >
               <strong>
-                <a href="회원가입.url">회원가입</a>
+                <NavLink to={"/register"}>
+                  회원가입
+                </NavLink>
               </strong>
             </span>
           </div>
