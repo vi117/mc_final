@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./styles/co_detail.css";
+import "./styles/Co_detail.css";
 import Commentsdata from "./assets/commentsample";
 import { ReactComponent as Heart } from "./assets/Heart-Linear.svg";
 import { ReactComponent as More } from "./assets/more.svg";

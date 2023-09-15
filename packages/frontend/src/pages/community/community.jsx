@@ -1,5 +1,5 @@
 import { Carousel } from "react-bootstrap";
-import "./styles/community.css";
+import "./styles/Community.css";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Sampledata from "./assets/sampledata";

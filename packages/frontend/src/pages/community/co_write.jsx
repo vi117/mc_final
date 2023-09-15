@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./styles/co_write.css";
+import "./styles/Co_write.css";
 import Form from "react-bootstrap/Form";
 import sampledata from "./assets/sampledata";
 
