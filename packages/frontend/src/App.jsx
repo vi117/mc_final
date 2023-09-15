@@ -7,6 +7,9 @@ import CommunityDetail from "./pages/community/co_detail";
 import CommunityWrite from "./pages/community/co_write";
 import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
+import FundingsEdit from "./pages/fundings/FundingsEdit";
+import FundingsHome from "./pages/fundings/FundingsHome";
+import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
@@ -68,11 +71,11 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 홈
        */
-      { path: "/fundings", element: <h1>Fundings</h1> },
+      { path: "/fundings", element: <FundingsHome /> },
       /**
        * 펀딩 검색 ?q=검색어
        */
-      { path: "/fundings/search", element: <h1>Search</h1> },
+      { path: "/fundings/search", element: <FundingsSearch /> },
       /**
        * 펀딩 글
        */
@@ -80,7 +83,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 수정 및 삭제
        */
-      { path: "/fundings/:id/edit", element: <h1>edit</h1> },
+      { path: "/fundings/:id/edit", element: <FundingsEdit /> },
       /**
        * 펀딩 글 작성
        */
@@ -89,8 +92,6 @@ const browserRouter = createBrowserRouter([
     ],
   },
 ]);
-
-import "./App.css";
 
 function App() {
   return <RouterProvider router={browserRouter}></RouterProvider>;
