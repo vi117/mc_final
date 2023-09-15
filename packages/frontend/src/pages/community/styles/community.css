@@ -1,50 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&display=swap');
-
-:root {
-  --black: #000;
-
-  /*주요 컬러*/
-  --dark: #0d0d0d;
-  --primary: #191919;
-
-  --teritary: #6d6d6d;
-  --gray: #9e9e9e;
-
-  /*border, hover*/
-  --secondary: #d9d9d9;
-
-  /*그림자, background, border*/
-  --border: #f3f3f3;
-  --white: #fff;
-
-  /*포인트 컬러*/
-  --green-dark: #1c6758;
-  --green: #3d8361;
-  --green-light: #eef2e6;
-  --beige: #d6cda4;
-
-  /*카테고리용 그림자*/
-  --boxshadow: rgba(0, 0, 0, 0.08) 0px 6px 6px -7px;
-
-  /* 타이포그래피
-기본 폰트: 'Noto Sans KR', sans-serif;
-weight: 400, (기본)
-500,
-700(강조)
-자간: -0.01px;  */
-}
 
 a {
   text-decoration: none;
   color: inherit;
 }
 
-* {
-  font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 400;
-  letter-spacing: -0.01px;
-  color: var(--primary);
-}
 /*전체 박스*/
 .list-wrap {
   padding: 0px 10px 0px 30px;
