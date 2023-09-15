@@ -3,20 +3,15 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// HEAD
 import CommunityDetail from "./pages/community/co_detail";
 import CommunityWrite from "./pages/community/co_write";
 import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
-//
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
 import FundingsSearch from "./pages/fundings/FundingsSearch";
-// HEAD
-//
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
-// 743e4a890238e2a4781121e83a4e7d52df137c60
 
 import LoginPage from "./pages/login";
 
