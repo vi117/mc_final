@@ -69,9 +69,8 @@ function RegisterPage() {
         alignItems: "center",
       }}
     >
-      <form
+      <div
         style={{ display: "flex", flexDirection: "column" }}
-        onSubmit={onSubmitHandler}
       >
         <Upload></Upload>
         <label>Name</label>
@@ -95,10 +94,10 @@ function RegisterPage() {
         <label>Article</label>
         <input type="text" value={Article} onChange={onArticleHandler} />
         <br />
-        <button id="form-controls" type="submit" formAction="">
+        <button id="form-controls" onClick={onSubmitHandler}>
           회원가입
         </button>
-      </form>
+      </div>
     </div>
   );
 }
