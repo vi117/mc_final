@@ -13,6 +13,7 @@ import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
+import RegisterPage from "./pages/register";
 
 const browserRouter = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 회원가입 페이지
        */
-      { path: "/register", element: <h1>Register</h1> },
+      { path: "/register", element: <RegisterPage /> },
       /**
        * 비밀번호 찾기
        */
