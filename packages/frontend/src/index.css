@@ -1,10 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&display=swap');
 
 :root {
-<<<<<<< HEAD
-    --max-content-width: 900px;
-  font-family: 'Roboto','Noto Sans KR', sans-serif;
-=======
   --max-content-width: 900px;
   font-family: 'Roboto', 'Noto Sans KR', sans-serif;
   --black: #000;
@@ -48,5 +44,4 @@ weight: 400, (기본)
   font-weight: 400;
   letter-spacing: -0.01px;
   color: var(--primary);
->>>>>>> 743e4a890238e2a4781121e83a4e7d52df137c60
 }
