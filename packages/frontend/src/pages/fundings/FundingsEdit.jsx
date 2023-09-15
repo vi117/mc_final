@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Container, Image, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
@@ -43,8 +44,8 @@ const Calender = () => {
 const FundingsEdit = function() {
   return (
     <Container style={{ "border": "1px solid red", "width": "50vw" }}>
+      <h1>수정할 수 있는 사항만 남겨둘 것.</h1>
       <Row>태그///////////////</Row>
-
       <Row>
         제목
         <Form.Control type="text" placeholder="제목을 기입해주세요." />
@@ -132,7 +133,9 @@ const FundingsEdit = function() {
 
       <Row>
         완료버튼
-        <Button variant="success">참가</Button>
+        <NavLink to={"/fundings"}>
+          <Button variant="success">참가</Button>
+        </NavLink>
       </Row>
     </Container>
   );
