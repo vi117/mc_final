@@ -1,7 +1,7 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Carousel } from "react-bootstrap";
 import "./styles/community.css";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import Sampledata from "./assets/sampledata";
 import Board from "./components/board";
 import Page from "./components/pagination";
@@ -36,11 +36,14 @@ export function Community() {
                 <h1>베스트 글 제목1</h1>
                 <div className="d-none d-md-block">
                   <p>
-                    아이스크림 먹을 때마다 졸래졸래 따라와서 킁킁 냄새맡고 핱으려고 하는 냥이 사람이 먹는 음식을 주면
-                    안된다고 하는데, 너무 먹고 싶어해서요. 살짝만 핱아보라고 줘도 괜찮을까요?
+                    아이스크림 먹을 때마다 졸래졸래 따라와서 킁킁 냄새맡고
+                    핱으려고 하는 냥이 사람이 먹는 음식을 주면 안된다고 하는데,
+                    너무 먹고 싶어해서요. 살짝만 핱아보라고 줘도 괜찮을까요?
                   </p>
                 </div>
-                <button className="morebtn">자세히보기</button>
+                <NavLink to={"/community/1"}>
+                  <button className="morebtn">자세히보기</button>
+                </NavLink>
               </div>
             </div>
           </Carousel.Item>
@@ -51,11 +54,14 @@ export function Community() {
                 <h1>베스트 글 제목 2</h1>
                 <div className="d-none d-md-block">
                   <p>
-                    세이오앙 모래는 항상 우주네 곳간에 쟁여 놓는 벤토예요. 먼지날림, 탈취력, 응고력의 밸런스가 골고루
-                    좋고 입자가 보들보들해서인지 우주의 선호도도 높더라고요😆
+                    세이오앙 모래는 항상 우주네 곳간에 쟁여 놓는 벤토예요.
+                    먼지날림, 탈취력, 응고력의 밸런스가 골고루 좋고 입자가
+                    보들보들해서인지 우주의 선호도도 높더라고요😆
                   </p>
                 </div>
-                <button className="morebtn">자세히보기</button>
+                <NavLink to={"/community/1"}>
+                  <button className="morebtn">자세히보기</button>
+                </NavLink>
               </div>
             </div>
           </Carousel.Item>
@@ -72,7 +78,6 @@ export function Community() {
             activePage={activePage}
             handlePageChange={handlePageChange}
           >
-            console.log(totalItems)
           </Page>
         </div>
       </div>
