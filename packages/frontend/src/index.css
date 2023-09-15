@@ -45,3 +45,8 @@ weight: 400, (기본)
   letter-spacing: -0.01px;
   color: var(--primary);
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

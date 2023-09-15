@@ -1,0 +1,37 @@
+.co_input,
+.co_textarea {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  width: 100%;
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
+}
+
+.co_input:focus,
+.co_textarea:focus {
+  background-color: var(--border);
+  outline: none;
+}
+
+.co_input::placeholder,
+.co_textarea::placeholder {
+  font-size: 14px;
+  color: var(--teritary);
+  padding: 7px;
+}
+
+.co_input {
+  height: 40px;
+}
+
+.co_textarea {
+  height: 450;
+  resize: none;
+}
+
+.co_h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02px;
+  margin: 0 auto;
+}

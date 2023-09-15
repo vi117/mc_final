@@ -1,10 +1,10 @@
-import { Carousel } from "react-bootstrap";
-import "./styles/Community.css";
 import { useState } from "react";
+import { Carousel } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import Sampledata from "./assets/sampledata";
 import Board from "./components/board";
 import Page from "./components/pagination";
+import classes from "./styles/Community.module.css";
 
 export function Community() {
   const [state, setState] = useState({
@@ -24,17 +24,20 @@ export function Community() {
 
   return (
     <>
-      <div className="list-wrap">
+      <div className={classes["list-wrap"]}>
         <h1 style={{ fontSize: "24px", marginBottom: "-20px" }}>
           금주의 베스트
         </h1>
         <Carousel>
           <Carousel.Item>
-            <div className="slidercontents" style={{ marginTop: "0px" }}>
+            <div
+              className={classes["slidercontents"]}
+              style={{ marginTop: "0px" }}
+            >
               <img src="/thumb.png"></img>
-              <div className="wrapText">
+              <div className={classes["wrapText"]}>
                 <h1>베스트 글 제목1</h1>
-                <div className="d-none d-md-block">
+                <div className={classes["d-none d-md-block"]}>
                   <p>
                     아이스크림 먹을 때마다 졸래졸래 따라와서 킁킁 냄새맡고
                     핱으려고 하는 냥이 사람이 먹는 음식을 주면 안된다고 하는데,
@@ -42,17 +45,17 @@ export function Community() {
                   </p>
                 </div>
                 <NavLink to={"/community/1"}>
-                  <button className="morebtn">자세히보기</button>
+                  <button className={classes["morebtn"]}>자세히보기</button>
                 </NavLink>
               </div>
             </div>
           </Carousel.Item>
           <Carousel.Item>
-            <div className="slidercontents2">
+            <div className={classes["slidercontents2"]}>
               <img src="/thumb2.png"></img>
-              <div className="wrapText">
+              <div className={classes["wrapText"]}>
                 <h1>베스트 글 제목 2</h1>
-                <div className="d-none d-md-block">
+                <div className={classes["d-none d-md-block"]}>
                   <p>
                     세이오앙 모래는 항상 우주네 곳간에 쟁여 놓는 벤토예요.
                     먼지날림, 탈취력, 응고력의 밸런스가 골고루 좋고 입자가
@@ -60,18 +63,18 @@ export function Community() {
                   </p>
                 </div>
                 <NavLink to={"/community/1"}>
-                  <button className="morebtn">자세히보기</button>
+                  <button className={classes["morebtn"]}>자세히보기</button>
                 </NavLink>
               </div>
             </div>
           </Carousel.Item>
         </Carousel>
 
-        <div className="container">
+        <div className={classes["container"]}>
           <Board data={currentPageData}></Board>
         </div>
 
-        <div className="pagination">
+        <div className={classes["pagination"]}>
           <Page
             totalItems={data.length}
             itemsPerPage={limit}

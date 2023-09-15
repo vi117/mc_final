@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./styles/Co_write.css";
 import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
 import sampledata from "./assets/sampledata";
+import baseClasses from "./styles/Co_base.module.css";
+import classes from "./styles/Co_write.module.css";
 
 // 카테고리 옵션
 let selectList = [
@@ -58,23 +59,23 @@ const CommunityWrite = () => {
   };
 
   return (
-    <div className="write-container">
-      <div className="write-wrap">
-        <div className="write-header">
+    <div className={classes["write-container"]}>
+      <div className={classes["write-wrap"]}>
+        <div className={classes["write-header"]}>
           <h4>커뮤니티 글 작성</h4>
         </div>
         <Form.Select
-          className="catSelect"
+          className={classes["catSelect"]}
           onChange={(e) => onChange(e)}
           name="category"
           value={category}
         >
-          <option className="d-none" value="">
+          <option className={classes["d-none"]} value="">
             카테고리를 선택해주세요
           </option>
           {selectList.map((item) => (
             <option
-              className="catSelectList"
+              className={classes["catSelectList"]}
               value={item.value}
               key={item.value}
             >
@@ -83,22 +84,33 @@ const CommunityWrite = () => {
           ))}
         </Form.Select>
 
-        <h1 style={{ marginTop: "30px" }}>태그 입력</h1>
-        <div>
-          <input type="text" name="tag" value={tag} onChange={onChange}></input>
-        </div>
-
-        <h1>작성자</h1>
+        <h1 className={baseClasses["co_h1"]} style={{ marginTop: "30px" }}>
+          태그 입력
+        </h1>
         <div>
           <input
+            className={baseClasses["co_input"]}
+            type="text"
+            name="tag"
+            value={tag}
+            onChange={onChange}
+          >
+          </input>
+        </div>
+
+        <h1 className={baseClasses["co_h1"]}>작성자</h1>
+        <div>
+          <input
+            className={baseClasses["co_input"]}
             type="text"
             name="createdBy"
             value={createdBy}
             onChange={onChange}
           />
         </div>
-        <h1>커뮤니티 글 작성</h1>
+        <h1 className={baseClasses["co_h1"]}>커뮤니티 글 작성</h1>
         <input
+          className={baseClasses["co_input"]}
           type="text"
           name="title"
           placeholder="제목을 입력해주세요"
@@ -108,6 +120,7 @@ const CommunityWrite = () => {
         />
         <div>
           <textarea
+            className={baseClasses["co_textarea"]}
             name="contents"
             cols="30"
             rows="10"
@@ -119,11 +132,11 @@ const CommunityWrite = () => {
           >
           </textarea>
         </div>
-        <Form.Group controlId="formFileMultiple" className="mb-3">
-          <Form.Label className="label">사진 업로드</Form.Label>
+        <Form.Group controlId="formFileMultiple" className={"mb-3 w-100"}>
+          <Form.Label className={classes["label"]}>사진 업로드</Form.Label>
           <Form.Control type="file" multiple />
         </Form.Group>
-        <div class="submitbutton">
+        <div className={classes["submitbutton"]}>
           <button onClick={backToList}>돌아가기</button>
           <button onClick={saveBoard}>글 등록</button>
         </div>

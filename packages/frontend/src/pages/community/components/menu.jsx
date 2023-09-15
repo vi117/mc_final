@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FormControl } from "react-bootstrap";
-import "../styles/community.css";
 
 const CustomMenu = React.forwardRef(
   ({ children, className, "aria-labelledby": labeledBy }, ref) => {
@@ -22,7 +21,8 @@ const CustomMenu = React.forwardRef(
         />
         <ul className="list-unstyled">
           {React.Children.toArray(children).filter(
-            (child) => !value || child.props.children.toLowerCase().startsWith(value),
+            (child) =>
+              !value || child.props.children.toLowerCase().startsWith(value),
           )}
         </ul>
       </div>
