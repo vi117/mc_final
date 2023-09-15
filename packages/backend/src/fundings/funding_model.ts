@@ -1,6 +1,9 @@
 import { DB } from "@/db/util";
-import { Insertable, Kysely } from "kysely";
+import debug_fn from "debug";
+import { Compilable, Insertable, Kysely, Updateable } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
+
+const debug = debug_fn("joinify:db");
 
 export interface FindAllUsersOptions {
   limit?: number;
@@ -21,6 +24,15 @@ export interface FindAllUsersOptions {
    * @default Date.now()
    */
   end_date?: Date;
+  /**
+   * include_deleted
+   * @default false
+   */
+  include_deleted?: boolean;
+  /**
+   * tags to search
+   */
+  tags?: string[];
 }
 
 export interface FindOneOptions {
@@ -56,11 +68,21 @@ export interface FundingObject {
   host_nickname: string;
   host_profile_image: string | null;
   host_email: string;
+
   interest_funding_id: number | null;
+  participated_reward_id: number | null;
 
   tags: {
     tag: string;
   }[];
+}
+
+function log<T extends Compilable>(qb: T) {
+  if (debug.enabled) {
+    const q = qb.compile();
+    debug(q.sql, q.parameters);
+  }
+  return qb;
 }
 
 export class FundingsRepository {
@@ -76,6 +98,8 @@ export class FundingsRepository {
     const user_id = options?.user_id ?? null;
     const begin_date = options?.begin_date ?? new Date();
     const end_date = options?.end_date ?? new Date();
+    const include_deleted = options?.include_deleted ?? false;
+    const tags = options?.tags;
 
     const query = this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
@@ -83,12 +107,35 @@ export class FundingsRepository {
         join
           .onRef("interest.funding_id", "=", "fundings.id")
           .on("interest.user_id", "=", user_id))
+      .leftJoin(
+        "funding_users",
+        join =>
+          join.onRef("funding_users.funding_id", "=", "fundings.id")
+            .on("funding_users.user_id", "=", user_id),
+      )
+      .$if(tags !== undefined, (qb) => {
+        tags?.forEach((tag, index) => {
+          qb = qb.innerJoin(
+            `funding_tag_rel as f${index}`,
+            `f${index}.funding_id`,
+            "fundings.id",
+          )
+            .innerJoin(
+              `funding_tags as t${index}`,
+              `t${index}.id`,
+              `f${index}.tag_id`,
+            )
+            .where(`t${index}.tag`, "=", tag) as unknown as typeof qb;
+        });
+        return qb;
+      })
       .selectAll(["fundings"])
       .select([
         "host.nickname as host_nickname",
         "host.profile_image as host_profile_image",
         "host.email as host_email",
         "interest.funding_id as interest_funding_id",
+        "funding_users.reward_id as participated_reward_id",
       ])
       .select((eb) => [
         jsonArrayFrom(
@@ -103,10 +150,15 @@ export class FundingsRepository {
         ).as("tags"),
       ])
       .$if(cursor !== undefined, (qb) => qb.where("id", "<", cursor ?? 0))
+      .$if(
+        !include_deleted,
+        (qb) => qb.where("fundings.deleted_at", "is", null),
+      )
       .where("fundings.begin_date", "<", end_date)
       .where("fundings.end_date", ">=", begin_date)
       .limit(limit)
-      .offset(offset);
+      .offset(offset)
+      .$call(log);
 
     const rows = await query.execute();
     return rows;
@@ -131,6 +183,12 @@ export class FundingsRepository {
         join
           .onRef("interest.funding_id", "=", "fundings.id")
           .on("interest.user_id", "=", user_id))
+      .leftJoin(
+        "funding_users",
+        join =>
+          join.onRef("funding_users.funding_id", "=", "fundings.id")
+            .on("funding_users.user_id", "=", user_id),
+      )
       .selectAll(["fundings"])
       .select([
         "host.id as host_id",
@@ -138,6 +196,7 @@ export class FundingsRepository {
         "host.profile_image as host_profile_image",
         "host.email as host_email",
         "interest.funding_id as interest_funding_id",
+        "funding_users.reward_id as participated_reward_id",
       ])
       .select((eb) => [
         jsonArrayFrom(
@@ -170,12 +229,28 @@ export class FundingsRepository {
     return ret;
   }
 
-  async insert(funding: Insertable<DB["fundings"]>): Promise<number> {
+  async getFundingRewards(funding_id: number): Promise<FundingRewards[]> {
+    const ret = await this.db.selectFrom("funding_rewards")
+      .where("funding_rewards.funding_id", "=", funding_id)
+      .selectAll("funding_rewards")
+      .execute();
+    return ret;
+  }
+
+  async insert(
+    funding: Insertable<DB["fundings"]>,
+  ): Promise<number | undefined> {
     const ret = await this.db.insertInto("fundings")
       .values(funding)
-      .returning(["id"])
+      .executeTakeFirst();
+    return Number(ret.insertId);
+  }
+
+  async updateById(id: number, funding: Updateable<DB["fundings"]>) {
+    return await this.db.updateTable("fundings")
+      .set(funding)
+      .where("fundings.id", "=", id)
       .executeTakeFirstOrThrow();
-    return ret?.id;
   }
 
   async setInterest(funding_id: number, user_id: number) {
@@ -184,10 +259,68 @@ export class FundingsRepository {
       .executeTakeFirstOrThrow();
   }
 
-  async dissetInterest(funding_id: number, user_id: number) {
+  async unsetInterest(funding_id: number, user_id: number) {
     return await this.db.deleteFrom("user_funding_interest")
       .where("funding_id", "=", funding_id)
       .where("user_id", "=", user_id)
+      .executeTakeFirstOrThrow();
+  }
+
+  async addCurrentValue(funding_id: number, operand: number) {
+    return await this.db.updateTable("fundings")
+      .set((eb) => ({
+        current_value: eb("fundings.current_value", "+", operand),
+      }))
+      .where("fundings.id", "=", funding_id)
+      .executeTakeFirstOrThrow();
+  }
+
+  async softDelete(funding_id: number) {
+    return await this.db.updateTable("fundings")
+      .set({
+        deleted_at: new Date(),
+      })
+      .where("fundings.id", "=", funding_id)
+      .executeTakeFirstOrThrow();
+  }
+}
+
+export class FundingRewardsRepository {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+
+  async findById(id: number): Promise<FundingRewards | undefined> {
+    const ret = await this.db.selectFrom("funding_rewards")
+      .where("funding_rewards.id", "=", id)
+      .selectAll("funding_rewards")
+      .executeTakeFirst();
+    return ret;
+  }
+  async updateById(id: number, funding: Updateable<DB["funding_rewards"]>) {
+    const ret = await this.db.updateTable("funding_rewards")
+      .set(funding)
+      .where("funding_rewards.id", "=", id)
+      .executeTakeFirstOrThrow();
+    return ret;
+  }
+}
+
+export class FundingUsersRepository {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+  async insert(funding_user: Insertable<DB["funding_users"]>) {
+    await this.db.insertInto("funding_users")
+      .values(funding_user)
+      .execute();
+  }
+  async deleteByUserIdAndFundingId(user_id: number, funding_id: number) {
+    await this.db.deleteFrom("funding_users")
+      .where("funding_users.user_id", "=", user_id)
+      .where("funding_users.funding_id", "=", funding_id)
       .executeTakeFirstOrThrow();
   }
 }

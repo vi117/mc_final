@@ -40,7 +40,7 @@ const Calender = () => {
   );
 };
 
-const FundingsWrite = function() {
+const FundingsEdit = function() {
   return (
     <Container style={{ "border": "1px solid red", "width": "50vw" }}>
       <Row>태그///////////////</Row>
@@ -138,4 +138,4 @@ const FundingsWrite = function() {
   );
 };
 
-export default FundingsWrite;
+export default FundingsEdit;

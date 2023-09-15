@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&display=swap');
+
+.write-container {
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+.write-wrap {
+  margin: 0 auto;
+  width: 85%;
+  justify-content: center;
+}
+
+.write-wrap h4 {
+  font-weight: 700;
+  text-align: center;
+}
+
+.write-header {
+  height: 50px;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--boxshadow);
+  margin-bottom: 40px;
+}
+
+.form-select:active {
+  background-color: var(--border);
+}
+
+input,
+textarea {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  width: 100%;
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
+}
+
+input:focus,
+textarea:focus {
+  background-color: var(--border);
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-size: 14px;
+  color: var(--teritary);
+  padding: 7px;
+}
+
+input {
+  height: 40px;
+}
+
+textarea {
+  height: 450;
+  resize: none;
+}
+
+h1,
+.label {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02px;
+  margin: 0 auto;
+}
+
+.submitbutton {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.submitbutton button {
+  border: 1px solid var(--secondary);
+  padding: 5px 30px;
+  border-radius: 12px;
+  font-size: 16px;
+  margin: 5px;
+  margin-bottom: 40px;
+  font-weight: bold;
+}
+
+.submitbutton button:hover {
+  background-color: var(--green);
+  border: 1px solid var(--green);
+  color: var(--white);
+  font-weight: bold;
+}
+
+.mb-3 {
+  width: 100%;
+}
+
+.catSelect {
+  width: 100%;
+  font-size: 14px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.catSelect:focus {
+  outline: none;
+  border: 1px solid var(--secondary);
+  box-shadow: none;
+}
+
+.catSelectList:active {
+  border: 1px solid red;
+  color: var(--dark);
+  background-color: black;
+}
+
+.Form.Select:active {
+  background-color: var(--secondary);
+  color: var(--dark);
+}

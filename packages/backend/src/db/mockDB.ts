@@ -8,7 +8,7 @@ import {
   MysqlQueryCompiler,
   QueryResult,
 } from "kysely";
-import { DB } from "../../dist/db";
+import { DB } from "./db";
 
 class MyDummyConnection implements DatabaseConnection {
   constructor(public queryCollection: CompiledQuery<unknown>[]) {
