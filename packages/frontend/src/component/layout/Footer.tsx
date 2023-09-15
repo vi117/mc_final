@@ -1,10 +1,12 @@
+import classes from "./Footer.module.css";
+
 export default function Footer() {
   return (
-    <footer className="footer_container">
-      <div className="footer_logo">
+    <footer className={classes.footer_container}>
+      <div className={classes.footer_logo}>
         해피테일즈 고객센터
       </div>
-      <div className="footer_details">
+      <div className={classes.footer_details}>
         <p>
           해피테리즈 대표이사 백재웅 사업자 등록번호 123-45-67899 성남시 분당구
           동판교로 115

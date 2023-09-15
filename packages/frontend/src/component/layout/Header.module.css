@@ -47,18 +47,3 @@
     margin:  0px 10px 0px 10px;
 }
 
-.footer_container{
-    max-width: var(--max-content-width);
-    margin: 0 auto;
-
-    display: flex;
-}
-.footer_logo {
-    width: 300px;
-    font-size: 0.8em;
-}
-.footer_details {
-    flex: 1 1 auto;
-    margin: 0px 0px 0px 10px;
-    font-size: 0.8em;
-}
