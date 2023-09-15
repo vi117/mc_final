@@ -112,14 +112,15 @@ a {
 }
 
 .writebtn {
-  color: var(--green);
   height: 32px;
-  font-weight: 700;
-  font-size: 14px;
   line-height: 32px;
   margin-left: auto !important;
 }
 
+.writebtn > p {
+  color: var(--green);
+  font-size: 14px;
+}
 .control {
   display: flex;
   flex-wrap: wrap;
@@ -205,7 +206,11 @@ table {
 }
 
 .board-table .td-title {
+  max-width: 200px;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .borad-table .th-cat {

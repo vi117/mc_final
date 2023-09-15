@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
+import { ReactComponent as Pencil } from "../assets/pencil.svg";
 import Sampledata from "../assets/sampledata";
 import CustomMenu from "./menu";
 import CustomToggle from "./toggle";
 import "../styles/community.css";
-import Pencil from "../assets/pencil.svg";
-const Board = () => {
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
 
+const Board = () => {
+  const [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState([]);
   useEffect(() => {
-    // Sampledata 배열을 초기 데이터로 설정
     setData(Sampledata);
 
-    // Sampledata 배열을 매핑하여 각 항목에 번호를 추가
     const newData = Sampledata.map((item, index) => ({
       ...item,
       id: index + 1,
@@ -24,9 +22,14 @@ const Board = () => {
   }, []);
 
   const filterResult = (catItem) => {
-    // 선택한 카테고리에 따라 데이터 필터링
     const result = data.filter((currData) => currData.category === catItem);
     setFilteredData(result);
+  };
+
+  const navigate = useNavigate();
+
+  const handleTitleClick = () => {
+    navigate(`./id:detail`);
   };
 
   return (
@@ -56,7 +59,10 @@ const Board = () => {
           </thead>
           <tbody>
             {filteredData.map((item) => (
-              <tr key={item.id}>
+              <tr
+                key={item.id}
+                onClick={() => handleTitleClick(item)}
+              >
                 <td>{item.id}</td>
                 <td>{item.category}</td>
                 <td className="td-title">{item.title}</td>
@@ -146,7 +152,9 @@ const Category = ({ filterData }) => {
         </div>
         <div className="writebtn">
           <p onClick={goWrite}>
-            <img src={Pencil} style={{ width: "14px" }} />
+            <Pencil
+              style={{ width: "14px", fill: "#3d8361", marginRight: "5px" }}
+            />
             글쓰기
           </p>
         </div>

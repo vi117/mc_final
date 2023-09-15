@@ -150,7 +150,6 @@ h1,
 }
 
 .catSelectList:active {
-  border: 1px solid red;
   color: var(--dark);
   background-color: black;
 }

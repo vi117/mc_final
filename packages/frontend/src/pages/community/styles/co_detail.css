@@ -44,29 +44,34 @@ weight: 400, (기본)
 .coDetailWrap {
   max-width: 900px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 30px;
+  border: none;
+  padding: 0px 10px;
 }
 
 .container {
+  border: none !important;
   width: 100%;
-  padding: 0 !important;
-}
-
-.selectedTitle {
-  color: var(--primary);
-  font-size: 24px;
-  font-weight: 700;
 }
 
 .titleArea {
   display: flex;
   align-items: center;
-  height: 50px;
+  padding: 20px 0px;
+}
+
+.selectedTitle {
+  width: 90%;
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .detailbtn {
-  justify-content: flex-end;
+  display: flex;
+  min-width: 130px;
   margin-left: auto !important;
+  justify-content: end;
 }
 .detailbtn > button {
   font-size: 12px;
@@ -92,7 +97,7 @@ weight: 400, (기본)
   font-size: 16px;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
   box-shadow: var(--boxshadow);
   padding: 10px 5px;
 }
@@ -130,24 +135,93 @@ weight: 400, (기본)
   color: var(--teritary);
 }
 
-.content {
+.contentArea {
   width: 100%;
   padding: 30px 10px;
+  min-height: 400px;
 }
 
 .reportArea {
   width: 100%;
   display: flex;
+  align-items: center;
   justify-content: center;
+  height: 100px;
+}
+
+.reportArea .Hearticon {
+  transition: transform 300ms ease;
+}
+
+.reportArea .Hearticon:hover {
+  transform: scale(1.2);
 }
 
 .reportArea > button {
-  width: 50px;
-  height: 50px;
-
-  border: 1px solid var(--secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  border: 1px solid var(--teritary);
   background-color: var(--white);
   border-radius: 100%;
-  padding: 10px;
-  margin: 5px;
+  padding: 7px;
+  font-size: 13px;
+  letter-spacing: -0.01px;
+  font-color: var(--teritary);
+}
+
+.commentArea {
+  padding: 30px 0px;
+}
+
+.oldComment {
+  padding: 10px 0px;
+  display: flex;
+  border-bottom: 1px solid var(--secondary);
+  align-items: center;
+  justify-content: center;
+}
+
+.commentDate {
+  color: var(--gray);
+  min-width: 100px;
+}
+.commentId {
+  width: 100px;
+}
+.commentContents {
+  padding: 0px 10px;
+  width: 70%;
+}
+
+.morebtn {
+  width: 100px;
+}
+
+.commentWrite {
+  min-height: 80px;
+}
+
+.commentbtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.commentbtn > button {
+  color: var(--green);
+  font-size: 13px;
+  border: 1px solid var(--green);
+  margin-right: 5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  background-color: var(--white);
+}
+
+.commentbtn > button:hover {
+  color: var(--white);
+  border: 1px solid var(--green);
+  background-color: var(--green);
 }
