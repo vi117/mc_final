@@ -1,5 +1,6 @@
 import { CgProfile } from "react-icons/cg";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { NavLink } from "react-router-dom";
 import LogoSvg from "../Logo";
 import SearchBar from "../SearchBar";
 
@@ -17,17 +18,14 @@ export function Header() {
           />
         </div>
         <div className="">
-          <p className="header_login_btn">
- community
-            <CgProfile color="#555555" style={{ marginRight: "5px", width: "20px", height: "20px" }} />
-=======
-            <CgProfile
-              color="#555555"
-              style={{ marginRight: "5px", width: "20px", height: "20px" }}
-            />
- main
-            로그인/회원가입
-          </p>
+          <NavLink to={"/login"}>
+            <p className="header_login_btn">
+              <CgProfile
+                color="#555555"
+                style={{ marginRight: "5px", width: "20px", height: "20px" }}
+              />로그인/회원가입
+            </p>
+          </NavLink>
         </div>
       </div>
       <div className="header_nav_container">
@@ -36,7 +34,9 @@ export function Header() {
             <RxHamburgerMenu />
           </div>
           <div className="nav_item">
-            홈
+            <NavLink to={"/"}>
+              홈
+            </NavLink>
           </div>
           <div className="nav_item">
             카테고리
@@ -45,7 +45,9 @@ export function Header() {
             펀딩
           </div>
           <div className="nav_item">
-            커뮤니티
+            <NavLink to={"/community"}>
+              커뮤니티
+            </NavLink>
           </div>
         </div>
         <div className="right">
