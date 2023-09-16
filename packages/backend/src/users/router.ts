@@ -3,6 +3,7 @@ import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
 
+import { parseQueryToNumber } from "@/util/query_param";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import { getAuthCodeRepository } from "./authCodeRepo";
@@ -202,12 +203,10 @@ export const queryAll = async (req: Request, res: Response) => {
   const userRepository = getUserRepository();
   const queryParams = req.query;
   const limit = Math.min(
-    parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50"),
+    parseQueryToNumber(queryParams.limit, 50),
     200,
   );
-  const offset = parseInt(
-    typeof queryParams.offset === "string" ? queryParams.offset : "0",
-  );
+  const offset = parseQueryToNumber(queryParams.offset, 0);
   const users = await userRepository.findAll({
     limit,
     offset,

@@ -28,3 +28,21 @@ export function parseQueryToNumber(
   const value = parseInt(q);
   return isNaN(value) ? default_value : value;
 }
+
+export function parseQueryToStringList(
+  q: ParsedQs[keyof ParsedQs],
+): string[] | undefined {
+  if (typeof q === "string") {
+    return [q];
+  } else if (Array.isArray(q)) {
+    return q.map(tag => {
+      if (typeof tag === "string") {
+        return tag;
+      }
+      return undefined;
+    }).filter((tag): tag is string => tag !== undefined);
+  } else if (typeof q === "object") {
+    return undefined;
+  }
+  return q;
+}
