@@ -1,5 +1,11 @@
-.carousel_img {
+.banner .carousel_img {
     height: 375px;
     width: 100vw;
     object-fit: cover;
+}
+
+.carousel_img {
+    height: 375px;
+    object-fit: cover;
+    max-width: 100vw;
 }

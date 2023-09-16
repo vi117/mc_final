@@ -19,5 +19,6 @@ module.exports = {
     ],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "react/jsx-filename-extension": ["warn", { extensions: [".jsx", ".tsx"] }],
   },
 };

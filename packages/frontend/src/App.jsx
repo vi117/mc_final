@@ -12,10 +12,11 @@ import FundingsHome from "./pages/fundings/FundingsHome";
 import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
-
 import LoginPage from "./pages/login";
+import WithdrawalPage from "./pages/withdrawal";
 
 import RegisterPage from "./pages/register";
+
 const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -35,6 +36,10 @@ const browserRouter = createBrowserRouter([
        * 회원가입 페이지
        */
       { path: "/register", element: <RegisterPage /> },
+      /**
+       * 회원 탈퇴
+       */
+      { path: "/withdraw", element: <WithdrawalPage></WithdrawalPage> },
       /**
        * 비밀번호 찾기
        */

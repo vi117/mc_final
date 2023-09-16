@@ -8,6 +8,7 @@ import { FundingsRepository } from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
 
 import { checkLogin } from "@/users/jwt";
+import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
 import assert from "assert";
 import {
   approveFundingRequest,
@@ -25,22 +26,10 @@ const router = Router();
 async function getAllFundingHandler(req: Request, res: Response) {
   const fundingRepository = new FundingsRepository(getDB());
   const queryParams = req.query;
-  const limit = parseInt(
-    typeof queryParams.limit === "string" ? queryParams.limit : "50",
-  );
-  const offset = parseInt(
-    typeof queryParams.offset === "string" ? queryParams.offset : "0",
-  );
-  const tags = ((q) => {
-    if (typeof q === "string") {
-      return [q];
-    } else if (Array.isArray(q)) {
-      return q.map(tag => tag.toString());
-    } else if (typeof q === "object") {
-      return undefined;
-    }
-    return q;
-  })(queryParams.tags);
+  const limit = parseQueryToNumber(queryParams.limit, 50);
+  const offset = parseQueryToNumber(queryParams.offset, 0);
+
+  const tags = parseQueryToStringList(queryParams.tags);
 
   const user = req.user;
 
@@ -56,10 +45,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
     }
   }
 
-  let cursor: number | undefined = parseInt(
-    typeof queryParams.cursor === "string" ? queryParams.cursor : "NaN",
-  );
-  cursor = isNaN(cursor) ? undefined : cursor;
+  const cursor: number | undefined = parseQueryToNumber(queryParams.cursor);
   const result = await fundingRepository.findAll({
     limit,
     offset,
@@ -97,12 +83,8 @@ async function getSingleFundingHandler(req: Request, res: Response) {
 async function getAllFundingRequestHandler(req: Request, res: Response) {
   const requestRepo = new FundingRequestsRepository(getDB());
   const queryParams = req.query;
-  const limit = parseInt(
-    typeof queryParams.limit === "string" ? queryParams.limit : "50",
-  );
-  const offset = parseInt(
-    typeof queryParams.offset === "string" ? queryParams.offset : "0",
-  );
+  const limit = parseQueryToNumber(queryParams.limit, 50);
+  const offset = parseQueryToNumber(queryParams.offset, 0);
 
   const result = await requestRepo.findAll({
     limit,
@@ -289,7 +271,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   }
   const { title, content, begin_date, end_date, target_value, thumbnail } =
     req.body;
-  const result = await requestRepo.insert({
+  const insertedId = await requestRepo.insert({
     host_id: user.id,
     title,
     content,
@@ -298,7 +280,10 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     target_value,
     thumbnail,
   });
-  res.json(result).status(StatusCodes.OK);
+  res.json({
+    message: "success",
+    id: insertedId,
+  }).status(StatusCodes.OK);
 }
 async function approveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
