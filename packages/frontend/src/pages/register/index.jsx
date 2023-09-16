@@ -50,7 +50,8 @@ function RegisterPage() {
       return alert("모든 필수 항목을 입력하세요.");
     }
 
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailPattern = // eslint-disable-next-line no-useless-escape
+      /^("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])$/;
     if (!emailPattern.test(Email)) {
       return alert("올바른 이메일 주소를 입력하세요.");
     }
@@ -58,6 +59,11 @@ function RegisterPage() {
     const phonePattern = /^01[0-9]-\d{3,4}-\d{4}$/;
     if (!phonePattern.test(Phone)) {
       return alert("올바른 핸드폰 번호를 입력하세요.");
+    }
+
+    const passwordPattern = /^[A-Za-z0-9]{8,20}$/;
+    if (!passwordPattern.test(Password)) {
+      return alert("올바른 비밀번호를 입력하세요.");
     }
   };
 
