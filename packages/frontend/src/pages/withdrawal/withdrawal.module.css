@@ -4,41 +4,30 @@
   border: none;
 }
 
-.container > h2 {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  font-size: 20px;
-
-}
-
-.alert {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  font-size: 14px;
-  width: 100%;
-}
+body {
   
-.form-floating {
-  width: 25%;
-  height:30vh;
-  margin-left: 500px;
-  margin-top: 40px;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+ 
 }
 
-.form-check{
-  margin-top: -75px;
-  margin-left: 270px;
-  height: 10vh;
+.container > h2{
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  font-size: 24px;
 
 }
 
-.btn-secondary {
-  margin-right: 20px;
-  margin-top: -10px;
+
+  
+.CheckboxLabels {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
 }
 
 
