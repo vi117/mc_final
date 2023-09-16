@@ -3,20 +3,17 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import CommunityDetail from "./pages/community/co_detail";
-import CommunityWrite from "./pages/community/co_write";
-import Community from "./pages/community/community";
+import CommunityDetail from "./pages/community/Co_detail";
+import CommunityWrite from "./pages/community/Co_write";
+import Community from "./pages/community/Community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
-
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
 import FundingsSearch from "./pages/fundings/FundingsSearch";
-
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
-import WithdrawalPage from "./pages/withdrawal";
-
 import LoginPage from "./pages/login";
+import WithdrawalPage from "./pages/withdrawal";
 
 import RegisterPage from "./pages/register";
 

@@ -3,9 +3,9 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Pencil } from "../assets/pencil.svg";
 import Sampledata from "../assets/sampledata";
-import CustomMenu from "./menu";
-import CustomToggle from "./toggle";
-import "../styles/community.css";
+import classes from "../styles/community.module.css";
+import CustomMenu from "./Menu";
+import CustomToggle from "./Toggle";
 
 const Board = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -34,25 +34,25 @@ const Board = () => {
 
   return (
     <>
-      <div className="board">
-        <div className="category"></div>
+      <div className={classes["board"]}>
+        <div className={classes["category"]}></div>
         <Category filterData={(catItem) => filterResult(catItem)} />
-        <table className="board-table">
+        <table className={classes["board-table"]}>
           <thead>
             <tr>
-              <th scope="col" className="th-num">
+              <th scope="col" className={classes["th-num"]}>
                 번호
               </th>
-              <th scope="col" className="th-cat">
+              <th scope="col" className={classes["th-cat"]}>
                 카테고리
               </th>
-              <th scope="col" className="th-title">
+              <th scope="col" className={classes["th-title"]}>
                 제목
               </th>
-              <th scope="col" className="th-author">
+              <th scope="col" className={classes["th-author"]}>
                 글쓴이
               </th>
-              <th scope="col" className="th-views">
+              <th scope="col" className={classes["th-views"]}>
                 조회수
               </th>
             </tr>
@@ -65,7 +65,7 @@ const Board = () => {
               >
                 <td>{item.id}</td>
                 <td>{item.category}</td>
-                <td className="td-title">{item.title}</td>
+                <td className={classes["td-title"]}>{item.title}</td>
                 <td>{item.createdBy}</td>
                 <td>{item.views}</td>
               </tr>
@@ -88,13 +88,13 @@ const Category = ({ filterData }) => {
   };
   return (
     <>
-      <div className="nav">
-        <div className="control">
+      <div className={classes["nav"]}>
+        <div className={classes["control"]}>
           <button>최신 순</button>
           <button>좋아요 순</button>
           <Dropdown>
-            <div className="toggle">
-              <div className="togglemenu">
+            <div className={classes["toggle"]}>
+              <div className={classes["togglemenu"]}>
                 <Dropdown.Toggle as={CustomToggle}>카테고리</Dropdown.Toggle>
               </div>
               <Dropdown.Menu as={CustomMenu}>
@@ -150,7 +150,7 @@ const Category = ({ filterData }) => {
             </div>
           </Dropdown>
         </div>
-        <div className="writebtn">
+        <div className={classes["writebtn"]}>
           <p onClick={goWrite}>
             <Pencil
               style={{ width: "14px", fill: "#3d8361", marginRight: "5px" }}

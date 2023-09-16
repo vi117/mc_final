@@ -128,7 +128,7 @@
   padding: 7px;
   font-size: 13px;
   letter-spacing: -0.01px;
-  font-color: var(--teritary);
+  color: var(--teritary);
 }
 
 .commentArea {

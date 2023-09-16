@@ -1,5 +1,5 @@
 import Pagination from "react-bootstrap/Pagination";
-import "../styles/community.css";
+import "../styles/community.module.css";
 
 const Page = ({ totalItems, itemsPerPage, activePage, handlePageChange }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);

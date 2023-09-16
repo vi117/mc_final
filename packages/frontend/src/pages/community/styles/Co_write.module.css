@@ -28,38 +28,6 @@
   background-color: var(--border);
 }
 
-input,
-textarea {
-  margin-top: 10px;
-  margin-bottom: 30px;
-  width: 100%;
-  border: 1px solid var(--secondary);
-  border-radius: 5px;
-}
-
-input:focus,
-textarea:focus {
-  background-color: var(--border);
-  outline: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-  font-size: 14px;
-  color: var(--teritary);
-  padding: 7px;
-}
-
-input {
-  height: 40px;
-}
-
-textarea {
-  height: 450;
-  resize: none;
-}
-
-h1,
 .label {
   font-size: 18px;
   font-weight: 700;
@@ -89,10 +57,6 @@ h1,
   border: 1px solid var(--green);
   color: var(--white);
   font-weight: bold;
-}
-
-.mb-3 {
-  width: 100%;
 }
 
 .catSelect {

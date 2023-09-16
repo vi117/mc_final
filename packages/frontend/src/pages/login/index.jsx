@@ -7,8 +7,6 @@ export default function LoginPage() {
       <div className={classes["login-wrapper"]}>
         <h1>Login</h1>
         <form
-          method="post"
-          action="/login.url"
           className={classes["login-form"]}
         >
           <input type="text" name="userName" placeholder="Email" />
@@ -19,7 +17,13 @@ export default function LoginPage() {
           <span>
             <a href="아이디/비밀번호 찾기.url">아이디/비밀번호 찾기</a>
           </span>
-          <input type="submit" value="Login" />
+          <NavLink to={"/"}>
+            <input
+              type="submit"
+              value="Login"
+              className={classes["login-form-input"]}
+            />
+          </NavLink>
         </form>
 
         <div className={classes["lfmFQa"]}>
