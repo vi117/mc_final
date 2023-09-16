@@ -271,7 +271,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   }
   const { title, content, begin_date, end_date, target_value, thumbnail } =
     req.body;
-  const result = await requestRepo.insert({
+  const insertedId = await requestRepo.insert({
     host_id: user.id,
     title,
     content,
@@ -280,7 +280,10 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     target_value,
     thumbnail,
   });
-  res.json(result).status(StatusCodes.OK);
+  res.json({
+    message: "success",
+    id: insertedId,
+  }).status(StatusCodes.OK);
 }
 async function approveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);

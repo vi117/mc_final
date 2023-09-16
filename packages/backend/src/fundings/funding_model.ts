@@ -106,7 +106,7 @@ export class FundingsRepository {
       .$if(user_id !== null, (qb) =>
         qb.leftJoin(
           "user_funding_interest as interest",
-          join =>
+          (join) =>
             join
               .onRef("interest.funding_id", "=", "fundings.id")
               .on("interest.user_id", "=", user_id),
@@ -117,7 +117,7 @@ export class FundingsRepository {
       .$if(user_id !== null, (qb) =>
         qb.leftJoin(
           "funding_users",
-          join =>
+          (join) =>
             join.onRef("funding_users.funding_id", "=", "fundings.id")
               .on("funding_users.user_id", "=", user_id),
         )
@@ -191,7 +191,7 @@ export class FundingsRepository {
       .$if(user_id !== null, (qb) =>
         qb.leftJoin(
           "user_funding_interest as interest",
-          join =>
+          (join) =>
             join
               .onRef("interest.funding_id", "=", "fundings.id")
               .on("interest.user_id", "=", user_id),
@@ -202,7 +202,7 @@ export class FundingsRepository {
       .$if(user_id !== null, (qb) =>
         qb.leftJoin(
           "funding_users",
-          join =>
+          (join) =>
             join.onRef("funding_users.funding_id", "=", "fundings.id")
               .on("funding_users.user_id", "=", user_id),
         )
@@ -230,6 +230,10 @@ export class FundingsRepository {
         jsonArrayFrom(
           eb.selectFrom("funding_rewards")
             .whereRef("funding_rewards.funding_id", "=", "fundings.id")
+            // Unfortunately, the MySQL jsonArrayFrom and jsonObjectFrom
+            // functions can only handle explicit selections due to limitations
+            // of the json_object function. selectAll() is not allowed in
+            // the subquery.
             .select([
               "funding_rewards.id",
               "funding_rewards.title",

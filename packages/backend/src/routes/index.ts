@@ -11,8 +11,12 @@ router.use("/api/users", userRouter);
 router.use("/api/fundings", fundingRouter);
 router.use("/api/articles", articleRouter);
 
-router.get("/", (_req, res) => {
-  res.json({ message: "hello" });
+router.all("/api", (req, res) => {
+  res.json({
+    message: "hello. it's api base",
+    body: req.body,
+    query: req.query,
+  }).status(200);
 });
 
 export default router;
