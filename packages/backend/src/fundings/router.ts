@@ -8,7 +8,7 @@ import { FundingsRepository } from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
 
 import { checkLogin } from "@/users/jwt";
-import { parseQueryToNumber } from "@/util/query_param";
+import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
 import assert from "assert";
 import {
   approveFundingRequest,
@@ -29,16 +29,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
   const limit = parseQueryToNumber(queryParams.limit, 50);
   const offset = parseQueryToNumber(queryParams.offset, 0);
 
-  const tags = ((q) => {
-    if (typeof q === "string") {
-      return [q];
-    } else if (Array.isArray(q)) {
-      return q.map(tag => tag.toString());
-    } else if (typeof q === "object") {
-      return undefined;
-    }
-    return q;
-  })(queryParams.tags);
+  const tags = parseQueryToStringList(queryParams.tags);
 
   const user = req.user;
 
