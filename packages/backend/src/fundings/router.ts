@@ -8,6 +8,7 @@ import { FundingsRepository } from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
 
 import { checkLogin } from "@/users/jwt";
+import { parseQueryToNumber } from "@/util/query_param";
 import assert from "assert";
 import {
   approveFundingRequest,
@@ -25,12 +26,9 @@ const router = Router();
 async function getAllFundingHandler(req: Request, res: Response) {
   const fundingRepository = new FundingsRepository(getDB());
   const queryParams = req.query;
-  const limit = parseInt(
-    typeof queryParams.limit === "string" ? queryParams.limit : "50",
-  );
-  const offset = parseInt(
-    typeof queryParams.offset === "string" ? queryParams.offset : "0",
-  );
+  const limit = parseQueryToNumber(queryParams.limit, 50);
+  const offset = parseQueryToNumber(queryParams.offset, 0);
+
   const tags = ((q) => {
     if (typeof q === "string") {
       return [q];
@@ -56,10 +54,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
     }
   }
 
-  let cursor: number | undefined = parseInt(
-    typeof queryParams.cursor === "string" ? queryParams.cursor : "NaN",
-  );
-  cursor = isNaN(cursor) ? undefined : cursor;
+  const cursor: number | undefined = parseQueryToNumber(queryParams.cursor);
   const result = await fundingRepository.findAll({
     limit,
     offset,
@@ -97,12 +92,8 @@ async function getSingleFundingHandler(req: Request, res: Response) {
 async function getAllFundingRequestHandler(req: Request, res: Response) {
   const requestRepo = new FundingRequestsRepository(getDB());
   const queryParams = req.query;
-  const limit = parseInt(
-    typeof queryParams.limit === "string" ? queryParams.limit : "50",
-  );
-  const offset = parseInt(
-    typeof queryParams.offset === "string" ? queryParams.offset : "0",
-  );
+  const limit = parseQueryToNumber(queryParams.limit, 50);
+  const offset = parseQueryToNumber(queryParams.offset, 0);
 
   const result = await requestRepo.findAll({
     limit,
