@@ -25,7 +25,7 @@ export function Community() {
   return (
     <>
       <div className={classes["list-wrap"]}>
-        <h1 style={{ fontSize: "24px", marginBottom: "-20px" }}>
+        <h1 style={{ fontSize: "24px", fontWeight: "700" }}>
           금주의 베스트
         </h1>
         <Carousel>
@@ -37,7 +37,7 @@ export function Community() {
               <img src="/thumb.png"></img>
               <div className={classes["wrapText"]}>
                 <h1>베스트 글 제목1</h1>
-                <div className={classes["d-none d-md-block"]}>
+                <div className={classes["d-none-d-md-block"]}>
                   <p>
                     아이스크림 먹을 때마다 졸래졸래 따라와서 킁킁 냄새맡고
                     핱으려고 하는 냥이 사람이 먹는 음식을 주면 안된다고 하는데,
@@ -55,7 +55,7 @@ export function Community() {
               <img src="/thumb2.png"></img>
               <div className={classes["wrapText"]}>
                 <h1>베스트 글 제목 2</h1>
-                <div className={classes["d-none d-md-block"]}>
+                <div className={classes["d-none-d-md-block"]}>
                   <p>
                     세이오앙 모래는 항상 우주네 곳간에 쟁여 놓는 벤토예요.
                     먼지날림, 탈취력, 응고력의 밸런스가 골고루 좋고 입자가

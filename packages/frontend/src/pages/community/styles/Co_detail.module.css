@@ -151,7 +151,7 @@
   width: 100px;
 }
 .commentContents {
-  padding: 0px 10px;
+  padding: 0px 20px;
   width: 70%;
 }
 
@@ -159,14 +159,18 @@
   width: 100px;
 }
 
+
 .commentWrite {
   min-height: 80px;
+  padding: 0px;
 }
 
 .commentbtn {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding:0px;
+  margin-bottom: 40px;
 }
 
 .commentbtn > button {
@@ -183,4 +187,39 @@
   color: var(--white);
   border: 1px solid var(--green);
   background-color: var(--green);
+}
+
+
+/*수정 삭제 더보기*/
+.moretogglearea {
+  width:85px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  position:relative;
+}
+
+.btntoggle {
+  z-index: 1;
+  padding:0px;
+  width:60px;
+  text-align: center;
+  position: absolute;
+  list-style: none;
+  border: 1px solid var(--secondary);
+  border-radius: 4px;
+  top:90%;
+  background-color: var(--white);
+}
+
+.btntoggle > li{
+  font-size: 14px;
+  margin: 0 auto;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+  padding:5px 0px;
+}
+
+.btntoggle > li:hover {
+  background-color: var(--border);
 }

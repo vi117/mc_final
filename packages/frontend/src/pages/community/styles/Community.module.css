@@ -19,6 +19,7 @@
 /*금주의 베스트*/
 .slidercontents,
 .slidercontents2 {
+  padding: 0px 10px;
   width: 100%;
   height: 300px;
   display: flex;
@@ -27,7 +28,7 @@
 
 .slidercontents img,
 .slidercontents2 img {
-  width: 33%;
+  width: 40%;
   aspect-ratio: 4 / 3;
   border-radius: 8px;
   background-color: var(--white) !important;
@@ -42,11 +43,24 @@
 }
 
 .wrapText .morebtn {
+  font-size: 14px;
   color: var(--teritary);
   padding: 0;
   border: none;
   background-color: transparent;
 }
+
+.wrapText > h1 {
+font-size: 24px;
+font-weight: 700;
+letter-spacing: -0.01px;
+}
+
+.d-none-d-md-block > p {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.01px;
+  }
 
 .wrapText {
   margin-left: 5%;
@@ -208,32 +222,8 @@ table {
 
 /*페이지네이션*/
 .pagination {
+  display:flex;
   margin-top: 20px;
   width: 100%;
   justify-content: center;
-}
-
-.active > .page-link,
-.page-link.active {
-  z-index: 3;
-  background-color: var(--border);
-  border: none;
-  color: #0d0d0d;
-  border: 1px solid #d9d9d9;
-}
-
-.page-link {
-  color: #0d0d0d;
-  text-decoration: none;
-  border: 1px solid var(--secondary);
-}
-
-.form-control:focus {
-  border-color: var(--secondary);
-  box-shadow: none;
-}
-
-.dropdown-item:focus {
-  background-color: var(--secondary);
-  color: #0d0d0d;
 }

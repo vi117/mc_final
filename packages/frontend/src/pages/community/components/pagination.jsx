@@ -17,7 +17,7 @@ const Page = ({ totalItems, itemsPerPage, activePage, handlePageChange }) => {
     );
   }
 
-  return <Pagination className="px-4">{pageItems}</Pagination>;
+  return <Pagination>{pageItems}</Pagination>;
 };
 
 export default Page;
