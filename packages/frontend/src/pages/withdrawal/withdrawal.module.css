@@ -22,7 +22,11 @@ body {
 
 }
 
-
+.img-wrapper {
+  position: absolute;
+  width: 100%;
+  
+}
   
 .CheckboxLabels {
   display: flex;
