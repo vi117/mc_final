@@ -3,24 +3,23 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// HEAD
 import CommunityDetail from "./pages/community/co_detail";
 import CommunityWrite from "./pages/community/co_write";
 import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
-//
+
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
 import FundingsSearch from "./pages/fundings/FundingsSearch";
-// HEAD
-//
+
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
-// 743e4a890238e2a4781121e83a4e7d52df137c60
+import WithdrawalPage from "./pages/withdrawal";
 
 import LoginPage from "./pages/login";
 
 import RegisterPage from "./pages/register";
+
 const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -40,6 +39,10 @@ const browserRouter = createBrowserRouter([
        * 회원가입 페이지
        */
       { path: "/register", element: <RegisterPage /> },
+      /**
+       * 회원 탈퇴
+       */
+      { path: "/withdraw", element: <WithdrawalPage></WithdrawalPage> },
       /**
        * 비밀번호 찾기
        */
@@ -90,11 +93,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 수정 및 삭제
        */
-      // HEAD
-      { path: "/fundings/:id/edit", element: <h1>edit</h1> },
-      //
       { path: "/fundings/:id/edit", element: <FundingsEdit /> },
-      // 743e4a890238e2a4781121e83a4e7d52df137c60
       /**
        * 펀딩 글 작성
        */ { path: "/fundings/:id/post", element: <FundingsWrite /> },
