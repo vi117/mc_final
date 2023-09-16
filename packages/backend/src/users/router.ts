@@ -57,7 +57,12 @@ export async function login(req: Request, res: Response): Promise<void> {
   }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
-  res.status(StatusCodes.OK).json({ message: "로그인 성공" });
+  res.status(StatusCodes.OK).json({
+    message: "로그인 성공",
+    id: user.id,
+    nickname: user.nickname,
+    email: user.email,
+  });
 }
 
 export async function signup(req: Request, res: Response): Promise<void> {
