@@ -85,11 +85,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 수정 및 삭제
        */
-      // HEAD
-      { path: "/fundings/:id/edit", element: <h1>edit</h1> },
-      //
       { path: "/fundings/:id/edit", element: <FundingsEdit /> },
-      // 743e4a890238e2a4781121e83a4e7d52df137c60
       /**
        * 펀딩 글 작성
        */ { path: "/fundings/:id/post", element: <FundingsWrite /> },
