@@ -43,7 +43,7 @@ const Calender = () => {
 
 const FundingsEdit = function() {
   return (
-    <Container style={{ "border": "1px solid red", "width": "50vw" }}>
+    <Container style={{ "width": "50vw" }}>
       <h1>수정할 수 있는 사항만 남겨둘 것.</h1>
       <Row>태그///////////////</Row>
       <Row>

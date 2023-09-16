@@ -3,6 +3,7 @@ import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
 
+import { parseQueryToNumber } from "@/util/query_param";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import { getAuthCodeRepository } from "./authCodeRepo";
@@ -56,7 +57,12 @@ export async function login(req: Request, res: Response): Promise<void> {
   }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
-  res.status(StatusCodes.OK).json({ message: "로그인 성공" });
+  res.status(StatusCodes.OK).json({
+    message: "로그인 성공",
+    id: user.id,
+    nickname: user.nickname,
+    email: user.email,
+  });
 }
 
 export async function signup(req: Request, res: Response): Promise<void> {
@@ -202,12 +208,10 @@ export const queryAll = async (req: Request, res: Response) => {
   const userRepository = getUserRepository();
   const queryParams = req.query;
   const limit = Math.min(
-    parseInt(typeof queryParams.limit === "string" ? queryParams.limit : "50"),
+    parseQueryToNumber(queryParams.limit, 50),
     200,
   );
-  const offset = parseInt(
-    typeof queryParams.offset === "string" ? queryParams.offset : "0",
-  );
+  const offset = parseQueryToNumber(queryParams.offset, 0);
   const users = await userRepository.findAll({
     limit,
     offset,

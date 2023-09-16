@@ -69,8 +69,8 @@ export interface FundingObject {
   host_profile_image: string | null;
   host_email: string;
 
-  interest_funding_id: number | null;
-  participated_reward_id: number | null;
+  interest_funding_id?: number | null;
+  participated_reward_id?: number | null;
 
   tags: {
     tag: string;
@@ -103,16 +103,27 @@ export class FundingsRepository {
 
     const query = this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
-      .leftJoin("user_funding_interest as interest", join =>
-        join
-          .onRef("interest.funding_id", "=", "fundings.id")
-          .on("interest.user_id", "=", user_id))
-      .leftJoin(
-        "funding_users",
-        join =>
-          join.onRef("funding_users.funding_id", "=", "fundings.id")
-            .on("funding_users.user_id", "=", user_id),
-      )
+      .$if(user_id !== null, (qb) =>
+        qb.leftJoin(
+          "user_funding_interest as interest",
+          (join) =>
+            join
+              .onRef("interest.funding_id", "=", "fundings.id")
+              .on("interest.user_id", "=", user_id),
+        )
+          .select([
+            "interest.user_id as interest_user_id",
+          ]))
+      .$if(user_id !== null, (qb) =>
+        qb.leftJoin(
+          "funding_users",
+          (join) =>
+            join.onRef("funding_users.funding_id", "=", "fundings.id")
+              .on("funding_users.user_id", "=", user_id),
+        )
+          .select([
+            "funding_users.reward_id as participated_reward_id",
+          ]))
       .$if(tags !== undefined, (qb) => {
         tags?.forEach((tag, index) => {
           qb = qb.innerJoin(
@@ -134,8 +145,6 @@ export class FundingsRepository {
         "host.nickname as host_nickname",
         "host.profile_image as host_profile_image",
         "host.email as host_email",
-        "interest.funding_id as interest_funding_id",
-        "funding_users.reward_id as participated_reward_id",
       ])
       .select((eb) => [
         jsonArrayFrom(
@@ -179,24 +188,33 @@ export class FundingsRepository {
     const user_id = options?.user_id ?? null;
     const ret = await this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
-      .leftJoin("user_funding_interest as interest", join =>
-        join
-          .onRef("interest.funding_id", "=", "fundings.id")
-          .on("interest.user_id", "=", user_id))
-      .leftJoin(
-        "funding_users",
-        join =>
-          join.onRef("funding_users.funding_id", "=", "fundings.id")
-            .on("funding_users.user_id", "=", user_id),
-      )
+      .$if(user_id !== null, (qb) =>
+        qb.leftJoin(
+          "user_funding_interest as interest",
+          (join) =>
+            join
+              .onRef("interest.funding_id", "=", "fundings.id")
+              .on("interest.user_id", "=", user_id),
+        )
+          .select([
+            "interest.user_id as interest_user_id",
+          ]))
+      .$if(user_id !== null, (qb) =>
+        qb.leftJoin(
+          "funding_users",
+          (join) =>
+            join.onRef("funding_users.funding_id", "=", "fundings.id")
+              .on("funding_users.user_id", "=", user_id),
+        )
+          .select([
+            "funding_users.reward_id as participated_reward_id",
+          ]))
       .selectAll(["fundings"])
       .select([
         "host.id as host_id",
         "host.nickname as host_nickname",
         "host.profile_image as host_profile_image",
         "host.email as host_email",
-        "interest.funding_id as interest_funding_id",
-        "funding_users.reward_id as participated_reward_id",
       ])
       .select((eb) => [
         jsonArrayFrom(
@@ -212,6 +230,10 @@ export class FundingsRepository {
         jsonArrayFrom(
           eb.selectFrom("funding_rewards")
             .whereRef("funding_rewards.funding_id", "=", "fundings.id")
+            // Unfortunately, the MySQL jsonArrayFrom and jsonObjectFrom
+            // functions can only handle explicit selections due to limitations
+            // of the json_object function. selectAll() is not allowed in
+            // the subquery.
             .select([
               "funding_rewards.id",
               "funding_rewards.title",
