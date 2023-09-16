@@ -23,6 +23,14 @@ export interface FindAllUsersOptions {
 
 export interface FindOneOptions {
   user_id?: number;
+  /**
+   * with comments
+   */
+  with_comments?: boolean;
+  /**
+   * comment_limit
+   */
+  comment_limit?: number;
 }
 
 export interface ArticleObject {
@@ -131,6 +139,8 @@ export class ArticleRepository {
     options?: FindOneOptions,
   ): Promise<ArticleObject | undefined> {
     const user_id = options?.user_id ?? null;
+    const with_comments = options?.with_comments ?? false;
+    const comment_limit = options?.comment_limit ?? 50;
 
     const ret = await this.db.selectFrom("articles")
       .innerJoin("users as author", "articles.user_id", "author.id")
@@ -163,6 +173,24 @@ export class ArticleRepository {
             ]),
         ).as("tags"),
       ])
+      .$if(with_comments, (qb) =>
+        qb.select(eb => [
+          jsonArrayFrom(
+            eb.selectFrom("comments as c")
+              .where("c.article_id", "=", id)
+              .select([
+                "c.id as comment_id",
+                "c.content as comment_content",
+                "c.created_at as comment_created_at",
+                "c.content as comment_content",
+                "c.user_id as comment_user_id",
+                "c.deleted_at as comment_deleted_at",
+                "c.updated_at as comment_updated_at",
+              ])
+              .orderBy("c.created_at", "desc")
+              .limit(comment_limit),
+          ).as("comments"),
+        ]))
       .where("articles.id", "=", id)
       .selectAll("articles")
       .executeTakeFirst();
