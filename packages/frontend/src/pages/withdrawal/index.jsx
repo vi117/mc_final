@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
 import { Alert } from "react-bootstrap";
 import images from "./images/logo.svg";
 import classes from "./withdrawal.module.css";
@@ -23,6 +23,11 @@ export default function WithdrawalPage() {
           control={<Checkbox defaultChecked />}
           label="안내사항을 모두 확인하였으며, 이에 동의합니다."
         />
+
+        <Button variant="contained">
+          탈퇴하기
+        </Button>
+        <Button variant="contained">취소</Button>
       </div>
     </div>
   );
