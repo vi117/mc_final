@@ -1,4 +1,3 @@
-import { getTransport } from "@/mail/service";
 import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
@@ -16,6 +15,7 @@ import {
   setRefreshTokenToCookie,
 } from "./jwt";
 import getUserRepository from "./model";
+import { sendVerificationMail } from "./sendmail";
 
 const router = Router();
 
@@ -122,16 +122,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
   const verificationCode = getAuthCodeRepository().createVerificationCode(
     email,
   );
-  await getTransport().sendMail({
-    from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
-    to: email,
-    subject: "회원가입 인증 코드",
-    text:
-      `회원가입 인증 코드는 ${verificationCode} 입니다. 이 코드를 입력해주세요.`,
-    headers: {
-      "content-type": "text/plain",
-    },
-  });
+  await sendVerificationMail(email, verificationCode);
+
   res.status(StatusCodes.OK).json({
     message: "회원가입 성공",
     user: user_id === undefined ? null : {
