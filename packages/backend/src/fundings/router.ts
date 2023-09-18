@@ -1,4 +1,4 @@
-import { getDB } from "@/db/util";
+import { getDB, isDuplKeyError } from "@/db/util";
 import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { Request, Response, Router } from "express";
@@ -156,10 +156,7 @@ async function interestHandler(req: Request, res: Response) {
       await fundingRepo.setInterest(id, user.id);
     }
   } catch (error) {
-    if (
-      error instanceof Error
-      && (error as { code?: string }).code === "ER_DUP_ENTRY"
-    ) {
+    if (isDuplKeyError(error)) {
       res.status(StatusCodes.CONFLICT).json({
         message: "이미 관심 펀딩입니다.",
       });

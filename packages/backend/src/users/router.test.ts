@@ -122,6 +122,7 @@ describe("signup", () => {
   test("signup fail: nickname already exists", async () => {
     const err = new class extends Error {
       code = "ER_DUP_ENTRY";
+      fatal = true;
     }("ER_DUP_ENTRY");
     insertUser.mockRejectedValue(err);
     const res = await fetcher.post("/api/users/signup").send({

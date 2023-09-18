@@ -1,6 +1,6 @@
 import debug_namespace from "debug";
-import { Kysely, MysqlDialect, sql } from "kysely";
-import { createPool } from "mysql2";
+import { Compilable, Kysely, MysqlDialect, sql } from "kysely";
+import { createPool, QueryError } from "mysql2";
 import { DB } from "./db";
 
 let db: Kysely<DB> | null = null;
@@ -62,7 +62,7 @@ export function beginTransaction(): Promise<
     },
   );
   return new Promise((resolve, reject) => {
-    trx_builder.execute(async trx => {
+    trx_builder.execute(async (trx) => {
       db = trx;
       resolve(dispose_fn);
       // transaction started
@@ -104,6 +104,38 @@ export function testDBConnection() {
     .catch((err) => {
       debug(err);
     });
+}
+
+export function log_query(
+  debug: debug_namespace.Debugger,
+) {
+  return <T extends Compilable>(qb: T) => {
+    if (debug.enabled) {
+      const q = qb.compile();
+      debug(q.sql, q.parameters);
+    }
+    return qb;
+  };
+}
+
+export function isQueryError(error: unknown): error is QueryError {
+  if (error instanceof Error) {
+    if (
+      "code" in error && "fatal" in error
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function isDuplKeyError(error: unknown): error is QueryError {
+  if (isQueryError(error)) {
+    if (error.code === "ER_DUP_ENTRY") {
+      return true;
+    }
+  }
+  return false;
 }
 
 export { DB };
