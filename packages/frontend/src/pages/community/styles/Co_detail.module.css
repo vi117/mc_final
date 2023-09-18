@@ -131,6 +131,11 @@
   color: var(--teritary);
 }
 
+.reportbtn:hover {
+  transition: transform 200ms ease;
+  transform: scale(1.05);
+}
+
 .commentArea {
   padding: 30px 0px;
 }
