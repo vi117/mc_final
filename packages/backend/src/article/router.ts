@@ -164,7 +164,20 @@ async function postCommentHandler(req: Request, res: Response) {
 
   res.json({ message: "success", id: inserted_id }).status(StatusCodes.OK);
 }
-async function deleteCommentHandler(_req: Request, _res: Response) {
+async function deleteCommentHandler(req: Request, res: Response) {
+  const commentRepository = new ArticleCommentRepository(getDB());
+  const id = parseInt(req.params.commentId);
+  assert(!isNaN(id));
+  const user = req.user;
+  assert(user);
+  const exists = await commentRepository.deleteById(id);
+  if (!exists) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "댓글이 존재하지 않습니다.",
+    });
+    return;
+  }
+  res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
 const router = Router();
