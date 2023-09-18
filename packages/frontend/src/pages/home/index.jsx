@@ -15,21 +15,21 @@ export function HomePage() {
       <div className="banner">
         <Carousel activeIndex={index} onSelect={handleSelect}>
           <Carousel.Item>
-            <img src="/public/sample.png" className="carousel_img"></img>
+            <img src="/sample.png" className="carousel_img"></img>
             <Carousel.Caption>
               <h3>First slide label</h3>
               <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
-            <img src="/public/sample.png" className="carousel_img"></img>
+            <img src="/sample.png" className="carousel_img"></img>
             <Carousel.Caption>
               <h3>Second slide label</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
-            <img src="../public/sample.png" className="carousel_img"></img>
+            <img src="/sample.png" className="carousel_img"></img>
             <Carousel.Caption>
               <h3>Third slide label</h3>
               <p>
