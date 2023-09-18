@@ -23,11 +23,12 @@ export default function WithdrawalPage() {
         <Accordion>
           <Accordion.Header>유의사항을 확인하세요</Accordion.Header>
           <Accordion.Body>
-            작성한 글, 펀딩, 프로필 등 모든 정보가 삭제됩니다. <br></br>
-            탈퇴 시 전자금융거래법에 따라 금융 거래기록은 5년 뒤 파기됩니다.
-            {" "}
+            작성한 글, 펀딩, 프로필 등 모든 정보가 삭제됩니다.
             <br></br>
-            타인 글의 댓글은 삭제되지 않으니 미리 확인하세요. <br></br>
+            탈퇴 시 전자금융거래법에 따라 금융 거래기록은 5년 뒤 파기됩니다.
+            <br></br>
+            타인 글의 댓글은 삭제되지 않으니 미리 확인하세요.
+            <br></br>
             그동안 HAPPYTAILS를 이용해주셔서 감사합니다.
           </Accordion.Body>
         </Accordion>
