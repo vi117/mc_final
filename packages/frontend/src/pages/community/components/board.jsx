@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import useSWR from "swr";
 import Sampledata from "../assets/sampledata";
 import classes from "../styles/community.module.css";
 import Category from "./category";
 
 const Board = () => {
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_filteredData, setFilteredData] = useState([]);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const animals = [
@@ -20,6 +22,15 @@ const Board = () => {
     "양서류",
     "갑각류",
   ];
+  const {
+    data: fetcherData,
+    error: fetcherError,
+    isLoading: fetcherIsLoading,
+  } = useSWR(
+    "/api/v1/articles",
+    (url) => fetch(url).then((res) => res.json()),
+  );
+
   const selectCheckbox = (animal) => {
     if (selectedAnimals.includes(animal)) {
       setSelectedAnimals(selectedAnimals.filter((a) => a !== animal));
@@ -59,6 +70,12 @@ const Board = () => {
     setFilteredData(newData);
   }, []);
 
+  if (fetcherIsLoading) {
+    return <div>로딩중...</div>;
+  }
+  if (fetcherError) {
+    return <div>에러가 발생했습니다.</div>;
+  }
   return (
     <>
       <Modal show={isModalOpen}>
@@ -129,7 +146,7 @@ const Board = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item) => (
+            {fetcherData.map((item) => (
               <tr
                 key={`board-${item.id}`}
                 onClick={() => handleTitleClick(item)}
@@ -137,8 +154,8 @@ const Board = () => {
                 <td className={classes["td-num"]}>{item.id}</td>
                 <td className={classes["td-cat"]}>{item.category}</td>
                 <td className={classes["td-title"]}>{item.title}</td>
-                <td>{item.createdBy}</td>
-                <td>{item.views}</td>
+                <td>{item.author_nickname}</td>
+                <td>{item.view_count}</td>
               </tr>
             ))}
           </tbody>
