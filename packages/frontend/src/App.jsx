@@ -76,7 +76,7 @@ const browserRouter = createBrowserRouter([
        * 커뮤니티 글 작성
        */
       {
-        path: "/community/post",
+        path: "/community/:id/post",
         element: <CommunityWrite></CommunityWrite>,
       },
       /**
@@ -97,7 +97,7 @@ const browserRouter = createBrowserRouter([
       { path: "/fundings/:id/edit", element: <FundingsEdit /> },
       /**
        * 펀딩 글 작성
-       */ { path: "/fundings/:id/post", element: <FundingsWrite /> },
+       */ { path: "/fundings/post", element: <FundingsWrite /> },
       { path: "*", element: <h1>Not Found</h1> },
     ],
   },
