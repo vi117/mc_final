@@ -13,6 +13,8 @@ import { Col } from "react-bootstrap";
 import "./FundingsDetail.css";
 import { NavLink } from "react-router-dom";
 
+// import useSWR from "swr";
+
 const placeholder = "https://via.placeholder.com/850x375";
 
 const FundingsDetail = function() {

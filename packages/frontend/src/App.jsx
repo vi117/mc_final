@@ -76,7 +76,7 @@ const browserRouter = createBrowserRouter([
        * 커뮤니티 글 작성
        */
       {
-        path: "/community/:id/post",
+        path: "/community/post",
         element: <CommunityWrite></CommunityWrite>,
       },
       /**
