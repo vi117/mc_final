@@ -1,6 +1,6 @@
-import { DB } from "@/db/util";
+import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
-import { Compilable, Insertable, Kysely, Updateable } from "kysely";
+import { Insertable, Kysely, Updateable } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
 
 const debug = debug_fn("joinify:db");
@@ -75,14 +75,6 @@ export interface FundingObject {
   tags: {
     tag: string;
   }[];
-}
-
-function log<T extends Compilable>(qb: T) {
-  if (debug.enabled) {
-    const q = qb.compile();
-    debug(q.sql, q.parameters);
-  }
-  return qb;
 }
 
 export class FundingsRepository {
@@ -167,7 +159,7 @@ export class FundingsRepository {
       .where("fundings.end_date", ">=", begin_date)
       .limit(limit)
       .offset(offset)
-      .$call(log);
+      .$call(log_query(debug));
 
     const rows = await query.execute();
     return rows;

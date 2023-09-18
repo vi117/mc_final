@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { AiFillHeart } from "react-icons/ai";
+import { FiMoreVertical } from "react-icons/fi";
 import Commentsdata from "./assets/commentsample";
-import { ReactComponent as Heart } from "./assets/Heart-Linear.svg";
-import { ReactComponent as More } from "./assets/more.svg";
 import Sampledata from "./assets/sampledata";
 import Profileimg from "./assets/user.png";
 import baseClasses from "./styles/Co_base.module.css";
@@ -71,7 +71,7 @@ export function CommunityDetail() {
           <div className={classes["selectedTitle"]}>{selectedPost.title}</div>
           <div className={classes["detailbtn"]}>
             <button>수정</button>
-            <button>삭제</button>
+            <button onClick={deleteMessage}>삭제</button>
           </div>
         </div>
         <div className={classes["createdArea"]}>
@@ -87,7 +87,7 @@ export function CommunityDetail() {
         </div>
         <div className={classes["reportArea"]}>
           <button style={{ marginRight: "7px" }}>
-            <Heart
+            <AiFillHeart
               className={classes["Hearticon"]}
               style={{
                 width: "24px",
@@ -97,7 +97,7 @@ export function CommunityDetail() {
               onClick={clickHeart}
             />
           </button>
-          <button>신고</button>
+          <button className={classes["reportbtn"]}>신고</button>
         </div>
         <div className={classes["commentArea"]}>
           <p>댓글 ({totalComments}개)</p>
@@ -118,7 +118,7 @@ export function CommunityDetail() {
               </div>
               <div className={classes["commentDate"]}>{comment.createdAt}</div>
               <div className={classes["moretogglearea"]}>
-                <More
+                <FiMoreVertical
                   className={classes["morebtn"]}
                   style={{
                     width: "20px",
