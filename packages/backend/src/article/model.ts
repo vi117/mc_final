@@ -255,12 +255,46 @@ export class ArticleRepository {
       .executeTakeFirstOrThrow();
   }
 
-  async addViewCount(article_id: number, count: number) {
+  async update(id: number, article: {
+    title?: string;
+    content?: string;
+    category?: string;
+  }) {
+    const { title, content, category } = article;
     await this.db.updateTable("articles")
-      .set((eb) => ({
-        view_count: eb("view_count", "+", count),
-      }))
-      .where("id", "=", article_id)
+      .set({
+        title,
+        content,
+        category,
+      })
+      .where("id", "=", id)
+      .executeTakeFirstOrThrow();
+  }
+
+  async addTag(article_id: number, tag_id: number) {
+    return await this.addTags(article_id, [tag_id]);
+  }
+
+  async addTags(article_id: number, tag_ids: number[]) {
+    await this.db.insertInto("article_tag_rel")
+      .values(tag_ids.map((id) => ({
+        article_id,
+        tag_id: id,
+      })))
+      .executeTakeFirst();
+  }
+
+  async removeTag(article_id: number, tag_id: number) {
+    await this.db.deleteFrom("article_tag_rel")
+      .where("article_id", "=", article_id)
+      .where("tag_id", "=", tag_id)
+      .executeTakeFirstOrThrow();
+  }
+
+  async removeTags(article_id: number, tag_ids: number[]) {
+    await this.db.deleteFrom("article_tag_rel")
+      .where("article_id", "=", article_id)
+      .where("tag_id", "in", tag_ids)
       .executeTakeFirstOrThrow();
   }
 }
@@ -308,6 +342,59 @@ export class ArticleLikeRepository {
     const res = await this.db.deleteFrom("article_likes")
       .where("user_id", "=", user_id)
       .where("article_id", "=", article_id)
+      .executeTakeFirstOrThrow();
+    return res.numDeletedRows === 1n;
+  }
+}
+
+export class ArticleTagsRepository {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+  async findAll(): Promise<{
+    id: number;
+    tag: string;
+  }[]> {
+    const ret = await this.db.selectFrom("article_tags")
+      .selectAll("article_tags")
+      .execute();
+    return ret;
+  }
+
+  async findByName(name: string) {
+    const ret = await this.db.selectFrom("article_tags")
+      .where("tag", "=", name)
+      .selectAll("article_tags")
+      .executeTakeFirst();
+    return ret;
+  }
+
+  async findByNames(names: string[]) {
+    const ret = await this.db.selectFrom("article_tags")
+      .where("tag", "in", names)
+      .selectAll("article_tags")
+      .execute();
+    return ret;
+  }
+
+  async insert(tag: Insertable<DB["article_tags"]>) {
+    const res = await this.db.insertInto("article_tags")
+      .values(tag)
+      .executeTakeFirst();
+    return Number(res.insertId);
+  }
+
+  async deleteByName(name: string) {
+    const res = await this.db.deleteFrom("article_tags")
+      .where("tag", "=", name)
+      .executeTakeFirstOrThrow();
+    return res.numDeletedRows === 1n;
+  }
+
+  async deleteById(id: number) {
+    const res = await this.db.deleteFrom("article_tags")
+      .where("id", "=", id)
       .executeTakeFirstOrThrow();
     return res.numDeletedRows === 1n;
   }

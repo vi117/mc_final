@@ -7,7 +7,7 @@ import { Router } from "express";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ArticleCommentRepository, ArticleRepository } from "./model";
-import { likeArticle, unlikeArticle } from "./service";
+import { ArticleLikeError, likeArticle, unlikeArticle } from "./service";
 
 /**
  * Retrieves all articles based on the provided query parameters.
@@ -110,7 +110,19 @@ async function deleteArticleHandler(req: Request, res: Response) {
   res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
-async function updateArticleHandler(_req: Request, _res: Response) {
+async function updateArticleHandler(req: Request, res: Response) {
+  const articleRepository = new ArticleRepository(getDB());
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  const user = req.user;
+  assert(user);
+
+  await articleRepository.update(id, {
+    title: req.body.title,
+    content: req.body.content,
+    category: req.body.category,
+  });
+  res.json({ message: "success" }).status(StatusCodes.OK);
 }
 async function likeArticleHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
@@ -125,8 +137,11 @@ async function likeArticleHandler(req: Request, res: Response) {
       await likeArticle(user_id, id);
     }
   } catch (e) {
-    res.status(StatusCodes.CONFLICT).json({ message: e.message });
-    return;
+    if (e instanceof ArticleLikeError) {
+      res.status(StatusCodes.CONFLICT).json({ message: e.message });
+      return;
+    }
+    throw e;
   }
   res.json({ message: "success" }).status(StatusCodes.OK);
 }
