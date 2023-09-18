@@ -2,6 +2,7 @@ import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
 
+import upload from "@/file/multer";
 import { parseQueryToNumber } from "@/util/query_param";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -66,6 +67,8 @@ export async function login(req: Request, res: Response): Promise<void> {
 }
 
 export async function signup(req: Request, res: Response): Promise<void> {
+  const file = req.file;
+
   const v = ajv.validate({
     type: "object",
     properties: {
@@ -101,6 +104,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
       password,
       address,
       phone,
+      profile_image: file?.filename,
     });
     if (user_id === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -124,7 +128,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
   );
   await sendVerificationMail(email, verificationCode);
 
-  res.status(StatusCodes.OK).json({
+  res.status(StatusCodes.CREATED).json({
     message: "회원가입 성공",
     user: user_id === undefined ? null : {
       user_id,
@@ -247,7 +251,7 @@ export const queryAll = async (req: Request, res: Response) => {
 };
 
 router.post("/login", RouterCatch(login));
-router.post("/signup", RouterCatch(signup));
+router.post("/signup", upload.single("profile"), RouterCatch(signup));
 router.post("/verify_resend", RouterCatch(resendVerificationCode));
 router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/logout", RouterCatch(logout));
