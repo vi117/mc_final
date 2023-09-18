@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Upload from "../uploadcomponent/Upload";
-import RegisterArgee from "./registerArgee";
+import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
 
 function RegisterPage() {
