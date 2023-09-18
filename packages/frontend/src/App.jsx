@@ -16,6 +16,7 @@ import LoginPage from "./pages/login";
 import WithdrawalPage from "./pages/withdrawal";
 
 import RegisterPage from "./pages/register";
+import ResetpasswordPage from "./pages/reset-password";
 
 const browserRouter = createBrowserRouter([
   {
@@ -47,7 +48,10 @@ const browserRouter = createBrowserRouter([
       /**
        * 비밀번호 재설정
        */
-      { path: "/reset-password", element: <h1>Reset Password</h1> },
+      {
+        path: "/reset-password",
+        element: <ResetpasswordPage></ResetpasswordPage>,
+      },
       /**
        * 접속한 유저의 프로필 홈
        */
