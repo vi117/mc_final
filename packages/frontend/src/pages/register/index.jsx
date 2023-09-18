@@ -1,6 +1,8 @@
 import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
 import Upload from "../uploadcomponent/Upload";
-import "./registerForm.css";
+import RegisterArgee from "./registerArgee";
+import classes from "./registerForm.module.css";
 
 function RegisterPage() {
   const [Email, setEmail] = useState("");
@@ -11,6 +13,9 @@ function RegisterPage() {
   const [Phone, setPhone] = useState("");
   const [Address, setAddress] = useState("");
   const [Article, setArticle] = useState("");
+  const [show, setShow] = useState(true);
+
+  const handleClose = () => setShow(false);
 
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -36,9 +41,61 @@ function RegisterPage() {
   const onArticleHandler = (event) => {
     setArticle(event.currentTarget.value);
   };
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
 
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{ display: "flex", flexDirection: "column" }}
+        className={classes.form}
+      >
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <RegisterArgee></RegisterArgee>
+        </Modal>
+        <Upload></Upload>
+        <RegisterLabel>Name</RegisterLabel>
+        <input type="text" value={Name} onChange={onNameHandler} />
+        <RegisterLabel>Email</RegisterLabel>
+        <input type="email" value={Email} onChange={onEmailHandler} />
+        <RegisterLabel>password</RegisterLabel>
+        <input type="password" value={Password} onChange={onPasswordHandler} />
+        <RegisterLabel>Confirm Password</RegisterLabel>
+        <input
+          type="password"
+          value={ConfirmPassword}
+          onChange={onConfirmPasswordHandler}
+        />
+        <RegisterLabel>NickName</RegisterLabel>
+        <input type="text" value={NickName} onChange={onNickNameHandler} />
+        <RegisterLabel>Phone</RegisterLabel>
+        <input type="text" value={Phone} onChange={onPhoneHandler} />
+        <RegisterLabel>Address</RegisterLabel>
+        <input type="text" value={Address} onChange={onAddressHandler} />
+        <RegisterLabel>Article</RegisterLabel>
+        <input type="text" value={Article} onChange={onArticleHandler} />
+        <br />
+        <button
+          id="form-controls"
+          onClick={onSubmitHandler}
+          className={classes.button_submit}
+        >
+          회원가입
+        </button>
+      </div>
+    </div>
+  );
+
+  function onSubmitHandler() {
     if (Password !== ConfirmPassword) {
       return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
     }
@@ -65,47 +122,15 @@ function RegisterPage() {
     if (!passwordPattern.test(Password)) {
       return alert("올바른 비밀번호를 입력하세요.");
     }
-  };
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{ display: "flex", flexDirection: "column" }}
-      >
-        <Upload></Upload>
-        <label>Name</label>
-        <input type="text" value={Name} onChange={onNameHandler} />
-        <label>Email</label>
-        <input type="email" value={Email} onChange={onEmailHandler} />
-        <label>Password</label>
-        <input type="password" value={Password} onChange={onPasswordHandler} />
-        <label>Confirm Password</label>
-        <input
-          type="password"
-          value={ConfirmPassword}
-          onChange={onConfirmPasswordHandler}
-        />
-        <label>NickName</label>
-        <input type="text" value={NickName} onChange={onNickNameHandler} />
-        <label>Phone</label>
-        <input type="text" value={Phone} onChange={onPhoneHandler} />
-        <label>Address</label>
-        <input type="text" value={Address} onChange={onAddressHandler} />
-        <label>Article</label>
-        <input type="text" value={Article} onChange={onArticleHandler} />
-        <br />
-        <button id="form-controls" onClick={onSubmitHandler}>
-          회원가입
-        </button>
-      </div>
-    </div>
-  );
+  }
 }
 
 export default RegisterPage;
+
+function RegisterLabel({ children }) {
+  return (
+    <label className={classes.label}>
+      {children}
+    </label>
+  );
+}

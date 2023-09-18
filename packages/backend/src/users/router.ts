@@ -1,8 +1,8 @@
-import { getTransport } from "@/mail/service";
 import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
 
+import upload from "@/file/multer";
 import { parseQueryToNumber } from "@/util/query_param";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -16,6 +16,7 @@ import {
   setRefreshTokenToCookie,
 } from "./jwt";
 import getUserRepository from "./model";
+import { sendVerificationMail } from "./sendmail";
 
 const router = Router();
 
@@ -66,6 +67,8 @@ export async function login(req: Request, res: Response): Promise<void> {
 }
 
 export async function signup(req: Request, res: Response): Promise<void> {
+  const file = req.file;
+
   const v = ajv.validate({
     type: "object",
     properties: {
@@ -101,6 +104,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
       password,
       address,
       phone,
+      profile_image: file?.filename,
     });
     if (user_id === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -122,17 +126,9 @@ export async function signup(req: Request, res: Response): Promise<void> {
   const verificationCode = getAuthCodeRepository().createVerificationCode(
     email,
   );
-  await getTransport().sendMail({
-    from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
-    to: email,
-    subject: "회원가입 인증 코드",
-    text:
-      `회원가입 인증 코드는 ${verificationCode} 입니다. 이 코드를 입력해주세요.`,
-    headers: {
-      "content-type": "text/plain",
-    },
-  });
-  res.status(StatusCodes.OK).json({
+  await sendVerificationMail(email, verificationCode);
+
+  res.status(StatusCodes.CREATED).json({
     message: "회원가입 성공",
     user: user_id === undefined ? null : {
       user_id,
@@ -140,6 +136,41 @@ export async function signup(req: Request, res: Response): Promise<void> {
     },
   });
 }
+
+export const resendVerificationCode = async (req: Request, res: Response) => {
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      email: { type: "string" },
+    },
+    required: ["email"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+  const email = req.body.email as string;
+  const userRepository = getUserRepository();
+  const user = await userRepository.findByEmail(email);
+  if (!user) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "존재하지 않는 이메일입니다.",
+    });
+    return;
+  }
+  if (!user.email_approved) {
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      message: "이미 인증된 이메일입니다.",
+    });
+    return;
+  }
+  const code = getAuthCodeRepository().createVerificationCode(email);
+  await sendVerificationMail(email, code, { resend: true });
+  res.status(StatusCodes.OK).json({ message: "인증 코드 재전송 성공" });
+};
 
 export const verifyWithCode = async (req: Request, res: Response) => {
   const v = ajv.validate({
@@ -220,7 +251,8 @@ export const queryAll = async (req: Request, res: Response) => {
 };
 
 router.post("/login", RouterCatch(login));
-router.post("/signup", RouterCatch(signup));
+router.post("/signup", upload.single("profile"), RouterCatch(signup));
+router.post("/verify_resend", RouterCatch(resendVerificationCode));
 router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/logout", RouterCatch(logout));
 router.get("/:id", RouterCatch(queryById));

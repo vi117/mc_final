@@ -20,6 +20,7 @@
     "@types/jest": "^29.5.4",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/morgan": "^1.9.5",
+    "@types/multer": "^1.4.7",
     "@types/node": "^20.6.0",
     "@types/nodemailer": "^6.4.10",
     "@types/supertest": "^2.0.12",
@@ -44,6 +45,7 @@
     "jsonwebtoken": "^9.0.2",
     "kysely": "^0.26.3",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.1",
     "nodemailer": "^6.9.5"
   }
