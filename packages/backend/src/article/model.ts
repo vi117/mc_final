@@ -22,6 +22,10 @@ export interface FindAllUsersOptions {
    * tags to search
    */
   tags?: string[];
+  /**
+   * category
+   */
+  allow_categories?: string[];
 }
 
 export interface FindOneOptions {
@@ -152,6 +156,7 @@ export class ArticleRepository {
       user_id,
       include_deleted = false,
       tags,
+      allow_categories,
     } = options ?? {};
 
     const ret = await this.getFindBaseQuery({
@@ -165,6 +170,12 @@ export class ArticleRepository {
       .$if(
         !include_deleted,
         (qb) => qb.where("articles.deleted_at", "is", null),
+      )
+      .$if(
+        allow_categories !== undefined,
+        // allow_categories is an array of strings
+        // that are categories of articles
+        (qb) => qb.where("articles.category", "in", allow_categories ?? []),
       )
       .limit(limit)
       .offset(offset)
@@ -324,6 +335,13 @@ export class ArticleCommentRepository {
       .values(comment)
       .executeTakeFirst();
     return Number(res.insertId);
+  }
+
+  async deleteById(id: number) {
+    const r = await this.db.deleteFrom("comments")
+      .where("id", "=", id)
+      .executeTakeFirst();
+    return r.numDeletedRows === 1n;
   }
 }
 

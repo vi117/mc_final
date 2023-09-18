@@ -25,6 +25,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
   const limit = parseQueryToNumber(req.query.limit, 50);
   const cursor = parseQueryToNumber(req.query.cursor);
   const tags = parseQueryToStringList(req.query.tags);
+  const categories = parseQueryToStringList(req.query.categories);
 
   const result = await articleRepository.findAll({
     user_id: user?.id,
@@ -33,6 +34,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
     limit,
     tags: tags,
     cursor: cursor,
+    allow_categories: categories,
   });
   res.json(result).status(StatusCodes.OK);
 }
