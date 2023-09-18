@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { AiFillHeart } from "react-icons/ai";
+import { FiMoreVertical } from "react-icons/fi";
 import Commentsdata from "./assets/commentsample";
-import { ReactComponent as Heart } from "./assets/Heart-Linear.svg";
-import { ReactComponent as More } from "./assets/more.svg";
 import Sampledata from "./assets/sampledata";
 import Profileimg from "./assets/user.png";
 import baseClasses from "./styles/Co_base.module.css";
@@ -87,7 +87,7 @@ export function CommunityDetail() {
         </div>
         <div className={classes["reportArea"]}>
           <button style={{ marginRight: "7px" }}>
-            <Heart
+            <AiFillHeart
               className={classes["Hearticon"]}
               style={{
                 width: "24px",
@@ -118,7 +118,7 @@ export function CommunityDetail() {
               </div>
               <div className={classes["commentDate"]}>{comment.createdAt}</div>
               <div className={classes["moretogglearea"]}>
-                <More
+                <FiMoreVertical
                   className={classes["morebtn"]}
                   style={{
                     width: "20px",
