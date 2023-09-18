@@ -417,3 +417,31 @@ export class ArticleTagsRepository {
     return res.numDeletedRows === 1n;
   }
 }
+
+export class ArticleReportRepository {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+
+  async insert(report: Insertable<DB["article_reports"]>) {
+    const res = await this.db.insertInto("article_reports")
+      .values(report)
+      .executeTakeFirst();
+    return Number(res.insertId);
+  }
+
+  async deleteById(id: number) {
+    const res = await this.db.deleteFrom("article_reports")
+      .where("id", "=", id)
+      .executeTakeFirst();
+    return res.numDeletedRows === 1n;
+  }
+
+  async deleteAllByArticleId(article_id: number) {
+    const res = await this.db.deleteFrom("article_reports")
+      .where("article_id", "=", article_id)
+      .executeTakeFirst();
+    return res.numDeletedRows === 1n;
+  }
+}
