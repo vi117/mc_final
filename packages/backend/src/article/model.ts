@@ -1,6 +1,9 @@
-import { DB } from "@/db/util";
+import { DB, log_query } from "@/db/util";
+import debug_fn from "debug";
 import { Insertable, Kysely } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
+
+const debug = debug_fn("joinify:db");
 
 export interface FindAllUsersOptions {
   limit?: number;
@@ -31,6 +34,17 @@ export interface FindOneOptions {
    * comment_limit
    */
   comment_limit?: number;
+}
+
+interface FindBaseOptions {
+  /**
+   * 사용자 ID
+   */
+  user_id?: number;
+  /**
+   * tags to search
+   */
+  tags?: string[];
 }
 
 export interface ArticleObject {
@@ -74,16 +88,13 @@ export class ArticleRepository {
   constructor(db: Kysely<DB>) {
     this.db = db;
   }
+  private getFindBaseQuery(options: FindBaseOptions) {
+    const {
+      user_id = null,
+      tags,
+    } = options;
 
-  async findAll(options: FindAllUsersOptions): Promise<ArticleObject[]> {
-    const limit = options?.limit ?? 50;
-    const offset = options?.offset ?? 0;
-    const cursor = options?.cursor;
-    const user_id = options?.user_id ?? null;
-    const include_deleted = options?.include_deleted ?? false;
-    const tags = options?.tags;
-
-    const ret = await this.db.selectFrom("articles")
+    return this.db.selectFrom("articles")
       .innerJoin("users as author", "articles.user_id", "author.id")
       .select([
         "author.id as author_id",
@@ -97,10 +108,9 @@ export class ArticleRepository {
           (join) =>
             join.onRef("articles.id", "=", "like.article_id")
               .on("like.user_id", "=", user_id),
-        )
-          .select([
-            "like.user_id as like_user_id",
-          ]))
+        ).select([
+          "like.user_id as like_user_id",
+        ]))
       .$if(tags !== undefined, (qb) => {
         tags?.forEach((tag, index) => {
           qb = qb.innerJoin(
@@ -131,7 +141,23 @@ export class ArticleRepository {
             ]),
         ).as("tags"),
       ])
-      .selectAll("articles")
+      .selectAll("articles");
+  }
+
+  async findAll(options?: FindAllUsersOptions): Promise<ArticleObject[]> {
+    const {
+      limit = 50,
+      offset = 0,
+      cursor,
+      user_id,
+      include_deleted = false,
+      tags,
+    } = options ?? {};
+
+    const ret = await this.getFindBaseQuery({
+      user_id,
+      tags,
+    })
       .$if(
         cursor !== undefined,
         (eb) => eb.where("articles.id", "<", cursor ?? 0),
@@ -154,69 +180,43 @@ export class ArticleRepository {
       comments?: CommentObject[];
     } | undefined
   > {
-    const user_id = options?.user_id ?? null;
-    const with_comments = options?.with_comments ?? false;
-    const comment_limit = options?.comment_limit ?? 50;
+    const {
+      user_id,
+      with_comments = false,
+      comment_limit = 50,
+    } = options ?? {};
 
-    const ret = await this.db.selectFrom("articles")
-      .innerJoin("users as author", "articles.user_id", "author.id")
-      .select([
-        "author.id as author_id",
-        "author.nickname as author_nickname",
-        "author.profile_image as author_profile_image",
-        "author.email as author_email",
-      ])
-      .$if(user_id !== null, (qb) =>
-        qb.leftJoin(
-          "article_likes as like",
-          (join) =>
-            join.onRef("articles.id", "=", "like.article_id")
-              .on("like.user_id", "=", user_id),
-        ).select([
-          "like.user_id as like_user_id",
-        ]))
-      .select((eb) => [
+    const ret = await this.getFindBaseQuery({
+      user_id,
+    }).$if(with_comments, (qb) =>
+      qb.select((eb) => [
         jsonArrayFrom(
-          eb.selectFrom("article_tag_rel as r")
-            .innerJoin(
-              `article_tags as t`,
-              `t.id`,
-              `r.tag_id`,
-            )
-            .whereRef(`r.article_id`, "=", "article_id")
+          eb.selectFrom("comments as c")
+            .innerJoin("users as u", "c.user_id", "u.id")
+            .where("c.article_id", "=", id)
+            // Unfortunately, the MySQL jsonArrayFrom and jsonObjectFrom
+            // functions can only handle explicit selections due to limitations
+            // of the json_object function. selectAll() is not allowed in
+            // the subquery.
             .select([
-              "t.tag as tag",
-            ]),
-        ).as("tags"),
-      ])
-      .$if(with_comments, (qb) =>
-        qb.select((eb) => [
-          jsonArrayFrom(
-            eb.selectFrom("comments as c")
-              .innerJoin("users as u", "c.user_id", "u.id")
-              .where("c.article_id", "=", id)
-              // Unfortunately, the MySQL jsonArrayFrom and jsonObjectFrom
-              // functions can only handle explicit selections due to limitations
-              // of the json_object function. selectAll() is not allowed in
-              // the subquery.
-              .select([
-                "c.id as id",
-                "c.content as content",
-                "c.created_at as created_at",
-                "c.user_id as user_id",
-                "c.deleted_at as deleted_at",
-                "c.updated_at as updated_at",
-              ])
-              .select([
-                "u.nickname as nickname",
-                "u.profile_image as profile_image",
-                "u.email as email",
-              ])
-              .limit(comment_limit),
-          ).as("comments"),
-        ]))
-      .where("articles.id", "=", id)
+              "c.id as id",
+              "c.content as content",
+              "c.created_at as created_at",
+              "c.user_id as user_id",
+              "c.deleted_at as deleted_at",
+              "c.updated_at as updated_at",
+            ])
+            .select([
+              "u.nickname as nickname",
+              "u.profile_image as profile_image",
+              "u.email as email",
+            ])
+            .limit(comment_limit),
+        ).as("comments"),
+      ]))
       .selectAll("articles")
+      .where("articles.id", "=", id)
+      .$call(log_query(debug))
       .executeTakeFirst();
     return ret;
   }
@@ -235,6 +235,33 @@ export class ArticleRepository {
       .values(article)
       .executeTakeFirst();
     return Number(res.insertId);
+  }
+
+  async softDelete(id: number) {
+    await this.db.updateTable("articles")
+      .where("id", "=", id)
+      .set({
+        deleted_at: new Date(),
+      })
+      .executeTakeFirstOrThrow();
+  }
+
+  async addLike(article_id: number, count: number) {
+    await this.db.updateTable("articles")
+      .set((eb) => ({
+        like_count: eb("like_count", "+", count),
+      }))
+      .where("id", "=", article_id)
+      .executeTakeFirstOrThrow();
+  }
+
+  async addViewCount(article_id: number, count: number) {
+    await this.db.updateTable("articles")
+      .set((eb) => ({
+        view_count: eb("view_count", "+", count),
+      }))
+      .where("id", "=", article_id)
+      .executeTakeFirstOrThrow();
   }
 }
 
@@ -263,5 +290,25 @@ export class ArticleCommentRepository {
       .values(comment)
       .executeTakeFirst();
     return Number(res.insertId);
+  }
+}
+
+export class ArticleLikeRepository {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+  async insert(like: Insertable<DB["article_likes"]>) {
+    const res = await this.db.insertInto("article_likes")
+      .values(like)
+      .executeTakeFirst();
+    return Number(res.insertId);
+  }
+  async deleteByUserIdAndArticleId(user_id: number, article_id: number) {
+    const res = await this.db.deleteFrom("article_likes")
+      .where("user_id", "=", user_id)
+      .where("article_id", "=", article_id)
+      .executeTakeFirstOrThrow();
+    return res.numDeletedRows === 1n;
   }
 }
