@@ -9,6 +9,83 @@
   margin-top: 50px;
 }
 
+/*모달창 ui*/
+
+.title{
+  text-align: center;
+  padding:0 !important;
+  margin-top: 20px;
+}
+.title > p {
+  font-size: 16px;
+  color:var(--secondary);
+  margin-bottom:0px;
+}
+
+.title > h1 {
+  font-size: 24px;
+  letter-spacing: -0.01px;
+  font-weight: 700;
+  margin-bottom: 0px !important;
+}
+
+.co-modal > label{
+  color:black;
+}
+
+/*Filtering checkbox*/
+.selecttable {
+  padding: 20px 0px;
+}
+
+.mb-3{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mb-3 > input{
+  margin-bottom: 0px !important;
+  margin-right: 10px;
+  border:1px solid var(--green);
+}
+.mb-3 > input:focus{
+ box-shadow: none !important;
+ background-color: var(--green);
+border:1px solid var(--green);}
+
+.mb-3 > input:checked{
+background-color: var(--green);
+border:1px solid var(--green);
+outline:none;
+}
+
+.mb-3 > label {
+  font-size: 16px;
+  letter-spacing: -0.01px;
+  color: var(--primary);
+}
+
+ .filterbtnarea {
+  margin-bottom: 20px;
+  display: flex; 
+  justify-content: center;  
+}
+
+.closebtn, .filteron {
+  font-size: 14px;
+  color:var(--white);
+  border: none;
+  border-radius: 7px;
+  padding: 5px 10px;
+background-color: var(--green-dark);
+}
+
+.closebtn:hover, .filteron:hover{
+  transform:scale(1.05);
+  transition: transform 200ms ease;
+}
+
 /*베스트 밑 게시판 전체 영역*/
 .container {
   width: 100%;
@@ -173,15 +250,9 @@ table {
   text-align: center;
 }
 
-.board-table .td-title {
-  max-width: 200px;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 .borad-table .th-cat {
+  position: absolute;
   width: 100px;
   text-align: center;
 }
@@ -197,6 +268,24 @@ table {
 .board-table th,
 .board-table td {
   padding: 14px 0;
+}
+
+.board-table .td-title {
+  max-width: 200px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-table .td-num {
+  text-align: center;
+  width: 75px;
+}
+
+.board-table .td-cat {
+  text-align: center;
+  width: 100px;
 }
 
 .board-table tbody td {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
+import { Dropdown, Form, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Pencil } from "../assets/pencil.svg";
 import Sampledata from "../assets/sampledata";
@@ -8,8 +8,49 @@ import CustomMenu from "./Menu";
 import CustomToggle from "./Toggle";
 
 const Board = () => {
-  const [filteredData, setFilteredData] = useState([]);
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedAnimals, setSelectedAnimals] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const animals = [
+    "강아지",
+    "고양이",
+    "햄스터",
+    "어류",
+    "조류",
+    "파충류",
+    "양서류",
+    "갑각류",
+  ];
+  const navigate = useNavigate();
+
+  const selectCheckbox = (animal) => {
+    if (selectedAnimals.includes(animal)) {
+      setSelectedAnimals(selectedAnimals.filter((a) => a !== animal));
+    } else {
+      setSelectedAnimals([...selectedAnimals, animal]);
+    }
+  };
+
+  const filterResult = () => {
+    const filteredAnimals = animals.filter((animal) =>
+      !selectedAnimals.includes(animal)
+    );
+    if (filteredAnimals.length === 0) {
+      setFilteredData(data);
+    } else {
+      const result = data.filter((currData) =>
+        filteredAnimals.includes(currData.category)
+      );
+      setFilteredData(result);
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleTitleClick = () => {
+    navigate(`./id:detail`);
+  };
+
   useEffect(() => {
     setData(Sampledata);
 
@@ -21,19 +62,50 @@ const Board = () => {
     setFilteredData(newData);
   }, []);
 
-  const filterResult = (catItem) => {
-    const result = data.filter((currData) => currData.category === catItem);
-    setFilteredData(result);
-  };
-
-  const navigate = useNavigate();
-
-  const handleTitleClick = () => {
-    navigate(`./id:detail`);
-  };
-
   return (
     <>
+      <Modal show={isModalOpen}>
+        <div className={classes["title"]}>
+          <p>잠깐! 커뮤니티에 들어가시기 전에</p>
+          <h1>필터링 키워드를 선택해주세요</h1>
+        </div>
+        <div className={classes["selecttable"]}>
+          <Form>
+            {animals.map((animal, index) => (
+              <div key={`animal-${index}`}>
+                <Form.Check
+                  inline
+                  id={`checkbox-${index}`}
+                  className={classes["mb-3"]}
+                  type="checkbox"
+                  name={`check${index + 1}`}
+                  label={animal}
+                  checked={selectedAnimals.includes(animal)}
+                  onChange={() => selectCheckbox(animal)}
+                />
+              </div>
+            ))}
+          </Form>
+        </div>
+        <div className={classes["filterbtnarea"]}>
+          <button
+            className={classes["closebtn"]}
+            onClick={() => setIsModalOpen(false)}
+            style={{ marginRight: "5px" }}
+          >
+            그냥 보기
+          </button>
+          <button
+            className={classes["filteron"]}
+            onClick={() => {
+              filterResult();
+            }}
+          >
+            저장하기
+          </button>
+        </div>
+      </Modal>
+
       <div className={classes["board"]}>
         <div className={classes["category"]}></div>
         <Category filterData={(catItem) => filterResult(catItem)} />
@@ -63,8 +135,8 @@ const Board = () => {
                 key={item.id}
                 onClick={() => handleTitleClick(item)}
               >
-                <td>{item.id}</td>
-                <td>{item.category}</td>
+                <td className={classes["td-num"]}>{item.id}</td>
+                <td className={classes["td-cat"]}>{item.category}</td>
                 <td className={classes["td-title"]}>{item.title}</td>
                 <td>{item.createdBy}</td>
                 <td>{item.views}</td>
@@ -86,6 +158,17 @@ const Category = ({ filterData }) => {
   const goWrite = () => {
     navigate("/community/:id/post");
   };
+
+  const animals = [
+    "강아지",
+    "고양이",
+    "햄스터",
+    "어류",
+    "조류",
+    "파충류",
+    "양서류",
+    "갑각류",
+  ];
   return (
     <>
       <div className={classes["nav"]}>
@@ -98,54 +181,15 @@ const Category = ({ filterData }) => {
                 <Dropdown.Toggle as={CustomToggle}>카테고리</Dropdown.Toggle>
               </div>
               <Dropdown.Menu as={CustomMenu}>
-                <Dropdown.Item
-                  eventKey="1"
-                  onClick={() => handleFilter("강아지")}
-                >
-                  강아지
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey="2"
-                  onClick={() => handleFilter("고양이")}
-                >
-                  고양이
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey="3"
-                  onClick={() => handleFilter("햄스터")}
-                >
-                  햄스터
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey="3"
-                  onClick={() => handleFilter("어류")}
-                >
-                  어류
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey="3"
-                  onClick={() => handleFilter("조류")}
-                >
-                  조류
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey="3"
-                  onClick={() => handleFilter("파충류")}
-                >
-                  파충류
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey="3"
-                  onClick={() => handleFilter("양서류")}
-                >
-                  양서류
-                </Dropdown.Item>
-                <Dropdown.Item
-                  eventKey="3"
-                  onClick={() => handleFilter("갑각류")}
-                >
-                  갑각류
-                </Dropdown.Item>
+                {animals.map((animal, index) => (
+                  <Dropdown.Item
+                    key={`animal-${index}`}
+                    eventKey={index + 1}
+                    onClick={() => handleFilter(animal)}
+                  >
+                    {animal}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </div>
           </Dropdown>

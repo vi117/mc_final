@@ -1,5 +1,7 @@
 import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
 import Upload from "../uploadcomponent/Upload";
+import RegisterArgee from "./registerArgee";
 import classes from "./registerForm.module.css";
 
 function RegisterPage() {
@@ -11,6 +13,9 @@ function RegisterPage() {
   const [Phone, setPhone] = useState("");
   const [Address, setAddress] = useState("");
   const [Article, setArticle] = useState("");
+  const [show, setShow] = useState(true);
+
+  const handleClose = () => setShow(false);
 
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -49,6 +54,14 @@ function RegisterPage() {
         style={{ display: "flex", flexDirection: "column" }}
         className={classes.form}
       >
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <RegisterArgee></RegisterArgee>
+        </Modal>
         <Upload></Upload>
         <RegisterLabel>Name</RegisterLabel>
         <input type="text" value={Name} onChange={onNameHandler} />

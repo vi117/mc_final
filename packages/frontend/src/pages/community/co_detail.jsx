@@ -71,7 +71,7 @@ export function CommunityDetail() {
           <div className={classes["selectedTitle"]}>{selectedPost.title}</div>
           <div className={classes["detailbtn"]}>
             <button>수정</button>
-            <button>삭제</button>
+            <button onClick={deleteMessage}>삭제</button>
           </div>
         </div>
         <div className={classes["createdArea"]}>
@@ -97,7 +97,7 @@ export function CommunityDetail() {
               onClick={clickHeart}
             />
           </button>
-          <button>신고</button>
+          <button className={classes["reportbtn"]}>신고</button>
         </div>
         <div className={classes["commentArea"]}>
           <p>댓글 ({totalComments}개)</p>
