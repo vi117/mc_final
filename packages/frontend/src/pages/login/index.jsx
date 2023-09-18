@@ -1,29 +1,89 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import classes from "./style.module.css";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  async function onLoginClick() {
+    /**
+     * if you want to use axios
+     * ```ts
+     * try {
+     *  const data = await axios.post("/api/v1/users/login", {
+     *    email: email,
+     *    password: password,
+     *  });
+     *  console.log(data);
+     * }
+     * catch (err) {
+     *  //login fail
+     *  console.log(err);
+     * }
+     * ```
+     */
+    const res = await fetch("/api/v1/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
+    if (res.status !== 200) {
+      const data = await res.json();
+      console.log(data);
+      console.log("로그인에 실패했습니다.");
+      // TODO(vi117): use modal to show error
+      alert("로그인에 실패했습니다.");
+      setPassword("");
+      return;
+    }
+    navigate("/");
+  }
+
   return (
     <div className={classes["login-container"]}>
       <div className={classes["login-wrapper"]}>
         <h1>Login</h1>
         <form
           className={classes["login-form"]}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
-          <input type="text" name="userName" placeholder="Email" />
-          <input type="password" name="userPassword" placeholder="Password" />
+          <input
+            type="text"
+            name="userName"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            name="userPassword"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <label htmlFor="remember-check">
             <input type="checkbox" id="remember-check"></input> 자동 로그인
           </label>
           <span>
             <a href="아이디/비밀번호 찾기.url">아이디/비밀번호 찾기</a>
           </span>
-          <NavLink to={"/"}>
-            <input
-              type="submit"
-              value="Login"
-              className={classes["login-form-input"]}
-            />
-          </NavLink>
+          <input
+            onClick={onLoginClick}
+            type="submit"
+            value="Login"
+            className={classes["login-form-input"]}
+          />
         </form>
 
         <div className={classes["lfmFQa"]}>
