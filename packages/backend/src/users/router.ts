@@ -133,6 +133,41 @@ export async function signup(req: Request, res: Response): Promise<void> {
   });
 }
 
+export const resendVerificationCode = async (req: Request, res: Response) => {
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      email: { type: "string" },
+    },
+    required: ["email"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+  const email = req.body.email as string;
+  const userRepository = getUserRepository();
+  const user = await userRepository.findByEmail(email);
+  if (!user) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "존재하지 않는 이메일입니다.",
+    });
+    return;
+  }
+  if (!user.email_approved) {
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      message: "이미 인증된 이메일입니다.",
+    });
+    return;
+  }
+  const code = getAuthCodeRepository().createVerificationCode(email);
+  await sendVerificationMail(email, code, { resend: true });
+  res.status(StatusCodes.OK).json({ message: "인증 코드 재전송 성공" });
+};
+
 export const verifyWithCode = async (req: Request, res: Response) => {
   const v = ajv.validate({
     type: "object",
@@ -213,6 +248,7 @@ export const queryAll = async (req: Request, res: Response) => {
 
 router.post("/login", RouterCatch(login));
 router.post("/signup", RouterCatch(signup));
+router.post("/verify_resend", RouterCatch(resendVerificationCode));
 router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/logout", RouterCatch(logout));
 router.get("/:id", RouterCatch(queryById));
