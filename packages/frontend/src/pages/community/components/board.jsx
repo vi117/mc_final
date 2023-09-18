@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { Dropdown, Form, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as Pencil } from "../assets/pencil.svg";
 import Sampledata from "../assets/sampledata";
 import classes from "../styles/community.module.css";
-import CustomMenu from "./Menu";
-import CustomToggle from "./Toggle";
+import Category from "./category";
 
 const Board = () => {
   const [data, setData] = useState([]);
@@ -22,8 +20,6 @@ const Board = () => {
     "양서류",
     "갑각류",
   ];
-  const navigate = useNavigate();
-
   const selectCheckbox = (animal) => {
     if (selectedAnimals.includes(animal)) {
       setSelectedAnimals(selectedAnimals.filter((a) => a !== animal));
@@ -47,6 +43,7 @@ const Board = () => {
     setIsModalOpen(false);
   };
 
+  const navigate = useNavigate();
   const handleTitleClick = () => {
     navigate(`./id:detail`);
   };
@@ -72,7 +69,7 @@ const Board = () => {
         <div className={classes["selecttable"]}>
           <Form>
             {animals.map((animal, index) => (
-              <div key={`animal-${index}`}>
+              <div key={`filter-${index}`}>
                 <Form.Check
                   inline
                   id={`checkbox-${index}`}
@@ -108,7 +105,9 @@ const Board = () => {
 
       <div className={classes["board"]}>
         <div className={classes["category"]}></div>
-        <Category filterData={(catItem) => filterResult(catItem)} />
+        <Category
+          filterData={(catItem) => filterResult(catItem, selectedAnimals)}
+        />
         <table className={classes["board-table"]}>
           <thead>
             <tr>
@@ -132,7 +131,7 @@ const Board = () => {
           <tbody>
             {filteredData.map((item) => (
               <tr
-                key={item.id}
+                key={`board-${item.id}`}
                 onClick={() => handleTitleClick(item)}
               >
                 <td className={classes["td-num"]}>{item.id}</td>
@@ -144,64 +143,6 @@ const Board = () => {
             ))}
           </tbody>
         </table>
-      </div>
-    </>
-  );
-};
-
-const Category = ({ filterData }) => {
-  const handleFilter = (catItem) => {
-    filterData(catItem);
-  };
-
-  const navigate = useNavigate();
-  const goWrite = () => {
-    navigate("/community/:id/post");
-  };
-
-  const animals = [
-    "강아지",
-    "고양이",
-    "햄스터",
-    "어류",
-    "조류",
-    "파충류",
-    "양서류",
-    "갑각류",
-  ];
-  return (
-    <>
-      <div className={classes["nav"]}>
-        <div className={classes["control"]}>
-          <button>최신 순</button>
-          <button>좋아요 순</button>
-          <Dropdown>
-            <div className={classes["toggle"]}>
-              <div className={classes["togglemenu"]}>
-                <Dropdown.Toggle as={CustomToggle}>카테고리</Dropdown.Toggle>
-              </div>
-              <Dropdown.Menu as={CustomMenu}>
-                {animals.map((animal, index) => (
-                  <Dropdown.Item
-                    key={`animal-${index}`}
-                    eventKey={index + 1}
-                    onClick={() => handleFilter(animal)}
-                  >
-                    {animal}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </div>
-          </Dropdown>
-        </div>
-        <div className={classes["writebtn"]}>
-          <p onClick={goWrite}>
-            <Pencil
-              style={{ width: "14px", fill: "#3d8361", marginRight: "5px" }}
-            />
-            글쓰기
-          </p>
-        </div>
       </div>
     </>
   );
