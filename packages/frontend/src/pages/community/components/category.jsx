@@ -1,6 +1,6 @@
 import { Dropdown } from "react-bootstrap";
+import { BiSolidPencil } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as Pencil } from "../assets/pencil.svg";
 import classes from "../styles/community.module.css";
 import CustomMenu from "./Menu";
 import CustomToggle from "./Toggle";
@@ -54,7 +54,7 @@ const Category = ({ filterData }) => {
         </div>
         <div className={classes["writebtn"]}>
           <p onClick={goWrite}>
-            <Pencil
+            <BiSolidPencil
               style={{ width: "14px", fill: "#3d8361", marginRight: "5px" }}
             />
             글쓰기
