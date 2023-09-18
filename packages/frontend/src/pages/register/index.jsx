@@ -1,6 +1,8 @@
 import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
 import Upload from "../uploadcomponent/Upload";
-import "./registerForm.css";
+import RegisterArgee from "./registerArgee";
+import classes from "./registerForm.module.css";
 
 function RegisterPage() {
   const [Email, setEmail] = useState("");
@@ -11,6 +13,9 @@ function RegisterPage() {
   const [Phone, setPhone] = useState("");
   const [Address, setAddress] = useState("");
   const [Article, setArticle] = useState("");
+  const [show, setShow] = useState(true);
+
+  const handleClose = () => setShow(false);
 
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -36,30 +41,6 @@ function RegisterPage() {
   const onArticleHandler = (event) => {
     setArticle(event.currentTarget.value);
   };
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
-
-    if (Password !== ConfirmPassword) {
-      return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
-    }
-
-    if (
-      !Email || !Name || !Password || !ConfirmPassword || !NickName || !Phone
-      || !Address
-    ) {
-      return alert("모든 필수 항목을 입력하세요.");
-    }
-
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailPattern.test(Email)) {
-      return alert("올바른 이메일 주소를 입력하세요.");
-    }
-
-    const phonePattern = /^01[0-9]-\d{3,4}-\d{4}$/;
-    if (!phonePattern.test(Phone)) {
-      return alert("올바른 핸드폰 번호를 입력하세요.");
-    }
-  };
 
   return (
     <div
@@ -71,35 +52,85 @@ function RegisterPage() {
     >
       <div
         style={{ display: "flex", flexDirection: "column" }}
+        className={classes.form}
       >
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <RegisterArgee></RegisterArgee>
+        </Modal>
         <Upload></Upload>
-        <label>Name</label>
+        <RegisterLabel>Name</RegisterLabel>
         <input type="text" value={Name} onChange={onNameHandler} />
-        <label>Email</label>
+        <RegisterLabel>Email</RegisterLabel>
         <input type="email" value={Email} onChange={onEmailHandler} />
-        <label>Password</label>
+        <RegisterLabel>password</RegisterLabel>
         <input type="password" value={Password} onChange={onPasswordHandler} />
-        <label>Confirm Password</label>
+        <RegisterLabel>Confirm Password</RegisterLabel>
         <input
           type="password"
           value={ConfirmPassword}
           onChange={onConfirmPasswordHandler}
         />
-        <label>NickName</label>
+        <RegisterLabel>NickName</RegisterLabel>
         <input type="text" value={NickName} onChange={onNickNameHandler} />
-        <label>Phone</label>
+        <RegisterLabel>Phone</RegisterLabel>
         <input type="text" value={Phone} onChange={onPhoneHandler} />
-        <label>Address</label>
+        <RegisterLabel>Address</RegisterLabel>
         <input type="text" value={Address} onChange={onAddressHandler} />
-        <label>Article</label>
+        <RegisterLabel>Article</RegisterLabel>
         <input type="text" value={Article} onChange={onArticleHandler} />
         <br />
-        <button id="form-controls" onClick={onSubmitHandler}>
+        <button
+          id="form-controls"
+          onClick={onSubmitHandler}
+          className={classes.button_submit}
+        >
           회원가입
         </button>
       </div>
     </div>
   );
+
+  function onSubmitHandler() {
+    if (Password !== ConfirmPassword) {
+      return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
+    }
+
+    if (
+      !Email || !Name || !Password || !ConfirmPassword || !NickName || !Phone
+      || !Address
+    ) {
+      return alert("모든 필수 항목을 입력하세요.");
+    }
+
+    const emailPattern = // eslint-disable-next-line no-useless-escape
+      /^("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])$/;
+    if (!emailPattern.test(Email)) {
+      return alert("올바른 이메일 주소를 입력하세요.");
+    }
+
+    const phonePattern = /^01[0-9]-\d{3,4}-\d{4}$/;
+    if (!phonePattern.test(Phone)) {
+      return alert("올바른 핸드폰 번호를 입력하세요.");
+    }
+
+    const passwordPattern = /^[A-Za-z0-9]{8,20}$/;
+    if (!passwordPattern.test(Password)) {
+      return alert("올바른 비밀번호를 입력하세요.");
+    }
+  }
 }
 
 export default RegisterPage;
+
+function RegisterLabel({ children }) {
+  return (
+    <label className={classes.label}>
+      {children}
+    </label>
+  );
+}

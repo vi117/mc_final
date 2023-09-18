@@ -1,6 +1,27 @@
 import { DB } from "@/db/util";
 import { Insertable, Kysely, Updateable } from "kysely";
 
+export interface FundingRequestObject {
+  id: number;
+  title: string;
+  content: string;
+  thumbnail: string;
+  created_at: Date;
+  deleted_at: Date | null;
+  updated_at: Date;
+  funding_state: number;
+  reason: string | null;
+  funding_request_id: number | null;
+  host_id: number;
+  target_value: number;
+  begin_date: Date;
+  end_date: Date;
+
+  host_nickname: string;
+  host_profile_image: string | null;
+  host_email: string;
+}
+
 export class FundingRequestsRepository {
   db: Kysely<DB>;
   constructor(db: Kysely<DB>) {
@@ -10,7 +31,7 @@ export class FundingRequestsRepository {
   async findAll({
     limit = 50,
     offset = 0,
-  }) {
+  }): Promise<FundingRequestObject[]> {
     return await this.db.selectFrom("funding_requests")
       .innerJoin("users as host", "funding_requests.host_id", "host.id")
       .select([
@@ -24,7 +45,7 @@ export class FundingRequestsRepository {
       .execute();
   }
 
-  async findById(id: number) {
+  async findById(id: number): Promise<FundingRequestObject | undefined> {
     return await this.db.selectFrom("funding_requests")
       .innerJoin("users as host", "funding_requests.host_id", "host.id")
       .select([
