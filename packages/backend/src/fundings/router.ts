@@ -1,4 +1,4 @@
-import { getDB } from "@/db/util";
+import { getDB, isDuplKeyError } from "@/db/util";
 import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { Request, Response, Router } from "express";
@@ -7,6 +7,7 @@ import { StatusCodes } from "http-status-codes";
 import { FundingsRepository } from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
 
+import upload from "@/file/multer";
 import { checkLogin } from "@/users/jwt";
 import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
 import assert from "assert";
@@ -126,8 +127,6 @@ async function getFundingRewardsHandler(req: Request, res: Response) {
 async function deleteFundingHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   assert(!isNaN(id));
-  const user = req.user;
-  assert(user);
 
   const fundingRepo = new FundingsRepository(getDB());
   await fundingRepo.softDelete(id);
@@ -157,10 +156,7 @@ async function interestHandler(req: Request, res: Response) {
       await fundingRepo.setInterest(id, user.id);
     }
   } catch (error) {
-    if (
-      error instanceof Error
-      && (error as { code?: string }).code === "ER_DUP_ENTRY"
-    ) {
+    if (isDuplKeyError(error)) {
       res.status(StatusCodes.CONFLICT).json({
         message: "이미 관심 펀딩입니다.",
       });
@@ -240,6 +236,13 @@ async function withdrawFundingHandler(req: Request, res: Response) {
 }
 
 async function createFundingRequestHandler(req: Request, res: Response) {
+  const thumbnail = req.file?.filename;
+  if (!thumbnail) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "썸네일이 필요합니다.",
+    });
+    return;
+  }
   const requestRepo = new FundingRequestsRepository(getDB());
   const user = req.user;
   assert(user, "로그인이 필요합니다.");
@@ -269,8 +272,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     });
     return;
   }
-  const { title, content, begin_date, end_date, target_value, thumbnail } =
-    req.body;
+  const { title, content, begin_date, end_date, target_value } = req.body;
   const insertedId = await requestRepo.insert({
     host_id: user.id,
     title,
@@ -354,6 +356,7 @@ router.post(
 router.post(
   "/request/",
   checkLogin(),
+  upload.single("thumbnail"),
   RouterCatch(createFundingRequestHandler),
 );
 router.post(

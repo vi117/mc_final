@@ -7,6 +7,7 @@ import { Router } from "express";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ArticleCommentRepository, ArticleRepository } from "./model";
+import { ArticleLikeError, likeArticle, unlikeArticle } from "./service";
 
 /**
  * Retrieves all articles based on the provided query parameters.
@@ -85,11 +86,64 @@ async function postArticleHandler(req: Request, res: Response) {
 
   res.json({ message: "success", id: inserted_id }).status(StatusCodes.OK);
 }
-async function deleteArticleHandler(_req: Request, _res: Response) {
+async function deleteArticleHandler(req: Request, res: Response) {
+  const articleRepository = new ArticleRepository(getDB());
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  const user = req.user;
+  assert(user);
+
+  const article = await articleRepository.findById(id);
+  if (!article) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "게시글이 존재하지 않습니다.",
+    });
+    return;
+  }
+  if (!user.is_admin && article.user_id !== user.id) {
+    res.status(StatusCodes.FORBIDDEN).json({
+      message: "게시글 소유자가 아닙니다.",
+    });
+    return;
+  }
+  await articleRepository.softDelete(id);
+  res.json({ message: "success" }).status(StatusCodes.OK);
 }
-async function updateArticleHandler(_req: Request, _res: Response) {
+
+async function updateArticleHandler(req: Request, res: Response) {
+  const articleRepository = new ArticleRepository(getDB());
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  const user = req.user;
+  assert(user);
+
+  await articleRepository.update(id, {
+    title: req.body.title,
+    content: req.body.content,
+    category: req.body.category,
+  });
+  res.json({ message: "success" }).status(StatusCodes.OK);
 }
-async function likeArticleHandler(_req: Request, _res: Response) {
+async function likeArticleHandler(req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  const user_id = req.user?.id;
+  assert(user_id !== undefined);
+  const unlike = req.query.unlike === "true";
+  try {
+    if (unlike) {
+      await unlikeArticle(user_id, id);
+    } else {
+      await likeArticle(user_id, id);
+    }
+  } catch (e) {
+    if (e instanceof ArticleLikeError) {
+      res.status(StatusCodes.CONFLICT).json({ message: e.message });
+      return;
+    }
+    throw e;
+  }
+  res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
 async function reportArticleHandler(_req: Request, _res: Response) {

@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 app.use(logger("dev"));
 app.use(express.static("public"));
-app.use("/dist", express.static("dist"));
+app.use("/api/dist", express.static("dist"));
 app.use(express.json());
 app.use(express.urlencoded(
   {

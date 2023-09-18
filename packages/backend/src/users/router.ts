@@ -2,6 +2,7 @@ import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { verify } from "argon2";
 
+import { isDuplKeyError } from "@/db/util";
 import upload from "@/file/multer";
 import { parseQueryToNumber } from "@/util/query_param";
 import { Request, Response, Router } from "express";
@@ -113,8 +114,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     }
   } catch (e) {
     if (
-      e instanceof Error
-      && (e as { code?: string }).code === "ER_DUP_ENTRY"
+      isDuplKeyError(e)
     ) {
       res.status(StatusCodes.CONFLICT)
         .json({ message: "중복된 닉네임 혹은 이메일" });
