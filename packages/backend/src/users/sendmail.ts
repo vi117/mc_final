@@ -21,3 +21,19 @@ export async function sendVerificationMail(
     },
   });
 }
+
+export async function sendResetMail(
+  email: string,
+  resetCode: string,
+) {
+  const transporter = getTransport();
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
+    to: email,
+    subject: "비밀 번호 재설정 코드",
+    text: `비밀번호 재설정 코드는 ${resetCode} 입니다. 이 코드를 입력해주세요.`,
+    headers: {
+      "content-type": "text/plain",
+    },
+  });
+}
