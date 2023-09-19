@@ -46,13 +46,13 @@ const Calender = () => {
   );
 };
 
-const TagSelcection = () => {
+const TagWrite = () => {
   const [selected, setSelected] = useState(["papaya"]);
 
   return (
     <div>
       <div>카테고리</div>
-      {/* <pre>{JSON.stringify(selected)}</pre> */}
+      <pre>{JSON.stringify(selected)}</pre>
       <TagsInput
         value={selected}
         onChange={setSelected}
@@ -172,7 +172,7 @@ const FundingsWrite = function() {
   return (
     <Container style={{ "border": "1px solid red", "width": "50vw" }}>
       <Row>
-        <TagSelcection />
+        <TagWrite />
       </Row>
 
       <Row>

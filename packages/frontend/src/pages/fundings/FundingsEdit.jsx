@@ -46,7 +46,7 @@ const Calender = () => {
   );
 };
 
-const TagSelcection = () => {
+const TagWrite = () => {
   const [selected, setSelected] = useState(["papaya"]);
 
   return (
@@ -174,7 +174,7 @@ const FundingsWrite = function() {
       <h1>수정가능한 부분만 남길것</h1>
       <Container style={{ "border": "1px solid red", "width": "50vw" }}>
         <Row>
-          <TagSelcection />
+          <TagWrite />
         </Row>
 
         <Row>

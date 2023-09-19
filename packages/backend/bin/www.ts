@@ -4,14 +4,13 @@
  * Module dependencies.
  */
 
+if (process.env.DEBUG) {
+  debug_fn.enable(process.env.DEBUG);
+}
 import http from "http";
 import app from "../app";
 
 import debug_fn from "debug";
-
-if (process.env.DEBUG) {
-  debug_fn.enable(process.env.DEBUG);
-}
 
 const debug = debug_fn("joinify:server");
 
@@ -64,9 +63,7 @@ function onError(error: NodeJS.ErrnoException) {
     throw error;
   }
 
-  const bind = typeof port === "string"
-    ? "Pipe " + port
-    : "Port " + port;
+  const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {

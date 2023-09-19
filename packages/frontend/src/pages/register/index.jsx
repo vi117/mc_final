@@ -1,12 +1,37 @@
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
+import { useRef, useState } from "react";
 import Upload from "../uploadcomponent/Upload";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
 
+const emailPattern = // eslint-disable-next-line no-useless-escape
+  /("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])/;
+
+window.emailPattern = emailPattern;
+
+/**
+ * @param formElem{HTMLFormElement}
+ */
+async function signUp(formElem) {
+  const formData = new FormData(formElem);
+
+  const r = await fetch("/api/v1/users/signup", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (r.status === 201) {
+    /// 회원가입 성공!
+    return true;
+  } else {
+    /// 회원 가입 실패!
+    return false;
+  }
+}
+
 function RegisterPage() {
+  const formRef = useRef(null);
   const [Email, setEmail] = useState("");
-  const [Name, setName] = useState("");
+  // const [Name, setName] = useState("");
   const [Password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [NickName, setNickName] = useState("");
@@ -20,9 +45,9 @@ function RegisterPage() {
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
   };
-  const onNameHandler = (event) => {
-    setName(event.currentTarget.value);
-  };
+  // const onNameHandler = (event) => {
+  //   setName(event.currentTarget.value);
+  // };
   const onPasswordHandler = (event) => {
     setPassword(event.currentTarget.value);
   };
@@ -50,25 +75,38 @@ function RegisterPage() {
         alignItems: "center",
       }}
     >
-      <div
+      <form
+        ref={formRef}
         style={{ display: "flex", flexDirection: "column" }}
         className={classes.form}
       >
-        <Modal
+        <RegisterArgee
           show={show}
-          onHide={handleClose}
           backdrop="static"
           keyboard={false}
+          handleConfirm={handleClose}
+          handleClose={handleClose}
         >
-          <RegisterArgee></RegisterArgee>
-        </Modal>
+        </RegisterArgee>
         <Upload></Upload>
-        <RegisterLabel>Name</RegisterLabel>
-        <input type="text" value={Name} onChange={onNameHandler} />
+        {
+          /* <RegisterLabel>Name</RegisterLabel>
+        <input name="" type="text" value={Name} onChange={onNameHandler} /> */
+        }
         <RegisterLabel>Email</RegisterLabel>
-        <input type="email" value={Email} onChange={onEmailHandler} />
+        <input
+          name="email"
+          type="email"
+          value={Email}
+          onChange={onEmailHandler}
+        />
         <RegisterLabel>password</RegisterLabel>
-        <input type="password" value={Password} onChange={onPasswordHandler} />
+        <input
+          name="password"
+          type="password"
+          value={Password}
+          onChange={onPasswordHandler}
+        />
         <RegisterLabel>Confirm Password</RegisterLabel>
         <input
           type="password"
@@ -76,22 +114,43 @@ function RegisterPage() {
           onChange={onConfirmPasswordHandler}
         />
         <RegisterLabel>NickName</RegisterLabel>
-        <input type="text" value={NickName} onChange={onNickNameHandler} />
+        <input
+          name="nickname"
+          type="text"
+          value={NickName}
+          onChange={onNickNameHandler}
+        />
         <RegisterLabel>Phone</RegisterLabel>
-        <input type="text" value={Phone} onChange={onPhoneHandler} />
+        <input
+          name="phone"
+          type="text"
+          value={Phone}
+          onChange={onPhoneHandler}
+        />
         <RegisterLabel>Address</RegisterLabel>
-        <input type="text" value={Address} onChange={onAddressHandler} />
+        <input
+          name="address"
+          type="text"
+          value={Address}
+          onChange={onAddressHandler}
+        />
         <RegisterLabel>Article</RegisterLabel>
-        <input type="text" value={Article} onChange={onArticleHandler} />
+        <input
+          name="introduction"
+          type="text"
+          value={Article}
+          onChange={onArticleHandler}
+        />
         <br />
         <button
           id="form-controls"
+          type="submit"
           onClick={onSubmitHandler}
           className={classes.button_submit}
         >
           회원가입
         </button>
-      </div>
+      </form>
     </div>
   );
 
@@ -101,14 +160,14 @@ function RegisterPage() {
     }
 
     if (
-      !Email || !Name || !Password || !ConfirmPassword || !NickName || !Phone
+      !Email
+      //  !Name ||
+      || !Password || !ConfirmPassword || !NickName || !Phone
       || !Address
     ) {
       return alert("모든 필수 항목을 입력하세요.");
     }
 
-    const emailPattern = // eslint-disable-next-line no-useless-escape
-      /^("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])$/;
     if (!emailPattern.test(Email)) {
       return alert("올바른 이메일 주소를 입력하세요.");
     }
@@ -121,6 +180,10 @@ function RegisterPage() {
     const passwordPattern = /^[A-Za-z0-9]{8,20}$/;
     if (!passwordPattern.test(Password)) {
       return alert("올바른 비밀번호를 입력하세요.");
+    }
+
+    if (formRef.current) {
+      signUp(formRef.current);
     }
   }
 }
