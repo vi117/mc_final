@@ -17,7 +17,7 @@ import {
   setRefreshTokenToCookie,
 } from "./jwt";
 import getUserRepository from "./model";
-import { sendVerificationMail } from "./sendmail";
+import { sendResetMail, sendVerificationMail } from "./sendmail";
 
 const router = Router();
 
@@ -59,6 +59,11 @@ export async function login(req: Request, res: Response): Promise<void> {
   }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
+  res.cookie("is_login", "true", {
+    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 day
+    sameSite: "strict",
+    path: "/",
+  });
   res.status(StatusCodes.OK).json({
     message: "로그인 성공",
     id: user.id,
@@ -207,9 +212,66 @@ export const verifyWithCode = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ message: "인증 성공" });
 };
 
-export const logout = (req: Request, res: Response) => {
+export async function sendPasswordReset(req: Request, res: Response) {
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      email: { type: "string" },
+    },
+    required: ["email"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+  const email = req.body.email;
+  const resetCode = getAuthCodeRepository().createVerificationCode(email, "1h");
+  sendResetMail(req.body.email, resetCode);
+  console.log(resetCode);
+
+  res.status(StatusCodes.OK).json({
+    message: "코드를 보냈습니다.",
+  });
+}
+
+export async function resetPassword(req: Request, res: Response) {
+  const userRepository = getUserRepository();
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      code: { type: "string" },
+      password: { type: "string" },
+    },
+    required: ["code", "password"],
+  }, req.body);
+
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+  const email = getAuthCodeRepository().verify(req.body.code);
+  if (!email) {
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      message: "만료되었거나 유효하지 않습니다.",
+    });
+    return;
+  }
+  await userRepository.resetPassword(email, req.body.password);
+  res.status(StatusCodes.OK).json({
+    message: "success",
+  });
+}
+
+export const logout = (_req: Request, res: Response) => {
   deleteAccessTokenFromCookie(res);
   deleteRefreshTokenFromCookie(res);
+  res.clearCookie("is_login");
   res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
   return;
 };
@@ -254,8 +316,10 @@ router.post("/login", RouterCatch(login));
 router.post("/signup", upload.single("profile"), RouterCatch(signup));
 router.post("/verify_resend", RouterCatch(resendVerificationCode));
 router.post("/verify", RouterCatch(verifyWithCode));
+router.post("/reset-password", RouterCatch(resetPassword));
+router.post("/send-reset-password", RouterCatch(sendPasswordReset));
 router.post("/logout", RouterCatch(logout));
-router.get("/:id", RouterCatch(queryById));
+router.get("/:id(\\d+)", RouterCatch(queryById));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 
 export default router;

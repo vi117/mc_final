@@ -6,16 +6,17 @@ type VerifyCodeType = string;
  * 사용자가 생성될 때 사용자가 이메일을 가지고 있는지 확인하는 저장소입니다.
  */
 export class AuthCodeRepository {
-  constructor() {
+  #secret: string;
+  constructor(postfix?: string) {
+    this.#secret = process.env.JWT_SECRET ?? "" + postfix ?? "";
   }
 
-  createVerificationCode(email: string) {
+  createVerificationCode(email: string, expiresIn?: string) {
     const content = {
       email: email,
     };
-    const secret = (process.env.JWT_SECRET as string) + "verificationCode";
-    const token = jwt.sign(content, secret, {
-      expiresIn: "5m",
+    const token = jwt.sign(content, this.#secret, {
+      expiresIn: expiresIn ?? "5m",
     });
     return token;
   }
@@ -28,7 +29,7 @@ export class AuthCodeRepository {
    */
   verify(code: VerifyCodeType): string | null {
     try {
-      const payload = jwt.verify(code, process.env.JWT_SECRET as string);
+      const payload = jwt.verify(code, this.#secret);
       const content = payload as { email: string };
       const email = content.email;
       if (email === undefined) {
@@ -44,7 +45,9 @@ export class AuthCodeRepository {
   }
 }
 
-const authCodeRepository: AuthCodeRepository = new AuthCodeRepository();
+const authCodeRepository: AuthCodeRepository = new AuthCodeRepository(
+  "verificationCode",
+);
 export function getAuthCodeRepository(): AuthCodeRepository {
   return authCodeRepository;
 }
