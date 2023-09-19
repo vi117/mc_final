@@ -3,29 +3,17 @@
   margin-top: 30px;
 }
 
-.container > p {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.FloatingLabel {
+.FloatingLabel{
   width: 40%;
   margin-top: 40px;
   margin-left: 270px;
   margin-bottom: 160px;
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+.container > p {
+  text-align: center;
+  margin-top: 40px;
+}
 
 
