@@ -5,9 +5,11 @@ import { verify } from "argon2";
 import { isDuplKeyError } from "@/db/util";
 import upload from "@/file/multer";
 import { parseQueryToNumber } from "@/util/query_param";
+import debug_fn from "debug";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import { getAuthCodeRepository } from "./authCodeRepo";
+import { googleLogin } from "./googleLogin";
 import {
   checkLogin,
   createTokenFromUser,
@@ -19,6 +21,7 @@ import {
 import getUserRepository from "./model";
 import { sendResetMail, sendVerificationMail } from "./sendmail";
 
+export const debug = debug_fn("joinify:users");
 const router = Router();
 
 export async function login(req: Request, res: Response): Promise<void> {
@@ -229,7 +232,7 @@ export async function sendPasswordReset(req: Request, res: Response) {
   }
   const email = req.body.email;
   const resetCode = getAuthCodeRepository().createVerificationCode(email, "1h");
-  sendResetMail(req.body.email, resetCode);
+  await sendResetMail(email, resetCode);
   console.log(resetCode);
 
   res.status(StatusCodes.OK).json({
@@ -319,6 +322,7 @@ router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/reset-password", RouterCatch(resetPassword));
 router.post("/send-reset-password", RouterCatch(sendPasswordReset));
 router.post("/logout", RouterCatch(logout));
+router.post("/google-login", RouterCatch(googleLogin));
 router.get("/:id(\\d+)", RouterCatch(queryById));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 

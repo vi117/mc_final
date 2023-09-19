@@ -19,6 +19,8 @@ import ForgotPasswordPage from "./pages/forgot-password";
 import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
 
+import { GoogleLogin } from "./pages/sns_login/google";
+
 const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -102,6 +104,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 작성
        */ { path: "/fundings/post", element: <FundingsWrite /> },
+      { path: "/google-login", element: <GoogleLogin></GoogleLogin> },
       { path: "*", element: <h1>Not Found</h1> },
     ],
   },
