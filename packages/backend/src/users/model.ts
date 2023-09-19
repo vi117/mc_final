@@ -38,6 +38,8 @@ export interface IUserRepository {
 
   insert(user: Insertable<DB["users"]>): Promise<number | undefined>;
   approveByEmail(email: string): Promise<boolean>;
+
+  resetPassword(email: string, password: string): Promise<void>;
 }
 
 export class UserRepository implements IUserRepository {
@@ -131,6 +133,14 @@ export class UserRepository implements IUserRepository {
       .set({ email_approved: 1 })
       .where("email", "=", email).executeTakeFirst();
     return ret.numUpdatedRows === 1n;
+  }
+
+  async resetPassword(email: string, password: string): Promise<void> {
+    const hashed = await argon2_hash(password);
+    await this.db.updateTable("users")
+      .set({ password: hashed })
+      .where("email", "=", email)
+      .executeTakeFirst();
   }
 }
 

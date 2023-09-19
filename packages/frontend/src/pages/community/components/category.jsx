@@ -5,10 +5,14 @@ import classes from "../styles/community.module.css";
 import CustomMenu from "./Menu";
 import CustomToggle from "./Toggle";
 
-const Category = ({ filterData }) => {
+const Category = ({ filterData, applyModalFilter }) => {
   const handleFilter = (catItem) => {
-    filterData(catItem);
-    console.log(catItem);
+    if (applyModalFilter) {
+      filterData(catItem);
+    } else {
+      filterData(catItem);
+    }
+    console.log("Category 내부", catItem);
   };
 
   const navigate = useNavigate();

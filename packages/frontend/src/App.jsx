@@ -15,6 +15,7 @@ import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
 import WithdrawalPage from "./pages/withdrawal";
 
+import ForgotPasswordPage from "./pages/forgot-password";
 import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
 
@@ -44,7 +45,10 @@ const browserRouter = createBrowserRouter([
       /**
        * 비밀번호 찾기
        */
-      { path: "/forgot-password", element: <h1>Forgot Password</h1> },
+      {
+        path: "/forgot-password",
+        element: <ForgotPasswordPage></ForgotPasswordPage>,
+      },
       /**
        * 비밀번호 재설정
        */
