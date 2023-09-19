@@ -12,12 +12,141 @@ import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import "./FundingsDetail.css";
 import { NavLink } from "react-router-dom";
-
 // import useSWR from "swr";
 
 const placeholder = "https://via.placeholder.com/850x375";
 
+const fundings = [
+  {
+    id: 1,
+    title: "funding 1",
+    thumbnail: placeholder,
+    tag: "고양이",
+    content: "aaaaaaaaaaaaaaaa",
+    target_value: 1000,
+    current_value: 500,
+  },
+  {
+    id: 2,
+    title: "funding 1",
+    thumbnail: placeholder,
+    tag: "고양이",
+    content: "aaaaaaaaaaaaaaaa",
+    target_value: "1000",
+    current_value: "500",
+  },
+  {
+    id: 3,
+    title: "funding 1",
+    thumbnail: placeholder,
+    tag: "고양이",
+    content: "aaaaaaaaaaaaaaaa",
+    target_value: "1000",
+    current_value: "500",
+  },
+  {
+    id: 4,
+    title: "funding 1",
+    thumbnail: placeholder,
+    tag: "고양이",
+    content: "aaaaaaaaaaaaaaaa",
+    target_value: "1000",
+    current_value: "500",
+  },
+  {
+    id: 4,
+    title: "funding 1",
+    thumbnail: placeholder,
+    tag: "고양이",
+    content: "aaaaaaaaaaaaaaaa",
+    target_value: "1000",
+    current_value: "500",
+  },
+  {
+    id: 4,
+    title: "funding 1",
+    thumbnail: placeholder,
+    tag: "고양이",
+    content: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    target_value: "1000",
+    current_value: "500",
+  },
+  {
+    id: 4,
+    title: "funding 1",
+    thumbnail: placeholder,
+    tag: "고양이",
+    content: "aaaaaaaaaaaaaaaa",
+    target_value: "1000",
+    current_value: "500",
+  },
+];
+
+const rewards = [
+  {
+    id: 1,
+    funding_id: 1,
+    title: "funding 1",
+    content: "펀딩 1 설명",
+    price: 10000,
+    reward_current_count: 1,
+    reward_count: 999,
+  },
+  {
+    id: 1,
+    funding_id: 2,
+    title: "funding 2",
+    content: "펀딩 2 설명",
+    price: 20000,
+    reward_current_count: 1,
+    reward_count: 999,
+  },
+  {
+    id: 1,
+    funding_id: 3,
+    title: "funding 3",
+    content: "펀딩 3 설명",
+    price: 10000,
+    reward_current_count: 1,
+    reward_count: 999,
+  },
+  {
+    id: 1,
+    funding_id: 4,
+    title: "funding 1",
+    content: "펀딩 1 설명",
+    price: 10000,
+    reward_current_count: 1,
+    reward_count: 999,
+  },
+  {
+    id: 1,
+    funding_id: 5,
+    title: "funding 1",
+    content: "펀딩 1 설명",
+    price: 10000,
+    reward_current_count: 1,
+    reward_count: 999,
+  },
+];
+
 const FundingsDetail = function() {
+  // const {
+  //   data: fetcherData,
+  //   error: fetcherError,
+  //   isLoading: fetcherIsLoading,
+  // } = useSWR(
+  //   "/api/v1/fundings",
+  //   (url) => fetch(url).then((res) => res.json()),
+  // );
+
+  // if (fetcherIsLoading) {
+  //   return <div>로딩중...</div>;
+  // }
+  // if (fetcherError) {
+  //   return <div>에러가 발생했습니다.</div>;
+  // }
+
   return (
     <Container style={{ "padding-top": "20px", "width": "50vw" }}>
       <div className="sujung">
@@ -28,6 +157,7 @@ const FundingsDetail = function() {
       <Row>
         <Col sm={8} className="fundingName">
           <h1>펀딩 제목</h1>
+          {/* <div>{fundings.title}</div> */}
         </Col>
 
         <Col className="tags">
@@ -35,6 +165,7 @@ const FundingsDetail = function() {
             <Badge>tag1</Badge>
             <Badge>tag2</Badge>
           </div>
+          {/* <div>{fundings.tag}</div> */}
         </Col>
       </Row>
 
@@ -64,8 +195,27 @@ const FundingsDetail = function() {
 
         <Col sm={4}>
           <Row style={{ margin: "16px" }}>
+            <div key={`${fundings.id}`}>
+              <div>{fundings.begin_date}</div>
+              <div>{fundings.end_date}</div>
+              <div>
+                달성도:{(fundings.current_value / fundings.target_value) * 100}%
+              </div>
+            </div>
             <div></div>개설기간, 달성도(후원자 명수)
+            {
+              /* {fetcherData.map((x) => (
+          <div key={x.id}>
+            <NavLink to={`/fundings/${x.id}`}>
+              <img src={x.thumbnail} alt="썸네일 이미지"></img>
+              <h3>{x.tag}</h3>
+              <h3>{x.title}</h3>
+              <h3>{x.content}</h3>
+              <h3>{(x.current_value / x.target_value) * 100}%</h3>
+            </NavLink> */
+            }
           </Row>
+
           <Row>
             <div></div>펀딩 창작자 소개
           </Row>
@@ -101,39 +251,24 @@ const FundingsDetail = function() {
       <Row>
         <Col sm={8}>
           <div></div>
-          상세페이지
+          상세페이지 (editor로 쓴 부분)
         </Col>
         <Col sm={4}>
           <Row className="rewardList">
             <ListGroup>
-              <ListGroup.Item action variant="success">
-                리워드제품1<br />
-                제품설명1
-              </ListGroup.Item>
-              <ListGroup.Item action variant="success">
-                리워드제품2<br />
-                제품설명2
-              </ListGroup.Item>
-              <ListGroup.Item action variant="success">
-                리워드제품3<br />
-                제품설명3
-              </ListGroup.Item>
-              <ListGroup.Item action variant="success">
-                리워드제품4<br />
-                제품설명4
-              </ListGroup.Item>
-              <ListGroup.Item action variant="success">
-                리워드제품5<br />
-                제품설명5
-              </ListGroup.Item>
-              <ListGroup.Item action variant="success">
-                리워드제품6<br />
-                제품설명6
-              </ListGroup.Item>
-              <ListGroup.Item action variant="success">
-                리워드제품7<br />
-                제품설명7
-              </ListGroup.Item>
+              {rewards.map((x) => (
+                <div key={x.funding_id}>
+                  <ListGroup.Item action variant="success">
+                    <div>제목:{x.title}</div>
+                    <div style={{ "overflow": "ellipsis" }}>
+                      설명:{x.content}
+                    </div>
+                    <div>가격:{x.price}</div>
+                    <div>현재까지펀딩수:{x.reward_current_count}</div>
+                    <div>펀딩의수량:{x.reward_count}</div>
+                  </ListGroup.Item>
+                </div>
+              ))}
             </ListGroup>
           </Row>
 
@@ -143,17 +278,25 @@ const FundingsDetail = function() {
         </Col>
       </Row>
 
-      <Row>
-        <Col>
-          <div></div>비슷한 토픽의 펀딩1
-        </Col>
-        <Col>
-          <div></div>비슷한 토픽의 펀딩2
-        </Col>
-        <Col>
-          <div></div>비슷한 토픽의 펀딩3
-        </Col>
-      </Row>
+      <Container>
+        <Row md={3} xs={1}>
+          {fundings.map((x) => (
+            <div key={x.id}>
+              <NavLink to={`/fundings/${x.id}`}>
+                <img
+                  src={x.thumbnail}
+                  style={{ width: "100%" }}
+                  alt="썸네일 이미지"
+                />
+                <div>{x.tag}</div>
+                <h3>{x.title}</h3>
+                <div style={{ "overflow": "ellipsis" }}>{x.content}</div>
+                <h3>달성도:{(x.current_value / x.target_value) * 100}%</h3>
+              </NavLink>
+            </div>
+          ))}
+        </Row>
+      </Container>
     </Container>
   );
 };
