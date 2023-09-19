@@ -5,21 +5,22 @@ export default function ResetpasswordPage() {
   return (
     <div className={classes["container"]}>
       <h3>비밀번호 재설정</h3>
-      <p>
-        가입하신 이메일 주소를 입력하시면 <br></br>
-        <strong>'비밀번호 재설정'</strong> 안내 메일이 전송됩니다.
-      </p>
+      <p>사용하실 비밀번호를 설정해주세요.</p>
       <div className={classes["FloatingLabel"]}>
         <FloatingLabel
           controlId="floatingInput"
-          label="Email address"
+          label="Password"
           className="mb-3"
         >
-          <Form.Control type="email" placeholder="name@example.com" />
+          <Form.Control type="password" placeholder="password" />
         </FloatingLabel>
+        <FloatingLabel controlId="floatingPassword" label="Password-check">
+          <Form.Control type="password" placeholder="Password-check" />
+        </FloatingLabel>
+        <br></br>
         <div className="d-grid gap-2">
           <Button variant="primary" size="lg">
-            전송
+            설정 완료
           </Button>
         </div>
       </div>
@@ -27,4 +28,4 @@ export default function ResetpasswordPage() {
   );
 }
 
-/* http://localhost:5173/reset-password */
+/*http://localhost:5173/reset-password*/
