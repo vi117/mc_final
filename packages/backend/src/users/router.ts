@@ -95,9 +95,9 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
   } = req.body;
-  // TODO: implement file upload for profile images
   const userRepository = getUserRepository();
   let user_id: number | undefined;
+
   try {
     user_id = await userRepository.insert({
       nickname,

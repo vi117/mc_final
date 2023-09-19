@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function App() {
+export default function TermOfPolicy() {
   const [allArgeed, setAllAgreed] = useState(false);
   const [agreements, setAgreements] = useState({
     termsAgreed: false,

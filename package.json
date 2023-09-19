@@ -8,7 +8,7 @@
     "format": "dprint fmt",
     "lint": "npm run lint --workspaces",
     "pre-commit": "lefthook run pre-commit",
-    "preinstall": "npx lefthook install"
+    "preinstall": "npx lefthook install && npx npm-merge-driver install"
   },
   "repository": {
     "type": "git",
