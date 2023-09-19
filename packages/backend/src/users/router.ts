@@ -308,6 +308,8 @@ router.post("/login", RouterCatch(login));
 router.post("/signup", upload.single("profile"), RouterCatch(signup));
 router.post("/verify_resend", RouterCatch(resendVerificationCode));
 router.post("/verify", RouterCatch(verifyWithCode));
+router.post("/reset-password", RouterCatch(resetPassword));
+router.post("/send-reset-password", RouterCatch(sendPasswordReset));
 router.post("/logout", RouterCatch(logout));
 router.get("/:id", RouterCatch(queryById));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
