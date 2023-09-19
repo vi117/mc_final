@@ -33,10 +33,13 @@ const Board = () => {
 
   const selectCheckbox = (animal) => {
     if (selectedAnimals.includes(animal)) {
-      setSelectedAnimals(selectedAnimals.filter((a) => a !== animal));
-      console.log(selectedAnimals);
+      setSelectedAnimals(selectedAnimals.filter((a) => a !== animal), () => {
+        filterResult();
+      });
     } else {
-      setSelectedAnimals([...selectedAnimals, animal]);
+      setSelectedAnimals([...selectedAnimals, animal], () => {
+        filterResult();
+      });
     }
   };
 
@@ -44,22 +47,18 @@ const Board = () => {
     const filteredAnimals = animals.filter((animal) =>
       !selectedAnimals.includes(animal)
     );
-    const dataTofilter = filteredAnimals.length === 0
-      ? fetcherData
-      : filteredData;
+
     if (filteredAnimals.length === 0) {
-      setFilteredData(fetcherData);
+      setIsModalOpen(false);
+      setCategoryFiltered(filteredData);
     } else {
-      const result = fetcherData.filter((currData) =>
+      const result = filteredData.filter((currData) =>
         filteredAnimals.includes(currData.category)
       );
-      setFilteredData(result);
+      setIsModalOpen(false);
+      setCategoryFiltered(result);
     }
-    setIsModalOpen(false);
-    CategoryFiltered(null, dataTofilter);
-    console.log(setFilteredData);
   };
-
   const handleTitleClick = (item) => {
     console.log("Modal 클릭됨:", item);
     setIsModalOpen(false);
@@ -137,7 +136,7 @@ const Board = () => {
           </button>
           <button
             className={classes["filteron"]}
-            onClick={filterResult}
+            onClick={() => filterResult()}
           >
             저장하기
           </button>
