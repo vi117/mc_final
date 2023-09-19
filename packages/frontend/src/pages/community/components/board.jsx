@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
-import Sampledata from "../assets/sampledata";
 import classes from "../styles/community.module.css";
 import Category from "./category";
 
 const Board = () => {
-  const [data, setData] = useState([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [categoryFiltered, setCategoryFiltered] = useState([]);
+  const [applyModalFilter, setApplyModalFilter] = useState(false);
+  const [originalData, setOriginalData] = useState([]);
+
   const animals = [
     "강아지",
     "고양이",
@@ -34,6 +34,7 @@ const Board = () => {
   const selectCheckbox = (animal) => {
     if (selectedAnimals.includes(animal)) {
       setSelectedAnimals(selectedAnimals.filter((a) => a !== animal));
+      console.log(selectedAnimals);
     } else {
       setSelectedAnimals([...selectedAnimals, animal]);
     }
@@ -43,32 +44,57 @@ const Board = () => {
     const filteredAnimals = animals.filter((animal) =>
       !selectedAnimals.includes(animal)
     );
+    const dataTofilter = filteredAnimals.length === 0
+      ? fetcherData
+      : filteredData;
     if (filteredAnimals.length === 0) {
-      setFilteredData(data);
+      setFilteredData(fetcherData);
     } else {
-      const result = data.filter((currData) =>
+      const result = fetcherData.filter((currData) =>
         filteredAnimals.includes(currData.category)
       );
       setFilteredData(result);
     }
     setIsModalOpen(false);
+    CategoryFiltered(null, dataTofilter);
+    console.log(setFilteredData);
   };
 
-  const navigate = useNavigate();
-  const handleTitleClick = () => {
-    navigate(`./id:detail`);
+  const handleTitleClick = (item) => {
+    console.log("Modal 클릭됨:", item);
+    setIsModalOpen(false);
   };
 
+  const CategoryFiltered = (catItem, dataToFilter = fetcherData) => {
+    if (catItem === null || catItem === undefined) {
+      setCategoryFiltered(dataToFilter);
+    } else {
+      const CategoryFilteredItems = dataToFilter.filter(
+        (currData) => currData.category === catItem,
+      );
+      setCategoryFiltered(CategoryFilteredItems);
+    }
+  };
+
+  const resetFilter = () => {
+    setIsModalOpen(false);
+    setSelectedAnimals([]);
+    setFilteredData(originalData);
+    setCategoryFiltered(originalData);
+    setApplyModalFilter(false);
+    console.log(originalData);
+  };
   useEffect(() => {
-    setData(Sampledata);
+    if (fetcherData) {
+      const newData = fetcherData.map((item, index) => ({
+        ...item,
+        id: index + 1,
+      }));
 
-    const newData = Sampledata.map((item, index) => ({
-      ...item,
-      id: index + 1,
-    }));
-
-    setFilteredData(newData);
-  }, []);
+      setFilteredData(newData);
+      setOriginalData(newData);
+    }
+  }, [fetcherData]);
 
   if (fetcherIsLoading) {
     return <div>로딩중...</div>;
@@ -104,16 +130,14 @@ const Board = () => {
         <div className={classes["filterbtnarea"]}>
           <button
             className={classes["closebtn"]}
-            onClick={() => setIsModalOpen(false)}
+            onClick={resetFilter}
             style={{ marginRight: "5px" }}
           >
             그냥 보기
           </button>
           <button
             className={classes["filteron"]}
-            onClick={() => {
-              filterResult();
-            }}
+            onClick={filterResult}
           >
             저장하기
           </button>
@@ -123,7 +147,9 @@ const Board = () => {
       <div className={classes["board"]}>
         <div className={classes["category"]}></div>
         <Category
-          filterData={(catItem) => filterResult(catItem, selectedAnimals)}
+          applyModalFilter={applyModalFilter}
+          filterData={(catItem, dataToFilter) =>
+            CategoryFiltered(catItem, dataToFilter)}
         />
         <table className={classes["board-table"]}>
           <thead>
@@ -146,7 +172,7 @@ const Board = () => {
             </tr>
           </thead>
           <tbody>
-            {fetcherData.map((item) => (
+            {categoryFiltered && categoryFiltered.map((item) => (
               <tr
                 key={`board-${item.id}`}
                 onClick={() => handleTitleClick(item)}
