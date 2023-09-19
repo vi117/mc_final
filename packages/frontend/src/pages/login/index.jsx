@@ -76,7 +76,7 @@ export default function LoginPage() {
             <input type="checkbox" id="remember-check"></input> 자동 로그인
           </label>
           <span>
-            <a href="아이디/비밀번호 찾기.url">아이디/비밀번호 찾기</a>
+            <NavLink to="/forgot-password">아이디/비밀번호 찾기</NavLink>
           </span>
           <input
             onClick={onLoginClick}
@@ -89,6 +89,23 @@ export default function LoginPage() {
         <div className={classes["lfmFQa"]}>
           <div className={classes["eiCjYy"]}></div>
           <p>간편하게 SNS 로그인</p>
+          <button
+            onClick={() => {
+              const url = new URL(
+                "https://accounts.google.com/o/oauth2/v2/auth",
+              );
+              url.searchParams.set(
+                "client_id",
+                "592095607776-mpffg3r8ts2ucee8l4rd5eodt63p9vra.apps.googleusercontent.com",
+              );
+              url.searchParams.set("redirect_url", "http://localhost:5173");
+              url.searchParams.set("response_type", "code");
+              url.searchParams.set("scope", "email profile openid");
+              window.location = url;
+            }}
+          >
+            Google login
+          </button>
           {/* <!-- 카카오 --> */}
           <button className={classes["fmrIwS"]}>
             <div className="">
