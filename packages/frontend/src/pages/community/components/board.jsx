@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import useSWR from "swr";
 import classes from "../styles/community.module.css";
 import Category from "./category";
@@ -59,10 +60,6 @@ const Board = () => {
       setCategoryFiltered(result);
     }
   };
-  const handleTitleClick = (item) => {
-    console.log("Modal 클릭됨:", item);
-    setIsModalOpen(false);
-  };
 
   const CategoryFiltered = (catItem, dataToFilter = fetcherData) => {
     if (catItem === null || catItem === undefined) {
@@ -81,7 +78,6 @@ const Board = () => {
     setFilteredData(originalData);
     setCategoryFiltered(originalData);
     setApplyModalFilter(false);
-    console.log(originalData);
   };
   useEffect(() => {
     if (fetcherData) {
@@ -174,11 +170,14 @@ const Board = () => {
             {categoryFiltered && categoryFiltered.map((item) => (
               <tr
                 key={`board-${item.id}`}
-                onClick={() => handleTitleClick(item)}
               >
                 <td className={classes["td-num"]}>{item.id}</td>
                 <td className={classes["td-cat"]}>{item.category}</td>
-                <td className={classes["td-title"]}>{item.title}</td>
+                <td className={classes["td-title"]}>
+                  <Link to={`/community/${item.id}`}>
+                    {item.title}
+                  </Link>
+                </td>
                 <td>{item.author_nickname}</td>
                 <td>{item.view_count}</td>
               </tr>
