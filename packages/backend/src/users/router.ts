@@ -59,6 +59,11 @@ export async function login(req: Request, res: Response): Promise<void> {
   }
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
+  res.cookie("is_login", "true", {
+    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 day
+    sameSite: "strict",
+    path: "/",
+  });
   res.status(StatusCodes.OK).json({
     message: "로그인 성공",
     id: user.id,
@@ -224,7 +229,8 @@ export async function sendPasswordReset(req: Request, res: Response) {
   }
   const email = req.body.email;
   const resetCode = getAuthCodeRepository().createVerificationCode(email, "1h");
-  await sendResetMail(req.body.email, resetCode);
+  sendResetMail(req.body.email, resetCode);
+  console.log(resetCode);
 
   res.status(StatusCodes.OK).json({
     message: "코드를 보냈습니다.",
@@ -239,8 +245,9 @@ export async function resetPassword(req: Request, res: Response) {
       code: { type: "string" },
       password: { type: "string" },
     },
-    required: ["code"],
+    required: ["code", "password"],
   }, req.body);
+
   if (!v) {
     res.status(StatusCodes.BAD_REQUEST).json({
       message: "유효하지 않은 요청입니다.",
@@ -261,9 +268,10 @@ export async function resetPassword(req: Request, res: Response) {
   });
 }
 
-export const logout = (req: Request, res: Response) => {
+export const logout = (_req: Request, res: Response) => {
   deleteAccessTokenFromCookie(res);
   deleteRefreshTokenFromCookie(res);
+  res.clearCookie("is_login");
   res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
   return;
 };
@@ -311,7 +319,7 @@ router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/reset-password", RouterCatch(resetPassword));
 router.post("/send-reset-password", RouterCatch(sendPasswordReset));
 router.post("/logout", RouterCatch(logout));
-router.get("/:id", RouterCatch(queryById));
+router.get("/:id(\\d+)", RouterCatch(queryById));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 
 export default router;
