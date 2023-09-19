@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Component } from "react";
 import { Button, Container, Image, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 
@@ -6,6 +7,11 @@ import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+import { TagsInput } from "react-tag-input-component";
+
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const dummyImage = "https://via.placeholder.com/250x250";
 
@@ -40,10 +46,134 @@ const Calender = () => {
   );
 };
 
+const TagWrite = () => {
+  const [selected, setSelected] = useState(["papaya"]);
+
+  return (
+    <div>
+      <div>카테고리</div>
+      <pre>{JSON.stringify(selected)}</pre>
+      <TagsInput
+        value={selected}
+        onChange={setSelected}
+        name="fruits"
+        placeHolder="enter fruits"
+      />
+      <em>태그를 입력해주세요.</em>
+    </div>
+  );
+};
+
+const Editor = () => {
+  const [text, setText] = useState("");
+
+  const handleChange = (value) => {
+    setText(value);
+  };
+
+  return (
+    <div>
+      <ReactQuill
+        value={text}
+        onChange={handleChange}
+        modules={{
+          toolbar: {
+            container: [
+              ["bold", "italic", "underline", "strike"],
+              ["link", "image"], // 이미지 업로드 버튼 추가
+              [{ list: "ordered" }, { list: "bullet" }],
+            ],
+          },
+        }}
+      />
+    </div>
+  );
+};
+class ItemList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [], // 물건 목록을 저장할 상태
+      newItemName: "", // 새 물건의 이름을 저장할 상태
+      newItemDesc: "", // 새 물건의 설명을 저장할 상태
+      newItemPrice: "", // 새 물건의 가격을 저장할 상태
+    };
+  }
+
+  // 새 물건을 추가하는 함수
+  addItem = () => {
+    const { newItemName, newItemDesc, newItemPrice } = this.state;
+    if (newItemName && newItemDesc && newItemPrice) {
+      const newItem = {
+        name: newItemName,
+        description: newItemDesc,
+        price: newItemPrice,
+      };
+
+      this.setState(prevState => ({
+        items: [...prevState.items, newItem],
+        newItemName: "",
+        newItemDesc: "",
+        newItemPrice: "",
+      }));
+    }
+  };
+
+  // 물건을 삭제하는 함수
+  deleteItem = (index) => {
+    const updatedItems = [...this.state.items];
+    updatedItems.splice(index, 1);
+    this.setState({ items: updatedItems });
+  };
+
+  render() {
+    return (
+      <div>
+        <div>리워드 추가</div>
+        <input
+          type="text"
+          placeholder="이름"
+          value={this.state.newItemName}
+          onChange={(e) => this.setState({ newItemName: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="설명"
+          value={this.state.newItemDesc}
+          onChange={(e) => this.setState({ newItemDesc: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="가격"
+          value={this.state.newItemPrice}
+          onChange={(e) => this.setState({ newItemPrice: e.target.value })}
+        />
+        <button onClick={this.addItem}>추가</button>
+
+        <ul>
+          {this.state.items.map((item, index) => (
+            <li key={index} style={{ "listStyleType": "None" }}>
+              <strong>{item.name}</strong> - {item.description} - {item.price}
+              <button
+                onClick={() =>
+                  this.deleteItem(index)}
+              >
+                삭제
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
+
 const FundingsWrite = function() {
   return (
     <Container style={{ "border": "1px solid red", "width": "50vw" }}>
-      <Row>태그///////////////</Row>
+      <Row>
+        <TagWrite />
+      </Row>
 
       <Row>
         제목
@@ -63,7 +193,7 @@ const FundingsWrite = function() {
 
       <Row>
         목표금액
-        <Form.Control type="text" placeholder="목표금액(숫자만)" />원
+        <Form.Control type="text" placeholder="목표금액(숫자만)" />
       </Row>
       ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
       <Row style={{ "width": "250px" }}>
@@ -88,25 +218,12 @@ const FundingsWrite = function() {
       </Row>
 
       ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-      <Row>상세페이지에디터///////////</Row>
+      <Row>
+        <Editor />
+      </Row>
 
       <Row>
-        리워드아이템설정//////////
-        <Container>
-          <Button variant="success">+</Button>
-          <Row>
-            금액
-            <Form.Control type="text" placeholder="계좌번호" />
-          </Row>
-          <Row>
-            제목
-            <Form.Control type="text" placeholder="계좌번호" />
-          </Row>
-          <Row>
-            설명
-            <Form.Control type="text" placeholder="계좌번호" />
-          </Row>
-        </Container>
+        <ItemList />
       </Row>
       ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
       <Row>
@@ -131,7 +248,7 @@ const FundingsWrite = function() {
 
       <Row>
         완료버튼
-        <Button variant="success">참가</Button>
+        <Button variant="success">완료</Button>
       </Row>
     </Container>
   );

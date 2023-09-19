@@ -29,7 +29,7 @@ export default function WithdrawalPage() {
             <br></br>
             타인 글의 댓글은 삭제되지 않으니 미리 확인하세요.
             <br></br>
-            그동안 HAPPYTAILS를 이용해주셔서 감사합니다.
+            그동안 HappyTails를 이용해주셔서 감사합니다.
           </Accordion.Body>
         </Accordion>
       </div>

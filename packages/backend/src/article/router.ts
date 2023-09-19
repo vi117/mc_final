@@ -1,12 +1,17 @@
 import { getDB } from "@/db/util";
 import { checkLogin } from "@/users/jwt";
+import ajv from "@/util/ajv";
 import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
 import { RouterCatch } from "@/util/util";
 import assert from "assert";
 import { Router } from "express";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ArticleCommentRepository, ArticleRepository } from "./model";
+import {
+  ArticleCommentRepository,
+  ArticleReportRepository,
+  ArticleRepository,
+} from "./model";
 import { ArticleLikeError, likeArticle, unlikeArticle } from "./service";
 
 /**
@@ -25,6 +30,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
   const limit = parseQueryToNumber(req.query.limit, 50);
   const cursor = parseQueryToNumber(req.query.cursor);
   const tags = parseQueryToStringList(req.query.tags);
+  const categories = parseQueryToStringList(req.query.categories);
 
   const result = await articleRepository.findAll({
     user_id: user?.id,
@@ -33,6 +39,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
     limit,
     tags: tags,
     cursor: cursor,
+    allow_categories: categories,
   });
   res.json(result).status(StatusCodes.OK);
 }
@@ -146,7 +153,32 @@ async function likeArticleHandler(req: Request, res: Response) {
   res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
-async function reportArticleHandler(_req: Request, _res: Response) {
+async function reportArticleHandler(req: Request, res: Response) {
+  const articleReportRepository = new ArticleReportRepository(getDB());
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  const user_id = req.user?.id;
+  assert(user_id !== undefined);
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      reason: { type: "string" },
+    },
+    required: ["reason"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+  const { reason } = req.body;
+  articleReportRepository.insert({
+    article_id: id,
+    user_id,
+    content: reason,
+  });
 }
 
 async function postCommentHandler(req: Request, res: Response) {
@@ -156,6 +188,20 @@ async function postCommentHandler(req: Request, res: Response) {
   const user_id = req.user?.id;
   assert(user_id !== undefined);
 
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      content: { type: "string" },
+    },
+    required: ["content"],
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "댓글을 입력해주세요.",
+    });
+    return;
+  }
+
   const inserted_id = await commentRepository.insert({
     article_id: id,
     content: req.body.content,
@@ -164,7 +210,20 @@ async function postCommentHandler(req: Request, res: Response) {
 
   res.json({ message: "success", id: inserted_id }).status(StatusCodes.OK);
 }
-async function deleteCommentHandler(_req: Request, _res: Response) {
+async function deleteCommentHandler(req: Request, res: Response) {
+  const commentRepository = new ArticleCommentRepository(getDB());
+  const id = parseInt(req.params.commentId);
+  assert(!isNaN(id));
+  const user = req.user;
+  assert(user);
+  const exists = await commentRepository.deleteById(id);
+  if (!exists) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "댓글이 존재하지 않습니다.",
+    });
+    return;
+  }
+  res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
 const router = Router();
