@@ -1,0 +1,16 @@
+.list {
+    list-style-type: none;
+}
+
+.body {
+    display: flex;
+    flex-direction: row;
+}
+
+.left_body {
+    width: 30%;
+}
+
+.right_body {
+    width: 70%;
+}

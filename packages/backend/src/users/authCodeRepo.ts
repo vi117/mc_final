@@ -51,3 +51,11 @@ const authCodeRepository: AuthCodeRepository = new AuthCodeRepository(
 export function getAuthCodeRepository(): AuthCodeRepository {
   return authCodeRepository;
 }
+
+const oauthCodeRepository: AuthCodeRepository = new AuthCodeRepository(
+  "oauthCode",
+);
+
+export function getOauthCodeRepository(): AuthCodeRepository {
+  return oauthCodeRepository;
+}

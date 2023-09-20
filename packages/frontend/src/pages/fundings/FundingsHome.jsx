@@ -71,12 +71,16 @@ const TagSelcection = () => {
 };
 
 const FundingsHome = function() {
+  const url = new URL("/api/v1/fundings", window.location.href);
+  url.searchParams.append("offset", 0);
+  url.searchParams.append("limit", 50);
+
   const {
     data: fetcherData,
     error: fetcherError,
     isLoading: fetcherIsLoading,
   } = useSWR(
-    "/api/v1/fundings",
+    url.href,
     (url) => fetch(url).then((res) => res.json()),
   );
 
@@ -88,8 +92,8 @@ const FundingsHome = function() {
   }
 
   return (
-    <Container style={{ "padding-top": "20px", "width": "50vw" }}>
-      <div style={{ "text-align": "right" }}>
+    <Container style={{ paddingTop: "20px", "width": "50vw" }}>
+      <div style={{ textAlign: "right" }}>
         <NavLink to={"/fundings/post"}>
           <Button variant="success">작성</Button>
         </NavLink>

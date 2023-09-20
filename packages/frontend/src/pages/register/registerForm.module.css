@@ -18,6 +18,7 @@
     background-color: #ED4B5E;
     border-radius: 10px;
     color: white;
+    width: 100%;
 }
 
 .button_submit:hover {
