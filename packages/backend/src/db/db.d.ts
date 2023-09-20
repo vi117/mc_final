@@ -65,6 +65,7 @@ export interface FundingRequests {
   target_value: number;
   begin_date: Date;
   end_date: Date;
+  meta: string | null;
 }
 
 export interface FundingRewards {
