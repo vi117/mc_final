@@ -10,6 +10,7 @@ import Community from "./pages/community/Community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
+import FundingsPay from "./pages/fundings/FundingsPay";
 import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
@@ -19,6 +20,8 @@ import WithdrawalPage from "./pages/withdrawal";
 import ForgotPasswordPage from "./pages/forgot-password";
 import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
+
+import { GoogleLogin } from "./pages/sns_login/google";
 
 const browserRouter = createBrowserRouter([
   {
@@ -103,7 +106,11 @@ const browserRouter = createBrowserRouter([
       /**
        * 펀딩 글 작성
        */ { path: "/fundings/post", element: <FundingsWrite /> },
+      { path: "/google-login", element: <GoogleLogin></GoogleLogin> },
       { path: "*", element: <h1>Not Found</h1> },
+      /**
+       * 펀딩 후원 결제 페이지
+       */ { path: "/fundings/:id/pay/", element: <FundingsPay /> },
     ],
   },
 ]);
