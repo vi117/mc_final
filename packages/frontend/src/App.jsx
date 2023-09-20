@@ -106,7 +106,7 @@ const browserRouter = createBrowserRouter([
       { path: "*", element: <h1>Not Found</h1> },
       /**
        * 펀딩 후원 결제 페이지
-       */ { path: "/fundings/:id/pay/", element: <FundingsPay /> },
+       */ { path: "/fundings/:id/pay", element: <FundingsPay /> },
     ],
   },
 ]);
