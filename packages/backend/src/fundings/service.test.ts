@@ -7,6 +7,10 @@ var findByIdMock = jest.fn();
 var updateByIdMock = jest.fn();
 // eslint-disable-next-line no-var
 var insertMock = jest.fn();
+// eslint-disable-next-line no-var
+var insertRewards = jest.fn();
+// eslint-disable-next-line no-var
+var insertTagsByName = jest.fn();
 
 jest.mock("./request_model", () => {
   return {
@@ -21,6 +25,8 @@ jest.mock("./request_model", () => {
 jest.mock("./funding_model", () => ({
   FundingsRepository: jest.fn().mockImplementation(() => ({
     insert: insertMock,
+    insertTagsByName,
+    insertRewards,
   })),
 }));
 
@@ -28,6 +34,8 @@ beforeEach(() => {
   findByIdMock.mockReset();
   updateByIdMock.mockReset();
   insertMock.mockReset();
+  insertRewards.mockReset();
+  insertTagsByName.mockReset();
 });
 
 describe("approveFundingRequest", () => {
@@ -80,7 +88,22 @@ describe("approveFundingRequest", () => {
   it("should insert a new funding request", async () => {
     const request_id = 123;
     const funding_id = 456;
-    const request = request_template;
+    const meta_parsed = {
+      tags: ["tag1", "tag2"],
+      rewards: [
+        {
+          title: "title",
+          content: "content",
+          price: 1000,
+          reward_count: 1,
+        },
+      ],
+    };
+    const request = {
+      ...request_template,
+      meta_parsed: meta_parsed,
+      meta: JSON.stringify(meta_parsed),
+    };
 
     findByIdMock.mockResolvedValue(request);
     insertMock.mockResolvedValue(funding_id);
