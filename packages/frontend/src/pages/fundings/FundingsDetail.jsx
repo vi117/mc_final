@@ -273,7 +273,9 @@ const FundingsDetail = function() {
           </Row>
 
           <Row className="joinBtn">
-            <Button variant="success">참가</Button>
+            <NavLink to={"/fundings/:id/pay/"}>
+              <Button variant="success">참가</Button>
+            </NavLink>
           </Row>
         </Col>
       </Row>
