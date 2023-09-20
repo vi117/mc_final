@@ -1,26 +1,39 @@
-import { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
+import { useLogin } from "../../hook/useLogin";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
 
+function useArticleDetail(id, {
+  with_comments = false,
+} = {}) {
+  const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
+
+  if (with_comments) {
+    url.searchParams.append("with_comments", "true");
+  }
+
+  return useSWR(
+    `/api/v1/articles/${id}`,
+    (url) => fetch(url).then((res) => res.json()),
+  );
+}
+
 export function CommunityDetail() {
-  const [heart, setHeart] = useState({
-    ischecked: false,
-    notice: "",
-  });
+  const user_id = useLogin();
   const { id } = useParams();
   const {
     data: fetcherData,
     error: fetcherError,
     isLoading: fetcherIsLoading,
-  } = useSWR(
-    `/api/v1/articles/${id}`,
-    (url) => fetch(url).then((res) => res.json()),
-  );
+    mutate,
+  } = useArticleDetail(id, {
+    with_comments: true,
+  });
+
   if (fetcherIsLoading) {
     return <div>로딩중...</div>;
   }
@@ -28,12 +41,6 @@ export function CommunityDetail() {
     return <div>에러가 발생했습니다.</div>;
   }
   const item = fetcherData;
-  const clickHeart = () => {
-    setHeart((prevHeart) => ({
-      ...prevHeart,
-      isChecked: !prevHeart.isChecked,
-    }));
-  };
 
   const deleteMessage = () => {
     if (confirm("정말로 삭제하시겠습니까?") == true) {
@@ -43,6 +50,7 @@ export function CommunityDetail() {
     }
   };
 
+  const liked = user_id === item.like_user_id;
   return (
     <div className={classes["coDetailWrap"]}>
       <div className={classes["container"]}>
@@ -79,10 +87,12 @@ export function CommunityDetail() {
               style={{
                 width: "24px",
                 height: "24px",
-                stroke: heart.isChecked ? "#DF2E38" : "#6d6d6d",
-                fill: heart.isChecked ? "#DF2E38" : "#6d6d6d",
+                stroke: liked ? "#DF2E38" : "#6d6d6d",
+                fill: liked ? "#DF2E38" : "#6d6d6d",
               }}
-              onClick={clickHeart}
+              onClick={() => {
+                setLike(!liked);
+              }}
             />
           </button>
           <button className={classes["reportbtn"]}>신고</button>
@@ -91,6 +101,26 @@ export function CommunityDetail() {
       </div>
     </div>
   );
+
+  async function setLike(like = true) {
+    if (user_id == null) {
+      return;
+    }
+    const url = new URL(`/api/v1/articles/${id}/like`, window.location.origin);
+
+    if (!like) {
+      url.searchParams.append("unlike", "true");
+    }
+    const res = await fetch(url, {
+      method: "POST",
+    });
+    if (res.status == 200) {
+      mutate({
+        ...item,
+        like_user_id: like ? user_id : null,
+      });
+    }
+  }
 }
 
 export default CommunityDetail;

@@ -37,7 +37,7 @@ export function unlikeArticle(user_id: number, article_id: number) {
       user_id,
       article_id,
     );
-    if (isDeleted) {
+    if (!isDeleted) {
       throw new ArticleLikeError("not liked");
     }
     const articleRepository = new ArticleRepository(db);
