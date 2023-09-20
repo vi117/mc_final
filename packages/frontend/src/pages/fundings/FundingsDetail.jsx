@@ -34,7 +34,7 @@ const FundingsDetail = function() {
     return <div>에러가 발생했습니다.</div>;
   }
   return (
-    <Container style={{ "padding-top": "20px", "width": "50vw" }}>
+    <Container style={{ paddingTop: "20px", "width": "50vw" }}>
       <div className={classes.sujung}>
         {user_id === funding.host_id && (
           <NavLink to={`/fundings/${id}/edit`}>

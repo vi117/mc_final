@@ -92,8 +92,8 @@ const FundingsHome = function() {
   }
 
   return (
-    <Container style={{ "padding-top": "20px", "width": "50vw" }}>
-      <div style={{ "text-align": "right" }}>
+    <Container style={{ paddingTop: "20px", "width": "50vw" }}>
+      <div style={{ textAlign: "right" }}>
         <NavLink to={"/fundings/post"}>
           <Button variant="success">작성</Button>
         </NavLink>
