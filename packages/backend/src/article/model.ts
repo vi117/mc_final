@@ -10,6 +10,11 @@ export interface FindAllUsersOptions {
   offset?: number;
   cursor?: number;
   /**
+   * 정렬.
+   * id, like_count
+   */
+  orderBy?: "id" | "like_count";
+  /**
    * 사용자 ID
    */
   user_id?: number;
@@ -157,6 +162,7 @@ export class ArticleRepository {
       include_deleted = false,
       tags,
       allow_categories,
+      orderBy,
     } = options ?? {};
 
     const ret = await this.getFindBaseQuery({
@@ -179,6 +185,10 @@ export class ArticleRepository {
       )
       .limit(limit)
       .offset(offset)
+      .$if(
+        orderBy !== undefined,
+        (qb) => qb.orderBy(`articles.${orderBy ?? "id"}`),
+      )
       .execute();
     return ret;
   }

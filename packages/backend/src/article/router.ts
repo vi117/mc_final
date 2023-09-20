@@ -1,7 +1,11 @@
 import { getDB } from "@/db/util";
 import { checkLogin } from "@/users/jwt";
 import ajv from "@/util/ajv";
-import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
+import {
+  parseQueryToNumber,
+  parseQueryToString,
+  parseQueryToStringList,
+} from "@/util/query_param";
 import { RouterCatch } from "@/util/util";
 import assert from "assert";
 import { Router } from "express";
@@ -31,6 +35,14 @@ async function getAllArticleHandler(req: Request, res: Response) {
   const cursor = parseQueryToNumber(req.query.cursor);
   const tags = parseQueryToStringList(req.query.tags);
   const categories = parseQueryToStringList(req.query.categories);
+  const orderBy = parseQueryToString(req.query.orderBy) ?? "id";
+  if (orderBy !== "id" && orderBy !== "like_count") {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "orderBy must be id or like_count",
+    });
+    return;
+    // throw new RouterCatch(StatusCodes.BAD_REQUEST, "orderBy must be id or like_count");
+  }
 
   const result = await articleRepository.findAll({
     user_id: user?.id,
@@ -40,6 +52,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
     tags: tags,
     cursor: cursor,
     allow_categories: categories,
+    orderBy: orderBy,
   });
   res.json(result).status(StatusCodes.OK);
 }
