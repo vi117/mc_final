@@ -1,4 +1,4 @@
-import { safeTransaction } from "@/db/util";
+import { isDuplKeyError, safeTransaction } from "@/db/util";
 import {
   FundingRewardsRepository,
   FundingsRepository,
@@ -25,10 +25,11 @@ export async function approveFundingRequest(request_id: number) {
     } else if (request.funding_state === 2) {
       throw new FundingApproveError("이미 취소된 요청입니다");
     }
+    const meta = request.meta_parsed ?? undefined;
 
-    let funding_id;
+    let result_funding_id: number | undefined;
     if (request.funding_request_id) {
-      funding_id = request.funding_request_id;
+      const funding_id = request.funding_request_id;
       await requestRepo.updateById(request_id, {
         title: request.title,
         content: request.content,
@@ -41,8 +42,13 @@ export async function approveFundingRequest(request_id: number) {
         end_date: request.end_date,
         host_id: request.host_id,
       });
+      // TODO(vi117): update  difference of tags.
+      result_funding_id = funding_id;
     } else {
-      funding_id = await fundingRepo.insert({
+      if (meta === undefined) {
+        throw new FundingApproveError("meta does not exist");
+      }
+      const funding_id = await fundingRepo.insert({
         title: request.title,
         content: request.content,
         thumbnail: request.thumbnail,
@@ -54,9 +60,19 @@ export async function approveFundingRequest(request_id: number) {
       if (funding_id === undefined) {
         throw new FundingApproveError("삽입 실패");
       }
+      await fundingRepo.insertTagsByName(funding_id, meta.tags);
+      await fundingRepo.insertRewards(meta.rewards.map((r) => ({
+        title: r.title,
+        content: r.content,
+        price: r.price,
+        reward_count: r.reward_count,
+        funding_id: funding_id,
+      })));
+
+      result_funding_id = funding_id;
     }
     await requestRepo.updateById(request_id, {
-      funding_request_id: funding_id,
+      funding_request_id: result_funding_id,
     });
   });
 }
@@ -88,10 +104,7 @@ export async function participateFunding({
         address,
       });
     } catch (error) {
-      if (
-        error instanceof Error
-        && (error as { code?: string }).code === "ER_DUP_ENTRY"
-      ) {
+      if (isDuplKeyError(error)) {
         throw new FundingUsersError("already participated");
       }
       throw error;

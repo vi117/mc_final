@@ -7,12 +7,13 @@ import {
   Dropdown,
   DropdownButton,
   ListGroup,
+  Spinner,
 } from "react-bootstrap";
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
-import "./FundingsDetail.css";
-import { NavLink } from "react-router-dom";
-// import useSWR from "swr";
+import { NavLink, useParams } from "react-router-dom";
+import useSWR from "swr";
+import classes from "./FundingsDetail.module.css";
 
 const placeholder = "https://via.placeholder.com/850x375";
 
@@ -82,90 +83,82 @@ const fundings = [
   },
 ];
 
-const rewards = [
-  {
-    id: 1,
-    funding_id: 1,
-    title: "funding 1",
-    content: "펀딩 1 설명",
-    price: 10000,
-    reward_current_count: 1,
-    reward_count: 999,
-  },
-  {
-    id: 1,
-    funding_id: 2,
-    title: "funding 2",
-    content: "펀딩 2 설명",
-    price: 20000,
-    reward_current_count: 1,
-    reward_count: 999,
-  },
-  {
-    id: 1,
-    funding_id: 3,
-    title: "funding 3",
-    content: "펀딩 3 설명",
-    price: 10000,
-    reward_current_count: 1,
-    reward_count: 999,
-  },
-  {
-    id: 1,
-    funding_id: 4,
-    title: "funding 1",
-    content: "펀딩 1 설명",
-    price: 10000,
-    reward_current_count: 1,
-    reward_count: 999,
-  },
-  {
-    id: 1,
-    funding_id: 5,
-    title: "funding 1",
-    content: "펀딩 1 설명",
-    price: 10000,
-    reward_current_count: 1,
-    reward_count: 999,
-  },
-];
+// const rewards = [
+//   {
+//     id: 1,
+//     funding_id: 1,
+//     title: "funding 1",
+//     content: "펀딩 1 설명",
+//     price: 10000,
+//     reward_current_count: 1,
+//     reward_count: 999,
+//   },
+//   {
+//     id: 1,
+//     funding_id: 2,
+//     title: "funding 2",
+//     content: "펀딩 2 설명",
+//     price: 20000,
+//     reward_current_count: 1,
+//     reward_count: 999,
+//   },
+//   {
+//     id: 1,
+//     funding_id: 3,
+//     title: "funding 3",
+//     content: "펀딩 3 설명",
+//     price: 10000,
+//     reward_current_count: 1,
+//     reward_count: 999,
+//   },
+//   {
+//     id: 1,
+//     funding_id: 4,
+//     title: "funding 1",
+//     content: "펀딩 1 설명",
+//     price: 10000,
+//     reward_current_count: 1,
+//     reward_count: 999,
+//   },
+//   {
+//     id: 1,
+//     funding_id: 5,
+//     title: "funding 1",
+//     content: "펀딩 1 설명",
+//     price: 10000,
+//     reward_current_count: 1,
+//     reward_count: 999,
+//   },
+// ];
 
 const FundingsDetail = function() {
-  // const {
-  //   data: fetcherData,
-  //   error: fetcherError,
-  //   isLoading: fetcherIsLoading,
-  // } = useSWR(
-  //   "/api/v1/fundings",
-  //   (url) => fetch(url).then((res) => res.json()),
-  // );
+  const { id } = useParams();
+  const { data: funding, error, isLoading } = useSWR(
+    `/api/v1/fundings/${id}`,
+    (url) => fetch(url).then((res) => res.json()),
+  );
 
-  // if (fetcherIsLoading) {
-  //   return <div>로딩중...</div>;
-  // }
-  // if (fetcherError) {
-  //   return <div>에러가 발생했습니다.</div>;
-  // }
-
+  if (isLoading) {
+    // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
+    return <Spinner />;
+  }
+  if (error) {
+    return <div>에러가 발생했습니다.</div>;
+  }
   return (
     <Container style={{ "padding-top": "20px", "width": "50vw" }}>
-      <div className="sujung">
-        <NavLink to={"/fundings/1/edit"}>
+      <div className={classes.sujung}>
+        <NavLink to={`/fundings/${id}/edit`}>
           <Button variant="success">수정</Button>
         </NavLink>
       </div>
       <Row>
-        <Col sm={8} className="fundingName">
-          <h1>펀딩 제목</h1>
-          {/* <div>{fundings.title}</div> */}
+        <Col sm={8} className={classes.fundingName}>
+          <h1>{funding.title}</h1>
         </Col>
 
-        <Col className="tags">
-          <div>
-            <Badge>tag1</Badge>
-            <Badge>tag2</Badge>
-          </div>
-          {/* <div>{fundings.tag}</div> */}
+        <Col className={classes.tags}>
+          {funding.tags.map((tag) => <Badge>{tag.tag}</Badge>)}
         </Col>
       </Row>
 
@@ -195,29 +188,14 @@ const FundingsDetail = function() {
 
         <Col sm={4}>
           <Row style={{ margin: "16px" }}>
-            <div key={`${fundings.id}`}>
-              <div>{fundings.begin_date}</div>
-              <div>{fundings.end_date}</div>
-              <div>
-                달성도:{(fundings.current_value / fundings.target_value) * 100}%
-              </div>
-            </div>
-            <div></div>개설기간, 달성도(후원자 명수)
-            {
-              /* {fetcherData.map((x) => (
-          <div key={x.id}>
-            <NavLink to={`/fundings/${x.id}`}>
-              <img src={x.thumbnail} alt="썸네일 이미지"></img>
-              <h3>{x.tag}</h3>
-              <h3>{x.title}</h3>
-              <h3>{x.content}</h3>
-              <h3>{(x.current_value / x.target_value) * 100}%</h3>
-            </NavLink> */
-            }
+            {/* TODO(vi117): 예쁘게 날짜 출력 */}
+            <div>
+              {funding.begin_date.toString()} ~ {funding.end_date.toString()}
+            </div>개설기간, 달성도(후원자 명수)
           </Row>
 
           <Row>
-            <div></div>펀딩 창작자 소개
+            <div>{funding.host_nickname}</div>
           </Row>
           <Row style={{ "padding": "10px 0px 10px 0px" }}>
             <Col className="sns">
@@ -241,8 +219,10 @@ const FundingsDetail = function() {
                 <Button variant="light">링</Button> */
               }
             </Col>
-            <Col className="wishList">
-              <Button variant="outline-dark">관심설정⭐</Button>
+            <Col className={classes.wishList}>
+              {funding.interest_user_id === null
+                ? <Button variant="outline-dark">관심설정⭐</Button>
+                : <Button variant="outline-dark">관심취소⭐</Button>}
             </Col>
           </Row>
         </Col>
@@ -250,32 +230,24 @@ const FundingsDetail = function() {
 
       <Row>
         <Col sm={8}>
-          <div></div>
-          상세페이지 (editor로 쓴 부분)
+          {funding.content}
         </Col>
         <Col sm={4}>
-          <Row className="rewardList">
+          <Row className={classes.rewardList}>
             <ListGroup>
-              {rewards.map((x) => (
-                <div key={x.funding_id}>
-                  <ListGroup.Item action variant="success">
-                    <div>제목:{x.title}</div>
-                    <div style={{ "overflow": "ellipsis" }}>
-                      설명:{x.content}
-                    </div>
-                    <div>가격:{x.price}</div>
-                    <div>현재까지펀딩수:{x.reward_current_count}</div>
-                    <div>펀딩의수량:{x.reward_count}</div>
-                  </ListGroup.Item>
-                </div>
+              {funding.rewards.map((reward) => (
+                <ListGroup.Item action variant="success">
+                  <h3>{reward.title}</h3>
+                  {reward.content}
+                </ListGroup.Item>
               ))}
             </ListGroup>
           </Row>
 
-          <Row className="joinBtn">
-            <NavLink to={"/fundings/:id/pay/"}>
-              <Button variant="success">참가</Button>
-            </NavLink>
+          <Row className={classes.joinBtn}>
+            {funding.participated_reward_id === null
+              ? <Button variant="success">참가</Button>
+              : <Button variant="danger">취소</Button>}
           </Row>
         </Col>
       </Row>

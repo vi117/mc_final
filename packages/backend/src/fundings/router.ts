@@ -313,6 +313,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       host_id: user.id,
       title,
       content,
+      // TODO(vi117): sanitize content html
       begin_date: new Date(begin_date),
       end_date: new Date(end_date),
       target_value,

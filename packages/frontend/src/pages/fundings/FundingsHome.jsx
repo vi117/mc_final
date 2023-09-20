@@ -4,7 +4,7 @@ import { Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useSWR from "swr";
-import "./FundingsDetail.css";
+// import "./FundingsDetail.css";
 // import classes from "./FundingsHome.css?inline";
 
 // const placerholder = "https://via.placeholder.com/100x100";
