@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import Profileimg from "./assets/user.png";
@@ -43,7 +44,6 @@ export function CommunityDetail() {
     }
   };
   const item = fetcherData;
-  console.log(item.id);
 
   return (
     <div className={classes["coDetailWrap"]}>
@@ -51,7 +51,9 @@ export function CommunityDetail() {
         <div className={classes["titleArea"]}>
           <div className={classes["selectedTitle"]}>{item.title}</div>
           <div className={classes["detailbtn"]}>
-            <button>수정</button>
+            <Link to={`/community/${item.id}/edit`}>
+              <button className={classes["editbtn"]}>수정</button>
+            </Link>
             <button onClick={deleteMessage}>삭제</button>
           </div>
         </div>

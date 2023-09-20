@@ -32,7 +32,8 @@
   margin-left: auto !important;
   justify-content: end;
 }
-.detailbtn > button {
+.detailbtn > button, 
+.editbtn {
   font-size: 12px;
   margin: 3px;
   color: var(--green);
@@ -42,7 +43,8 @@
   background-color: var(--white);
 }
 
-.detailbtn > button:hover {
+.detailbtn > button:hover,
+.editbtn:hover{
   font-size: 12px;
   margin: 3px;
   color: var(--white);
