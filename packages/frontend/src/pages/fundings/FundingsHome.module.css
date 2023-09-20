@@ -1,13 +1,11 @@
 
 .zzzzzzzzzzzzzzz {
-  margin-left: 7000px;
-  font-size: 24px;
+  /* margin-left: 7000px; */
+  font-size: 4px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
-.views {
-  color: var(--teritary);
-}
+/* css가 안먹어요.... */

@@ -4,15 +4,15 @@ import { Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useSWR from "swr";
-// import "./FundingsDetail.css";
-// import classes from "./FundingsHome.css?inline";
+import classes from "./FundingsDetail.module.css";
 
 // const placerholder = "https://via.placeholder.com/100x100";
 
 const GridContainer = styled("div")({
   display: "flex",
   flexWrap: "wrap",
-  // col-md
+  justifyContent: "center",
+  marginLeft: "12.5px",
 });
 
 // const fundings = [
@@ -63,10 +63,11 @@ const TagSelcection = () => {
       <div>카테고리</div>
       {/* <pre>{JSON.stringify(selected)}</pre> */}
       <TagsInput
+        width="860px"
         value={selected}
         onChange={setSelected}
         name="fruits"
-        placeHolder="enter fruits"
+        placeHolder="enter..."
       />
       {/* <em>태그를 입력해주세요.</em> */}
     </div>
@@ -95,25 +96,41 @@ const FundingsHome = function() {
   }
 
   return (
-    <Container style={{ "padding-top": "20px", "width": "50vw" }}>
-      <div style={{ "text-align": "right" }}>
+    <Container style={{ paddingTop: "20px", "width": "860px" }}>
+      <div style={{ textAlign: "right" }}>
         <NavLink to={"/fundings/post"}>
           <Button variant="success">작성</Button>
         </NavLink>
       </div>
       <TagSelcection />
-      <GridContainer>
+
+      <GridContainer
+        style={{
+          marginTop: "10px",
+        }}
+      >
         {fetcherData.map((x) => (
-          <div key={x.id} style={{ paddingRight: "15px", width: "150px" }}>
+          <div
+            key={x.id}
+            style={{
+              flex: "0 0 calc(33.33% - 25px)",
+              marginRight: "10px",
+              marginBottom: "10px",
+              // height:"200px"
+            }}
+          >
             <NavLink to={`/fundings/${x.id}`}>
               <img
                 src={x.thumbnail}
-                style={{ width: "100%" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                }}
                 alt="썸네일 이미지"
               />
-              <div>{x.tag}</div>
+              <div>tag1,tag2...{x.tag}</div>
               <h5>{x.title}</h5>
-              <div className="zzzzzzzzzzzzzzz">{x.content}</div>
+              <h6 className={classes.zzzzzzzzzzzzzzz}>{x.content}</h6>
               <div>
                 <ProgressBar
                   now={(x.current_value / x.target_value) * 100}

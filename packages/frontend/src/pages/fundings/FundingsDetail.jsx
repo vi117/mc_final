@@ -84,54 +84,6 @@ const fundings = [
   },
 ];
 
-// const rewards = [
-//   {
-//     id: 1,
-//     funding_id: 1,
-//     title: "funding 1",
-//     content: "펀딩 1 설명",
-//     price: 10000,
-//     reward_current_count: 1,
-//     reward_count: 999,
-//   },
-//   {
-//     id: 1,
-//     funding_id: 2,
-//     title: "funding 2",
-//     content: "펀딩 2 설명",
-//     price: 20000,
-//     reward_current_count: 1,
-//     reward_count: 999,
-//   },
-//   {
-//     id: 1,
-//     funding_id: 3,
-//     title: "funding 3",
-//     content: "펀딩 3 설명",
-//     price: 10000,
-//     reward_current_count: 1,
-//     reward_count: 999,
-//   },
-//   {
-//     id: 1,
-//     funding_id: 4,
-//     title: "funding 1",
-//     content: "펀딩 1 설명",
-//     price: 10000,
-//     reward_current_count: 1,
-//     reward_count: 999,
-//   },
-//   {
-//     id: 1,
-//     funding_id: 5,
-//     title: "funding 1",
-//     content: "펀딩 1 설명",
-//     price: 10000,
-//     reward_current_count: 1,
-//     reward_count: 999,
-//   },
-// ];
-
 const FundingsDetail = function() {
   const { id } = useParams();
   const { data: funding, error, isLoading } = useSWR(
@@ -243,15 +195,20 @@ const FundingsDetail = function() {
                 <ListGroup.Item action variant="success">
                   <h3>{reward.title}</h3>
                   {reward.content}
+                  {reward.price}
+                  {reward.count}
+                  {reward.reward_current_count}
                 </ListGroup.Item>
               ))}
             </ListGroup>
           </Row>
 
           <Row className={classes.joinBtn}>
-            {funding.participated_reward_id
-              ? <Button variant="danger">취소</Button>
-              : <Button variant="success">참가</Button>}
+            <NavLink to={"/fundings/:id/pay/"}>
+              {funding.participated_reward_id
+                ? <Button variant="danger">취소</Button>
+                : <Button variant="success">참가</Button>}
+            </NavLink>
           </Row>
         </Col>
       </Row>
