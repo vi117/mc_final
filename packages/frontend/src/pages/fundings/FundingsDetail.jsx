@@ -13,6 +13,7 @@ import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import useSWR from "swr";
+import { useLogin } from "../../hook/useLogin";
 import classes from "./FundingsDetail.module.css";
 
 const placeholder = "https://via.placeholder.com/850x375";
@@ -23,6 +24,7 @@ const FundingsDetail = function() {
     `/api/v1/fundings/${id}`,
     (url) => fetch(url).then((res) => res.json()),
   );
+  const user_id = useLogin();
 
   if (isLoading) {
     // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
@@ -34,9 +36,11 @@ const FundingsDetail = function() {
   return (
     <Container style={{ "padding-top": "20px", "width": "50vw" }}>
       <div className={classes.sujung}>
-        <NavLink to={`/fundings/${id}/edit`}>
-          <Button variant="success">수정</Button>
-        </NavLink>
+        {user_id === funding.host_id && (
+          <NavLink to={`/fundings/${id}/edit`}>
+            <Button variant="success">수정</Button>
+          </NavLink>
+        )}
       </div>
       <Row>
         <Col sm={8} className={classes.fundingName}>
@@ -105,9 +109,9 @@ const FundingsDetail = function() {
               }
             </Col>
             <Col className={classes.wishList}>
-              {funding.interest_user_id === null
-                ? <Button variant="outline-dark">관심설정⭐</Button>
-                : <Button variant="outline-dark">관심취소⭐</Button>}
+              {funding.interest_user_id
+                ? <Button variant="outline-dark">관심취소⭐</Button>
+                : <Button variant="outline-dark">관심설정⭐</Button>}
             </Col>
           </Row>
         </Col>
@@ -130,9 +134,9 @@ const FundingsDetail = function() {
           </Row>
 
           <Row className={classes.joinBtn}>
-            {funding.participated_reward_id === null
-              ? <Button variant="success">참가</Button>
-              : <Button variant="danger">취소</Button>}
+            {funding.participated_reward_id
+              ? <Button variant="danger">취소</Button>
+              : <Button variant="success">참가</Button>}
           </Row>
         </Col>
       </Row>
