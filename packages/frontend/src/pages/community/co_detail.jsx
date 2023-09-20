@@ -64,7 +64,13 @@ export function CommunityDetail() {
           </div>
         </div>
         <div className={classes["contentArea"]}>
-          <p>{item.content}</p>
+          <p
+            // TODO(vi117): sanitize content
+            dangerouslySetInnerHTML={{
+              __html: item.content,
+            }}
+          >
+          </p>
         </div>
         <div className={classes["reportArea"]}>
           <button style={{ marginRight: "7px" }}>
@@ -72,8 +78,9 @@ export function CommunityDetail() {
               className={classes["Hearticon"]}
               style={{
                 width: "24px",
+                height: "24px",
                 stroke: heart.isChecked ? "#DF2E38" : "#6d6d6d",
-                fill: heart.isChecked ? "#DF2E38" : "none",
+                fill: heart.isChecked ? "#DF2E38" : "#6d6d6d",
               }}
               onClick={clickHeart}
             />

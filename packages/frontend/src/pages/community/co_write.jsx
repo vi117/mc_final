@@ -21,7 +21,6 @@ const TagWrite = ({
       <TagsInput
         value={selected}
         onChange={onChange}
-        name="fruits"
         placeHolder="태그를 입력해주세요"
       />
     </div>
@@ -109,21 +108,21 @@ const CommunityWrite = () => {
   );
 
   async function sendRequest() {
-    const url = new URL("/api/v1/articles/request", window.location.href);
-
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("category", category);
-    formData.append("tags", tagSelected.toString());
-
+    const url = new URL("/api/v1/articles/", window.location.href);
     const r = await fetch(url.href, {
       method: "POST",
-      body: formData,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        content,
+        category,
+      }),
     });
 
     if (r.status === 201) {
+      // TODO(vi117): navigate
       alert("요청이 접수되었습니다.");
     } else {
       alert("요청이 실패했습니다.");

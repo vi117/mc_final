@@ -71,7 +71,7 @@ function useArticles({
 const Board = () => {
   const [isModalOpen, setIsModalOpen] = useState(loadCategoryFilter() === null);
   const [categoryFiltered, setCategoryFiltered] = useState(
-    getRestAnimals(loadCategoryFilter()) ?? [],
+    getRestAnimals(loadCategoryFilter() ?? []),
   );
   const [orderBy, setOrderBy] = useState("id");
 
