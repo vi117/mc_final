@@ -2,19 +2,11 @@ import { useState } from "react";
 import { Form, Modal, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
+import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
 import Category from "./category";
 
-const animals = [
-  "강아지",
-  "고양이",
-  "햄스터",
-  "어류",
-  "조류",
-  "파충류",
-  "양서류",
-  "갑각류",
-];
+const animals = ANIMAL_CATEGORY;
 
 function getRestAnimals(filterAnimals) {
   return animals.filter((animal) => !filterAnimals.includes(animal));

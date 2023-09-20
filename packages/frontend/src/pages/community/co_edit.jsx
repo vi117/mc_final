@@ -7,18 +7,12 @@ import { Editor } from "../../component/Editor";
 import baseClasses from "./styles/Co_base.module.css";
 import classes from "./styles/Co_write.module.css";
 import "react-quill/dist/quill.snow.css";
+import { ANIMAL_CATEGORY } from "./constant";
 
-let selectList = [
-  { value: "강아지" },
-  { value: "고양이" },
-  { value: "햄스터" },
-  { value: "어류" },
-  { value: "조류" },
-  { value: "파충류" },
-  { value: "양서류" },
-  { value: "갑각류" },
-  { value: "기타" },
-];
+const selectList = ANIMAL_CATEGORY.map((v) => ({
+  value: v,
+}));
+
 const TagWrite = ({
   selected,
   onChange,
@@ -34,6 +28,7 @@ const TagWrite = ({
     </div>
   );
 };
+
 const CommunityEdit = () => {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");

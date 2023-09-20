@@ -1,20 +1,12 @@
 import { Dropdown } from "react-bootstrap";
 import { BiSolidPencil } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
 import CustomMenu from "./Menu";
 import CustomToggle from "./Toggle";
 
-const animals = [
-  "강아지",
-  "고양이",
-  "햄스터",
-  "어류",
-  "조류",
-  "파충류",
-  "양서류",
-  "갑각류",
-];
+const animals = ANIMAL_CATEGORY;
 
 const Category = ({ selectCategoryFilter, selectOrderBy = () => {} }) => {
   const navigate = useNavigate();
