@@ -27,7 +27,7 @@
 
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
 
-    "types": [ "vite/client"]
+    "types": ["vite/client"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

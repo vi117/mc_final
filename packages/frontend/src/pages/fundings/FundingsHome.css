@@ -1,0 +1,13 @@
+
+.zzzzzzzzzzzzzzz {
+  margin-left: 7000px;
+  font-size: 24px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.views {
+  color: var(--teritary);
+}

@@ -1,35 +1,18 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Upload from "../uploadcomponent/Upload";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
 
 const emailPattern = // eslint-disable-next-line no-useless-escape
-  /("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])/;
+  /("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])/u;
 
 window.emailPattern = emailPattern;
 
 /**
  * @param formElem{HTMLFormElement}
  */
-async function signUp(formElem) {
-  const formData = new FormData(formElem);
-
-  const r = await fetch("/api/v1/users/signup", {
-    method: "POST",
-    body: formData,
-  });
-
-  if (r.status === 201) {
-    /// 회원가입 성공!
-    return true;
-  } else {
-    /// 회원 가입 실패!
-    return false;
-  }
-}
 
 function RegisterPage() {
-  const formRef = useRef(null);
   const [Email, setEmail] = useState("");
   // const [Name, setName] = useState("");
   const [Password, setPassword] = useState("");
@@ -40,6 +23,28 @@ function RegisterPage() {
   const [Article, setArticle] = useState("");
   const [show, setShow] = useState(true);
 
+  async function signUp() {
+    const formData = new FormData();
+    formData.append("email", Email);
+    formData.append("password", Password);
+    formData.append("nickname", NickName);
+    formData.append("phone", Phone);
+    formData.append("address", Address);
+    formData.append("introduction", Article);
+
+    const r = await fetch("/api/v1/users/signup", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (r.status === 201) {
+      /// 회원가입 성공!
+      return true;
+    } else {
+      /// 회원 가입 실패!
+      return false;
+    }
+  }
   const handleClose = () => setShow(false);
 
   const onEmailHandler = (event) => {
@@ -75,8 +80,7 @@ function RegisterPage() {
         alignItems: "center",
       }}
     >
-      <form
-        ref={formRef}
+      <div
         style={{ display: "flex", flexDirection: "column" }}
         className={classes.form}
       >
@@ -144,13 +148,13 @@ function RegisterPage() {
         <br />
         <button
           id="form-controls"
-          type="submit"
+          type="click"
           onClick={onSubmitHandler}
           className={classes.button_submit}
         >
           회원가입
         </button>
-      </form>
+      </div>
     </div>
   );
 
@@ -182,9 +186,7 @@ function RegisterPage() {
       return alert("올바른 비밀번호를 입력하세요.");
     }
 
-    if (formRef.current) {
-      signUp(formRef.current);
-    }
+    signUp();
   }
 }
 

@@ -1,15 +1,18 @@
 import { styled } from "@mui/material";
 import { useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useSWR from "swr";
+import "./FundingsDetail.css";
+// import classes from "./FundingsHome.css?inline";
 
 // const placerholder = "https://via.placeholder.com/100x100";
 
 const GridContainer = styled("div")({
   display: "flex",
   flexWrap: "wrap",
+  // col-md
 });
 
 // const fundings = [
@@ -101,13 +104,22 @@ const FundingsHome = function() {
       <TagSelcection />
       <GridContainer>
         {fetcherData.map((x) => (
-          <div key={x.id}>
+          <div key={x.id} style={{ paddingRight: "15px", width: "150px" }}>
             <NavLink to={`/fundings/${x.id}`}>
-              <img src={x.thumbnail} alt="썸네일 이미지"></img>
-              <h3>{x.tag}</h3>
-              <h3>{x.title}</h3>
-              <h3>{x.content}</h3>
-              <h3>{(x.current_value / x.target_value) * 100}%</h3>
+              <img
+                src={x.thumbnail}
+                style={{ width: "100%" }}
+                alt="썸네일 이미지"
+              />
+              <div>{x.tag}</div>
+              <h5>{x.title}</h5>
+              <div className="zzzzzzzzzzzzzzz">{x.content}</div>
+              <div>
+                <ProgressBar
+                  now={(x.current_value / x.target_value) * 100}
+                  label={(x.current_value / x.target_value) * 100}
+                />
+              </div>
             </NavLink>
           </div>
         ))}
