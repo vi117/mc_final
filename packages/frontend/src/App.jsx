@@ -9,6 +9,7 @@ import Community from "./pages/community/Community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
+import FundingsPay from "./pages/fundings/FundingsPay";
 import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
@@ -106,6 +107,9 @@ const browserRouter = createBrowserRouter([
        */ { path: "/fundings/post", element: <FundingsWrite /> },
       { path: "/google-login", element: <GoogleLogin></GoogleLogin> },
       { path: "*", element: <h1>Not Found</h1> },
+      /**
+       * 펀딩 후원 결제 페이지
+       */ { path: "/fundings/:id/pay/", element: <FundingsPay /> },
     ],
   },
 ]);
