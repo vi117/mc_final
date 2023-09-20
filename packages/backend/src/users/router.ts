@@ -12,12 +12,10 @@ import { getAuthCodeRepository } from "./authCodeRepo";
 import { googleLogin } from "./googleLogin";
 import {
   checkLogin,
-  createTokenFromUser,
   deleteAccessTokenFromCookie,
   deleteRefreshTokenFromCookie,
-  setAccessTokenToCookie,
-  setRefreshTokenToCookie,
 } from "./jwt";
+import { setLoginToken } from "./jwt";
 import getUserRepository from "./model";
 import { sendResetMail, sendVerificationMail } from "./sendmail";
 
@@ -60,13 +58,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     });
     return;
   }
-  setAccessTokenToCookie(res, createTokenFromUser(user, false));
-  setRefreshTokenToCookie(res, createTokenFromUser(user, true));
-  res.cookie("is_login", "true", {
-    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 day
-    sameSite: "strict",
-    path: "/",
-  });
+  setLoginToken(res, user);
   res.status(StatusCodes.OK).json({
     message: "로그인 성공",
     id: user.id,
@@ -274,7 +266,7 @@ export async function resetPassword(req: Request, res: Response) {
 export const logout = (_req: Request, res: Response) => {
   deleteAccessTokenFromCookie(res);
   deleteRefreshTokenFromCookie(res);
-  res.clearCookie("is_login");
+  res.clearCookie("login_user_id");
   res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
   return;
 };

@@ -3,11 +3,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { decode as jwtDecode } from "jsonwebtoken";
 import { getOauthCodeRepository } from "./authCodeRepo";
-import {
-  createTokenFromUser,
-  setAccessTokenToCookie,
-  setRefreshTokenToCookie,
-} from "./jwt";
+import { setLoginToken } from "./jwt";
 import getUserRepository from "./model";
 import { debug } from "./router";
 
@@ -73,13 +69,7 @@ export async function googleLogin(req: Request, res: Response) {
   }
 
   // if user is exist, login
-  setAccessTokenToCookie(res, createTokenFromUser(user, false));
-  setRefreshTokenToCookie(res, createTokenFromUser(user, true));
-  res.cookie("is_login", "true", {
-    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 day
-    sameSite: "strict",
-    path: "/",
-  });
+  setLoginToken(res, user);
   res.status(StatusCodes.OK).json({
     message: "success",
     code: "success",

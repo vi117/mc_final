@@ -15,6 +15,8 @@ import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
+import ProfileEdit from "./pages/profile/edit/profileEdit";
+import Profile from "./pages/profile/profilePage";
 import WithdrawalPage from "./pages/withdrawal";
 
 import ForgotPasswordPage from "./pages/forgot-password";
@@ -63,11 +65,11 @@ const browserRouter = createBrowserRouter([
       /**
        * 접속한 유저의 프로필 홈
        */
-      { path: "/profile", element: <h1>Profile</h1> },
+      { path: "/profile", element: <Profile /> },
       /**
        * 접속한 유저의 자기 프로필 수정
        */
-      { path: "/profile/edit", element: <h1>Edit Profile</h1> },
+      { path: "/profile/edit", element: <ProfileEdit /> },
       /**
        * 커뮤니티 홈
        */

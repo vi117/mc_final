@@ -121,7 +121,7 @@ export function log_query(
 export function isQueryError(error: unknown): error is QueryError {
   if (error instanceof Error) {
     if (
-      "code" in error && "fatal" in error
+      "code" in error
     ) {
       return true;
     }
