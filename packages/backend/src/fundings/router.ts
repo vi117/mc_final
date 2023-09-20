@@ -18,6 +18,7 @@ import {
   participateFunding,
   withdrawFunding,
 } from "./service";
+import { isRewardArray } from "./util";
 
 const router = Router();
 
@@ -236,7 +237,7 @@ async function withdrawFundingHandler(req: Request, res: Response) {
 }
 
 async function createFundingRequestHandler(req: Request, res: Response) {
-  const thumbnail = req.file?.filename;
+  const thumbnail = req.file?.url;
   if (!thumbnail) {
     res.status(StatusCodes.BAD_REQUEST).json({
       message: "썸네일이 필요합니다.",
@@ -253,8 +254,9 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       content: { type: "string" },
       begin_date: { type: "string", format: "date-time" },
       end_date: { type: "string", format: "date-time" },
-      target_value: { type: "number" },
-      thumbnail: { type: "string" },
+      target_value: { type: "string" },
+      rewards: { type: "string" },
+      tags: { type: "string" },
     },
     required: [
       "title",
@@ -262,7 +264,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       "begin_date",
       "end_date",
       "target_value",
-      "thumbnail",
+      "rewards",
     ],
   }, req.body);
   if (!v) {
@@ -272,20 +274,69 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     });
     return;
   }
-  const { title, content, begin_date, end_date, target_value } = req.body;
-  const insertedId = await requestRepo.insert({
-    host_id: user.id,
-    title,
-    content,
-    begin_date: new Date(begin_date),
-    end_date: new Date(end_date),
-    target_value,
-    thumbnail,
-  });
-  res.json({
-    message: "success",
-    id: insertedId,
-  }).status(StatusCodes.OK);
+
+  let rewards;
+  try {
+    rewards = JSON.parse(req.body.rewards);
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: { rewards: "JSON syntax error" },
+    });
+    return;
+  }
+  if (!isRewardArray(rewards)) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+  if (rewards.length === 0) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "보상이 없습니다.",
+    });
+    return;
+  }
+  const target_value = parseInt(req.body.target_value);
+  if (isNaN(target_value)) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "타겟 값이 유효하지 않습니다.",
+    });
+  }
+  const tags = req.body.tags.split(",");
+
+  const { title, content, begin_date, end_date } = req.body;
+
+  try {
+    const insertedId = await requestRepo.insert({
+      host_id: user.id,
+      title,
+      content,
+      begin_date: new Date(begin_date),
+      end_date: new Date(end_date),
+      target_value,
+      thumbnail,
+      meta_parsed: ({
+        tags: tags,
+        rewards: rewards,
+      }),
+    });
+    res
+      .status(StatusCodes.CREATED)
+      .json({
+        message: "success",
+        id: insertedId,
+      });
+  } catch (error) {
+    if (isDuplKeyError(error)) {
+      res.status(StatusCodes.CONFLICT).json({
+        message: "이미 존재하는 제목입니다.",
+      });
+      return;
+    }
+    throw error;
+  }
 }
 async function approveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
