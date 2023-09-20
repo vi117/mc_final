@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { TagsInput } from "react-tag-input-component";
+import useSWR from "swr";
+import { Editor } from "../../component/Editor";
 import baseClasses from "./styles/Co_base.module.css";
 import classes from "./styles/Co_write.module.css";
 import "react-quill/dist/quill.snow.css";
-import { TagsInput } from "react-tag-input-component";
-import { Editor } from "../../component/Editor";
 import { ANIMAL_CATEGORY } from "./constant";
 
 const selectList = ANIMAL_CATEGORY.map((v) => ({
@@ -21,22 +22,57 @@ const TagWrite = ({
       <TagsInput
         value={selected}
         onChange={onChange}
+        name="fruits"
         placeHolder="태그를 입력해주세요"
       />
     </div>
   );
 };
 
-const CommunityWrite = () => {
-  const navigate = useNavigate();
+const CommunityEdit = () => {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [tagSelected, setSelected] = useState(["QnA"]);
 
-  const backToList = () => {
-    navigate("/community");
-  };
+  const { id } = useParams();
+  const {
+    data: fetcherData,
+    error: fetcherError,
+    isLoading: fetcherIsLoading,
+  } = useSWR(
+    `/api/v1/articles/${id}`,
+    (url) => fetch(url).then((res) => res.json()),
+  );
+  const item = fetcherData;
+  // const initialBoardState = fetcherData || {
+  //   title: "",
+  //   category: "",
+  //   tag: "",
+  //   contents: "",
+  // };
+  // const [board, setBoard] = useState(initialBoardState);
+  // const { title, category, tag, contents } = board;
+  // const onChange = (event) => {
+  //   const { value, name } = event.target; // event.target에서 name과 value만 가져오기
+  //   setBoard({
+  //     ...board,
+  //     [name]: value,
+  //   });
+  // };
+
+  // const saveBoard = async () => {
+  //   const newPost = {
+  //     title,
+  //     category,
+  //     tag,
+  //     contents,
+  //   };
+  //   sampledata.push(newPost);
+
+  //   alert("등록되었습니다.");
+  //   navigate("/community");
+  // };
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +80,13 @@ const CommunityWrite = () => {
       setCategory(value);
     }
   };
+
+  if (fetcherIsLoading) {
+    return <div>로딩중...</div>;
+  }
+  if (fetcherError) {
+    return <div>에러가 발생했습니다.</div>;
+  }
 
   return (
     <div className={classes["write-container"]}>
@@ -86,7 +129,7 @@ const CommunityWrite = () => {
           type="text"
           name="title"
           placeholder="제목을 입력해주세요"
-          value={title}
+          value={item.title}
           onChange={(e) => setTitle(e.target.value)}
           style={{ marginBottom: "-2px" }}
         />
@@ -96,11 +139,11 @@ const CommunityWrite = () => {
             onChange={(v) => {
               setContent(v);
             }}
-            value={content}
+            value={item.content}
           />
         </div>
         <div className={classes["submitbutton"]}>
-          <button onClick={backToList}>돌아가기</button>
+          <button>돌아가기</button>
           <button onClick={sendRequest}>글 등록</button>
         </div>
       </div>
@@ -108,21 +151,21 @@ const CommunityWrite = () => {
   );
 
   async function sendRequest() {
-    const url = new URL("/api/v1/articles/", window.location.href);
+    const url = new URL("/api/v1/articles/request", window.location.href);
+
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("category", category);
+    formData.append("tags", tagSelected.toString());
+
     const r = await fetch(url.href, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        content,
-        category,
-      }),
+      body: formData,
     });
 
     if (r.status === 201) {
-      // TODO(vi117): navigate
       alert("요청이 접수되었습니다.");
     } else {
       alert("요청이 실패했습니다.");
@@ -130,4 +173,4 @@ const CommunityWrite = () => {
   }
 };
 
-export default CommunityWrite;
+export default CommunityEdit;

@@ -86,7 +86,7 @@ const fundings = [
 
 const FundingsDetail = function() {
   const { id } = useParams();
-  const { data: funding, error, isLoading } = useSWR(
+  const { data: funding, error, isLoading, mutate } = useSWR(
     `/api/v1/fundings/${id}`,
     (url) => fetch(url).then((res) => res.json()),
   );
@@ -100,7 +100,7 @@ const FundingsDetail = function() {
     return <div>에러가 발생했습니다.</div>;
   }
   return (
-    <Container style={{ "padding-top": "20px", "width": "50vw" }}>
+    <Container style={{ paddingTop: "20px", "width": "50vw" }}>
       <div className={classes.sujung}>
         {user_id === funding.host_id && (
           <NavLink to={`/fundings/${id}/edit`}>
@@ -177,8 +177,26 @@ const FundingsDetail = function() {
             </Col>
             <Col className={classes.wishList}>
               {funding.interest_user_id
-                ? <Button variant="outline-dark">관심취소⭐</Button>
-                : <Button variant="outline-dark">관심설정⭐</Button>}
+                ? (
+                  <Button
+                    variant="outline-dark"
+                    onClick={() => {
+                      setInterest(funding.id, false);
+                    }}
+                  >
+                    관심취소⭐
+                  </Button>
+                )
+                : (
+                  <Button
+                    variant="outline-dark"
+                    onClick={() => {
+                      setInterest(funding.id);
+                    }}
+                  >
+                    관심설정⭐
+                  </Button>
+                )}
             </Col>
           </Row>
         </Col>
@@ -234,6 +252,29 @@ const FundingsDetail = function() {
       </Container>
     </Container>
   );
+  async function setInterest(id, like = true) {
+    const url = new URL(
+      `/api/v1/fundings/${id}/interest`,
+      window.location.origin,
+    );
+    url.searchParams.append("disset", !like);
+    const res = await fetch(url.href, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.status === 401) {
+      return "Unauthorized";
+    } else if (res.status === 409) {
+      return "Conflict";
+    } else {
+      mutate({
+        ...funding,
+        interest_user_id: like ? funding.host_id : null,
+      });
+    }
+  }
 };
 
 export default FundingsDetail;

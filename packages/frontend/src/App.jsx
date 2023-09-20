@@ -4,6 +4,7 @@ import { Layout } from "./component/layout/Layout";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import CommunityDetail from "./pages/community/Co_detail";
+import CommunityEdit from "./pages/community/co_edit";
 import CommunityWrite from "./pages/community/Co_write";
 import Community from "./pages/community/Community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
@@ -14,6 +15,8 @@ import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
+import ProfileEdit from "./pages/profile/edit/profileEdit";
+import Profile from "./pages/profile/profilePage";
 import WithdrawalPage from "./pages/withdrawal";
 
 import ForgotPasswordPage from "./pages/forgot-password";
@@ -62,11 +65,11 @@ const browserRouter = createBrowserRouter([
       /**
        * 접속한 유저의 프로필 홈
        */
-      { path: "/profile", element: <h1>Profile</h1> },
+      { path: "/profile", element: <Profile /> },
       /**
        * 접속한 유저의 자기 프로필 수정
        */
-      { path: "/profile/edit", element: <h1>Edit Profile</h1> },
+      { path: "/profile/edit", element: <ProfileEdit /> },
       /**
        * 커뮤니티 홈
        */
@@ -78,7 +81,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 커뮤니티 글 수정 및 삭제
        */
-      { path: "/community/:id/edit", element: <h1>Communityedit</h1> },
+      { path: "/community/:id/edit", element: <CommunityEdit></CommunityEdit> },
       /**
        * 커뮤니티 글 작성
        */
@@ -109,7 +112,7 @@ const browserRouter = createBrowserRouter([
       { path: "*", element: <h1>Not Found</h1> },
       /**
        * 펀딩 후원 결제 페이지
-       */ { path: "/fundings/:id/pay/", element: <FundingsPay /> },
+       */ { path: "/fundings/:id/pay", element: <FundingsPay /> },
     ],
   },
 ]);

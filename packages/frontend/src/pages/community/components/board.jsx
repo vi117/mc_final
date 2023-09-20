@@ -1,150 +1,118 @@
-import { useEffect, useState } from "react";
-import { Form, Modal } from "react-bootstrap";
+import { useState } from "react";
+import { Form, Modal, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
+import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
 import Category from "./category";
 
-const Board = () => {
-  const [filteredData, setFilteredData] = useState([]);
-  const [selectedAnimals, setSelectedAnimals] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [categoryFiltered, setCategoryFiltered] = useState([]);
-  const [applyModalFilter, setApplyModalFilter] = useState(false);
-  const [originalData, setOriginalData] = useState([]);
+const animals = ANIMAL_CATEGORY;
 
-  const animals = [
-    "강아지",
-    "고양이",
-    "햄스터",
-    "어류",
-    "조류",
-    "파충류",
-    "양서류",
-    "갑각류",
-  ];
+function getRestAnimals(filterAnimals) {
+  return animals.filter((animal) => !filterAnimals.includes(animal));
+}
+
+// TODO(vi117): refactor this. make hook for session storage.
+function saveCategoryRepo(categories) {
+  sessionStorage.setItem("article_category_filter", JSON.stringify(categories));
+}
+function loadCategoryFilter() {
+  const categories = sessionStorage.getItem("article_category_filter");
+  if (categories) {
+    return JSON.parse(categories);
+  }
+  return null;
+}
+
+function useArticles({
+  offset = 0,
+  limit = 50,
+  categories,
+  tags,
+  orderBy,
+  /**
+   * if true, include deleted articles. admin only.
+   * @param {boolean}
+   */
+  include_deleted,
+}) {
+  const url = new URL("/api/v1/articles", window.location.href);
+  url.searchParams.append("offset", offset);
+  url.searchParams.append("limit", limit);
+
+  if (categories && categories.length < animals.length) {
+    categories.forEach((category) => {
+      url.searchParams.append("categories[]", category);
+    });
+  }
+  if (tags && tags.length > 0) {
+    tags.forEach((tag) => {
+      url.searchParams.append("tags[]", tag);
+    });
+  }
+
+  if (["id", "like_count"].includes(orderBy)) {
+    url.searchParams.append("orderBy", orderBy);
+  } else {
+    console.error("orderBy value isn't acceptable. value: ", orderBy);
+    url.searchParams.append("orderBy", "id");
+  }
+
+  if (include_deleted) {
+    url.searchParams.append("include_deleted", "true");
+  }
+
+  return useSWR(
+    url.href,
+    (url) => fetch(url).then((res) => res.json()),
+  );
+}
+
+const Board = () => {
+  const [isModalOpen, setIsModalOpen] = useState(loadCategoryFilter() === null);
+  const [categoryFiltered, setCategoryFiltered] = useState(
+    getRestAnimals(loadCategoryFilter() ?? []),
+  );
+  const [orderBy, setOrderBy] = useState("id");
+
   const {
     data: fetcherData,
     error: fetcherError,
     isLoading: fetcherIsLoading,
-  } = useSWR(
-    "/api/v1/articles",
-    (url) => fetch(url).then((res) => res.json()),
-  );
-
-  const selectCheckbox = (animal) => {
-    if (selectedAnimals.includes(animal)) {
-      setSelectedAnimals(selectedAnimals.filter((a) => a !== animal), () => {
-        filterResult();
-      });
-    } else {
-      setSelectedAnimals([...selectedAnimals, animal], () => {
-        filterResult();
-      });
-    }
-  };
-
-  const filterResult = () => {
-    const filteredAnimals = animals.filter((animal) =>
-      !selectedAnimals.includes(animal)
-    );
-
-    if (filteredAnimals.length === 0) {
-      setIsModalOpen(false);
-      setCategoryFiltered(filteredData);
-    } else {
-      const result = filteredData.filter((currData) =>
-        filteredAnimals.includes(currData.category)
-      );
-      setIsModalOpen(false);
-      setCategoryFiltered(result);
-    }
-  };
-
-  const CategoryFiltered = (catItem, dataToFilter = fetcherData) => {
-    if (catItem === null || catItem === undefined) {
-      setCategoryFiltered(dataToFilter);
-    } else {
-      const CategoryFilteredItems = dataToFilter.filter(
-        (currData) => currData.category === catItem,
-      );
-      setCategoryFiltered(CategoryFilteredItems);
-    }
-  };
-
-  const resetFilter = () => {
-    setIsModalOpen(false);
-    setSelectedAnimals([]);
-    setFilteredData(originalData);
-    setCategoryFiltered(originalData);
-    setApplyModalFilter(false);
-  };
-  useEffect(() => {
-    if (fetcherData) {
-      const newData = fetcherData.map((item, index) => ({
-        ...item,
-        id: index + 1,
-      }));
-
-      setFilteredData(newData);
-      setOriginalData(newData);
-    }
-  }, [fetcherData]);
+  } = useArticles({
+    offset: 0,
+    limit: 50,
+    categories: categoryFiltered,
+    orderBy,
+  });
 
   if (fetcherIsLoading) {
-    return <div>로딩중...</div>;
+    // TODO(vi117): use bootstrap placeholder instead of spinner
+    return <Spinner></Spinner>;
   }
   if (fetcherError) {
     return <div>에러가 발생했습니다.</div>;
   }
   return (
     <>
-      <Modal show={isModalOpen}>
-        <div className={classes["title"]}>
-          <p>잠깐! 커뮤니티에 들어가시기 전에</p>
-          <h1>필터링 키워드를 선택해주세요</h1>
-        </div>
-        <div className={classes["selecttable"]}>
-          <Form>
-            {animals.map((animal, index) => (
-              <div key={`filter-${index}`}>
-                <Form.Check
-                  inline
-                  id={`checkbox-${index}`}
-                  className={classes["mb-3"]}
-                  type="checkbox"
-                  name={`check${index + 1}`}
-                  label={animal}
-                  checked={selectedAnimals.includes(animal)}
-                  onChange={() => selectCheckbox(animal)}
-                />
-              </div>
-            ))}
-          </Form>
-        </div>
-        <div className={classes["filterbtnarea"]}>
-          <button
-            className={classes["closebtn"]}
-            onClick={resetFilter}
-            style={{ marginRight: "5px" }}
-          >
-            그냥 보기
-          </button>
-          <button
-            className={classes["filteron"]}
-            onClick={() => filterResult()}
-          >
-            저장하기
-          </button>
-        </div>
-      </Modal>
+      <FilterModal
+        isModalOpen={isModalOpen}
+        onApplyFilter={(v) => {
+          setCategoryFiltered(v);
+          saveCategoryRepo(v);
+          setIsModalOpen(false);
+        }}
+      />
 
       <div className={classes["board"]}>
         <div className={classes["category"]}></div>
         <Category
-          applyModalFilter={applyModalFilter}
-          filterData={(catItem, dataToFilter) =>
-            CategoryFiltered(catItem, dataToFilter)}
+          selectCategoryFilter={(c) => {
+            setCategoryFiltered([c]);
+          }}
+          selectOrderBy={(o) => {
+            setOrderBy(o);
+          }}
         />
         <table className={classes["board-table"]}>
           <thead>
@@ -167,7 +135,7 @@ const Board = () => {
             </tr>
           </thead>
           <tbody>
-            {categoryFiltered && categoryFiltered.map((item) => (
+            {fetcherData.map((item) => (
               <tr
                 key={`board-${item.id}`}
               >
@@ -190,3 +158,66 @@ const Board = () => {
 };
 
 export default Board;
+
+function FilterModal(
+  {
+    isModalOpen,
+    onApplyFilter,
+  },
+) {
+  const [selectedAnimals, setSelectedAnimals] = useState([]);
+
+  return (
+    <Modal show={isModalOpen}>
+      <div className={classes["title"]}>
+        <p>잠깐! 커뮤니티에 들어가시기 전에</p>
+        <h1>필터링 키워드를 선택해주세요</h1>
+      </div>
+      <div className={classes["selecttable"]}>
+        <Form>
+          {animals.map((animal, index) => (
+            <div key={`filter-${index}`}>
+              <Form.Check
+                inline
+                id={`checkbox-${index}`}
+                className={classes["mb-3"]}
+                type="checkbox"
+                name={`check${index + 1}`}
+                label={animal}
+                checked={selectedAnimals.includes(animal)}
+                onChange={() => {
+                  if (selectedAnimals.includes(animal)) {
+                    setSelectedAnimals(
+                      selectedAnimals.filter((a) => a !== animal),
+                    );
+                  } else {
+                    setSelectedAnimals([...selectedAnimals, animal]);
+                  }
+                }}
+              />
+            </div>
+          ))}
+        </Form>
+      </div>
+      <div className={classes["filterbtnarea"]}>
+        <button
+          className={classes["closebtn"]}
+          onClick={() => {
+            onApplyFilter([]);
+          }}
+          style={{ marginRight: "5px" }}
+        >
+          그냥 보기
+        </button>
+        <button
+          className={classes["filteron"]}
+          onClick={() => {
+            onApplyFilter(selectedAnimals);
+          }}
+        >
+          저장하기
+        </button>
+      </div>
+    </Modal>
+  );
+}

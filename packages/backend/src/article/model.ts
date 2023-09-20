@@ -10,6 +10,11 @@ export interface FindAllUsersOptions {
   offset?: number;
   cursor?: number;
   /**
+   * 정렬.
+   * id, like_count
+   */
+  orderBy?: "id" | "like_count";
+  /**
    * 사용자 ID
    */
   user_id?: number;
@@ -157,6 +162,7 @@ export class ArticleRepository {
       include_deleted = false,
       tags,
       allow_categories,
+      orderBy,
     } = options ?? {};
 
     const ret = await this.getFindBaseQuery({
@@ -179,6 +185,10 @@ export class ArticleRepository {
       )
       .limit(limit)
       .offset(offset)
+      .$if(
+        orderBy !== undefined,
+        (qb) => qb.orderBy(`articles.${orderBy ?? "id"}`),
+      )
       .execute();
     return ret;
   }
@@ -283,16 +293,24 @@ export class ArticleRepository {
   }
 
   async addTag(article_id: number, tag_id: number) {
-    return await this.addTags(article_id, [tag_id]);
+    return await this.addTagsFromIds(article_id, [tag_id]);
   }
 
-  async addTags(article_id: number, tag_ids: number[]) {
+  async addTagsFromIds(article_id: number, tag_ids: number[]) {
     await this.db.insertInto("article_tag_rel")
       .values(tag_ids.map((id) => ({
         article_id,
         tag_id: id,
       })))
       .executeTakeFirst();
+  }
+  async addTagsFromName(article_id: number, tags: string[]) {
+    await this.db.insertInto("article_tag_rel")
+      .expression((eb) =>
+        eb.selectFrom("article_tags")
+          .where("article_tags.tag", "in", tags)
+          .select(["id as tag_id", eb.val(article_id).as("article_id")])
+      );
   }
 
   async removeTag(article_id: number, tag_id: number) {

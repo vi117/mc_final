@@ -1,8 +1,13 @@
 import { getDB } from "@/db/util";
 import { checkLogin } from "@/users/jwt";
 import ajv from "@/util/ajv";
-import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
+import {
+  parseQueryToNumber,
+  parseQueryToString,
+  parseQueryToStringList,
+} from "@/util/query_param";
 import { RouterCatch } from "@/util/util";
+import { JSONSchemaType } from "ajv";
 import assert from "assert";
 import { Router } from "express";
 import { Request, Response } from "express";
@@ -31,6 +36,14 @@ async function getAllArticleHandler(req: Request, res: Response) {
   const cursor = parseQueryToNumber(req.query.cursor);
   const tags = parseQueryToStringList(req.query.tags);
   const categories = parseQueryToStringList(req.query.categories);
+  const orderBy = parseQueryToString(req.query.orderBy) ?? "id";
+  if (orderBy !== "id" && orderBy !== "like_count") {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "orderBy must be id or like_count",
+    });
+    return;
+    // throw new RouterCatch(StatusCodes.BAD_REQUEST, "orderBy must be id or like_count");
+  }
 
   const result = await articleRepository.findAll({
     user_id: user?.id,
@@ -40,6 +53,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
     tags: tags,
     cursor: cursor,
     allow_categories: categories,
+    orderBy: orderBy,
   });
   res.json(result).status(StatusCodes.OK);
 }
@@ -83,15 +97,43 @@ async function postArticleHandler(req: Request, res: Response) {
   const articleRepository = new ArticleRepository(getDB());
   const user_id = req.user?.id;
   assert(user_id !== undefined);
-
+  const body = req.body;
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      title: { type: "string" },
+      content: { type: "string" },
+      category: { type: "string" },
+      tags: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+    },
+    required: ["title", "content", "category"],
+  } as JSONSchemaType<{
+    title: string;
+    content: string;
+    category: string;
+    tags: string[];
+  }>, body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+  }
+  // TODO(vi117): sanitize content.
   const inserted_id = await articleRepository.insert({
-    title: req.body.title,
-    content: req.body.content,
+    title: body.title,
+    content: body.content,
     user_id,
-    category: req.body.category,
+    category: body.category,
   });
 
-  res.json({ message: "success", id: inserted_id }).status(StatusCodes.OK);
+  res.status(StatusCodes.CREATED)
+    .json({ message: "success", id: inserted_id });
 }
 async function deleteArticleHandler(req: Request, res: Response) {
   const articleRepository = new ArticleRepository(getDB());
@@ -123,6 +165,24 @@ async function updateArticleHandler(req: Request, res: Response) {
   assert(!isNaN(id));
   const user = req.user;
   assert(user);
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      title: { type: "string" },
+      content: { type: "string" },
+      category: { type: "string" },
+      tags: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+    },
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.OK)
+      .json({ message: "success" });
+  }
 
   await articleRepository.update(id, {
     title: req.body.title,
