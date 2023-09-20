@@ -4,6 +4,7 @@ import { Layout } from "./component/layout/Layout";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import CommunityDetail from "./pages/community/Co_detail";
+import CommunityEdit from "./pages/community/co_edit";
 import CommunityWrite from "./pages/community/Co_write";
 import Community from "./pages/community/Community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
@@ -80,7 +81,7 @@ const browserRouter = createBrowserRouter([
       /**
        * 커뮤니티 글 수정 및 삭제
        */
-      { path: "/community/:id/edit", element: <h1>Communityedit</h1> },
+      { path: "/community/:id/edit", element: <CommunityEdit></CommunityEdit> },
       /**
        * 커뮤니티 글 작성
        */

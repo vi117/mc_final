@@ -13,9 +13,9 @@ export default function Profile() {
         <ul className="list">
           <li>nickname</li>
           <li>
-            <button>
-              <Link to={`/profile/edit`}>내정보 수정</Link>
-            </button>
+            <Link to={`/profile/edit`}>
+              <button>내정보 수정</button>
+            </Link>
           </li>
           <li>
             <button>관심리스트</button>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import Profileimg from "./assets/user.png";
@@ -7,6 +8,10 @@ import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
 
 export function CommunityDetail() {
+  const [heart, setHeart] = useState({
+    ischecked: false,
+    notice: "",
+  });
   const { id } = useParams();
   const {
     data: fetcherData,
@@ -16,18 +21,13 @@ export function CommunityDetail() {
     `/api/v1/articles/${id}`,
     (url) => fetch(url).then((res) => res.json()),
   );
-
-  const [heart, setHeart] = useState({
-    ischecked: false,
-    notice: "",
-  });
-
   if (fetcherIsLoading) {
     return <div>로딩중...</div>;
   }
   if (fetcherError) {
     return <div>에러가 발생했습니다.</div>;
   }
+  const item = fetcherData;
   const clickHeart = () => {
     setHeart((prevHeart) => ({
       ...prevHeart,
@@ -42,8 +42,6 @@ export function CommunityDetail() {
       return false;
     }
   };
-  const item = fetcherData;
-  console.log(item.id);
 
   return (
     <div className={classes["coDetailWrap"]}>
@@ -51,7 +49,9 @@ export function CommunityDetail() {
         <div className={classes["titleArea"]}>
           <div className={classes["selectedTitle"]}>{item.title}</div>
           <div className={classes["detailbtn"]}>
-            <button>수정</button>
+            <Link to={`/community/${item.id}/edit`}>
+              <button className={classes["editbtn"]}>수정</button>
+            </Link>
             <button onClick={deleteMessage}>삭제</button>
           </div>
         </div>

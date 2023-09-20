@@ -147,14 +147,16 @@ function RegisterPage() {
           onChange={onArticleHandler}
         />
         <br />
-        <button
+        <Link
+          to={`/login`}
           id="form-controls"
           type="click"
           onClick={onSubmitHandler}
-          className={classes.button_submit}
         >
-          <Link to={`/login`}>회원가입</Link>
-        </button>
+          <button className={classes.button_submit}>
+            회원가입
+          </button>
+        </Link>
       </div>
     </div>
   );
