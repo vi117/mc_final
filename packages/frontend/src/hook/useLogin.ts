@@ -18,6 +18,7 @@ function getLoginUserId() {
 }
 
 export function useLogin() {
+  // TODO(vi117): For react 18, use `usesyncExternalstore`
   const [loginUser, setLoginUser] = useState(getLoginUserId());
   useEffect(() => {
     const handler = () => {
