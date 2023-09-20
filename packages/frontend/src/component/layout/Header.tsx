@@ -1,3 +1,4 @@
+import { useLogin } from "@/hook/useLogin";
 import { CgProfile } from "react-icons/cg";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
@@ -6,6 +7,8 @@ import SearchBar from "../SearchBar";
 import classes from "./Header.module.css";
 
 export function Header() {
+  const userId = useLogin();
+
   return (
     <header className={classes.header_container}>
       <div className={classes.logo_container}>
@@ -19,15 +22,37 @@ export function Header() {
           />
         </div>
         <div className="">
-          <NavLink to={"/login"}>
-            <p className={classes.header_login_btn}>
-              <CgProfile
-                color="#555555"
-                style={{ marginRight: "5px", width: "20px", height: "20px" }}
-              />
-              로그인
-            </p>
-          </NavLink>
+          {userId
+            ? (
+              <NavLink to={"/"}>
+                <p className={classes.header_login_btn}>
+                  <CgProfile
+                    color="#555555"
+                    style={{
+                      marginRight: "5px",
+                      width: "20px",
+                      height: "20px",
+                    }}
+                  />
+                  로그아웃
+                </p>
+              </NavLink>
+            )
+            : (
+              <NavLink to={"/login"}>
+                <p className={classes.header_login_btn}>
+                  <CgProfile
+                    color="#555555"
+                    style={{
+                      marginRight: "5px",
+                      width: "20px",
+                      height: "20px",
+                    }}
+                  />
+                  로그인
+                </p>
+              </NavLink>
+            )}
         </div>
       </div>
       <div className={classes.header_nav_container}>
