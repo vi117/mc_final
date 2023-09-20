@@ -1,13 +1,30 @@
-import { useLogin } from "@/hook/useLogin";
 import { CgProfile } from "react-icons/cg";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
+import { loginRevalidate, useLogin } from "../../hook/useLogin";
 import LogoSvg from "../Logo";
 import SearchBar from "../SearchBar";
 import classes from "./Header.module.css";
 
+/**
+ * Logs the user out by making a POST request to the "/api/v1/users/logout" endpoint.
+ *
+ * @return {Promise<void>} Returns a promise that resolves when the logout request is complete.
+ */
+async function logout(): Promise<void> {
+  const res = await fetch("/api/v1/users/logout", {
+    method: "POST",
+  });
+  if (res.status !== 200) {
+    console.log("logout fail");
+  }
+  loginRevalidate();
+  console.log("logout success");
+}
+
 export function Header() {
   const userId = useLogin();
+  console.log(userId);
 
   return (
     <header className={classes.header_container}>
@@ -22,9 +39,9 @@ export function Header() {
           />
         </div>
         <div className="">
-          {userId
+          {userId !== null
             ? (
-              <NavLink to={"/"}>
+              <NavLink to={"#"} onClick={logout}>
                 <p className={classes.header_login_btn}>
                   <CgProfile
                     color="#555555"

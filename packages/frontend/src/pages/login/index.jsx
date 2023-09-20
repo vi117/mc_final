@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { GOOGLE_APP_CLIENT_ID } from "../../config";
+import { loginRevalidate } from "../../hook/useLogin";
 import classes from "./style.module.css";
 
 export default function LoginPage() {
@@ -46,6 +47,7 @@ export default function LoginPage() {
       setPassword("");
       return;
     }
+    loginRevalidate();
     navigate("/");
   }
 

@@ -21,6 +21,7 @@ export function useLogin() {
   const [loginUser, setLoginUser] = useState(getLoginUserId());
   useEffect(() => {
     const handler = () => {
+      console.log("revalidate");
       setLoginUser(getLoginUserId());
     };
     login_event_target.addEventListener("revalidate", handler);
@@ -28,9 +29,7 @@ export function useLogin() {
       login_event_target.removeEventListener("revalidate", handler);
     };
   });
-  return {
-    loginUser,
-  };
+  return loginUser;
 }
 
 export function loginRevalidate() {
