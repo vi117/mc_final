@@ -1,58 +1,16 @@
 import { useState } from "react";
-import { Component } from "react";
 import { Button, Container, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 
-import ko from "date-fns/locale/ko";
-import DatePicker from "react-datepicker";
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { TagsInput } from "react-tag-input-component";
 
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
-const Calender = ({
-  startDate,
-  endDate,
-  onChange,
-}) => {
-  return (
-    <Container>
-      <DatePicker
-        showIcon // 달력 아이콘 표시인것 같은데 안보임
-        selected={startDate}
-        onChange={(date) =>
-          onChange({
-            startDate: date,
-            endDate,
-          })}
-        selectsStart
-        startDate={startDate}
-        endDate={endDate}
-        locale={ko}
-        dateFormat="yyyy년 MM월 dd일"
-      />
-      ~
-      <DatePicker
-        showIcon
-        selected={endDate}
-        onChange={(date) =>
-          onChange({
-            endDate: date,
-            startDate,
-          })}
-        selectsEnd
-        startDate={startDate}
-        endDate={endDate}
-        minDate={startDate}
-        locale={ko}
-        dateFormat="yyyy년 MM월 dd일"
-      />
-    </Container>
-  );
-};
+import { Editor } from "../../component/Editor";
+import { Calender } from "./component/Calender";
+import { ItemList } from "./component/ItemList";
 
 /**
  * Renders the TagWrite component.
@@ -80,129 +38,6 @@ const TagWrite = ({
     </div>
   );
 };
-
-const Editor = ({
-  onChange,
-  value,
-}) => {
-  return (
-    <div>
-      <ReactQuill
-        value={value}
-        onChange={onChange}
-        modules={{
-          toolbar: {
-            container: [
-              ["bold", "italic", "underline", "strike"],
-              ["link", "image"], // 이미지 업로드 버튼 추가
-              [{ list: "ordered" }, { list: "bullet" }],
-            ],
-          },
-        }}
-      />
-    </div>
-  );
-};
-class ItemList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      /**
-       * @type {Array}
-       */
-      items: [], // 물건 목록을 저장할 상태
-      newItemName: "", // 새 물건의 이름을 저장할 상태
-      newItemDesc: "", // 새 물건의 설명을 저장할 상태
-      newItemPrice: "", // 새 물건의 가격을 저장할 상태
-      newItemCount: "",
-    };
-  }
-
-  // 새 물건을 추가하는 함수
-  addItem = () => {
-    const { newItemName, newItemDesc, newItemPrice, newItemCount } = this.state;
-    if (newItemName && newItemDesc && newItemPrice) {
-      const newItem = {
-        title: newItemName,
-        content: newItemDesc,
-        price: parseInt(newItemPrice),
-        reward_count: parseInt(newItemCount),
-      };
-
-      this.setState(prevState => ({
-        items: [...prevState.items, newItem],
-        newItemName: "",
-        newItemDesc: "",
-        newItemPrice: "",
-        newItemCount: "",
-      }));
-      this.props.onChange?.([...this.state.items, newItem]);
-    }
-  };
-
-  // 물건을 삭제하는 함수
-  deleteItem = (index) => {
-    const updatedItems = [...this.state.items];
-    updatedItems.splice(index, 1);
-    this.setState({ items: updatedItems });
-    this.props.onChange?.(updatedItems);
-  };
-
-  render() {
-    return (
-      <div>
-        <div>리워드 추가</div>
-        <input
-          type="text"
-          placeholder="이름"
-          value={this.state.newItemName}
-          onChange={(e) => this.setState({ newItemName: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="설명"
-          value={this.state.newItemDesc}
-          onChange={(e) => this.setState({ newItemDesc: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="가격"
-          value={this.state.newItemPrice}
-          onChange={(e) => this.setState({ newItemPrice: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="수량"
-          value={this.state.newItemCount}
-          onChange={(e) => this.setState({ newItemCount: e.target.value })}
-        />
-        <button
-          onClick={() => {
-            this.addItem();
-          }}
-        >
-          추가
-        </button>
-
-        <ul>
-          {this.state.items.map((item, index) => (
-            <li key={index} style={{ "listStyleType": "None" }}>
-              <strong>{item.title}</strong> - {item.content} - {item.price} -
-              {item.reward_count}
-              <button
-                onClick={() => {
-                  this.deleteItem(index);
-                }}
-              >
-                삭제
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-}
 
 const FundingsWrite = function() {
   const [title, setTitle] = useState("");
