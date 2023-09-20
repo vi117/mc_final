@@ -258,6 +258,7 @@ async function postCommentHandler(req: Request, res: Response) {
   if (!v) {
     res.status(StatusCodes.BAD_REQUEST).json({
       message: "댓글을 입력해주세요.",
+      errors: ajv.errors,
     });
     return;
   }
@@ -268,7 +269,8 @@ async function postCommentHandler(req: Request, res: Response) {
     user_id,
   });
 
-  res.json({ message: "success", id: inserted_id }).status(StatusCodes.OK);
+  res.status(StatusCodes.CREATED)
+    .json({ message: "success", id: inserted_id });
 }
 async function deleteCommentHandler(req: Request, res: Response) {
   const commentRepository = new ArticleCommentRepository(getDB());

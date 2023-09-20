@@ -17,7 +17,7 @@ function useArticleDetail(id, {
   }
 
   return useSWR(
-    `/api/v1/articles/${id}`,
+    url.href,
     (url) => fetch(url).then((res) => res.json()),
   );
 }
@@ -81,7 +81,12 @@ export function CommunityDetail() {
           </p>
         </div>
         <div className={classes["reportArea"]}>
-          <button style={{ marginRight: "7px" }}>
+          <button
+            style={{ marginRight: "7px" }}
+            onClick={() => {
+              setLike(!liked);
+            }}
+          >
             <AiFillHeart
               className={classes["Hearticon"]}
               style={{
@@ -90,20 +95,74 @@ export function CommunityDetail() {
                 stroke: liked ? "#DF2E38" : "#6d6d6d",
                 fill: liked ? "#DF2E38" : "#6d6d6d",
               }}
-              onClick={() => {
-                setLike(!liked);
-              }}
             />
           </button>
           <button className={classes["reportbtn"]}>신고</button>
         </div>
-        <Comments></Comments>
+        <Comments
+          comments={item.comments}
+          onRegisterComment={registerComment}
+          article_id={id}
+          onDeleteComment={deleteComment}
+        >
+        </Comments>
       </div>
     </div>
   );
+  async function registerComment(c) {
+    const url = new URL(
+      `/api/v1/articles/${id}/comments`,
+      window.location.origin,
+    );
+    if (user_id == null) {
+      // TODO(vi117): alert login required
+      return;
+    }
+    const res = await fetch(url.href, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: c,
+      }),
+    });
+    const resJson = await res.json();
+    if (res.status == 201) {
+      mutate({
+        ...item,
+        comments: [...item.comments, {
+          content: c,
+          created_at: new Date().toISOString(),
+          user_id,
+          id: resJson.inserted_id,
+        }],
+      });
+      return true;
+    }
+    return false;
+  }
+
+  async function deleteComment(comment) {
+    const url = new URL(
+      `/api/v1/articles/${id}/comments/${comment.id}`,
+      window.location.origin,
+    );
+    const res = await fetch(url.href, {
+      method: "DELETE",
+    });
+    if (res.status == 200) {
+      mutate({
+        ...item,
+        comments: item.comments.filter((c) => c.id !== comment.id),
+      });
+      console.log("삭제되었습니다.");
+    }
+  }
 
   async function setLike(like = true) {
     if (user_id == null) {
+      // TODO(vi117): alert login required
       return;
     }
     const url = new URL(`/api/v1/articles/${id}/like`, window.location.origin);
@@ -111,7 +170,7 @@ export function CommunityDetail() {
     if (!like) {
       url.searchParams.append("unlike", "true");
     }
-    const res = await fetch(url, {
+    const res = await fetch(url.href, {
       method: "POST",
     });
     if (res.status == 200) {
