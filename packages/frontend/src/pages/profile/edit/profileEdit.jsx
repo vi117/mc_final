@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import classes from "../../register/";
+import classes from "../../register/registerForm.module.css";
 
 /**
  * @param formElem{HTMLFormElement}
@@ -87,29 +87,32 @@ function ProfileEditPage() {
           onChange={onArticleHandler}
         />
         <br />
-        <button
-          id="form-controls"
-          type="submit"
-          onClick={onSubmitHandler}
-          className={classes.button_submit}
-        >
-          <Link to={`/profile`}>수정 완료</Link>
-        </button>
+
+        <Link to={`/profile`}>
+          <button
+            id="form-controls"
+            type="submit"
+            onClick={onSubmitHandler}
+            className={classes.button_submit}
+          >
+            수정 완료
+          </button>
+        </Link>
       </form>
     </div>
   );
 
   function onSubmitHandler() {
-    if (
-      !Phone || !Address
-    ) {
-      return alert("모든 필수 항목을 입력하세요.");
-    }
+    // if (
+    //   !Phone || !Address
+    // ) {
+    //   return alert("모든 필수 항목을 입력하세요.");
+    // }
 
-    const phonePattern = /^01[0-9]\d{3,4}\d{4}$/;
-    if (!phonePattern.test(Phone)) {
-      return alert("올바른 핸드폰 번호를 입력하세요.");
-    }
+    // const phonePattern = /^01[0-9]\d{3,4}\d{4}$/;
+    // if (!phonePattern.test(Phone)) {
+    //   return alert("올바른 핸드폰 번호를 입력하세요.");
+    // }
 
     // if (formRef.current) {
     //   edit(formRef.current);
