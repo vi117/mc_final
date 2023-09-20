@@ -8,6 +8,10 @@ import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
 
 export function CommunityDetail() {
+  const [heart, setHeart] = useState({
+    ischecked: false,
+    notice: "",
+  });
   const { id } = useParams();
   const {
     data: fetcherData,
@@ -17,18 +21,13 @@ export function CommunityDetail() {
     `/api/v1/articles/${id}`,
     (url) => fetch(url).then((res) => res.json()),
   );
-
-  const [heart, setHeart] = useState({
-    ischecked: false,
-    notice: "",
-  });
-
   if (fetcherIsLoading) {
     return <div>로딩중...</div>;
   }
   if (fetcherError) {
     return <div>에러가 발생했습니다.</div>;
   }
+  const item = fetcherData;
   const clickHeart = () => {
     setHeart((prevHeart) => ({
       ...prevHeart,
@@ -43,7 +42,6 @@ export function CommunityDetail() {
       return false;
     }
   };
-  const item = fetcherData;
 
   return (
     <div className={classes["coDetailWrap"]}>

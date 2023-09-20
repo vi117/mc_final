@@ -106,20 +106,21 @@ const Board = () => {
         </div>
         <div className={classes["selecttable"]}>
           <Form>
-            {animals.map((animal, index) => (
-              <div key={`filter-${index}`}>
-                <Form.Check
-                  inline
-                  id={`checkbox-${index}`}
-                  className={classes["mb-3"]}
-                  type="checkbox"
-                  name={`check${index + 1}`}
-                  label={animal}
-                  checked={selectedAnimals.includes(animal)}
-                  onChange={() => selectCheckbox(animal)}
-                />
-              </div>
-            ))}
+            {animals
+              && animals.map((animal, index) => (
+                <div key={`filter-${index}`}>
+                  <Form.Check
+                    inline
+                    id={`checkbox-${index}`}
+                    className={classes["mb-3"]}
+                    type="checkbox"
+                    name={`check${index + 1}`}
+                    label={animal}
+                    checked={selectedAnimals.includes(animal)}
+                    onChange={() => selectCheckbox(animal)}
+                  />
+                </div>
+              ))}
           </Form>
         </div>
         <div className={classes["filterbtnarea"]}>
