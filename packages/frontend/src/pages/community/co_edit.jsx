@@ -1,10 +1,12 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { TagsInput } from "react-tag-input-component";
 import useSWR from "swr";
-import sampledata from "./assets/sampledata";
+import { Editor } from "../../component/Editor";
 import baseClasses from "./styles/Co_base.module.css";
 import classes from "./styles/Co_write.module.css";
+import "react-quill/dist/quill.snow.css";
 
 let selectList = [
   { value: "강아지" },
@@ -17,8 +19,27 @@ let selectList = [
   { value: "갑각류" },
   { value: "기타" },
 ];
+const TagWrite = ({
+  selected,
+  onChange,
+}) => {
+  return (
+    <div>
+      <TagsInput
+        value={selected}
+        onChange={onChange}
+        name="fruits"
+        placeHolder="태그를 입력해주세요"
+      />
+    </div>
+  );
+};
 const CommunityEdit = () => {
-  const navigate = useNavigate();
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [tagSelected, setSelected] = useState(["QnA"]);
+
   const { id } = useParams();
   const {
     data: fetcherData,
@@ -29,33 +50,40 @@ const CommunityEdit = () => {
     (url) => fetch(url).then((res) => res.json()),
   );
   const item = fetcherData;
-  const initialBoardState = fetcherData || {
-    title: "",
-    category: "",
-    tag: "",
-    contents: "",
-  };
-  const [board, setBoard] = useState(initialBoardState);
-  const { title, category, tag, contents } = board;
-  const onChange = (event) => {
-    const { value, name } = event.target; // event.target에서 name과 value만 가져오기
-    setBoard({
-      ...board,
-      [name]: value,
-    });
-  };
+  // const initialBoardState = fetcherData || {
+  //   title: "",
+  //   category: "",
+  //   tag: "",
+  //   contents: "",
+  // };
+  // const [board, setBoard] = useState(initialBoardState);
+  // const { title, category, tag, contents } = board;
+  // const onChange = (event) => {
+  //   const { value, name } = event.target; // event.target에서 name과 value만 가져오기
+  //   setBoard({
+  //     ...board,
+  //     [name]: value,
+  //   });
+  // };
 
-  const saveBoard = async () => {
-    const newPost = {
-      title,
-      category,
-      tag,
-      contents,
-    };
-    sampledata.push(newPost);
+  // const saveBoard = async () => {
+  //   const newPost = {
+  //     title,
+  //     category,
+  //     tag,
+  //     contents,
+  //   };
+  //   sampledata.push(newPost);
 
-    alert("등록되었습니다.");
-    navigate("/community");
+  //   alert("등록되었습니다.");
+  //   navigate("/community");
+  // };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "category") {
+      setCategory(value);
+    }
   };
 
   if (fetcherIsLoading) {
@@ -73,7 +101,7 @@ const CommunityEdit = () => {
         </div>
         <Form.Select
           className={classes["catSelect"]}
-          onChange={(e) => onChange(e)}
+          onChange={onChange}
           name="category"
           value={category}
         >
@@ -91,54 +119,63 @@ const CommunityEdit = () => {
           ))}
         </Form.Select>
 
-        <h1 className={baseClasses["co_h1"]} style={{ marginTop: "30px" }}>
+        <h1 className={baseClasses["co_h1"]} style={{ marginBottom: "10px" }}>
           태그 입력
         </h1>
-        <div>
-          <input
-            className={baseClasses["co_input"]}
-            type="text"
-            name="tag"
-            value={item.tag}
-            onChange={onChange}
-          >
-          </input>
+        <div
+          className={baseClasses["co_tagarea"]}
+          style={{ marginBottom: "20px" }}
+        >
+          <TagWrite selected={tagSelected} onChange={setSelected} />
         </div>
         <h1 className={baseClasses["co_h1"]}>커뮤니티 글 작성</h1>
         <input
           className={baseClasses["co_input"]}
           type="text"
           name="title"
+          placeholder="제목을 입력해주세요"
           value={item.title}
-          onChange={onChange}
+          onChange={(e) => setTitle(e.target.value)}
           style={{ marginBottom: "-2px" }}
         />
-        <div>
-          <textarea
-            className={baseClasses["co_textarea"]}
-            name="contents"
-            cols="30"
-            rows="10"
+        <div className={baseClasses["co_textarea"]}>
+          <Editor
+            className={baseClasses["co_editor"]}
+            onChange={(v) => {
+              setContent(v);
+            }}
             value={item.content}
-            onChange={onChange}
-            minLength={10}
-            required={true}
-          >
-          </textarea>
+          />
         </div>
-        <Form.Group controlId="formFileMultiple" className={"mb-3 w-100"}>
-          <Form.Label className={classes["label"]}>사진 업로드</Form.Label>
-          <Form.Control type="file" multiple />
-        </Form.Group>
         <div className={classes["submitbutton"]}>
-          <Link to={`/community/${item.id}`}>
-            <button>돌아가기</button>
-          </Link>
-          <button onClick={saveBoard}>글 등록</button>
+          <button>돌아가기</button>
+          <button onClick={sendRequest}>글 등록</button>
         </div>
       </div>
     </div>
   );
+
+  async function sendRequest() {
+    const url = new URL("/api/v1/articles/request", window.location.href);
+
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("category", category);
+    formData.append("tags", tagSelected.toString());
+
+    const r = await fetch(url.href, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (r.status === 201) {
+      alert("요청이 접수되었습니다.");
+    } else {
+      alert("요청이 실패했습니다.");
+    }
+  }
 };
 
 export default CommunityEdit;
