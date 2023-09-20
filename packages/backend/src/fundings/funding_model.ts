@@ -260,6 +260,29 @@ export class FundingsRepository {
     return Number(ret.insertId);
   }
 
+  async insertTags(funding_id: number, tag_ids: number[]) {
+    return await this.db.insertInto("funding_tag_rel")
+      .values(tag_ids.map((tag) => ({ tag_id: tag, funding_id })))
+      .executeTakeFirstOrThrow();
+  }
+  async insertTagsByName(funding_id: number, tag_names: string[]) {
+    return await this.db.insertInto("funding_tag_rel")
+      .columns(["tag_id", "funding_id"])
+      .expression(
+        (eb) =>
+          eb.selectFrom("funding_tags")
+            .where("funding_tags.tag", "in", tag_names)
+            .select(["id", eb.val(funding_id).as("funding_id")]),
+      );
+  }
+  async insertRewards(
+    rewards: Insertable<DB["funding_rewards"]>[],
+  ) {
+    return await this.db.insertInto("funding_rewards")
+      .values(rewards)
+      .executeTakeFirstOrThrow();
+  }
+
   async updateById(id: number, funding: Updateable<DB["fundings"]>) {
     return await this.db.updateTable("fundings")
       .set(funding)

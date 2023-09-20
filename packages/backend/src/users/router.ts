@@ -5,20 +5,21 @@ import { verify } from "argon2";
 import { isDuplKeyError } from "@/db/util";
 import upload from "@/file/multer";
 import { parseQueryToNumber } from "@/util/query_param";
+import debug_fn from "debug";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import { getAuthCodeRepository } from "./authCodeRepo";
+import { googleLogin } from "./googleLogin";
 import {
   checkLogin,
-  createTokenFromUser,
   deleteAccessTokenFromCookie,
   deleteRefreshTokenFromCookie,
-  setAccessTokenToCookie,
-  setRefreshTokenToCookie,
 } from "./jwt";
+import { setLoginToken } from "./jwt";
 import getUserRepository from "./model";
 import { sendResetMail, sendVerificationMail } from "./sendmail";
 
+export const debug = debug_fn("joinify:users");
 const router = Router();
 
 export async function login(req: Request, res: Response): Promise<void> {
@@ -57,13 +58,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     });
     return;
   }
-  setAccessTokenToCookie(res, createTokenFromUser(user, false));
-  setRefreshTokenToCookie(res, createTokenFromUser(user, true));
-  res.cookie("is_login", "true", {
-    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 day
-    sameSite: "strict",
-    path: "/",
-  });
+  setLoginToken(res, user);
   res.status(StatusCodes.OK).json({
     message: "로그인 성공",
     id: user.id,
@@ -229,7 +224,7 @@ export async function sendPasswordReset(req: Request, res: Response) {
   }
   const email = req.body.email;
   const resetCode = getAuthCodeRepository().createVerificationCode(email, "1h");
-  sendResetMail(req.body.email, resetCode);
+  await sendResetMail(email, resetCode);
   console.log(resetCode);
 
   res.status(StatusCodes.OK).json({
@@ -271,7 +266,7 @@ export async function resetPassword(req: Request, res: Response) {
 export const logout = (_req: Request, res: Response) => {
   deleteAccessTokenFromCookie(res);
   deleteRefreshTokenFromCookie(res);
-  res.clearCookie("is_login");
+  res.clearCookie("login_user_id");
   res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
   return;
 };
@@ -319,6 +314,7 @@ router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/reset-password", RouterCatch(resetPassword));
 router.post("/send-reset-password", RouterCatch(sendPasswordReset));
 router.post("/logout", RouterCatch(logout));
+router.post("/google-login", RouterCatch(googleLogin));
 router.get("/:id(\\d+)", RouterCatch(queryById));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 

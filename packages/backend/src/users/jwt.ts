@@ -206,3 +206,12 @@ export function checkLogin({ admin_check = false } = {}) {
     next();
   };
 }
+export function setLoginToken(res: Response, user: UserObject) {
+  setAccessTokenToCookie(res, createTokenFromUser(user, false));
+  setRefreshTokenToCookie(res, createTokenFromUser(user, true));
+  res.cookie("login_user_id", user.id.toString(), {
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+    sameSite: "strict",
+    path: "/",
+  });
+}

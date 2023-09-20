@@ -27,7 +27,7 @@
 }
 
 .rewardList{
-  /* text-align: center; */
+  text-align: center;
   /* align-items: center; */
   /* align-items: flex-end; */
 }
@@ -49,8 +49,8 @@
 /* 
 
 
-
 <div className="btn-group btn-group-lg" role="group" aria-label="...">...</div>
 
 <Button variant="success"
 style={{"--bs-btn-width":"20000px", "--bs-btn-padding-y":"11rem", "--bs-btn-padding-x":".5rem", "--bs-btn-font-size":".75rem"}}>참가버튼</Button>
+*/
