@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import Upload from "../uploadcomponent/Upload";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
@@ -148,39 +149,39 @@ function RegisterPage() {
           onClick={onSubmitHandler}
           className={classes.button_submit}
         >
-          회원가입
+          <Link to={`/login`}>회원가입</Link>
         </button>
       </form>
     </div>
   );
 
   function onSubmitHandler() {
-    if (Password !== ConfirmPassword) {
-      return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
-    }
+    // if (Password !== ConfirmPassword) {
+    //   return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
+    // }
 
-    if (
-      !Email
-      //  !Name ||
-      || !Password || !ConfirmPassword || !NickName || !Phone
-      || !Address
-    ) {
-      return alert("모든 필수 항목을 입력하세요.");
-    }
+    // if (
+    //   !Email
+    //   //  !Name ||
+    //   || !Password || !ConfirmPassword || !NickName || !Phone
+    //   || !Address
+    // ) {
+    //   return alert("모든 필수 항목을 입력하세요.");
+    // }
 
-    if (!emailPattern.test(Email)) {
-      return alert("올바른 이메일 주소를 입력하세요.");
-    }
+    // if (!emailPattern.test(Email)) {
+    //   return alert("올바른 이메일 주소를 입력하세요.");
+    // }
 
-    const phonePattern = /^01[0-9]-\d{3,4}-\d{4}$/;
-    if (!phonePattern.test(Phone)) {
-      return alert("올바른 핸드폰 번호를 입력하세요.");
-    }
+    // const phonePattern = /^01[0-9]\d{3,4}\d{4}$/;
+    // if (!phonePattern.test(Phone)) {
+    //   return alert("올바른 핸드폰 번호를 입력하세요.");
+    // }
 
-    const passwordPattern = /^[A-Za-z0-9]{8,20}$/;
-    if (!passwordPattern.test(Password)) {
-      return alert("올바른 비밀번호를 입력하세요.");
-    }
+    // const passwordPattern = /^[A-Za-z0-9]{8,20}$/;
+    // if (!passwordPattern.test(Password)) {
+    //   return alert("올바른 비밀번호를 입력하세요.");
+    // }
 
     if (formRef.current) {
       signUp(formRef.current);
