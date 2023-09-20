@@ -57,7 +57,7 @@ const TagWrite = () => {
         value={selected}
         onChange={setSelected}
         name="fruits"
-        placeHolder="enter fruits"
+        placeHolder="enter..."
       />
       <em>태그를 입력해주세요.</em>
     </div>
