@@ -7,6 +7,7 @@ import {
   parseQueryToStringList,
 } from "@/util/query_param";
 import { RouterCatch } from "@/util/util";
+import { JSONSchemaType } from "ajv";
 import assert from "assert";
 import { Router } from "express";
 import { Request, Response } from "express";
@@ -96,15 +97,43 @@ async function postArticleHandler(req: Request, res: Response) {
   const articleRepository = new ArticleRepository(getDB());
   const user_id = req.user?.id;
   assert(user_id !== undefined);
-
+  const body = req.body;
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      title: { type: "string" },
+      content: { type: "string" },
+      category: { type: "string" },
+      tags: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+    },
+    required: ["title", "content", "category"],
+  } as JSONSchemaType<{
+    title: string;
+    content: string;
+    category: string;
+    tags: string[];
+  }>, body);
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+  }
+  // TODO(vi117): sanitize content.
   const inserted_id = await articleRepository.insert({
-    title: req.body.title,
-    content: req.body.content,
+    title: body.title,
+    content: body.content,
     user_id,
-    category: req.body.category,
+    category: body.category,
   });
 
-  res.json({ message: "success", id: inserted_id }).status(StatusCodes.OK);
+  res.status(StatusCodes.CREATED)
+    .json({ message: "success", id: inserted_id });
 }
 async function deleteArticleHandler(req: Request, res: Response) {
   const articleRepository = new ArticleRepository(getDB());
@@ -136,6 +165,24 @@ async function updateArticleHandler(req: Request, res: Response) {
   assert(!isNaN(id));
   const user = req.user;
   assert(user);
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      title: { type: "string" },
+      content: { type: "string" },
+      category: { type: "string" },
+      tags: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+    },
+  }, req.body);
+  if (!v) {
+    res.status(StatusCodes.OK)
+      .json({ message: "success" });
+  }
 
   await articleRepository.update(id, {
     title: req.body.title,
