@@ -6,7 +6,6 @@ import classes from "./FundingsPay.module.css";
 export default function FundingsPay() {
   const location = useLocation();
   const { funding, selectedReward } = location.state;
-  const [address, setAddress] = useState("");
 
   const remainingDays =
     (new Date(funding.end_date).getTime() - new Date().getTime())
@@ -64,68 +63,11 @@ export default function FundingsPay() {
       </div>
       <div className={classes["Address"]}>
         <p>배송 정보</p>
-        <Form>
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridName">
-              <Form.Label>받는 사람</Form.Label>
-              <Form.Control
-                type="Name"
-                placeholder="받는 분 성함을 입력해주세요."
-              />
-            </Form.Group>
-          </Row>
-          <Form.Group className="mb-3" controlId="formGridAddress1">
-            <Form.Label>배송지</Form.Label>
-            <Form.Control
-              placeholder="ex) 성남시 분당구 동판교로 115"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formGridAddress2">
-            <Form.Label>상세주소</Form.Label>
-            <Form.Control placeholder="ex) 2층 201호" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" id="formGridCheckbox">
-            <Form.Check type="checkbox" label="기본 배송지로 등록" />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            등록 완료
-          </Button>
-        </Form>
+        <ShippingInformation />
       </div>
       <div className={classes["RoundedWrapper"]}>
         <p>결제수단</p>
-        <Form>
-          {["radio"].map((type) => (
-            <div key={`inline-${type}`} className="mb-3">
-              <Form.Check
-                inline
-                label="카드 간편결제"
-                name="group1"
-                type={type}
-                id={`inline-${type}-1`}
-              />
-              <Form.Check
-                inline
-                label="네이버페이"
-                name="group1"
-                type={type}
-                id={`inline-${type}-2`}
-              />
-              <Form.Check
-                inline
-                label="계좌이체"
-                name="group1"
-                type={type}
-                id={`inline-${type}-3`}
-              />
-            </div>
-          ))}
-        </Form>
+        <PaymentMethod />
         <CardRegister />
 
         <div className={classes["PledgeAmount"]}>
@@ -135,33 +77,9 @@ export default function FundingsPay() {
           </p>
           <div className={classes["PledgeAmount-text"]}></div>
           프로젝트가 무산되거나 중단된 경우 결제는 자동으로 취소됩니다.
-          <Form>
-            {["checkbox"].map((type) => (
-              <div key={`inline-${type}`} className="mb-3">
-                <Form.Check
-                  inline
-                  label="개인정보 제 3자 제공 동의"
-                  name="group1"
-                  type={type}
-                  id={`inline-${type}-1`}
-                />
-              </div>
-            ))}
-          </Form>
+          <ConsentForm />
           <FundingPrecaution />
-          <Form>
-            {["checkbox"].map((type) => (
-              <div key={`inline-${type}`} className="mb-3">
-                <Form.Check
-                  inline
-                  label="후원 유의사항 확인"
-                  name="group1"
-                  type={type}
-                  id={`inline-${type}-1`}
-                />
-              </div>
-            ))}
-          </Form>
+          <PrecautionForm />
           <div className="mb-2">
             <Button variant="primary" size="lg" onClick={participate}>
               후원하기
@@ -182,7 +100,7 @@ export default function FundingsPay() {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        address,
+        // address,
       }),
     });
     if (!r.ok) {
@@ -348,5 +266,114 @@ function CardRegister() {
         </Modal.Footer>
       </Modal>
     </>
+  );
+}
+
+function ShippingInformation() {
+  const [address, setAddress] = useState("");
+
+  return (
+    <>
+      <Form>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="formGridName">
+            <Form.Label>받는 사람</Form.Label>
+            <Form.Control
+              type="Name"
+              placeholder="받는 분 성함을 입력해주세요."
+            />
+          </Form.Group>
+        </Row>
+        <Form.Group className="mb-3" controlId="formGridAddress1">
+          <Form.Label>배송지</Form.Label>
+          <Form.Control
+            placeholder="ex) 성남시 분당구 동판교로 115"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formGridAddress2">
+          <Form.Label>상세주소</Form.Label>
+          <Form.Control placeholder="ex) 2층 201호" />
+        </Form.Group>
+
+        <Form.Group className="mb-3" id="formGridCheckbox">
+          <Form.Check type="checkbox" label="기본 배송지로 등록" />
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          등록 완료
+        </Button>
+      </Form>
+    </>
+  );
+}
+
+function PaymentMethod() {
+  return (
+    <Form>
+      {["radio"].map((type) => (
+        <div key={`inline-${type}`} className="mb-3">
+          <Form.Check
+            inline
+            label="카드 간편결제"
+            name="group1"
+            type={type}
+            id={`inline-${type}-1`}
+          />
+          <Form.Check
+            inline
+            label="네이버페이"
+            name="group1"
+            type={type}
+            id={`inline-${type}-2`}
+          />
+          <Form.Check
+            inline
+            label="계좌이체"
+            name="group1"
+            type={type}
+            id={`inline-${type}-3`}
+          />
+        </div>
+      ))}
+    </Form>
+  );
+}
+
+function ConsentForm() {
+  return (
+    <Form>
+      {["checkbox"].map((type) => (
+        <div key={`inline-${type}`} className="mb-3">
+          <Form.Check
+            inline
+            label="개인정보 제 3자 제공 동의"
+            name="group1"
+            type={type}
+            id={`inline-${type}-1`}
+          />
+        </div>
+      ))}
+    </Form>
+  );
+}
+
+function PrecautionForm() {
+  return (
+    <Form>
+      {["checkbox"].map((type) => (
+        <div key={`inline-${type}`} className="mb-3">
+          <Form.Check
+            inline
+            label="후원 유의사항 확인"
+            name="group1"
+            type={type}
+            id={`inline-${type}-1`}
+          />
+        </div>
+      ))}
+    </Form>
   );
 }

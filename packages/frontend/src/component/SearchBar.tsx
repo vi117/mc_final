@@ -1,4 +1,5 @@
 import { FiSearch } from "react-icons/fi";
+import { NavLink } from "react-router-dom";
 import classes from "./SearchBar.module.css";
 
 export default function SearchBar() {
@@ -8,7 +9,9 @@ export default function SearchBar() {
         className={classes["search_bar"]}
         placeholder="검색어를 입력하세요."
       />
-      <FiSearch className={classes["search_bar_button"]} />
+      <NavLink to={"/fundings/search"}>
+        <FiSearch className={classes["search_bar_button"]} />
+      </NavLink>
     </div>
   );
 }
