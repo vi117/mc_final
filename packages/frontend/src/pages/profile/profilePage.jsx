@@ -71,24 +71,24 @@ export default function Profile() {
             <tbody>
               <tr>
                 <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>0</td>
+                <td>강아지</td>
+                <td>귀여운 초코</td>
+                <td>초코에몽</td>
+                <td>756</td>
               </tr>
               <tr>
                 <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>0</td>
+                <td>고양이</td>
+                <td>츤데레 고영희씨</td>
+                <td>개냥이</td>
+                <td>945</td>
               </tr>
               <tr>
                 <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-                <td>0</td>
+                <td>햄스터</td>
+                <td>해바라기씨 먹방</td>
+                <td>햄토리</td>
+                <td>824</td>
               </tr>
             </tbody>
           </table>
