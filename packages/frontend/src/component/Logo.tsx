@@ -6,6 +6,7 @@ export function LogoSvg(props: React.SVGProps<SVGSVGElement>) {
       version="1.0"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
+      viewBox="0 0 975 115"
       {...props}
     >
       <g

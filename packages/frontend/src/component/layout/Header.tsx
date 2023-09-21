@@ -70,7 +70,6 @@ export function Header() {
             <Navbar.Brand>
               <LogoSvg
                 style={{ width: "240px", height: "30px" }}
-                viewBox="0 0 975 115"
               >
               </LogoSvg>
             </Navbar.Brand>
