@@ -68,7 +68,7 @@ export function Header() {
     <>
       <header className={classes.header_container}>
         <Navbar expand="sm">
-          <Container>
+          <Container className="header-brand-container">
             <Navbar.Brand>
               <LogoSvg
                 style={{ width: "240px", height: "30px" }}
@@ -105,30 +105,19 @@ export function Header() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <Container>
-          <div className={classes.header_nav_container}>
+        <Navbar bg="transparent" data-bs-theme="light">
+          <Nav variant="underline" className={classes.header_nav_container}>
             <div className={classes.left}>
-              <div className={classes.nav_item}>
-                <NavLink to={"/"}>
-                  홈
-                </NavLink>
-              </div>
-              <div className={classes.nav_item}>
-                <NavLink to={"/fundings"}>
-                  펀딩
-                </NavLink>
-              </div>
-              <div className={classes.nav_item}>
-                <NavLink to={"/community"}>
-                  커뮤니티
-                </NavLink>
-              </div>
+              <Nav.Link href="/">홈</Nav.Link>
+              <Nav.Link href="">카테고리</Nav.Link>
+              <Nav.Link href="/fundings">펀딩</Nav.Link>
+              <Nav.Link href="/community">커뮤니티</Nav.Link>
             </div>
             <div className={classes.right}>
               <SearchModal />
             </div>
-          </div>
-        </Container>
+          </Nav>
+        </Navbar>
       </header>
     </>
   );

@@ -19,6 +19,10 @@
     background: transparent;
 }
 
+.search_bar::placeholder {
+font-size: 14px;
+color:var(--teritary);
+}
 
 .search_bar_button {
     /* margin-left: -40px; */
