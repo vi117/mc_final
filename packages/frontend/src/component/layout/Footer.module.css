@@ -1,7 +1,7 @@
 .footer_container{
     max-width: var(--max-content-width);
     margin: 0 auto;
-
+    padding:30px 0px 60px 0px;
     display: flex;
 }
 .footer_logo {

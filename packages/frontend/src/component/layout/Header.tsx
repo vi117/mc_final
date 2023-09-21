@@ -1,5 +1,5 @@
+import { Nav, Navbar } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
-
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
@@ -67,13 +67,15 @@ export function Header() {
     <header className={classes.header_container}>
       <div className={classes.logo_container}>
         <div className={classes.page_logo}>
-          <LogoSvg
-            style={{
-              width: "240px",
-              height: "30px",
-            }}
-            viewBox="0 0 975 115"
-          />
+          <NavLink to={`/`}>
+            <LogoSvg
+              style={{
+                width: "240px",
+                height: "30px",
+              }}
+              viewBox="0 0 975 115"
+            />
+          </NavLink>
         </div>
         <div className={classes.page_profile_container}>
           <LoginButton></LoginButton>
@@ -96,34 +98,20 @@ export function Header() {
           )}
         </div>
       </div>
-      <div className={classes.header_nav_container}>
-        <div className={classes.left}>
-          <div className={classes.nav_item}>
-            <RxHamburgerMenu />
+      <Navbar bg="transparent" data-bs-theme="light">
+        <Nav variant="underline" className={classes.header_nav_container}>
+          <div className={classes.left}>
+            <RxHamburgerMenu style={{ marginRight: "7px" }} />
+            <Nav.Link href="/">홈</Nav.Link>
+            <Nav.Link href="">카테고리</Nav.Link>
+            <Nav.Link href="/fundings">펀딩</Nav.Link>
+            <Nav.Link href="/community">커뮤니티</Nav.Link>
           </div>
-          <div className={classes.nav_item}>
-            <NavLink to={"/"}>
-              홈
-            </NavLink>
+          <div className={classes.right}>
+            <SearchBar />
           </div>
-          <div className={classes.nav_item}>
-            카테고리
-          </div>
-          <div className={classes.nav_item}>
-            <NavLink to={"/fundings"}>
-              펀딩
-            </NavLink>
-          </div>
-          <div className={classes.nav_item}>
-            <NavLink to={"/community"}>
-              커뮤니티
-            </NavLink>
-          </div>
-        </div>
-        <div className={classes.right}>
-          <SearchBar />
-        </div>
-      </div>
+        </Nav>
+      </Navbar>
     </header>
   );
 }
