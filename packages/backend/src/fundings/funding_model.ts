@@ -88,7 +88,7 @@ export class FundingsRepository {
     const offset = options?.offset ?? 0;
     const cursor = options?.cursor;
     const user_id = options?.user_id ?? null;
-    const begin_date = options?.begin_date ?? new Date();
+    const begin_date = options?.begin_date;
     const end_date = options?.end_date ?? new Date();
     const include_deleted = options?.include_deleted ?? false;
     const tags = options?.tags;
@@ -156,9 +156,13 @@ export class FundingsRepository {
         (qb) => qb.where("fundings.deleted_at", "is", null),
       )
       .where("fundings.begin_date", "<", end_date)
-      .where("fundings.end_date", ">=", begin_date)
+      .$if(
+        begin_date !== undefined,
+        (qb) => qb.where("fundings.end_date", "<=", begin_date ?? new Date()),
+      )
       .limit(limit)
       .offset(offset)
+      .orderBy("fundings.created_at", "desc")
       .$call(log_query(debug));
 
     const rows = await query.execute();
