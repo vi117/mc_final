@@ -83,20 +83,22 @@ export function Header() {
               </Nav>
               {userId !== null && (
                 <Nav>
-                  <span className={classes.header_logo_nav}>
-                    <CgProfile
-                      color="#555555"
-                      style={{
-                        marginRight: "5px",
-                        width: "20px",
-                        height: "20px",
-                        marginLeft: "10px",
-                      }}
-                    />
-                    <span style={{ fontSize: "12px" }}>
-                      프로파일
+                  <NavLink to={`/profile`}>
+                    <span className={classes.header_logo_nav}>
+                      <CgProfile
+                        color="#555555"
+                        style={{
+                          marginRight: "5px",
+                          width: "20px",
+                          height: "20px",
+                          marginLeft: "10px",
+                        }}
+                      />
+                      <span style={{ fontSize: "12px" }}>
+                        내정보
+                      </span>
                     </span>
-                  </span>
+                  </NavLink>
                 </Nav>
               )}
             </Navbar.Collapse>

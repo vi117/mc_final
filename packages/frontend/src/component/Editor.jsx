@@ -7,6 +7,7 @@ export const Editor = ({
   return (
     <div>
       <ReactQuill
+        style={{ height: "400px" }}
         value={value}
         onChange={onChange}
         modules={{
