@@ -57,7 +57,7 @@ const fundings = [
     current_value: "500",
   },
   {
-    id: 4,
+    id: 5,
     title: "funding 1",
     thumbnail: placeholder,
     tag: "고양이",
@@ -66,7 +66,7 @@ const fundings = [
     current_value: "500",
   },
   {
-    id: 4,
+    id: 6,
     title: "funding 1",
     thumbnail: placeholder,
     tag: "고양이",
@@ -75,7 +75,7 @@ const fundings = [
     current_value: "500",
   },
   {
-    id: 4,
+    id: 7,
     title: "funding 1",
     thumbnail: placeholder,
     tag: "고양이",
@@ -127,7 +127,7 @@ const FundingsDetail = function() {
         </Col>
 
         <Col className={classes.tags}>
-          {funding.tags.map((tag) => <Badge>{tag.tag}</Badge>)}
+          {funding.tags.map((tag) => <Badge key={tag.id}>{tag.tag}</Badge>)}
         </Col>
       </Row>
 

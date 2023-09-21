@@ -147,7 +147,7 @@ export class FundingsRepository {
               "funding_tags.id",
             )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
-            .select(["funding_tags.tag as tag"]),
+            .select(["funding_tags.tag as tag", "funding_tags.id as id"]),
         ).as("tags"),
       ])
       .$if(cursor !== undefined, (qb) => qb.where("id", "<", cursor ?? 0))
@@ -221,7 +221,7 @@ export class FundingsRepository {
               "funding_tags.id",
             )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
-            .select(["funding_tags.tag as tag"]),
+            .select(["funding_tags.tag as tag", "funding_tags.id as id"]),
         ).as("tags"),
         jsonArrayFrom(
           eb.selectFrom("funding_rewards")
