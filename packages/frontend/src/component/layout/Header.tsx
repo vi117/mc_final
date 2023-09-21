@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { loginRevalidate, useLogin } from "../../hook/useLogin";
+import { loginRevalidate, useLoginId } from "../../hook/useLogin";
 import LogoSvg from "../Logo";
 import SearchModal from "../SearchModal";
 import classes from "./Header.module.css";
@@ -26,7 +26,7 @@ async function logout(): Promise<void> {
 }
 
 function LoginButton() {
-  const userId = useLogin();
+  const userId = useLoginId();
   return userId !== null
     ? (
       <NavLink to={"/"} onClick={logout}>
@@ -62,7 +62,7 @@ function LoginButton() {
 }
 
 export function Header() {
-  const userId = useLogin();
+  const userId = useLoginId();
   console.log(userId);
 
   return (
