@@ -22,6 +22,7 @@ export interface FundingRequestObject {
   meta_parsed: {
     tags: string[];
     rewards: FundingRewardInput[];
+    content_thumbnails?: string[];
   } | null;
 }
 
@@ -50,6 +51,7 @@ export interface FundingObject {
   title: string;
   content: string;
   thumbnail: string;
+  content_thumbnails: string[];
   created_at: Date;
   deleted_at: Date | null;
   updated_at: Date;

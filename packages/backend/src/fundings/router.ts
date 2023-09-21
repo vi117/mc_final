@@ -9,6 +9,7 @@ import { FundingRequestsRepository } from "./request_model";
 
 import upload from "@/file/multer";
 import { checkLogin } from "@/users/jwt";
+import { assert_param } from "@/util/assert_param";
 import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
 import assert from "assert";
 import {
@@ -180,6 +181,8 @@ async function participateFundingHandler(req: Request, res: Response) {
     type: "object",
     properties: {
       address: { type: "string" },
+      recipient: { type: "string" },
+      phone: { type: "string" },
     },
     required: ["address"],
   }, req.body);
@@ -190,7 +193,7 @@ async function participateFundingHandler(req: Request, res: Response) {
     });
     return;
   }
-  const { address } = req.body;
+  const { address, recipient, phone } = req.body;
 
   const user = req.user;
   assert(user);
@@ -200,6 +203,8 @@ async function participateFundingHandler(req: Request, res: Response) {
       funding_id: id,
       reward_id: req_id,
       address: address,
+      recipient: recipient,
+      phone: phone,
     });
   } catch (error) {
     if (error instanceof FundingUsersError) {
@@ -238,13 +243,20 @@ async function withdrawFundingHandler(req: Request, res: Response) {
 }
 
 async function createFundingRequestHandler(req: Request, res: Response) {
-  const thumbnail = req.file?.url;
-  if (!thumbnail) {
+  const files = req.files;
+  if (!files) {
     res.status(StatusCodes.BAD_REQUEST).json({
-      message: "썸네일이 필요합니다.",
+      message: "파일이 필요합니다.",
     });
     return;
   }
+  assert(!(files instanceof Array));
+  const thumbnailArr = files["thumbnail"];
+  assert_param(thumbnailArr.length > 0, "썸네일이 필요합니다.");
+  const thumbnail = thumbnailArr[0].url;
+
+  const content_thumbnails = files["content_thumbnail"].map((file) => file.url);
+
   const requestRepo = new FundingRequestsRepository(getDB());
   const user = req.user;
   assert(user, "로그인이 필요합니다.");
@@ -322,6 +334,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       meta_parsed: ({
         tags: tags,
         rewards: rewards,
+        content_thumbnails: content_thumbnails,
       }),
     });
     res
@@ -409,7 +422,10 @@ router.post(
 router.post(
   "/request/",
   checkLogin(),
-  upload.single("thumbnail"),
+  upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "content_thumbnail", maxCount: 5 },
+  ]),
   RouterCatch(createFundingRequestHandler),
 );
 router.post(

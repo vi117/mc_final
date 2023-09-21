@@ -13,7 +13,7 @@ function createMinioMulter() {
       accessKey: process.env.S3_ACCESS_KEY ?? "",
       secretKey: process.env.S3_SECRET_KEY ?? "",
       endPoint: process.env.S3_ENDPOINT ?? "",
-      useSSL: false,
+      useSSL: process.env.S3_USE_SSL === "true",
       bucket: process.env.S3_BUCKET ?? "",
       filename: (_req, file, cb) => {
         const ext = path.extname(file.originalname);

@@ -108,6 +108,9 @@ const FundingsDetail = function() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+  const content_thumbnails = funding.content_thumbnails.length > 0
+    ? funding.content_thumbnails
+    : [funding.thumbnail];
   return (
     <Container
       style={{ paddingTop: "20px", "maxWidth": "var(--max-content-width)" }}
@@ -132,24 +135,11 @@ const FundingsDetail = function() {
       <Row>
         <Col sm={8}>
           <Carousel slide={false}>
-            <Carousel.Item>
-              <img src={placeholder} text="First slide" />
-              <Carousel.Caption>
-                <h3>썸네일 Carousel or 사진한장</h3>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={placeholder} text="Second slide" />
-              <Carousel.Caption>
-                <h3>썸네일 Carousel or 사진한장</h3>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={placeholder} text="Third slide" />
-              <Carousel.Caption>
-                <h3>Third slide label</h3>
-              </Carousel.Caption>
-            </Carousel.Item>
+            {content_thumbnails.map((thumbnail) => (
+              <Carousel.Item key={thumbnail}>
+                <img src={thumbnail} />
+              </Carousel.Item>
+            ))}
           </Carousel>
         </Col>
 
