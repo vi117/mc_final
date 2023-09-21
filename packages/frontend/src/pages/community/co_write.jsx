@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import { TagsInput } from "react-tag-input-component";
 import { Editor } from "../../component/Editor";
 import { ANIMAL_CATEGORY } from "./constant";
+import "./styles/tags.css";
 
 const selectList = ANIMAL_CATEGORY.map((v) => ({
   value: v,
@@ -21,7 +22,7 @@ const TagWrite = ({
       <TagsInput
         value={selected}
         onChange={onChange}
-        placeHolder="태그를 입력해주세요"
+        placeHolder="엔터로 태그를 입력해주세요"
       />
     </div>
   );
@@ -62,7 +63,6 @@ const CommunityWrite = () => {
           </option>
           {selectList.map((item) => (
             <option
-              className={classes["catSelectList"]}
               value={item.value}
               key={item.value}
             >
@@ -88,7 +88,6 @@ const CommunityWrite = () => {
           placeholder="제목을 입력해주세요"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          style={{ marginBottom: "-2px" }}
         />
         <div className={baseClasses["co_textarea"]}>
           <Editor
