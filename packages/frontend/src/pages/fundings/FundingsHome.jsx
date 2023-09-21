@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import { useState } from "react";
-import { Button, Container, ProgressBar } from "react-bootstrap";
+import { Badge, Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useSWR from "swr";
@@ -128,7 +128,7 @@ const FundingsHome = function() {
                 }}
                 alt="썸네일 이미지"
               />
-              <div>tag1,tag2...{x.tag}</div>
+              <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>
               <h5>{x.title}</h5>
               <h6 className={classes.zzzzzzzzzzzzzzz}>{x.content}</h6>
               <div>

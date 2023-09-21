@@ -1,4 +1,6 @@
 import { CgProfile } from "react-icons/cg";
+
+import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
 import { loginRevalidate, useLogin } from "../../hook/useLogin";
@@ -22,6 +24,41 @@ async function logout(): Promise<void> {
   console.log("logout success");
 }
 
+function LoginButton() {
+  const userId = useLogin();
+  return userId !== null
+    ? (
+      <NavLink to={"#"} onClick={logout}>
+        <p className={classes.header_login_btn}>
+          <FiLogOut
+            color="#555555"
+            style={{
+              marginRight: "5px",
+              width: "20px",
+              height: "20px",
+            }}
+          />
+          로그아웃
+        </p>
+      </NavLink>
+    )
+    : (
+      <NavLink to={"/login"}>
+        <p className={classes.header_login_btn}>
+          <FiLogIn
+            color="#555555"
+            style={{
+              marginRight: "5px",
+              width: "20px",
+              height: "20px",
+            }}
+          />
+          로그인
+        </p>
+      </NavLink>
+    );
+}
+
 export function Header() {
   const userId = useLogin();
   console.log(userId);
@@ -38,11 +75,12 @@ export function Header() {
             viewBox="0 0 975 115"
           />
         </div>
-        <div className="">
-          {userId !== null
-            ? (
-              <NavLink to={"#"} onClick={logout}>
-                <p className={classes.header_login_btn}>
+        <div className={classes.page_profile_container}>
+          <LoginButton></LoginButton>
+          {userId !== null && (
+            <>
+              <NavLink to={`/profile`}>
+                <span>
                   <CgProfile
                     color="#555555"
                     style={{
@@ -51,25 +89,11 @@ export function Header() {
                       height: "20px",
                     }}
                   />
-                  로그아웃
-                </p>
+                  내 정보
+                </span>
               </NavLink>
-            )
-            : (
-              <NavLink to={"/login"}>
-                <p className={classes.header_login_btn}>
-                  <CgProfile
-                    color="#555555"
-                    style={{
-                      marginRight: "5px",
-                      width: "20px",
-                      height: "20px",
-                    }}
-                  />
-                  로그인
-                </p>
-              </NavLink>
-            )}
+            </>
+          )}
         </div>
       </div>
       <div className={classes.header_nav_container}>
