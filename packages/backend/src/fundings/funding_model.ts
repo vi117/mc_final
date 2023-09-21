@@ -1,7 +1,10 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
+import { FundingObject, FundingRewards } from "dto";
 import { Insertable, Kysely, Updateable } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
+
+export { FundingObject, FundingRewards };
 
 const debug = debug_fn("joinify:db");
 
@@ -37,44 +40,6 @@ export interface FindAllUsersOptions {
 
 export interface FindOneOptions {
   user_id?: number;
-}
-
-export interface FundingRewards {
-  id: number;
-  title: string;
-  content: string;
-  price: number;
-  reward_count: number;
-  reward_current_count: number;
-  created_at: Date;
-  deleted_at: Date | null;
-}
-
-export interface FundingObject {
-  id: number;
-  title: string;
-  content: string;
-  thumbnail: string;
-  created_at: Date;
-  deleted_at: Date | null;
-  updated_at: Date;
-  target_value: number;
-  current_value: number;
-  begin_date: Date;
-  end_date: Date;
-
-  host_id: number;
-
-  host_nickname: string;
-  host_profile_image: string | null;
-  host_email: string;
-
-  interest_funding_id?: number | null;
-  participated_reward_id?: number | null;
-
-  tags: {
-    tag: string;
-  }[];
 }
 
 export class FundingsRepository {
@@ -277,7 +242,7 @@ export class FundingsRepository {
           eb.selectFrom("funding_tags")
             .where("funding_tags.tag", "in", tag_names)
             .select(["id", eb.val(funding_id).as("funding_id")]),
-      );
+      ).execute();
   }
   async insertRewards(
     rewards: Insertable<DB["funding_rewards"]>[],
@@ -363,5 +328,31 @@ export class FundingUsersRepository {
       .where("funding_users.user_id", "=", user_id)
       .where("funding_users.funding_id", "=", funding_id)
       .executeTakeFirstOrThrow();
+  }
+}
+
+export class FundingTagRepo {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+
+  async insert(funding_tag: Insertable<DB["funding_tags"]>[]) {
+    await this.db.insertInto("funding_tags")
+      .values(funding_tag)
+      .execute();
+  }
+
+  async getAll() {
+    return await this.db.selectFrom("funding_tags")
+      .selectAll("funding_tags")
+      .execute();
+  }
+
+  async intersectTags(tag_names: string[]) {
+    return await this.db.selectFrom("funding_tags")
+      .where("funding_tags.tag", "in", tag_names)
+      .selectAll("funding_tags")
+      .execute();
   }
 }

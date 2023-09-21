@@ -1,33 +1,15 @@
-*{
-  padding: 0;
-  margin: 0;
-  border: none;
-}
-
-body {
-  
-  display: flex;
-  justify-content: center; 
-  align-items: center;
- 
-}
-
-.container > h2{
+.container > h1{
   display: flex;
   justify-content: center; 
   align-items: center;
   margin-top: 15px;
   margin-bottom: 20px;
-  font-size: 24px;
-
+  font-size: 2em;
 }
 
 .img-wrapper {
-  max-width: 150%;
-  width: 150px;
-  max-height: 100%;
-  margin-left: 370px;
-  margin-top: 30px;
+  width: 180px;
+  margin: auto;
 }
   
 .CheckboxLabels {

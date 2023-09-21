@@ -2,6 +2,7 @@ import { isDuplKeyError, safeTransaction } from "@/db/util";
 import {
   FundingRewardsRepository,
   FundingsRepository,
+  FundingTagRepo,
   FundingUsersRepository,
 } from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
@@ -17,6 +18,8 @@ export async function approveFundingRequest(request_id: number) {
   return await safeTransaction(async (db) => {
     const requestRepo = new FundingRequestsRepository(db);
     const fundingRepo = new FundingsRepository(db);
+    const fundingTagRepo = new FundingTagRepo(db);
+
     const request = await requestRepo.findById(request_id);
     if (request === undefined) {
       throw new FundingApproveError("존재하지 않는 요청 ID");
@@ -48,31 +51,50 @@ export async function approveFundingRequest(request_id: number) {
       if (meta === undefined) {
         throw new FundingApproveError("meta does not exist");
       }
-      const funding_id = await fundingRepo.insert({
-        title: request.title,
-        content: request.content,
-        thumbnail: request.thumbnail,
-        target_value: request.target_value,
-        begin_date: request.begin_date,
-        end_date: request.end_date,
-        host_id: request.host_id,
-      });
+      let funding_id: number | undefined;
+      try {
+        funding_id = await fundingRepo.insert({
+          title: request.title,
+          content: request.content,
+          thumbnail: request.thumbnail,
+          target_value: request.target_value,
+          begin_date: request.begin_date,
+          end_date: request.end_date,
+          host_id: request.host_id,
+        });
+      } catch (error) {
+        if (isDuplKeyError(error)) {
+          throw new FundingApproveError("duplicated title");
+        }
+        throw error;
+      }
       if (funding_id === undefined) {
         throw new FundingApproveError("삽입 실패");
       }
+      const v = funding_id;
+      const included_tag = (await fundingTagRepo.intersectTags(meta.tags)).map((
+        t,
+      ) => t.tag);
+      const not_included_tag = meta.tags.filter(
+        (t) => !included_tag.includes(t),
+      );
+      await fundingTagRepo.insert(not_included_tag.map((t) => ({
+        tag: t,
+      })));
       await fundingRepo.insertTagsByName(funding_id, meta.tags);
       await fundingRepo.insertRewards(meta.rewards.map((r) => ({
         title: r.title,
         content: r.content,
         price: r.price,
         reward_count: r.reward_count,
-        funding_id: funding_id,
+        funding_id: v,
       })));
 
       result_funding_id = funding_id;
     }
     await requestRepo.updateById(request_id, {
       funding_request_id: result_funding_id,
+      funding_state: 1,
     });
   });
 }
