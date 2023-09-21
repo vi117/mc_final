@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Modal, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import useSWR from "swr";
+import useArticles from "../../../hook/useArticles";
 import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
 import Category from "./category";
@@ -22,50 +22,6 @@ function loadCategoryFilter() {
     return JSON.parse(categories);
   }
   return null;
-}
-
-function useArticles({
-  offset = 0,
-  limit = 50,
-  categories,
-  tags,
-  orderBy,
-  /**
-   * if true, include deleted articles. admin only.
-   * @param {boolean}
-   */
-  include_deleted,
-}) {
-  const url = new URL("/api/v1/articles", window.location.href);
-  url.searchParams.append("offset", offset);
-  url.searchParams.append("limit", limit);
-
-  if (categories && categories.length < animals.length) {
-    categories.forEach((category) => {
-      url.searchParams.append("categories[]", category);
-    });
-  }
-  if (tags && tags.length > 0) {
-    tags.forEach((tag) => {
-      url.searchParams.append("tags[]", tag);
-    });
-  }
-
-  if (["id", "like_count"].includes(orderBy)) {
-    url.searchParams.append("orderBy", orderBy);
-  } else {
-    console.error("orderBy value isn't acceptable. value: ", orderBy);
-    url.searchParams.append("orderBy", "id");
-  }
-
-  if (include_deleted) {
-    url.searchParams.append("include_deleted", "true");
-  }
-
-  return useSWR(
-    url.href,
-    (url) => fetch(url).then((res) => res.json()),
-  );
 }
 
 const Board = () => {

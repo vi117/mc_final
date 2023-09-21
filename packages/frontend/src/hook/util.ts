@@ -1,5 +1,5 @@
-type DateToISOString<T extends Date> = T extends Date ? string : never;
+type DateToISOString<T> = T extends Date ? string : T;
 
 export type DateToString<T> = {
-  [P in keyof T]: T[P] extends Date ? DateToISOString<T[P]> : T[P];
+  [P in keyof T]: DateToISOString<T[P]>;
 };

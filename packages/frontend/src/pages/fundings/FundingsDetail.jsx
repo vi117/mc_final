@@ -13,7 +13,7 @@ import {
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
-import useSWR from "swr";
+import useFundingDetail from "../../hook/useFundingDetail";
 import { useLogin } from "../../hook/useLogin";
 import classes from "./FundingsDetail.module.css";
 
@@ -87,10 +87,8 @@ const fundings = [
 
 const FundingsDetail = function() {
   const { id } = useParams();
-  const { data: funding, error, isLoading, mutate } = useSWR(
-    `/api/v1/fundings/${id}`,
-    (url) => fetch(url).then((res) => res.json()),
-  );
+  const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
+
   const user_id = useLogin();
   const [selectedReward, setSelectedReward] = useState(null);
   useEffect(() => {

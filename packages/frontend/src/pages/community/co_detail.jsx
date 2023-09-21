@@ -1,26 +1,11 @@
 import { AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import useSWR from "swr";
+import useArticleDetail from "../../hook/useArticleDetail";
 import { useLogin } from "../../hook/useLogin";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
-
-function useArticleDetail(id, {
-  with_comments = false,
-} = {}) {
-  const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
-
-  if (with_comments) {
-    url.searchParams.append("with_comments", "true");
-  }
-
-  return useSWR(
-    url.href,
-    (url) => fetch(url).then((res) => res.json()),
-  );
-}
 
 export function CommunityDetail() {
   const user_id = useLogin();
@@ -42,14 +27,6 @@ export function CommunityDetail() {
   }
   const item = fetcherData;
 
-  const deleteMessage = () => {
-    if (confirm("정말로 삭제하시겠습니까?") == true) {
-      alert("삭제되었습니다"); // 삭제 기능 나중에 구현
-    } else {
-      return false;
-    }
-  };
-
   const liked = user_id === item.like_user_id;
   return (
     <div className={classes["coDetailWrap"]}>
@@ -60,7 +37,7 @@ export function CommunityDetail() {
             <Link to={`/community/${item.id}/edit`}>
               <button className={classes["editbtn"]}>수정</button>
             </Link>
-            <button onClick={deleteMessage}>삭제</button>
+            <button onClick={deleteArticle}>삭제</button>
           </div>
         </div>
         <div className={classes["createdArea"]}>
@@ -109,6 +86,13 @@ export function CommunityDetail() {
       </div>
     </div>
   );
+  async function deleteArticle() {
+    if (confirm("정말로 삭제하시겠습니까?") == true) {
+      alert("삭제되었습니다"); // 삭제 기능 나중에 구현
+    } else {
+      return false;
+    }
+  }
   async function registerComment(c) {
     const url = new URL(
       `/api/v1/articles/${id}/comments`,
