@@ -1,6 +1,6 @@
-import { ANIMAL_CATEGORY } from "@/pages/community/constant";
 import { ArticleObject } from "dto";
 import useSWR from "swr";
+import { ANIMAL_CATEGORY } from "../pages/community/constant";
 import { DateToString } from "./util";
 
 interface UseArticleOptions {

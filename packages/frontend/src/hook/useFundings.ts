@@ -2,7 +2,7 @@ import { FundingObject } from "dto";
 import useSWR from "swr";
 import { DateToString } from "./util";
 
-export function useFundings({
+export default function useFundings({
   offset = 0,
   limit = 50,
 }) {

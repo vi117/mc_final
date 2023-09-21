@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Badge, Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
-import useFundings from "../../hooks/useFundings";
+import useFundings from "../../hook/useFundings";
 import classes from "./FundingsDetail.module.css";
 
 // const placerholder = "https://via.placeholder.com/100x100";
