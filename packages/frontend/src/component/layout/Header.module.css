@@ -47,3 +47,8 @@
     margin:  0px 10px 0px 10px;
 }
 
+.page_profile_container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
