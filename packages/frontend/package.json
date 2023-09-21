@@ -39,6 +39,7 @@
     "stylis": "^4.3.0",
     "typescript-plugin-css-modules": "^5.0.1",
     "vite": "^4.4.9",
-    "vite-plugin-fast-react-svg": "^0.4.0"
+    "vite-plugin-fast-react-svg": "^0.4.0",
+    "dto": "*"
   }
 }

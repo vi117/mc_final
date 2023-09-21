@@ -1,41 +1,12 @@
 import { DB } from "@/db/util";
+import {
+  FundingMetaParsed,
+  FundingRequestObject,
+  FundingRewardInput,
+} from "dto";
 import { Insertable, Kysely, Updateable } from "kysely";
 
-export interface FundingRewardInput {
-  title: string;
-  content: string;
-  price: number;
-  reward_count: number;
-}
-
-export interface FundingRequestObject {
-  id: number;
-  title: string;
-  content: string;
-  thumbnail: string;
-  created_at: Date;
-  deleted_at: Date | null;
-  updated_at: Date;
-  funding_state: number;
-  reason: string | null;
-  funding_request_id: number | null;
-  host_id: number;
-  target_value: number;
-  begin_date: Date;
-  end_date: Date;
-
-  host_nickname: string;
-  host_profile_image: string | null;
-  host_email: string;
-
-  meta: string | null;
-  meta_parsed: {
-    tags: string[];
-    rewards: FundingRewardInput[];
-  } | null;
-}
-
-export type FundingMetaParsed = FundingRequestObject["meta_parsed"];
+export { FundingMetaParsed, FundingRequestObject, FundingRewardInput };
 
 export class FundingRequestsRepository {
   db: Kysely<DB>;

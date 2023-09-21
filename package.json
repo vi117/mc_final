@@ -22,7 +22,8 @@
   "private": "true",
   "workspaces": [
     "packages/frontend",
-    "packages/backend"
+    "packages/backend",
+    "packages/dto"
   ],
   "homepage": "https://github.com/vi117/mc_final#readme",
   "devDependencies": {

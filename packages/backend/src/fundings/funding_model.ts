@@ -1,7 +1,10 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
+import { FundingObject, FundingRewards } from "dto";
 import { Insertable, Kysely, Updateable } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
+
+export { FundingObject, FundingRewards };
 
 const debug = debug_fn("joinify:db");
 
@@ -37,44 +40,6 @@ export interface FindAllUsersOptions {
 
 export interface FindOneOptions {
   user_id?: number;
-}
-
-export interface FundingRewards {
-  id: number;
-  title: string;
-  content: string;
-  price: number;
-  reward_count: number;
-  reward_current_count: number;
-  created_at: Date;
-  deleted_at: Date | null;
-}
-
-export interface FundingObject {
-  id: number;
-  title: string;
-  content: string;
-  thumbnail: string;
-  created_at: Date;
-  deleted_at: Date | null;
-  updated_at: Date;
-  target_value: number;
-  current_value: number;
-  begin_date: Date;
-  end_date: Date;
-
-  host_id: number;
-
-  host_nickname: string;
-  host_profile_image: string | null;
-  host_email: string;
-
-  interest_funding_id?: number | null;
-  participated_reward_id?: number | null;
-
-  tags: {
-    tag: string;
-  }[];
 }
 
 export class FundingsRepository {
