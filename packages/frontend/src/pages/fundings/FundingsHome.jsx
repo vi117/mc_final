@@ -134,7 +134,8 @@ const FundingsHome = function() {
               <div>
                 <ProgressBar
                   now={(x.current_value / x.target_value) * 100}
-                  label={(x.current_value / x.target_value) * 100}
+                  label={((x.current_value / x.target_value) * 100).toFixed(2)
+                    + "%"}
                 />
               </div>
             </NavLink>
