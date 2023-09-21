@@ -8,8 +8,6 @@ export function HomePage() {
     setIndex(selectedIndex);
   };
 
-  const placeholder = "https://via.placeholder.com/1200x375";
-
   return (
     <>
       <div className="main-home-container">
@@ -20,13 +18,24 @@ export function HomePage() {
             indicators={false}
           >
             <Carousel.Item>
+              <Carousel.Caption>
+                <h3>시선집중 스페셜 기획전</h3>
+                <p>해피테일즈 단독 펀딩을 살펴보세요</p>
+              </Carousel.Caption>
+              <div className="img-overlay" />
               <img src="/sample.png" className="carousel_img"></img>
             </Carousel.Item>
             <Carousel.Item>
-              <img src="/sample.png" className="carousel_img"></img>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src="/sample.png" className="carousel_img"></img>
+              <Carousel.Caption>
+                <h3>만나서 반가워요!</h3>
+                <p>즉시 할인 신규 가입 혜택 알아보기</p>
+              </Carousel.Caption>
+              <div className="img-overlay" />
+              <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjR5fRTjU1l0RaTtMemRHeUcJsoamu3P9NDYQ1pfol5UnLm0el77VzVGk-z1j73uvegJr3f9mySNDSG2kB-gvy6Fa-oArqx-jc68I8lKzSzetKSayZAk8HM1Z0zebs4T2d8mBwaru_VfswQURZO8Qv-fiZbCEEYw-iXajUbw-Tm5Tvv1RX11QGVW3slfZjx/s1920/banner1.jpg"
+                className="carousel_img"
+              >
+              </img>
             </Carousel.Item>
           </Carousel>
         </div>
@@ -46,7 +55,11 @@ export function HomePage() {
                 </img>
               </Carousel.Item>
               <Carousel.Item>
-                <img src={placeholder} className="carousel_img"></img>
+                <img
+                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaCXnYJqJV0CWbJumvp_dlYSf6p9D0uzCGho7vbgVeOk26dksQuyOxdhtM-hEXHRJiugXNKBStP2x4ykZ11cSU5raxTtfYIOXsEZJ1kPKDO60lNy6MiF7-gb9LwJGRL8Ujg2JVOskPbjpTLJHN2h3i5GTHlSthkSuFNQDuV2QPm_PVOCnGbl3PXLVEnJeJ/s1178/funding4.jpg"
+                  className="carousel_img"
+                >
+                </img>
               </Carousel.Item>
             </Carousel>
           </div>
@@ -63,7 +76,11 @@ export function HomePage() {
                 </img>
               </Carousel.Item>
               <Carousel.Item>
-                <img src={placeholder} className="carousel_img"></img>
+                <img
+                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSObSVrzZy97-7DzmzA1db8c4vhSMZvrdioiDLRMC8BFv7Bh6diebLP1mdP41IBDKjspey2INOTnQ9Q5Rt6iZQBbKYvCbWC3yCldufr780bHzNa0HVnLR8I41_g45bkF-wXMqafSv85tLGR16kppPP02kOsd3dpkL9QYUZcHVPTjpidKB1hiBY07dGbUCW/s1178/funding3.jpg"
+                  className="carousel_img"
+                >
+                </img>
               </Carousel.Item>
             </Carousel>
           </div>

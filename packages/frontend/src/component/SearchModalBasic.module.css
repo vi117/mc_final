@@ -17,7 +17,7 @@
 
   /* 모달창 디자인 */
   background-color: white;
-  border: 1px solid #ccc;
+  border: 1px solid var(--secondary);
   border-radius: 8px;
 }
 

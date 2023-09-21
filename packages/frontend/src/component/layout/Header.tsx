@@ -47,8 +47,9 @@ function LoginButton() {
       <NavLink to={"/login"}>
         <p className={classes.header_login_btn}>
           <FiLogIn
-            color="#555555"
+            color="#6d6d6d"
             style={{
+              color: "#6d6d6d",
               marginRight: "5px",
               width: "20px",
               height: "20px",
@@ -69,12 +70,14 @@ export function Header() {
       <header className={classes.header_container}>
         <Navbar expand="sm">
           <Container className="header-brand-container">
-            <Navbar.Brand>
-              <LogoSvg
-                style={{ width: "240px", height: "30px" }}
-              >
-              </LogoSvg>
-            </Navbar.Brand>
+            <NavLink to={"/"}>
+              <Navbar.Brand>
+                <LogoSvg
+                  style={{ width: "240px", height: "30px" }}
+                >
+                </LogoSvg>
+              </Navbar.Brand>
+            </NavLink>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end gap-3 ">
               <Nav>
