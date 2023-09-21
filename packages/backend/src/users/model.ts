@@ -1,6 +1,9 @@
 import { DB, getDB } from "@/db/util";
 import { hash as argon2_hash } from "argon2";
+import { UserObject } from "dto";
 import { Insertable, Kysely } from "kysely";
+
+export { UserObject };
 
 export interface FindAllUsersOptions {
   /**
@@ -13,21 +16,6 @@ export interface FindAllUsersOptions {
    * @default 0
    */
   offset?: number;
-}
-
-export interface UserObject {
-  id: number;
-  nickname: string;
-  profile_image: string | null;
-  email: string;
-  email_approved: number;
-  is_admin: number;
-  phone: string;
-  address: string;
-  password: string;
-  introduction: string | null;
-  created_at: Date;
-  deleted_at: Date | null;
 }
 
 export interface IUserRepository {

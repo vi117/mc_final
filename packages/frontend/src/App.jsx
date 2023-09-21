@@ -23,6 +23,7 @@ import ForgotPasswordPage from "./pages/forgot-password";
 import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
 
+import AdminPage from "./pages/admin/index";
 import { GoogleLogin } from "./pages/sns_login/google";
 
 const browserRouter = createBrowserRouter([
@@ -107,12 +108,27 @@ const browserRouter = createBrowserRouter([
       { path: "/fundings/:id/edit", element: <FundingsEdit /> },
       /**
        * 펀딩 글 작성
-       */ { path: "/fundings/post", element: <FundingsWrite /> },
+       */
+      { path: "/fundings/post", element: <FundingsWrite /> },
+      /**
+       * Google 로그인 처리
+       */
       { path: "/google-login", element: <GoogleLogin></GoogleLogin> },
-      { path: "*", element: <h1>Not Found</h1> },
       /**
        * 펀딩 후원 결제 페이지
-       */ { path: "/fundings/:id/pay", element: <FundingsPay /> },
+       */
+      { path: "/fundings/:id/pay", element: <FundingsPay /> },
+      /**
+       * admin 페이지
+       */
+      {
+        path: "/admin",
+        element: <AdminPage />,
+      },
+      /**
+       * Not Found
+       */
+      { path: "*", element: <h1>Not Found</h1> },
     ],
   },
 ]);

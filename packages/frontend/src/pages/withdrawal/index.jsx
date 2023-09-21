@@ -1,12 +1,11 @@
-import { Button, Checkbox, FormControlLabel } from "@mui/material";
-import { Accordion, Alert } from "react-bootstrap";
-import images from "./images/logo.svg";
+import { Accordion, Alert, Button, Form } from "react-bootstrap";
+import Logo from "../../component/Logo";
 import classes from "./withdrawal.module.css";
 
 export default function WithdrawalPage() {
   return (
     <div className={classes["container"]}>
-      <h2 style={{ color: "#0C0002" }}>회원 탈퇴</h2>
+      <h1 style={{ color: "#0C0002" }}>회원 탈퇴</h1>
       <div className={classes["Alert"]}>
         <Alert variant="danger">
           탈퇴 시 전자금융거래법에 따라 금융 거래기록은 5년 뒤 파기됩니다. 다른
@@ -14,7 +13,7 @@ export default function WithdrawalPage() {
         </Alert>
       </div>
       <div className={classes["img-wrapper"]}>
-        <img src={images} alt="logo" />
+        <Logo style={{ width: "100%", height: "100%" }} />
       </div>
       <h4>탈퇴하기 전 꼭 확인하세요!</h4>
       <p>탈퇴하시면 이용중인 모든 페이지가 폐쇄되며,</p>
@@ -34,14 +33,12 @@ export default function WithdrawalPage() {
         </Accordion>
       </div>
       <div className={classes["CheckboxLabels"]}>
-        <FormControlLabel
-          control={<Checkbox defaultChecked />}
-          label="안내사항을 모두 확인하였으며, 이에 동의합니다."
-        />
+        <Form.Check label="안내사항을 모두 확인하였으며, 이에 동의합니다.">
+        </Form.Check>
       </div>
       <div className={classes["Button"]}>
-        <Button variant="contained">탈퇴하기</Button>
-        <Button variant="contained">취소</Button>
+        <Button variant="danger">탈퇴하기</Button>
+        <Button variant="secondary">취소</Button>
       </div>
     </div>
   );

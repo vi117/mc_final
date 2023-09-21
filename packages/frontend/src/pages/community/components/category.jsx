@@ -8,7 +8,10 @@ import CustomToggle from "./Toggle";
 
 const animals = ANIMAL_CATEGORY;
 
-const Category = ({ selectCategoryFilter, selectOrderBy = () => {} }) => {
+const Category = (
+  { selectCategoryFilter, selectOrderBy, setIsModalOpen = () => {} },
+) => {
+  console.log("setIsModalOpen:", setIsModalOpen);
   const navigate = useNavigate();
   const goWrite = () => {
     navigate("/community/:id/post");
@@ -38,6 +41,14 @@ const Category = ({ selectCategoryFilter, selectOrderBy = () => {} }) => {
               </Dropdown.Menu>
             </div>
           </Dropdown>
+          <button
+            onClick={() => {
+              console.log("버튼 클릭됨");
+              setIsModalOpen(true);
+            }}
+          >
+            필터링 다시하기
+          </button>
         </div>
         <div className={classes["writebtn"]}>
           <p onClick={goWrite}>

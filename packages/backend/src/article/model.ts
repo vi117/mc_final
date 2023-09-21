@@ -1,7 +1,10 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
+import { ArticleObject, CommentObject } from "dto";
 import { Insertable, Kysely } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
+
+export { ArticleObject, CommentObject };
 
 const debug = debug_fn("joinify:db");
 
@@ -54,42 +57,6 @@ interface FindBaseOptions {
    * tags to search
    */
   tags?: string[];
-}
-
-export interface ArticleObject {
-  id: number;
-  title: string;
-  content: string;
-  created_at: Date;
-  deleted_at: Date | null;
-  updated_at: Date | null;
-  like_count: number;
-  user_id: number;
-  category: string;
-  view_count: number;
-
-  author_id: number;
-  author_nickname: string;
-  author_profile_image: string | null;
-  author_email: string;
-
-  like_user_id?: number | null;
-
-  tags: {
-    tag: string;
-  }[];
-}
-
-export interface CommentObject {
-  id: number;
-  content: string;
-  created_at: Date;
-  deleted_at: Date | null;
-  updated_at: Date | null;
-  user_id: number;
-  nickname: string;
-  profile_image: string | null;
-  email: string;
 }
 
 export class ArticleRepository {
@@ -187,7 +154,7 @@ export class ArticleRepository {
       .offset(offset)
       .$if(
         orderBy !== undefined,
-        (qb) => qb.orderBy(`articles.${orderBy ?? "id"}`),
+        (qb) => qb.orderBy(`articles.${orderBy ?? "id"}`, "desc"),
       )
       .execute();
     return ret;

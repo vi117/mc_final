@@ -1,7 +1,10 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
+import { FundingObject, FundingRewards } from "dto";
 import { Insertable, Kysely, Updateable } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
+
+export { FundingObject, FundingRewards };
 
 const debug = debug_fn("joinify:db");
 
@@ -39,44 +42,6 @@ export interface FindOneOptions {
   user_id?: number;
 }
 
-export interface FundingRewards {
-  id: number;
-  title: string;
-  content: string;
-  price: number;
-  reward_count: number;
-  reward_current_count: number;
-  created_at: Date;
-  deleted_at: Date | null;
-}
-
-export interface FundingObject {
-  id: number;
-  title: string;
-  content: string;
-  thumbnail: string;
-  created_at: Date;
-  deleted_at: Date | null;
-  updated_at: Date;
-  target_value: number;
-  current_value: number;
-  begin_date: Date;
-  end_date: Date;
-
-  host_id: number;
-
-  host_nickname: string;
-  host_profile_image: string | null;
-  host_email: string;
-
-  interest_funding_id?: number | null;
-  participated_reward_id?: number | null;
-
-  tags: {
-    tag: string;
-  }[];
-}
-
 export class FundingsRepository {
   db: Kysely<DB>;
   constructor(db: Kysely<DB>) {
@@ -88,7 +53,7 @@ export class FundingsRepository {
     const offset = options?.offset ?? 0;
     const cursor = options?.cursor;
     const user_id = options?.user_id ?? null;
-    const begin_date = options?.begin_date ?? new Date();
+    const begin_date = options?.begin_date;
     const end_date = options?.end_date ?? new Date();
     const include_deleted = options?.include_deleted ?? false;
     const tags = options?.tags;
@@ -147,7 +112,7 @@ export class FundingsRepository {
               "funding_tags.id",
             )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
-            .select(["funding_tags.tag as tag"]),
+            .select(["funding_tags.tag as tag", "funding_tags.id as id"]),
         ).as("tags"),
       ])
       .$if(cursor !== undefined, (qb) => qb.where("id", "<", cursor ?? 0))
@@ -156,9 +121,13 @@ export class FundingsRepository {
         (qb) => qb.where("fundings.deleted_at", "is", null),
       )
       .where("fundings.begin_date", "<", end_date)
-      .where("fundings.end_date", ">=", begin_date)
+      .$if(
+        begin_date !== undefined,
+        (qb) => qb.where("fundings.end_date", "<=", begin_date ?? new Date()),
+      )
       .limit(limit)
       .offset(offset)
+      .orderBy("fundings.created_at", "desc")
       .$call(log_query(debug));
 
     const rows = await query.execute();
@@ -217,7 +186,7 @@ export class FundingsRepository {
               "funding_tags.id",
             )
             .whereRef("funding_tag_rel.funding_id", "=", "fundings.id")
-            .select(["funding_tags.tag as tag"]),
+            .select(["funding_tags.tag as tag", "funding_tags.id as id"]),
         ).as("tags"),
         jsonArrayFrom(
           eb.selectFrom("funding_rewards")
@@ -273,7 +242,7 @@ export class FundingsRepository {
           eb.selectFrom("funding_tags")
             .where("funding_tags.tag", "in", tag_names)
             .select(["id", eb.val(funding_id).as("funding_id")]),
-      );
+      ).execute();
   }
   async insertRewards(
     rewards: Insertable<DB["funding_rewards"]>[],
@@ -359,5 +328,31 @@ export class FundingUsersRepository {
       .where("funding_users.user_id", "=", user_id)
       .where("funding_users.funding_id", "=", funding_id)
       .executeTakeFirstOrThrow();
+  }
+}
+
+export class FundingTagRepo {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+
+  async insert(funding_tag: Insertable<DB["funding_tags"]>[]) {
+    await this.db.insertInto("funding_tags")
+      .values(funding_tag)
+      .execute();
+  }
+
+  async getAll() {
+    return await this.db.selectFrom("funding_tags")
+      .selectAll("funding_tags")
+      .execute();
+  }
+
+  async intersectTags(tag_names: string[]) {
+    return await this.db.selectFrom("funding_tags")
+      .where("funding_tags.tag", "in", tag_names)
+      .selectAll("funding_tags")
+      .execute();
   }
 }

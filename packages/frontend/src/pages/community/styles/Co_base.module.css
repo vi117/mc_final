@@ -1,26 +1,24 @@
+/*제목입력란*/
 .co_input{
   margin-bottom: 10px;
   margin-top: 10px;
   width: 100%;
   border: 1px solid var(--secondary);
   border-radius: 5px;
+  height: 45px;
+  line-height: 45px;
 }
 
 
-.co_input:focus, {
+.co_input:focus {
   background-color: var(--border);
-  border: 1px solid red;
-  outline: none;
+  outline: none !important;
 }
 
 .co_input::placeholder {
   font-size: 14px;
   color: var(--teritary);
   padding: 7px;
-}
-
-.co_input {
-  height: 40px;
 }
 
 .co_h1 {
@@ -31,7 +29,7 @@
 }
 
 .co_textarea {
+  min-height:450px;
   margin-bottom: 10px;
   margin-top: 10px;
 }
-
