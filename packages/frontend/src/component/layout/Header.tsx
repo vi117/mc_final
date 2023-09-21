@@ -111,11 +111,12 @@ export function Header() {
         <Navbar bg="transparent" data-bs-theme="light">
           <Nav variant="underline" className={classes.header_nav_container}>
             <div className={classes.left}>
-              <Nav.Link href="/">홈</Nav.Link>
-              <Nav.Link href="">카테고리</Nav.Link>
-              <Nav.Link href="/fundings">펀딩</Nav.Link>
-              <Nav.Link href="/community">커뮤니티</Nav.Link>
-            </div>
+              <NavLink className={"nav-link"} to={"/"}>홈</NavLink>
+              <NavLink className={"nav-link"} to={"/fundings"}>펀딩</NavLink>
+              <NavLink className={"nav-link"} to={"/community"}>
+                커뮤니티
+              </NavLink>
+            </div>{" "}
             <div className={classes.right}>
               <SearchModal />
             </div>
