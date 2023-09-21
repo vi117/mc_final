@@ -1,0 +1,11 @@
+.co-page .page-link{
+    background-color: var(--white) !important;
+    border: 1px solid var(--teritary) !important;
+    color: var(--teritary) !important;
+}
+
+.co-page .page-link:hover{
+    background-color: var(--green) !important;
+    border: 1px solid var(--green) !important;
+    color: var(--white) !important;
+}
