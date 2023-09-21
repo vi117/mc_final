@@ -14,7 +14,7 @@ import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import useFundingDetail from "../../hook/useFundingDetail";
-import { useLogin } from "../../hook/useLogin";
+import { useLoginId } from "../../hook/useLogin";
 import classes from "./FundingsDetail.module.css";
 
 const placeholder = "https://via.placeholder.com/850x375";
@@ -89,7 +89,7 @@ const FundingsDetail = function() {
   const { id } = useParams();
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
 
-  const user_id = useLogin();
+  const user_id = useLoginId();
   const [selectedReward, setSelectedReward] = useState(null);
   useEffect(() => {
     if (isLoading) return;
