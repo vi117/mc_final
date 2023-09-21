@@ -418,7 +418,7 @@ router.post(
   RouterCatch(approveFundingRequestHandler),
 );
 router.post(
-  "/request/:id(\\d+)/disapprove",
+  "/request/:id(\\d+)/reject",
   checkLogin({ admin_check: true }),
   RouterCatch(disapproveFundingRequestHandler),
 );

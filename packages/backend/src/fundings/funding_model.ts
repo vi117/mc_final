@@ -242,7 +242,7 @@ export class FundingsRepository {
           eb.selectFrom("funding_tags")
             .where("funding_tags.tag", "in", tag_names)
             .select(["id", eb.val(funding_id).as("funding_id")]),
-      );
+      ).execute();
   }
   async insertRewards(
     rewards: Insertable<DB["funding_rewards"]>[],
@@ -328,5 +328,31 @@ export class FundingUsersRepository {
       .where("funding_users.user_id", "=", user_id)
       .where("funding_users.funding_id", "=", funding_id)
       .executeTakeFirstOrThrow();
+  }
+}
+
+export class FundingTagRepo {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+
+  async insert(funding_tag: Insertable<DB["funding_tags"]>[]) {
+    await this.db.insertInto("funding_tags")
+      .values(funding_tag)
+      .execute();
+  }
+
+  async getAll() {
+    return await this.db.selectFrom("funding_tags")
+      .selectAll("funding_tags")
+      .execute();
+  }
+
+  async intersectTags(tag_names: string[]) {
+    return await this.db.selectFrom("funding_tags")
+      .where("funding_tags.tag", "in", tag_names)
+      .selectAll("funding_tags")
+      .execute();
   }
 }
