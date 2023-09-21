@@ -7,10 +7,6 @@ export default function FundingsPay() {
   const location = useLocation();
   const { funding, selectedReward } = location.state;
   const [address, setAddress] = useState("");
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const remainingDays =
     (new Date(funding.end_date).getTime() - new Date().getTime())
@@ -130,130 +126,7 @@ export default function FundingsPay() {
             </div>
           ))}
         </Form>
-        <Button variant="primary" onClick={handleShow}>
-          + 카드 등록
-        </Button>
-
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>신용/체크 카드 등록</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              {["radio"].map((type) => (
-                <div key={`inline-${type}`} className="mb-3">
-                  <Form.Check
-                    inline
-                    label="개인"
-                    name="group1"
-                    type={type}
-                    id={`inline-${type}-1`}
-                  />
-                  <Form.Check
-                    inline
-                    label="법인"
-                    name="group1"
-                    type={type}
-                    id={`inline-${type}-2`}
-                  />
-                </div>
-              ))}
-            </Form>
-            <div className={classes["NumberWrapper"]}>
-              <Form>
-                <Form.Group className="mb-3" controlId="formGroupEmail">
-                  <Form.Label>카드번호</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="0000-0000-0000-0000 "
-                  />
-                </Form.Group>
-              </Form>
-
-              <p>카드 유효기간</p>
-              <Form.Select aria-label="Default select example">
-                <option>1월</option>
-                <option value="1">2월</option>
-                <option value="2">3월</option>
-                <option value="3">4월</option>
-                <option value="4">5월</option>
-                <option value="5">6월</option>
-                <option value="6">7월</option>
-                <option value="7">8월</option>
-                <option value="8">9월</option>
-                <option value="9">10월</option>
-                <option value="10">11월</option>
-                <option value="11">12월</option>
-              </Form.Select>
-
-              <Form.Select aria-label="Default select example">
-                <option>2023년</option>
-                <option value="1">2024년</option>
-                <option value="2">2025년</option>
-                <option value="3">2026년</option>
-                <option value="4">2027년</option>
-                <option value="5">2028년</option>
-                <option value="6">2029년</option>
-                <option value="7">2030년</option>
-                <option value="8">2031년</option>
-                <option value="9">2032년</option>
-                <option value="10">2033년</option>
-              </Form.Select>
-
-              <Form>
-                <Form.Group className="mb-3" controlId="formGroupEmail">
-                  <Form.Label>카드 비밀번호 앞 두자리</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="앞 두자리를 입력해주세요."
-                  />
-                </Form.Group>
-              </Form>
-
-              <Form>
-                <Form.Group className="mb-3" controlId="formGroupEmail">
-                  <Form.Label>소유주 생년월일</Form.Label>
-                  <Form.Control type="number" placeholder="예) 920101" />
-                </Form.Group>
-              </Form>
-
-              <Form>
-                {["checkbox"].map((type) => (
-                  <div key={`inline-${type}`} className="mb-3">
-                    <Form.Check
-                      inline
-                      label="결정사 정보제공 동의"
-                      name="group1"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                  </div>
-                ))}
-              </Form>
-              <Form>
-                {["checkbox"].map((type) => (
-                  <div key={`inline-${type}`} className="mb-3">
-                    <Form.Check
-                      inline
-                      label="기본 결제수단으로 등록"
-                      name="group1"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                  </div>
-                ))}
-              </Form>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              취소
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              등록 완료
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <CardRegister />
 
         <div className={classes["PledgeAmount"]}>
           <p>
@@ -340,5 +213,140 @@ function FundingPrecaution() {
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
+  );
+}
+
+function CardRegister() {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow}>
+        + 카드 등록
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>신용/체크 카드 등록</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            {["radio"].map((type) => (
+              <div key={`inline-${type}`} className="mb-3">
+                <Form.Check
+                  inline
+                  label="개인"
+                  name="group1"
+                  type={type}
+                  id={`inline-${type}-1`}
+                />
+                <Form.Check
+                  inline
+                  label="법인"
+                  name="group1"
+                  type={type}
+                  id={`inline-${type}-2`}
+                />
+              </div>
+            ))}
+          </Form>
+          <div className={classes["NumberWrapper"]}>
+            <Form>
+              <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Label>카드번호</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="0000-0000-0000-0000 "
+                />
+              </Form.Group>
+            </Form>
+
+            <p>카드 유효기간</p>
+            <Form.Select aria-label="Default select example">
+              <option>1월</option>
+              <option value="1">2월</option>
+              <option value="2">3월</option>
+              <option value="3">4월</option>
+              <option value="4">5월</option>
+              <option value="5">6월</option>
+              <option value="6">7월</option>
+              <option value="7">8월</option>
+              <option value="8">9월</option>
+              <option value="9">10월</option>
+              <option value="10">11월</option>
+              <option value="11">12월</option>
+            </Form.Select>
+
+            <Form.Select aria-label="Default select example">
+              <option>2023년</option>
+              <option value="1">2024년</option>
+              <option value="2">2025년</option>
+              <option value="3">2026년</option>
+              <option value="4">2027년</option>
+              <option value="5">2028년</option>
+              <option value="6">2029년</option>
+              <option value="7">2030년</option>
+              <option value="8">2031년</option>
+              <option value="9">2032년</option>
+              <option value="10">2033년</option>
+            </Form.Select>
+
+            <Form>
+              <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Label>카드 비밀번호 앞 두자리</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="앞 두자리를 입력해주세요."
+                />
+              </Form.Group>
+            </Form>
+
+            <Form>
+              <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Label>소유주 생년월일</Form.Label>
+                <Form.Control type="number" placeholder="예) 920101" />
+              </Form.Group>
+            </Form>
+
+            <Form>
+              {["checkbox"].map((type) => (
+                <div key={`inline-${type}`} className="mb-3">
+                  <Form.Check
+                    inline
+                    label="결정사 정보제공 동의"
+                    name="group1"
+                    type={type}
+                    id={`inline-${type}-1`}
+                  />
+                </div>
+              ))}
+            </Form>
+            <Form>
+              {["checkbox"].map((type) => (
+                <div key={`inline-${type}`} className="mb-3">
+                  <Form.Check
+                    inline
+                    label="기본 결제수단으로 등록"
+                    name="group1"
+                    type={type}
+                    id={`inline-${type}-1`}
+                  />
+                </div>
+              ))}
+            </Form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            취소
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            등록 완료
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
