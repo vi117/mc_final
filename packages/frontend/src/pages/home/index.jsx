@@ -43,11 +43,10 @@ export function HomePage() {
       <div
         style={{
           margin: "auto",
-          width: "1200px",
         }}
       >
         금주의 베스트 펀딩을 확인해보세요!
-        <Carousel style={{ width: "1200px" }}>
+        <Carousel style={{}}>
           <Carousel.Item>
             <img src={placeholder} className="carousel_img"></img>
             <Carousel.Caption>
@@ -69,7 +68,7 @@ export function HomePage() {
         </Carousel>
         신규 펀딩을 확인해 보세요!
 
-        <Carousel style={{ width: "1200px" }}>
+        <Carousel style={{}}>
           <Carousel.Item>
             <img src={placeholder} className="carousel_img"></img>
             <Carousel.Caption>

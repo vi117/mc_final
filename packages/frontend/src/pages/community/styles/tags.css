@@ -1,0 +1,15 @@
+
+.rti--container {
+    --rti-main: none !important;
+    --rti-tag-remove: #0d0d0d !important;
+    --rti-border: #d9d9d9 !important;
+  }
+
+.rti--input::placeholder {
+    font-size: 14px;
+}
+
+.rti--tag {
+    background-color: #d9d9d9 !important;
+    margin-right:10px;
+}

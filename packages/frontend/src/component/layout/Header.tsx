@@ -1,5 +1,6 @@
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
-import { RxHamburgerMenu } from "react-icons/rx";
+import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { loginRevalidate, useLogin } from "../../hook/useLogin";
 import LogoSvg from "../Logo";
@@ -22,85 +23,113 @@ async function logout(): Promise<void> {
   console.log("logout success");
 }
 
+function LoginButton() {
+  const userId = useLogin();
+  return userId !== null
+    ? (
+      <NavLink to={"/"} onClick={logout}>
+        <span className={classes.header_login_btn}>
+          <FiLogOut
+            color="#555555"
+            style={{
+              marginRight: "5px",
+              width: "20px",
+              height: "20px",
+            }}
+          />
+          로그아웃
+        </span>
+      </NavLink>
+    )
+    : (
+      <NavLink to={"/login"}>
+        <p className={classes.header_login_btn}>
+          <FiLogIn
+            color="#555555"
+            style={{
+              marginRight: "5px",
+              width: "20px",
+              height: "20px",
+            }}
+          />
+          로그인
+        </p>
+      </NavLink>
+    );
+}
+
 export function Header() {
   const userId = useLogin();
   console.log(userId);
 
   return (
-    <header className={classes.header_container}>
-      <div className={classes.logo_container}>
-        <div className={classes.page_logo}>
-          <LogoSvg
-            style={{
-              width: "240px",
-              height: "30px",
-            }}
-            viewBox="0 0 975 115"
-          />
-        </div>
-        <div className="">
-          {userId !== null
-            ? (
-              <NavLink to={"#"} onClick={logout}>
-                <p className={classes.header_login_btn}>
-                  <CgProfile
-                    color="#555555"
-                    style={{
-                      marginRight: "5px",
-                      width: "20px",
-                      height: "20px",
-                    }}
-                  />
-                  로그아웃
-                </p>
-              </NavLink>
-            )
-            : (
-              <NavLink to={"/login"}>
-                <p className={classes.header_login_btn}>
-                  <CgProfile
-                    color="#555555"
-                    style={{
-                      marginRight: "5px",
-                      width: "20px",
-                      height: "20px",
-                    }}
-                  />
-                  로그인
-                </p>
-              </NavLink>
-            )}
-        </div>
-      </div>
-      <div className={classes.header_nav_container}>
-        <div className={classes.left}>
-          <div className={classes.nav_item}>
-            <RxHamburgerMenu />
+    <>
+      <header className={classes.header_container}>
+        <Navbar expand="sm">
+          <Container>
+            <Navbar.Brand>
+              <LogoSvg
+                style={{ width: "240px", height: "30px" }}
+                viewBox="0 0 975 115"
+              >
+              </LogoSvg>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse className="justify-content-end gap-3 ">
+              <Nav>
+                <span className={classes.header_logo_nav}>
+                  <LoginButton></LoginButton>
+                </span>
+              </Nav>
+              {userId !== null && (
+                <Nav>
+                  <NavLink to={`/profile`}>
+                    <span className={classes.header_logo_nav}>
+                      <CgProfile
+                        color="#555555"
+                        style={{
+                          marginRight: "5px",
+                          width: "20px",
+                          height: "20px",
+                          marginLeft: "10px",
+                        }}
+                      />
+                      <span style={{ fontSize: "12px" }}>
+                        내정보
+                      </span>
+                    </span>
+                  </NavLink>
+                </Nav>
+              )}
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+        <Container>
+          <div className={classes.header_nav_container}>
+            <div className={classes.left}>
+              <div className={classes.nav_item}>
+                <NavLink to={"/"}>
+                  홈
+                </NavLink>
+              </div>
+              <div className={classes.nav_item}>
+                <NavLink to={"/fundings"}>
+                  펀딩
+                </NavLink>
+              </div>
+              <div className={classes.nav_item}>
+                <NavLink to={"/community"}>
+                  커뮤니티
+                </NavLink>
+              </div>
+            </div>
+            <div className={classes.right}>
+              <SearchBar />
+            </div>
           </div>
-          <div className={classes.nav_item}>
-            <NavLink to={"/"}>
-              홈
-            </NavLink>
-          </div>
-          <div className={classes.nav_item}>
-            카테고리
-          </div>
-          <div className={classes.nav_item}>
-            <NavLink to={"/fundings"}>
-              펀딩
-            </NavLink>
-          </div>
-          <div className={classes.nav_item}>
-            <NavLink to={"/community"}>
-              커뮤니티
-            </NavLink>
-          </div>
-        </div>
-        <div className={classes.right}>
-          <SearchBar />
-        </div>
-      </div>
-    </header>
+        </Container>
+      </header>
+    </>
   );
 }
 

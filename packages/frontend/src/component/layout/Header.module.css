@@ -1,12 +1,12 @@
 .header_container{
-    max-width: var(--max-content-width);
-    margin: 0 auto;
+    margin-bottom: 12px;
 }
 
 .logo_container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px;
 }
 
 .page_logo {
@@ -15,12 +15,23 @@
 
 .header_login_btn {
     display: inline-flex;
-    border: 1px solid #555555;
     height: 40px;
     font-size: 12px;
-    border-radius: 4px;
     padding: 10px;
-    margin: 30px;
+    /* margin: 30px; */
+    align-items: center;
+}
+
+@media screen and (min-width: 576px) {
+    .header_login_btn{
+        border: 1px solid #555555;
+        border-radius: 4px;
+    }
+}
+
+.header_logo_nav{
+    height: 40px;
+    display: flex;
     align-items: center;
 }
 
@@ -45,5 +56,12 @@
 .nav_item{
     display: inline-block;
     margin:  0px 10px 0px 10px;
+    font-size: 14px;
+    line-height: 40px;
 }
 
+.page_profile_container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}

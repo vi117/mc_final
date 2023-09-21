@@ -38,10 +38,11 @@ async function getAllFundingHandler(req: Request, res: Response) {
   let begin_date: Date | undefined;
   let end_date: Date | undefined;
 
+  if (typeof queryParams.begin_date === "string") {
+    begin_date = new Date(queryParams.begin_date);
+  }
+
   if (user?.is_admin) {
-    if (typeof queryParams.begin_date === "string") {
-      begin_date = new Date(queryParams.begin_date);
-    }
     if (typeof queryParams.end_date === "string") {
       end_date = new Date(queryParams.end_date);
     }
