@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 
 const login_event_target = new EventTarget();
 
-function getLoginUserId() {
+interface UserInfo {
+  id: number;
+  nickname: string;
+  address: string;
+  phone: string;
+  email: string;
+}
+function getLoginUser(): UserInfo | null {
   const cookiesStr = document.cookie;
   const cookies = cookiesStr.split(";");
   const cookiesObj = cookies.map((cookie) => {
@@ -12,18 +19,24 @@ function getLoginUserId() {
     return cookieName === "login_user_id";
   });
   if (cookiesObj.length > 0) {
-    return parseInt(cookiesObj[0].cookieValue);
+    try {
+      const value = decodeURIComponent(cookiesObj[0].cookieValue);
+      return JSON.parse(value);
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   }
   return null;
 }
 
-export function useLogin() {
+export function useLoginInfo() {
   // TODO(vi117): For react 18, use `usesyncExternalstore`
-  const [loginUser, setLoginUser] = useState(getLoginUserId());
+  const [loginUser, setLoginUser] = useState(getLoginUser());
   useEffect(() => {
     const handler = () => {
       console.log("revalidate");
-      setLoginUser(getLoginUserId());
+      setLoginUser(getLoginUser());
     };
     login_event_target.addEventListener("revalidate", handler);
     return () => {
@@ -31,6 +44,11 @@ export function useLogin() {
     };
   });
   return loginUser;
+}
+
+export function useLoginId(): number | null {
+  const loginUser = useLoginInfo();
+  return loginUser?.id ?? null;
 }
 
 export function loginRevalidate() {
