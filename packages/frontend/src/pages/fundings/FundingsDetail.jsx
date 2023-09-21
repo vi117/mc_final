@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -12,7 +13,7 @@ import {
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
-import useSWR from "swr";
+import useFundingDetail from "../../hook/useFundingDetail";
 import { useLogin } from "../../hook/useLogin";
 import classes from "./FundingsDetail.module.css";
 
@@ -56,7 +57,7 @@ const fundings = [
     current_value: "500",
   },
   {
-    id: 4,
+    id: 5,
     title: "funding 1",
     thumbnail: placeholder,
     tag: "고양이",
@@ -65,7 +66,7 @@ const fundings = [
     current_value: "500",
   },
   {
-    id: 4,
+    id: 6,
     title: "funding 1",
     thumbnail: placeholder,
     tag: "고양이",
@@ -74,7 +75,7 @@ const fundings = [
     current_value: "500",
   },
   {
-    id: 4,
+    id: 7,
     title: "funding 1",
     thumbnail: placeholder,
     tag: "고양이",
@@ -86,11 +87,19 @@ const fundings = [
 
 const FundingsDetail = function() {
   const { id } = useParams();
-  const { data: funding, error, isLoading, mutate } = useSWR(
-    `/api/v1/fundings/${id}`,
-    (url) => fetch(url).then((res) => res.json()),
-  );
+  const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
+
   const user_id = useLogin();
+  const [selectedReward, setSelectedReward] = useState(null);
+  useEffect(() => {
+    if (isLoading) return;
+    if (error) return;
+    if (funding.participated_reward_id === null) return;
+    const reward = funding.rewards.filter((r) =>
+      r.id === funding.participated_reward_id
+    )[0];
+    setSelectedReward(reward);
+  }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
   if (isLoading) {
     // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
@@ -100,7 +109,9 @@ const FundingsDetail = function() {
     return <div>에러가 발생했습니다.</div>;
   }
   return (
-    <Container style={{ paddingTop: "20px", "width": "50vw" }}>
+    <Container
+      style={{ paddingTop: "20px", "maxWidth": "var(--max-content-width)" }}
+    >
       <div className={classes.sujung}>
         {user_id === funding.host_id && (
           <NavLink to={`/fundings/${id}/edit`}>
@@ -114,7 +125,7 @@ const FundingsDetail = function() {
         </Col>
 
         <Col className={classes.tags}>
-          {funding.tags.map((tag) => <Badge>{tag.tag}</Badge>)}
+          {funding.tags.map((tag) => <Badge key={tag.id}>{tag.tag}</Badge>)}
         </Col>
       </Row>
 
@@ -146,8 +157,10 @@ const FundingsDetail = function() {
           <Row style={{ margin: "16px" }}>
             {/* TODO(vi117): 예쁘게 날짜 출력 */}
             <div>
-              {funding.begin_date.toString()} ~ {funding.end_date.toString()}
-            </div>개설기간, 달성도(후원자 명수)
+              개설기간: {(new Date(funding.begin_date)).toDateString()} ~
+              {(new Date(funding.end_date)).toDateString()}
+              달성도: {funding.current_value} 원/{funding.target_value} 원
+            </div>
           </Row>
 
           <Row>
@@ -168,35 +181,9 @@ const FundingsDetail = function() {
                   <Dropdown.Item eventKey="5">링크</Dropdown.Item>
                 </DropdownButton>
               </ButtonGroup>
-              {
-                /* <Button variant="light">인</Button>
-                <Button variant="light">트</Button>
-                <Button variant="light">페</Button>
-                <Button variant="light">링</Button> */
-              }
             </Col>
             <Col className={classes.wishList}>
-              {funding.interest_user_id
-                ? (
-                  <Button
-                    variant="outline-dark"
-                    onClick={() => {
-                      setInterest(funding.id, false);
-                    }}
-                  >
-                    관심취소⭐
-                  </Button>
-                )
-                : (
-                  <Button
-                    variant="outline-dark"
-                    onClick={() => {
-                      setInterest(funding.id);
-                    }}
-                  >
-                    관심설정⭐
-                  </Button>
-                )}
+              <InterestButton funding={funding} setInterest={setInterest} />
             </Col>
           </Row>
         </Col>
@@ -208,25 +195,35 @@ const FundingsDetail = function() {
         </Col>
         <Col sm={4}>
           <Row className={classes.rewardList}>
-            <ListGroup>
-              {funding.rewards.map((reward) => (
-                <ListGroup.Item action variant="success">
-                  <h3>{reward.title}</h3>
-                  {reward.content}
-                  {reward.price}
-                  {reward.count}
-                  {reward.reward_current_count}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
+            <SelectablRewardList
+              rewards={funding.rewards}
+              selectedReward={selectedReward}
+              onChange={(v) => setSelectedReward(v)}
+              disabled={!!funding.participated_reward_id}
+            />
           </Row>
 
           <Row className={classes.joinBtn}>
-            <NavLink to={"/fundings/:id/pay/"}>
-              {funding.participated_reward_id
-                ? <Button variant="danger">취소</Button>
-                : <Button variant="success">참가</Button>}
-            </NavLink>
+            {funding.participated_reward_id
+              // TODO(vi117): 환불 창 추가
+              ? (
+                <Button variant="danger" onClick={withdrawFunding}>
+                  취소
+                </Button>
+              )
+              : (
+                <NavLink
+                  to={`/fundings/${id}/pay/`}
+                  state={{ funding: funding, selectedReward: selectedReward }}
+                >
+                  <Button
+                    variant="success"
+                    disabled={!selectedReward}
+                  >
+                    참가
+                  </Button>
+                </NavLink>
+              )}
           </Row>
         </Col>
       </Row>
@@ -252,6 +249,7 @@ const FundingsDetail = function() {
       </Container>
     </Container>
   );
+
   async function setInterest(id, like = true) {
     const url = new URL(
       `/api/v1/fundings/${id}/interest`,
@@ -275,6 +273,83 @@ const FundingsDetail = function() {
       });
     }
   }
+  async function withdrawFunding() {
+    if (!selectedReward) {
+      throw new Error("not selected reward");
+    }
+    const url = new URL(
+      `/api/v1/fundings/${id}/rewards/${selectedReward.id}/withdraw`,
+      window.location.origin,
+    );
+    const res = await fetch(url.href, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) {
+      throw new Error("withdraw error");
+    }
+    mutate({
+      ...funding,
+      participated_reward_id: null,
+    });
+    setSelectedReward(null);
+  }
 };
+
+function InterestButton({ funding, setInterest }) {
+  return (
+    <>
+      {funding.interest_user_id
+        ? (
+          <Button
+            variant="outline-dark"
+            onClick={() => {
+              setInterest(funding.id, false);
+            }}
+          >
+            관심취소⭐
+          </Button>
+        )
+        : (
+          <Button
+            variant="outline-dark"
+            onClick={() => {
+              setInterest(funding.id);
+            }}
+          >
+            관심설정⭐
+          </Button>
+        )}
+    </>
+  );
+}
+function SelectablRewardList(
+  { rewards, selectedReward, onChange = () => {}, disabled = false },
+) {
+  return (
+    <ListGroup>
+      {rewards.map((reward) => (
+        <ListGroup.Item
+          action
+          variant="success"
+          key={reward.id}
+          onClick={() => {
+            if (!disabled) {
+              onChange(reward);
+            }
+          }}
+          active={selectedReward?.id === reward.id}
+        >
+          <h3>{reward.title}</h3>
+          {reward.content}
+          {reward.price} 원 총 {reward.reward_count} 개 현재{" "}
+          {reward.reward_current_count} 개
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+  );
+}
 
 export default FundingsDetail;

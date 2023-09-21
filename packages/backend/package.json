@@ -31,7 +31,8 @@
     "kysely-codegen": "^0.10.1",
     "nodemon": "^3.0.1",
     "supertest": "^6.3.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "dto": "*"
   },
   "dependencies": {
     "ajv": "^8.12.0",

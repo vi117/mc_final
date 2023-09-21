@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 
 const FundingsSearch = function() {
   return (
-    <Container style={{ paddingTop: "20px", "width": "50vw" }}>
+    <Container style={{ paddingTop: "20px", "width": "860px" }}>
       Search
     </Container>
   );

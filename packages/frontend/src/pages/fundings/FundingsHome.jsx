@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Badge, Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
-import useSWR from "swr";
+import useFundings from "../../hook/useFundings";
 import classes from "./FundingsDetail.module.css";
 
 // const placerholder = "https://via.placeholder.com/100x100";
@@ -75,18 +75,14 @@ const TagSelcection = () => {
 };
 
 const FundingsHome = function() {
-  const url = new URL("/api/v1/fundings", window.location.href);
-  url.searchParams.append("offset", 0);
-  url.searchParams.append("limit", 50);
-
   const {
     data: fetcherData,
     error: fetcherError,
     isLoading: fetcherIsLoading,
-  } = useSWR(
-    url.href,
-    (url) => fetch(url).then((res) => res.json()),
-  );
+  } = useFundings({
+    offset: 0,
+    limit: 50,
+  });
 
   if (fetcherIsLoading) {
     return <div>로딩중...</div>;
@@ -134,7 +130,8 @@ const FundingsHome = function() {
               <div>
                 <ProgressBar
                   now={(x.current_value / x.target_value) * 100}
-                  label={(x.current_value / x.target_value) * 100}
+                  label={((x.current_value / x.target_value) * 100).toFixed(2)
+                    + "%"}
                 />
               </div>
             </NavLink>
