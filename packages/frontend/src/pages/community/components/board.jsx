@@ -97,6 +97,7 @@ const Board = () => {
     <>
       <FilterModal
         isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
         onApplyFilter={(v) => {
           setCategoryFiltered(v);
           saveCategoryRepo(v);

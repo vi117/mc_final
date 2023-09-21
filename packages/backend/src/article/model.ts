@@ -187,7 +187,7 @@ export class ArticleRepository {
       .offset(offset)
       .$if(
         orderBy !== undefined,
-        (qb) => qb.orderBy(`articles.${orderBy ?? "id"}`),
+        (qb) => qb.orderBy(`articles.${orderBy ?? "id"}`, "desc"),
       )
       .execute();
     return ret;
