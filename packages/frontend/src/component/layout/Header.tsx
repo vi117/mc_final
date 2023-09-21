@@ -5,8 +5,10 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
 import { loginRevalidate, useLogin } from "../../hook/useLogin";
 import LogoSvg from "../Logo";
-import SearchBar from "../SearchBar";
+import SearchModal from "../SearchModal";
 import classes from "./Header.module.css";
+// import SearchBar from "../SearchBar";
+// import SearchBox from "../SearchBox";
 
 /**
  * Logs the user out by making a POST request to the "/api/v1/users/logout" endpoint.
@@ -116,7 +118,7 @@ export function Header() {
           </div>
         </div>
         <div className={classes.right}>
-          <SearchBar />
+          <SearchModal />
         </div>
       </div>
     </header>
