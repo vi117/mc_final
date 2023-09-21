@@ -78,16 +78,21 @@ export function Header() {
         <div className={classes.page_profile_container}>
           <LoginButton></LoginButton>
           {userId !== null && (
-            <span>
-              <CgProfile
-                color="#555555"
-                style={{
-                  marginRight: "5px",
-                  width: "20px",
-                  height: "20px",
-                }}
-              />
-            </span>
+            <>
+              <NavLink to={`/profile`}>
+                <span>
+                  <CgProfile
+                    color="#555555"
+                    style={{
+                      marginRight: "5px",
+                      width: "20px",
+                      height: "20px",
+                    }}
+                  />
+                  내 정보
+                </span>
+              </NavLink>
+            </>
           )}
         </div>
       </div>
