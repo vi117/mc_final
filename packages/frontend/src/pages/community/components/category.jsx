@@ -9,7 +9,7 @@ import CustomToggle from "./Toggle";
 const animals = ANIMAL_CATEGORY;
 
 const Category = (
-  { selectCategoryFilter, selectOrderBy, setIsModalOpen = () => {} },
+  { selectCategoryFilter, selectOrderBy, setIsModalOpen },
 ) => {
   console.log("setIsModalOpen:", setIsModalOpen);
   const navigate = useNavigate();
@@ -43,7 +43,6 @@ const Category = (
           </Dropdown>
           <button
             onClick={() => {
-              console.log("버튼 클릭됨");
               setIsModalOpen(true);
             }}
           >
