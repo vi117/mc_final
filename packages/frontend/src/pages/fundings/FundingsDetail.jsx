@@ -15,6 +15,7 @@ import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import useFundingDetail from "../../hook/useFundingDetail";
 import { useLoginId } from "../../hook/useLogin";
+import Profileimg from "../community/assets/user.png";
 import classes from "./FundingsDetail.module.css";
 
 const FundingsDetail = function() {
@@ -40,6 +41,8 @@ const FundingsDetail = function() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+
+  const restTime = new Date(funding.end_date).getTime() - new Date().getTime();
   const content_thumbnails = funding.content_thumbnails.length > 0
     ? funding.content_thumbnails
     : [funding.thumbnail];
@@ -58,7 +61,6 @@ const FundingsDetail = function() {
         <Col sm={8} className={classes.fundingName}>
           <h1>{funding.title}</h1>
         </Col>
-
         <Col className={classes.tags}>
           {funding.tags.map((tag) => <Badge key={tag.id}>{tag.tag}</Badge>)}
         </Col>
@@ -66,28 +68,49 @@ const FundingsDetail = function() {
 
       <Row>
         <Col sm={8}>
-          <Carousel slide={false}>
+          <Carousel className={classes.carousel}>
             {content_thumbnails.map((thumbnail) => (
               <Carousel.Item key={thumbnail}>
-                <img src={thumbnail} />
+                <img
+                  src={thumbnail}
+                  className={"d-block w-100"}
+                  style={{ height: "400px", objectFit: "cover" }}
+                />
               </Carousel.Item>
             ))}
           </Carousel>
         </Col>
-
         <Col sm={4}>
-          <Row style={{ margin: "16px" }}>
-            {/* TODO(vi117): 예쁘게 날짜 출력 */}
-            <div>
-              개설기간: {(new Date(funding.begin_date)).toDateString()} ~
-              {(new Date(funding.end_date)).toDateString()}
-              달성도: {funding.current_value} 원/{funding.target_value} 원
+          <Row className="mb-3">
+            <h4>남은 기간</h4>
+
+            {restTime / (1000 * 60 * 60 * 24) > 0
+              ? (
+                <strong>
+                  {(restTime / (1000 * 60 * 60 * 24)).toFixed(1)}일
+                </strong>
+              )
+              : <strong>종료</strong>}
+          </Row>
+          <Row className="mb-3">
+            <h4>달성도</h4>
+            <div style={{ fontSize: "14px" }}>
+              <strong>{funding.current_value} 원</strong>{" "}
+              <strong style={{ color: "green", fontSize: "12px" }}>
+                {(funding.current_value / funding.target_value * 100).toFixed(
+                  1,
+                )}%
+              </strong>
             </div>
           </Row>
-
           <Row>
-            <div>{funding.host_nickname}</div>
+            <h4>호스트</h4>
+            <div>
+              <img src={Profileimg} className={classes["user"]} alt="Profile" />
+              {funding.host_nickname}
+            </div>
           </Row>
+          <hr></hr>
           <Row style={{ "padding": "10px 0px 10px 0px" }}>
             <Col className="sns">
               <ButtonGroup vertical>
@@ -110,10 +133,14 @@ const FundingsDetail = function() {
           </Row>
         </Col>
       </Row>
-
+      <hr></hr>
       <Row>
         <Col sm={8}>
-          <div dangerouslySetInnerHTML={{ __html: funding.content }}></div>
+          <div
+            className={classes.content}
+            dangerouslySetInnerHTML={{ __html: funding.content }}
+          >
+          </div>
         </Col>
         <Col sm={4}>
           <Row className={classes.rewardList}>

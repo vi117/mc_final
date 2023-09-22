@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import { useState } from "react";
-import { Badge, Button, Container, ProgressBar } from "react-bootstrap";
+import { Badge, Button, Card, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
@@ -8,8 +8,9 @@ import useFundings from "../../hook/useFundings";
 // const placerholder = "https://via.placeholder.com/100x100";
 
 const GridContainer = styled("div")({
-  display: "flex",
-  flexWrap: "wrap",
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gridGap: "12px",
   justifyContent: "center",
   marginLeft: "12.5px",
 });
@@ -94,6 +95,7 @@ const FundingsHome = function() {
       <GridContainer
         style={{
           marginTop: "10px",
+          marginBottom: "10px",
         }}
       >
         {fetcherData.map((x) => (
@@ -101,9 +103,7 @@ const FundingsHome = function() {
             key={x.id}
             item={x}
             style={{
-              flex: "0 0 calc(33.33% - 25px)",
-              marginRight: "10px",
-              marginBottom: "10px",
+              padding: "4px",
               // height:"200px"
             }}
           />
@@ -118,7 +118,7 @@ function FundingItem({
   ...rest
 }) {
   return (
-    <div
+    <Card
       key={x.id}
       {...rest}
     >
@@ -127,7 +127,9 @@ function FundingItem({
           src={x.thumbnail}
           style={{
             width: "100%",
-            height: "auto",
+            height: "200px",
+            objectFit: "cover",
+            borderRadius: "5px",
           }}
           alt="썸네일 이미지"
         />
@@ -142,7 +144,7 @@ function FundingItem({
           />
         </div>
       </NavLink>
-    </div>
+    </Card>
   );
 }
 

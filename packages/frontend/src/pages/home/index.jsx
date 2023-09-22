@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Carousel } from "react-bootstrap";
 import "./home.css";
+import { Link } from "react-router-dom";
 
 export function HomePage() {
   const [index, setIndex] = useState(0);
@@ -48,18 +49,22 @@ export function HomePage() {
           <div className="home-funding-banner">
             <Carousel indicators={false} className="home-carousel2">
               <Carousel.Item>
-                <img
-                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIgGrfevQhicyAFH9OQJ0-rtlQi3Al6uzthfS9SBfJx1yzgH7YQSmOZ67k7uqnyBxbxPdLEBiACRiyXXghnuPK9M_633_P6F_3LNT98Xf9NxgzL6idMJmC0JJb2Fkyd3zWi-7raV8AMwHMT_3AKmT9sWdm6bIt231Qu-UdjGw869T_kn6BOZYU0IAGRq0b/s1178/funding1.jpg"
-                  className="carousel_img"
-                >
-                </img>
+                <Link to={"/fundings/"}>
+                  <img
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIgGrfevQhicyAFH9OQJ0-rtlQi3Al6uzthfS9SBfJx1yzgH7YQSmOZ67k7uqnyBxbxPdLEBiACRiyXXghnuPK9M_633_P6F_3LNT98Xf9NxgzL6idMJmC0JJb2Fkyd3zWi-7raV8AMwHMT_3AKmT9sWdm6bIt231Qu-UdjGw869T_kn6BOZYU0IAGRq0b/s1178/funding1.jpg"
+                    className="carousel_img"
+                  >
+                  </img>
+                </Link>
               </Carousel.Item>
               <Carousel.Item>
-                <img
-                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaCXnYJqJV0CWbJumvp_dlYSf6p9D0uzCGho7vbgVeOk26dksQuyOxdhtM-hEXHRJiugXNKBStP2x4ykZ11cSU5raxTtfYIOXsEZJ1kPKDO60lNy6MiF7-gb9LwJGRL8Ujg2JVOskPbjpTLJHN2h3i5GTHlSthkSuFNQDuV2QPm_PVOCnGbl3PXLVEnJeJ/s1178/funding4.jpg"
-                  className="carousel_img"
-                >
-                </img>
+                <Link to={"/fundings/2"}>
+                  <img
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaCXnYJqJV0CWbJumvp_dlYSf6p9D0uzCGho7vbgVeOk26dksQuyOxdhtM-hEXHRJiugXNKBStP2x4ykZ11cSU5raxTtfYIOXsEZJ1kPKDO60lNy6MiF7-gb9LwJGRL8Ujg2JVOskPbjpTLJHN2h3i5GTHlSthkSuFNQDuV2QPm_PVOCnGbl3PXLVEnJeJ/s1178/funding4.jpg"
+                    className="carousel_img"
+                  >
+                  </img>
+                </Link>
               </Carousel.Item>
             </Carousel>
           </div>
@@ -69,18 +74,22 @@ export function HomePage() {
           <div className="home-funding-banner">
             <Carousel indicators={false} className="home-carousel2">
               <Carousel.Item>
-                <img
-                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDYY2BzEkLZHTGqetYKSuN2lhSLl0fYmmGt6Og0YZLtQQpv4XrDyHgZE-9NmvfCmNW0-CevCQXEm8iD3CbBAyTMxGdRS_s-24EIVaDNUU3IS-ixaGRgnb_YMa2iNwdf4OIn5Er3GqVQSxY-vYP1oXntv8yZ71OAIJlzw2oLcVABXfngSsLLyJNglocE1PQ/s1178/funding2.jpg"
-                  className="carousel_img"
-                >
-                </img>
+                <Link to={"/fundings/1"}>
+                  <img
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDYY2BzEkLZHTGqetYKSuN2lhSLl0fYmmGt6Og0YZLtQQpv4XrDyHgZE-9NmvfCmNW0-CevCQXEm8iD3CbBAyTMxGdRS_s-24EIVaDNUU3IS-ixaGRgnb_YMa2iNwdf4OIn5Er3GqVQSxY-vYP1oXntv8yZ71OAIJlzw2oLcVABXfngSsLLyJNglocE1PQ/s1178/funding2.jpg"
+                    className="carousel_img"
+                  >
+                  </img>
+                </Link>
               </Carousel.Item>
               <Carousel.Item>
-                <img
-                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSObSVrzZy97-7DzmzA1db8c4vhSMZvrdioiDLRMC8BFv7Bh6diebLP1mdP41IBDKjspey2INOTnQ9Q5Rt6iZQBbKYvCbWC3yCldufr780bHzNa0HVnLR8I41_g45bkF-wXMqafSv85tLGR16kppPP02kOsd3dpkL9QYUZcHVPTjpidKB1hiBY07dGbUCW/s1178/funding3.jpg"
-                  className="carousel_img"
-                >
-                </img>
+                <Link to={"/fundings/3"}>
+                  <img
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSObSVrzZy97-7DzmzA1db8c4vhSMZvrdioiDLRMC8BFv7Bh6diebLP1mdP41IBDKjspey2INOTnQ9Q5Rt6iZQBbKYvCbWC3yCldufr780bHzNa0HVnLR8I41_g45bkF-wXMqafSv85tLGR16kppPP02kOsd3dpkL9QYUZcHVPTjpidKB1hiBY07dGbUCW/s1178/funding3.jpg"
+                    className="carousel_img"
+                  >
+                  </img>
+                </Link>
               </Carousel.Item>
             </Carousel>
           </div>
