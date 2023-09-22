@@ -9,7 +9,11 @@ import { FundingRequestsRepository } from "./request_model";
 
 import upload from "@/file/multer";
 import { checkLogin } from "@/users/jwt";
-import { assert_param } from "@/util/assert_param";
+import {
+  assert_exists,
+  assert_param,
+  BadRequestError,
+} from "@/util/assert_param";
 import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
 import assert from "assert";
 import {
@@ -71,10 +75,7 @@ async function getSingleFundingHandler(req: Request, res: Response) {
   const result = await fundingRepository.findById(id, {
     user_id: user?.id,
   });
-  if (!result) {
-    res.status(StatusCodes.NOT_FOUND).json();
-    return;
-  }
+  assert_exists(!!result, "존재하지 않는 펀딩입니다.");
   if (!user?.is_admin && result.begin_date.getTime() >= new Date().getTime()) {
     res.status(StatusCodes.FORBIDDEN).json({
       message: "공개 준비 중인 펀딩입니다.",
@@ -106,10 +107,8 @@ async function getSingleFundingRequestHandler(req: Request, res: Response) {
   assert(user, "로그인이 필요합니다.");
 
   const result = await requestRepo.findById(id);
-  if (!result) {
-    res.status(StatusCodes.NOT_FOUND).json();
-    return;
-  }
+  assert_exists(!!result, "존재하지 않는 펀딩 요청입니다.");
+
   if (!user?.is_admin && result.host_id !== user.id) {
     res.status(StatusCodes.FORBIDDEN).json({ message: "요청자가 아닙니다." });
     return;
@@ -186,13 +185,10 @@ async function participateFundingHandler(req: Request, res: Response) {
     },
     required: ["address"],
   }, req.body);
-  if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
-      errors: ajv.errors,
-    });
-    return;
-  }
+  assert_param(v, "유효하지 않은 요청입니다.", {
+    errors: ajv.errors,
+  });
+
   const { address, recipient, phone } = req.body;
 
   const user = req.user;
@@ -292,31 +288,21 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   try {
     rewards = JSON.parse(req.body.rewards);
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
-      errors: { rewards: "JSON syntax error" },
+    throw new BadRequestError("보상이 유효하지 않습니다.", {
+      errors: { rewards: "JSON syntax error", param: req.body.rewards },
     });
-    return;
   }
   if (!isRewardArray(rewards)) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
+    throw new BadRequestError("보상이 유효하지 않습니다.", {
       errors: ajv.errors,
     });
-    return;
   }
   if (rewards.length === 0) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "보상이 없습니다.",
-    });
-    return;
+    throw new BadRequestError("보상이 없습니다.");
   }
   const target_value = parseInt(req.body.target_value);
-  if (isNaN(target_value)) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "타겟 값이 유효하지 않습니다.",
-    });
-  }
+  assert_param(!isNaN(target_value), "타겟 값이 유효하지 않습니다.");
+
   const tags = req.body.tags.split(",");
 
   const { title, content, begin_date, end_date } = req.body;

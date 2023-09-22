@@ -8,12 +8,13 @@ interface UserInfo {
   address: string;
   phone: string;
   email: string;
+  is_admin?: boolean;
 }
 function getLoginUser(): UserInfo | null {
   const cookiesStr = document.cookie;
   const cookies = cookiesStr.split(";");
   const cookiesObj = cookies.map((cookie) => {
-    const [cookieName, cookieValue] = cookie.split("=");
+    const [cookieName, cookieValue] = cookie.split("=").map((v) => v.trim());
     return { cookieName, cookieValue };
   }).filter(({ cookieName }) => {
     return cookieName === "login_user_id";
