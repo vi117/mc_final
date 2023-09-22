@@ -16,6 +16,11 @@ export default function Profile() {
               <button>내정보 수정</button>
             </Link>
           </li>
+          <li>
+            <Link to={`/withdraw`}>
+              <button>회원탈퇴</button>
+            </Link>
+          </li>
         </ul>
       </div>
       {/* 오른쪽 */}

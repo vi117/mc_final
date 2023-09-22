@@ -141,7 +141,7 @@ function RegisterPage() {
           value={Address}
           onChange={onAddressHandler}
         />
-        <RegisterLabel>Article</RegisterLabel>
+        <RegisterLabel>Introduce</RegisterLabel>
         <input
           name="introduction"
           type="text"
