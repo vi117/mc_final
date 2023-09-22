@@ -39,13 +39,13 @@ function RegisterPage() {
       method: "POST",
       body: formData,
     });
-
+    const msg = await r.json();
     if (r.status === 201) {
       /// 회원가입 성공!
-      return true;
+      return [true, msg.message];
     } else {
       /// 회원 가입 실패!
-      return false;
+      return [false, msg.message];
     }
   }
   const handleClose = () => setShow(false);
@@ -186,13 +186,13 @@ function RegisterPage() {
     // if (!passwordPattern.test(Password)) {
     //   return alert("올바른 비밀번호를 입력하세요.");
     // }
-
-    if (await signUp()) {
+    const [result, msg] = await signUp();
+    if (result) {
       // TODO(vi117): 이메일을 확인하라는 모달을 띄우고 나서 navigate
       navigate("/login");
     } else {
       // TODO(vi117): 나중에 적당한 경고창 띄우기.
-      alert("fail");
+      alert("fail" + msg);
     }
   }
 }
