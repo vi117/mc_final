@@ -7,7 +7,7 @@ export function Layout() {
     <div>
       <Header />
       <Outlet />
-      <hr />
+      <hr style={{ width: "1080px", margin: "0px auto" }} />
       <Footer />
     </div>
   );

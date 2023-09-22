@@ -9,6 +9,11 @@ import { FundingRequestsRepository } from "./request_model";
 
 import upload from "@/file/multer";
 import { checkLogin } from "@/users/jwt";
+import {
+  assert_exists,
+  assert_param,
+  BadRequestError,
+} from "@/util/assert_param";
 import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
 import assert from "assert";
 import {
@@ -70,10 +75,7 @@ async function getSingleFundingHandler(req: Request, res: Response) {
   const result = await fundingRepository.findById(id, {
     user_id: user?.id,
   });
-  if (!result) {
-    res.status(StatusCodes.NOT_FOUND).json();
-    return;
-  }
+  assert_exists(!!result, "존재하지 않는 펀딩입니다.");
   if (!user?.is_admin && result.begin_date.getTime() >= new Date().getTime()) {
     res.status(StatusCodes.FORBIDDEN).json({
       message: "공개 준비 중인 펀딩입니다.",
@@ -105,10 +107,8 @@ async function getSingleFundingRequestHandler(req: Request, res: Response) {
   assert(user, "로그인이 필요합니다.");
 
   const result = await requestRepo.findById(id);
-  if (!result) {
-    res.status(StatusCodes.NOT_FOUND).json();
-    return;
-  }
+  assert_exists(!!result, "존재하지 않는 펀딩 요청입니다.");
+
   if (!user?.is_admin && result.host_id !== user.id) {
     res.status(StatusCodes.FORBIDDEN).json({ message: "요청자가 아닙니다." });
     return;
@@ -180,17 +180,16 @@ async function participateFundingHandler(req: Request, res: Response) {
     type: "object",
     properties: {
       address: { type: "string" },
+      recipient: { type: "string" },
+      phone: { type: "string" },
     },
     required: ["address"],
   }, req.body);
-  if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
-      errors: ajv.errors,
-    });
-    return;
-  }
-  const { address } = req.body;
+  assert_param(v, "유효하지 않은 요청입니다.", {
+    errors: ajv.errors,
+  });
+
+  const { address, recipient, phone } = req.body;
 
   const user = req.user;
   assert(user);
@@ -200,6 +199,8 @@ async function participateFundingHandler(req: Request, res: Response) {
       funding_id: id,
       reward_id: req_id,
       address: address,
+      recipient: recipient,
+      phone: phone,
     });
   } catch (error) {
     if (error instanceof FundingUsersError) {
@@ -238,13 +239,20 @@ async function withdrawFundingHandler(req: Request, res: Response) {
 }
 
 async function createFundingRequestHandler(req: Request, res: Response) {
-  const thumbnail = req.file?.url;
-  if (!thumbnail) {
+  const files = req.files;
+  if (!files) {
     res.status(StatusCodes.BAD_REQUEST).json({
-      message: "썸네일이 필요합니다.",
+      message: "파일이 필요합니다.",
     });
     return;
   }
+  assert(!(files instanceof Array));
+  const thumbnailArr = files["thumbnail"];
+  assert_param(thumbnailArr.length > 0, "썸네일이 필요합니다.");
+  const thumbnail = thumbnailArr[0].url;
+
+  const content_thumbnails = files["content_thumbnail"].map((file) => file.url);
+
   const requestRepo = new FundingRequestsRepository(getDB());
   const user = req.user;
   assert(user, "로그인이 필요합니다.");
@@ -280,31 +288,21 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   try {
     rewards = JSON.parse(req.body.rewards);
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
-      errors: { rewards: "JSON syntax error" },
+    throw new BadRequestError("보상이 유효하지 않습니다.", {
+      errors: { rewards: "JSON syntax error", param: req.body.rewards },
     });
-    return;
   }
   if (!isRewardArray(rewards)) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
+    throw new BadRequestError("보상이 유효하지 않습니다.", {
       errors: ajv.errors,
     });
-    return;
   }
   if (rewards.length === 0) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "보상이 없습니다.",
-    });
-    return;
+    throw new BadRequestError("보상이 없습니다.");
   }
   const target_value = parseInt(req.body.target_value);
-  if (isNaN(target_value)) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "타겟 값이 유효하지 않습니다.",
-    });
-  }
+  assert_param(!isNaN(target_value), "타겟 값이 유효하지 않습니다.");
+
   const tags = req.body.tags.split(",");
 
   const { title, content, begin_date, end_date } = req.body;
@@ -322,6 +320,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       meta_parsed: ({
         tags: tags,
         rewards: rewards,
+        content_thumbnails: content_thumbnails,
       }),
     });
     res
@@ -409,7 +408,10 @@ router.post(
 router.post(
   "/request/",
   checkLogin(),
-  upload.single("thumbnail"),
+  upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "content_thumbnail", maxCount: 5 },
+  ]),
   RouterCatch(createFundingRequestHandler),
 );
 router.post(

@@ -209,9 +209,20 @@ export function checkLogin({ admin_check = false } = {}) {
 export function setLoginToken(res: Response, user: UserObject) {
   setAccessTokenToCookie(res, createTokenFromUser(user, false));
   setRefreshTokenToCookie(res, createTokenFromUser(user, true));
-  res.cookie("login_user_id", user.id.toString(), {
-    maxAge: 1000 * 60 * 60 * 24 * 14,
-    sameSite: "strict",
-    path: "/",
-  });
+  res.cookie(
+    "login_user_id",
+    JSON.stringify({
+      id: user.id,
+      nickname: user.nickname,
+      address: user.address,
+      phone: user.phone,
+      email: user.email,
+      is_admin: user.is_admin == 1 ? true : undefined,
+    }),
+    {
+      maxAge: 1000 * 60 * 60 * 24 * 14,
+      sameSite: "strict",
+      path: "/",
+    },
+  );
 }

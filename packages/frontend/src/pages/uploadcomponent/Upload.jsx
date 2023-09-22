@@ -37,18 +37,18 @@ const Upload = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const sendImageToServer = () => {
-    if (image.image_file) {
-      const formData = new FormData();
-      formData.append("file", image.image_file);
-      alert("서버에 등록이 완료되었습니다!");
-      setImage({
-        image_file: "",
-      });
-    } else {
-      alert("사진을 등록하세요!");
-    }
-  };
+  // const sendImageToServer = () => {
+  //   if (image.image_file) {
+  //     const formData = new FormData();
+  //     formData.append("file", image.image_file);
+  //     alert("서버에 등록이 완료되었습니다!");
+  //     setImage({
+  //       image_file: "",
+  //     });
+  //   } else {
+  //     alert("사진을 등록하세요!");
+  //   }
+  // };
 
   return (
     <div className="uploader-wrapper">
@@ -75,9 +75,11 @@ const Upload = () => {
         <Button color="error" variant="contained" onClick={deleteImage}>
           Delete
         </Button>
-        <Button color="success" variant="contained" onClick={sendImageToServer}>
+        {
+          /* <Button color="success" variant="contained" onClick={sendImageToServer}>
           Upload
-        </Button>
+        </Button> */
+        }
       </div>
     </div>
   );

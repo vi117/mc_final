@@ -61,6 +61,7 @@ export async function approveFundingRequest(request_id: number) {
           begin_date: request.begin_date,
           end_date: request.end_date,
           host_id: request.host_id,
+          content_thumbnails: meta.content_thumbnails,
         });
       } catch (error) {
         if (isDuplKeyError(error)) {
@@ -111,11 +112,15 @@ export async function participateFunding({
   funding_id,
   reward_id,
   address,
+  recipient,
+  phone,
 }: {
   user_id: number;
   funding_id: number;
   reward_id: number;
   address: string;
+  recipient: string;
+  phone: string;
 }) {
   return await safeTransaction(async (db) => {
     try {
@@ -124,6 +129,8 @@ export async function participateFunding({
         funding_id,
         reward_id,
         address,
+        recipient,
+        phone,
       });
     } catch (error) {
       if (isDuplKeyError(error)) {

@@ -45,6 +45,7 @@ const FundingsWrite = function() {
   const [endDate, setEndDate] = useState(new Date());
   const [tagSelected, setSelected] = useState([]);
   const [thumbnail, setThumbnail] = useState([]);
+  const [contentThumbnails, setContentThumbnails] = useState([]);
   const [targetValue, setTargetValue] = useState(0);
   const [content, setContent] = useState("");
   const [rewards, setRewards] = useState([]);
@@ -79,6 +80,20 @@ const FundingsWrite = function() {
           />
         </Form.Group>
         {/* TODO(vi117): title thumbnail과 content thumbnail 을 업로드 */}
+      </Row>
+      <Row>
+        콘텐츠 썸네일
+        <Form.Group controlId="formFileMultiple" className="mb-3">
+          <Form.Label>콘텐츠 썸네일 사진을 업로드해주세요.</Form.Label>
+          <Form.Control
+            type="file"
+            multiple
+            onChange={(e) => {
+              console.log(e.target.files);
+              setContentThumbnails(e.target.files);
+            }}
+          />
+        </Form.Group>
       </Row>
       <Row>
         개설기간
@@ -142,7 +157,7 @@ const FundingsWrite = function() {
       </Row>
 
       <Row>
-        완료버튼
+        완료
         <Button
           variant="success"
           onClick={() => {
@@ -155,12 +170,16 @@ const FundingsWrite = function() {
     </Container>
   );
   async function sendRequest() {
+    console.log("sendRequest");
     const url = new URL("/api/v1/fundings/request", window.location.href);
 
     const formData = new FormData();
 
     formData.append("title", title);
     formData.append("thumbnail", thumbnail[0]);
+    [...contentThumbnails].forEach((file) => {
+      formData.append("content_thumbnail", file);
+    });
     formData.append("content", content);
     formData.append("target_value", parseInt(targetValue));
     formData.append("begin_date", startDate.toISOString());

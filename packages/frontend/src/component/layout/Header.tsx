@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { loginRevalidate, useLogin } from "../../hook/useLogin";
+import { loginRevalidate, useLoginId } from "../../hook/useLogin";
 import LogoSvg from "../Logo";
 import SearchModal from "../SearchModal";
 import classes from "./Header.module.css";
@@ -27,7 +27,7 @@ async function logout(): Promise<void> {
 }
 
 function LoginButton() {
-  const userId = useLogin();
+  const userId = useLoginId();
   return userId !== null
     ? (
       <NavLink to={"/"} onClick={logout}>
@@ -48,8 +48,9 @@ function LoginButton() {
       <NavLink to={"/login"}>
         <p className={classes.header_login_btn}>
           <FiLogIn
-            color="#555555"
+            color="#6d6d6d"
             style={{
+              color: "#6d6d6d",
               marginRight: "5px",
               width: "20px",
               height: "20px",
@@ -62,20 +63,22 @@ function LoginButton() {
 }
 
 export function Header() {
-  const userId = useLogin();
+  const userId = useLoginId();
   console.log(userId);
 
   return (
     <>
       <header className={classes.header_container}>
         <Navbar expand="sm">
-          <Container>
-            <Navbar.Brand>
-              <LogoSvg
-                style={{ width: "240px", height: "30px" }}
-              >
-              </LogoSvg>
-            </Navbar.Brand>
+          <Container className="header-brand-container">
+            <NavLink to={"/"}>
+              <Navbar.Brand>
+                <LogoSvg
+                  style={{ width: "240px", height: "30px" }}
+                >
+                </LogoSvg>
+              </Navbar.Brand>
+            </NavLink>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end gap-3 ">
               <Nav>
@@ -106,31 +109,21 @@ export function Header() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <Container>
-          <div className={classes.header_nav_container}>
+        <Navbar bg="transparent" data-bs-theme="light">
+          <Nav variant="underline" className={classes.header_nav_container}>
             <div className={classes.left}>
-              <div className={classes.nav_item}>
-                <NavLink to={"/"}>
-                  홈
-                </NavLink>
-              </div>
-              <div className={classes.nav_item}>
-                <NavLink to={"/fundings"}>
-                  펀딩
-                </NavLink>
-              </div>
-              <div className={classes.nav_item}>
-                <NavLink to={"/community"}>
-                  커뮤니티
-                </NavLink>
-              </div>
-            </div>
+              <NavLink className={"nav-link"} to={"/"}>홈</NavLink>
+              <NavLink className={"nav-link"} to={"/fundings"}>펀딩</NavLink>
+              <NavLink className={"nav-link"} to={"/community"}>
+                커뮤니티
+              </NavLink>
+            </div>{" "}
             <div className={classes.right}>
               <SearchModal />
               {/* <AutoSearch/> */}
             </div>
-          </div>
-        </Container>
+          </Nav>
+        </Navbar>
       </header>
     </>
   );

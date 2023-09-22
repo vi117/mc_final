@@ -19,6 +19,7 @@ import ProfileEdit from "./pages/profile/edit/profileEdit";
 import Profile from "./pages/profile/profilePage";
 import WithdrawalPage from "./pages/withdrawal";
 
+import ApproveEmailPage from "./pages/approve-email";
 import ForgotPasswordPage from "./pages/forgot-password";
 import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
@@ -52,6 +53,10 @@ const browserRouter = createBrowserRouter([
       /**
        * 비밀번호 찾기
        */
+      {
+        path: "/approve-email",
+        element: <ApproveEmailPage></ApproveEmailPage>,
+      },
       {
         path: "/forgot-password",
         element: <ForgotPasswordPage></ForgotPasswordPage>,

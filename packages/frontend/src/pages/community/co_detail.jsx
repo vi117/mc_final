@@ -2,13 +2,13 @@ import { AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import useArticleDetail from "../../hook/useArticleDetail";
-import { useLogin } from "../../hook/useLogin";
+import { useLoginId } from "../../hook/useLogin";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
 
 export function CommunityDetail() {
-  const user_id = useLogin();
+  const user_id = useLoginId();
   const { id } = useParams();
   const {
     data: fetcherData,
