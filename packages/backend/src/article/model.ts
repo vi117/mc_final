@@ -116,8 +116,7 @@ export class ArticleRepository {
               "t.tag as tag",
             ]),
         ).as("tags"),
-      ])
-      .selectAll("articles");
+      ]);
   }
 
   async findAll(options?: FindAllUsersOptions): Promise<ArticleObject[]> {
@@ -136,6 +135,7 @@ export class ArticleRepository {
       user_id,
       tags,
     })
+      .selectAll("articles")
       .$if(
         cursor !== undefined,
         (eb) => eb.where("articles.id", "<", cursor ?? 0),

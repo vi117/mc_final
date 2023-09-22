@@ -50,11 +50,13 @@ const CommunityWrite = () => {
 
   return (
     <div className={classes["write-container"]}>
-      <Cowritemodal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-      >
-      </Cowritemodal>
+      {
+        <Cowritemodal
+          show={showModal}
+          handleClose={() => setShowModal(false)}
+        >
+        </Cowritemodal>
+      }
       <div className={classes["write-wrap"]}>
         <div className={classes["write-header"]}>
           <h4>커뮤니티 글 작성</h4>

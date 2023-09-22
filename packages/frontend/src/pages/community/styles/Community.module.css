@@ -143,6 +143,7 @@ background-color: var(--green-dark);
   max-height:280px;
   border-radius: 8px;
   aspect-ratio: 4 / 3;
+  object-fit: cover;
   background-color: var(--white) !important;
 }
 

@@ -26,7 +26,6 @@ export default function AdminPage() {
               {funding.host_email}
               <img src={funding.thumbnail}>
               </img>
-              <div dangerouslySetInnerHTML={{ __html: funding.content }}></div>
               <div>{funding.host_nickname}</div>
               <div>목표 {funding.target_value}원</div>
               <div>
