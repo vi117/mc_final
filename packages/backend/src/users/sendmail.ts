@@ -1,4 +1,7 @@
 import { getTransport } from "@/mail/service";
+import debug_fn from "debug";
+
+const debug = debug_fn("joinify:sendmail");
 
 interface SendVerificationMailOptions {
   resend?: boolean;
@@ -10,7 +13,13 @@ export async function sendVerificationMail(
   _options?: SendVerificationMailOptions,
 ) {
   const transporter = getTransport();
-  const frontendUrl = new URL(process.env.SERVER_URL ?? "");
+  debug("sendVerificationMail", { email, verificationCode });
+  if (!process.env.SERVER_URL) {
+    debug("SERVER_URL is not set");
+  }
+  const frontendUrl = new URL(
+    process.env.SERVER_URL ?? "http://localhost:5173",
+  );
   frontendUrl.pathname = `/approve-email`;
   frontendUrl.searchParams.set("code", verificationCode);
   await transporter.sendMail({
