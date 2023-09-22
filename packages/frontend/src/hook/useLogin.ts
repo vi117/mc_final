@@ -8,7 +8,9 @@ interface UserInfo {
   address: string;
   phone: string;
   email: string;
+  is_admin?: boolean;
 }
+
 function getLoginUser(): UserInfo | null {
   const cookiesStr = document.cookie;
   const cookies = cookiesStr.split(";");
