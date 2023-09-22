@@ -54,7 +54,7 @@
   object-fit: cover;
   border-radius: 100%;
   border: 1px solid var(--secondary);
-  margin-right: 7px;
+  /* margin-right: 7px; */
 }
 
 .content img {

@@ -104,9 +104,11 @@ const FundingsDetail = function() {
             </div>
           </Row>
           <Row>
-            <img src={Profileimg} className={classes["user"]} alt="Profile" />
-            {/* <h4>호스트</h4> */}
-            <div>{funding.host_nickname}</div>
+            <h4>호스트</h4>
+            <div>
+              <img src={Profileimg} className={classes["user"]} alt="Profile" />
+              {funding.host_nickname}
+            </div>
           </Row>
           <hr></hr>
           <Row style={{ "padding": "10px 0px 10px 0px" }}>
