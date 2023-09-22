@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Upload from "../uploadcomponent/Upload";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
@@ -14,6 +14,8 @@ window.emailPattern = emailPattern;
  */
 
 function RegisterPage() {
+  const navigate = useNavigate();
+
   const [Email, setEmail] = useState("");
   // const [Name, setName] = useState("");
   const [Password, setPassword] = useState("");
@@ -147,21 +149,17 @@ function RegisterPage() {
           onChange={onArticleHandler}
         />
         <br />
-        <Link
-          to={`/login`}
-          id="form-controls"
-          type="click"
-          onClick={onSubmitHandler}
+        <button
+          className={classes.button_submit}
+          onClick={() => onSubmitHandler()}
         >
-          <button className={classes.button_submit}>
-            회원가입
-          </button>
-        </Link>
+          회원가입
+        </button>
       </div>
     </div>
   );
 
-  function onSubmitHandler() {
+  async function onSubmitHandler() {
     // if (Password !== ConfirmPassword) {
     //   return alert("비밀번호와 비밀번호 확인이 같지 않습니다.");
     // }
@@ -189,7 +187,13 @@ function RegisterPage() {
     //   return alert("올바른 비밀번호를 입력하세요.");
     // }
 
-    signUp();
+    if (await signUp()) {
+      // TODO(vi117): 이메일을 확인하라는 모달을 띄우고 나서 navigate
+      navigate("/login");
+    } else {
+      // TODO(vi117): 나중에 적당한 경고창 띄우기.
+      alert("fail");
+    }
   }
 }
 
