@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Accordion, Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";
 
@@ -23,7 +23,10 @@ export default function FundingsPay() {
     / (1000 * 60 * 60 * 24);
 
   return (
-    <div className={classes["ImgArea"]}>
+    <div
+      className={classes["ImgArea"]}
+      style={{ paddingLeft: "230px", paddingRight: "230px" }}
+    >
       <a herf="">
         <img
           src={funding.thumbnail}
@@ -94,9 +97,11 @@ export default function FundingsPay() {
           <FundingPrecaution />
           <PrecautionForm />
           <div className="mb-2">
-            <Button variant="primary" size="lg" onClick={participate}>
-              후원하기
-            </Button>
+            <Link to={`/fundings/${funding.id}`}>
+              <Button variant="primary" size="lg" onClick={participate}>
+                후원하기
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
