@@ -181,7 +181,7 @@ const FundingsDetail = function() {
 
       <Row>
         <Col sm={8}>
-          {funding.content}
+          <div dangerouslySetInnerHTML={{ __html: funding.content }}></div>
         </Col>
         <Col sm={4}>
           <Row className={classes.rewardList}>
