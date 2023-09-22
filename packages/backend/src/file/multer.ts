@@ -8,6 +8,7 @@ const debug = debug_fn("joinify:multer");
 
 function createMinioMulter() {
   return Multer({
+    limits: { fieldSize: 25 * 1024 * 1024 },
     storage: new MinioEngine({
       region: process.env.S3_REGION,
       accessKey: process.env.S3_ACCESS_KEY ?? "",

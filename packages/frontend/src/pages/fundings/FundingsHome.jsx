@@ -133,7 +133,7 @@ function FundingItem({
         />
         <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>
         <h5>{x.title}</h5>
-        <h6>{x.content}</h6>
+        {/* <h6>{x.content}</h6> */}
         <div>
           <ProgressBar
             now={(x.current_value / x.target_value) * 100}
