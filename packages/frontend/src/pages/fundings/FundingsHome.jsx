@@ -55,26 +55,8 @@ const GridContainer = styled("div")({
 //   },
 // ];
 
-const TagSelcection = () => {
-  const [selected, setSelected] = useState(["태그1"]);
-
-  return (
-    <div>
-      <div>카테고리</div>
-      {/* <pre>{JSON.stringify(selected)}</pre> */}
-      <TagsInput
-        width="860px"
-        value={selected}
-        onChange={setSelected}
-        name="fruits"
-        placeHolder="enter..."
-      />
-      {/* <em>태그를 입력해주세요.</em> */}
-    </div>
-  );
-};
-
 const FundingsHome = function() {
+  const [selected, setSelected] = useState([]);
   const {
     data: fetcherData,
     error: fetcherError,
@@ -82,6 +64,7 @@ const FundingsHome = function() {
   } = useFundings({
     offset: 0,
     limit: 50,
+    tags: selected.length > 0 ? selected : undefined,
   });
 
   if (fetcherIsLoading) {
@@ -98,7 +81,16 @@ const FundingsHome = function() {
           <Button variant="success">작성</Button>
         </NavLink>
       </div>
-      <TagSelcection />
+
+      <div>카테고리</div>
+      {/* <pre>{JSON.stringify(selected)}</pre> */}
+      <TagsInput
+        width="860px"
+        value={selected}
+        onChange={setSelected}
+        name="fruits"
+        placeHolder="enter..."
+      />
 
       <GridContainer
         style={{
