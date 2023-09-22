@@ -131,7 +131,10 @@ export class FundingsRepository {
       .$call(log_query(debug));
 
     const rows = await query.execute();
-    return rows;
+    return rows.map((row) => ({
+      ...row,
+      content_thumbnails: JSON.parse(row.content_thumbnails) as string[],
+    }));
   }
 
   /**
@@ -209,7 +212,13 @@ export class FundingsRepository {
       ])
       .where("fundings.id", "=", id)
       .executeTakeFirst();
-    return ret;
+    if (!ret) {
+      return undefined;
+    }
+    return {
+      ...ret,
+      content_thumbnails: JSON.parse(ret.content_thumbnails) as string[],
+    };
   }
 
   async getFundingRewards(funding_id: number): Promise<FundingRewards[]> {
@@ -221,10 +230,17 @@ export class FundingsRepository {
   }
 
   async insert(
-    funding: Insertable<DB["fundings"]>,
+    funding: Omit<Insertable<DB["fundings"]>, "content_thumbnails"> & {
+      content_thumbnails?: string[];
+    },
   ): Promise<number | undefined> {
     const ret = await this.db.insertInto("fundings")
-      .values(funding)
+      .values({
+        ...funding,
+        content_thumbnails: funding.content_thumbnails
+          ? JSON.stringify(funding.content_thumbnails)
+          : undefined,
+      })
       .executeTakeFirst();
     return Number(ret.insertId);
   }
@@ -337,9 +353,12 @@ export class FundingTagRepo {
     this.db = db;
   }
 
-  async insert(funding_tag: Insertable<DB["funding_tags"]>[]) {
+  async insert(funding_tags: Insertable<DB["funding_tags"]>[]) {
+    if (funding_tags.length === 0) {
+      return;
+    }
     await this.db.insertInto("funding_tags")
-      .values(funding_tag)
+      .values(funding_tags)
       .execute();
   }
 

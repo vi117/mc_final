@@ -1,26 +1,33 @@
 import { useState } from "react";
 import { Accordion, Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";
 
 export default function FundingsPay() {
   const location = useLocation();
-  const state = location.state;
-  if (!state) {
-    return <div>Funding에서 클릭해야 합니다!</div>;
+  const userInfo = useLoginInfo();
+  const [shippingInfo, setShippingInfo] = useState({
+    address: userInfo?.address ?? "",
+    addressDetail: "",
+    name: "",
+  });
+
+  if (!userInfo) {
+    return <div>로그인이 필요합니다.</div>;
   }
 
-  const { funding, selectedReward } = state;
-
+  const { funding, selectedReward } = location.state;
   const remainingDays =
     (new Date(funding.end_date).getTime() - new Date().getTime())
     / (1000 * 60 * 60 * 24);
+
   return (
     <div className={classes["ImgArea"]}>
       <a herf="">
         <img
-          src="https://tumblbug-pci.imgix.net/7cfb3abbd6858246bf2035597db71d580c2d498a/45aaac977a4839c037ae17edf1c6fc60a7808549/7de566a0fc9249d3118ace965b212a7a2271db41/2df1f908-3e53-4cbc-a592-a75990833129.png?auto=format%2Ccompress&amp;fit=crop&amp;h=465&amp;lossless=true&amp;w=620&amp;s=2ec44f003aac8f0499c9d46d72f68d15"
-          alt="[댕냥이 위생, 목욕 고민 해결] 100% 국내제작 펫타올 프로젝트 이미지"
+          src={funding.thumbnail}
+          alt={funding.title}
         >
         </img>
       </a>
@@ -34,12 +41,10 @@ export default function FundingsPay() {
       </div>
       <div className={classes["styled-project"]}>
         <span className={classes["account"]}>
-          {funding.current_value} 원 1,493,600 원
+          {funding.current_value} 원
         </span>
         <span className={classes["achivement"]}>
           {((funding.current_value / funding.target_value) * 100).toFixed(2)}
-          {" "}
-          % 298 %
         </span>
         <span className={classes["state"]}>
           {/* TODO(vi117): 일, 시간, 분 남음으로 바꾸기. 컴포넌트로 추출하고 setInterval로 실시간 갱신. */}
@@ -68,7 +73,10 @@ export default function FundingsPay() {
       </div>
       <div className={classes["Address"]}>
         <p>배송 정보</p>
-        <ShippingInformation />
+        <ShippingInformation
+          setShippingInfo={setShippingInfo}
+          shippingInfo={shippingInfo}
+        />
       </div>
       <div className={classes["RoundedWrapper"]}>
         <p>결제수단</p>
@@ -105,7 +113,10 @@ export default function FundingsPay() {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        // address,
+        address: shippingInfo.address + shippingInfo.addressDetail,
+        recipient: shippingInfo.name,
+        // TODO(vi117): phone 입력 추가
+        phone: userInfo.phone,
       }),
     });
     if (!r.ok) {
@@ -274,9 +285,7 @@ function CardRegister() {
   );
 }
 
-function ShippingInformation() {
-  const [address, setAddress] = useState("");
-
+function ShippingInformation({ shippingInfo, setShippingInfo }) {
   return (
     <>
       <Form>
@@ -286,6 +295,12 @@ function ShippingInformation() {
             <Form.Control
               type="Name"
               placeholder="받는 분 성함을 입력해주세요."
+              value={shippingInfo.name}
+              onChange={(e) =>
+                setShippingInfo({
+                  ...shippingInfo,
+                  name: e.target.value,
+                })}
             />
           </Form.Group>
         </Row>
@@ -293,14 +308,26 @@ function ShippingInformation() {
           <Form.Label>배송지</Form.Label>
           <Form.Control
             placeholder="ex) 성남시 분당구 동판교로 115"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            value={shippingInfo.address}
+            onChange={(e) =>
+              setShippingInfo({
+                ...shippingInfo,
+                address: e.target.value,
+              })}
           />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGridAddress2">
           <Form.Label>상세주소</Form.Label>
-          <Form.Control placeholder="ex) 2층 201호" />
+          <Form.Control
+            placeholder="ex) 2층 201호"
+            value={shippingInfo.addressDetail}
+            onChange={(e) =>
+              setShippingInfo({
+                ...shippingInfo,
+                addressDetail: e.target.value,
+              })}
+          />
         </Form.Group>
 
         <Form.Group className="mb-3" id="formGridCheckbox">

@@ -2,13 +2,13 @@ import { AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import useArticleDetail from "../../hook/useArticleDetail";
-import { useLogin } from "../../hook/useLogin";
+import { useLoginId } from "../../hook/useLogin";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
 
 export function CommunityDetail() {
-  const user_id = useLogin();
+  const user_id = useLoginId();
   const { id } = useParams();
   const {
     data: fetcherData,
@@ -99,7 +99,8 @@ export function CommunityDetail() {
       window.location.origin,
     );
     if (user_id == null) {
-      // TODO(vi117): alert login required
+      alert("비회원은 권한이 없습니다. 로그인 해주세요.");
+      location.href = "/login";
       return;
     }
     const res = await fetch(url.href, {
@@ -146,7 +147,8 @@ export function CommunityDetail() {
 
   async function setLike(like = true) {
     if (user_id == null) {
-      // TODO(vi117): alert login required
+      alert("비회원은 권한이 없습니다. 로그인 해주세요.");
+      location.href = "/login";
       return;
     }
     const url = new URL(`/api/v1/articles/${id}/like`, window.location.origin);

@@ -14,7 +14,7 @@ import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import useFundingDetail from "../../hook/useFundingDetail";
-import { useLogin } from "../../hook/useLogin";
+import { useLoginId } from "../../hook/useLogin";
 import classes from "./FundingsDetail.module.css";
 
 const placeholder = "https://via.placeholder.com/850x375";
@@ -89,7 +89,7 @@ const FundingsDetail = function() {
   const { id } = useParams();
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
 
-  const user_id = useLogin();
+  const user_id = useLoginId();
   const [selectedReward, setSelectedReward] = useState(null);
   useEffect(() => {
     if (isLoading) return;
@@ -108,6 +108,9 @@ const FundingsDetail = function() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+  const content_thumbnails = funding.content_thumbnails.length > 0
+    ? funding.content_thumbnails
+    : [funding.thumbnail];
   return (
     <Container
       style={{ paddingTop: "20px", "maxWidth": "var(--max-content-width)" }}
@@ -132,24 +135,11 @@ const FundingsDetail = function() {
       <Row>
         <Col sm={8}>
           <Carousel slide={false}>
-            <Carousel.Item>
-              <img src={placeholder} text="First slide" />
-              <Carousel.Caption>
-                <h3>썸네일 Carousel or 사진한장</h3>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={placeholder} text="Second slide" />
-              <Carousel.Caption>
-                <h3>썸네일 Carousel or 사진한장</h3>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img src={placeholder} text="Third slide" />
-              <Carousel.Caption>
-                <h3>Third slide label</h3>
-              </Carousel.Caption>
-            </Carousel.Item>
+            {content_thumbnails.map((thumbnail) => (
+              <Carousel.Item key={thumbnail}>
+                <img src={thumbnail} />
+              </Carousel.Item>
+            ))}
           </Carousel>
         </Col>
 
@@ -191,7 +181,7 @@ const FundingsDetail = function() {
 
       <Row>
         <Col sm={8}>
-          {funding.content}
+          <div dangerouslySetInnerHTML={{ __html: funding.content }}></div>
         </Col>
         <Col sm={4}>
           <Row className={classes.rewardList}>

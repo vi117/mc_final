@@ -8,6 +8,7 @@ import { TagsInput } from "react-tag-input-component";
 import { Editor } from "../../component/Editor";
 import { ANIMAL_CATEGORY } from "./constant";
 import "./styles/tags.css";
+import Cowritemodal from "./components/co_writemodal";
 
 const selectList = ANIMAL_CATEGORY.map((v) => ({
   value: v,
@@ -34,6 +35,7 @@ const CommunityWrite = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [tagSelected, setSelected] = useState(["QnA"]);
+  const [showModal, setShowModal] = useState(true);
 
   const backToList = () => {
     navigate("/community");
@@ -48,6 +50,11 @@ const CommunityWrite = () => {
 
   return (
     <div className={classes["write-container"]}>
+      <Cowritemodal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+      >
+      </Cowritemodal>
       <div className={classes["write-wrap"]}>
         <div className={classes["write-header"]}>
           <h4>커뮤니티 글 작성</h4>
@@ -123,6 +130,7 @@ const CommunityWrite = () => {
     if (r.status === 201) {
       // TODO(vi117): navigate
       alert("요청이 접수되었습니다.");
+      navigate("/community");
     } else {
       alert("요청이 실패했습니다.");
     }
