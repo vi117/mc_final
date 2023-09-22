@@ -15,6 +15,7 @@ import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import useFundingDetail from "../../hook/useFundingDetail";
 import { useLoginId } from "../../hook/useLogin";
+import Profileimg from "../community/assets/user.png";
 import classes from "./FundingsDetail.module.css";
 
 const FundingsDetail = function() {
@@ -103,7 +104,8 @@ const FundingsDetail = function() {
             </div>
           </Row>
           <Row>
-            <h4>호스트</h4>
+            <img src={Profileimg} className={classes["user"]} alt="Profile" />
+            {/* <h4>호스트</h4> */}
             <div>{funding.host_nickname}</div>
           </Row>
           <hr></hr>

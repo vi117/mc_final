@@ -47,6 +47,16 @@
 
 }
 
+.user {
+  width: 40%;
+  aspect-ratio: 1 / 1;
+  max-width: 45px;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 1px solid var(--secondary);
+  margin-right: 7px;
+}
+
 .content img {
   width: 100%;
   display: block;
