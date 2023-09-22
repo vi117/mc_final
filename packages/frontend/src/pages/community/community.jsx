@@ -34,9 +34,10 @@ export function Community() {
               className={classes["slidercontents"]}
               style={{ marginTop: "0px" }}
             >
-              <img src="/thumb.png"></img>
+              <img src="https://bff-images.bemypet.kr/media/medias/all/280-KakaoTalk_Photo_2023-09-10-21-32-50.jpeg">
+              </img>
               <div className={classes["wrapText"]}>
-                <h1>베스트 글 제목1</h1>
+                <h1>고양이 아이스크림 줘도 되나요?</h1>
                 <div className={classes["d-none-d-md-block"]}>
                   <p>
                     아이스크림 먹을 때마다 졸래졸래 따라와서 킁킁 냄새맡고
@@ -44,7 +45,7 @@ export function Community() {
                     너무 먹고 싶어해서요. 살짝만 핱아보라고 줘도 괜찮을까요?
                   </p>
                 </div>
-                <NavLink to={"/community/1"}>
+                <NavLink to={"/community/3"}>
                   <button className={classes["morebtn"]}>자세히보기</button>
                 </NavLink>
               </div>
@@ -52,17 +53,20 @@ export function Community() {
           </Carousel.Item>
           <Carousel.Item>
             <div className={classes["slidercontents2"]}>
-              <img src="/thumb2.png"></img>
+              <img src="https://bff-images.bemypet.kr/media/medias/all/163-image_picker_50636B55-8924-417E-96D8-82566C2E3A3A-99534-0000459CE1BB2F52.jpg">
+              </img>
               <div className={classes["wrapText"]}>
-                <h1>베스트 글 제목 2</h1>
+                <h1>궁디팡팡 해주면 좋아하다가 갑자기 콱 깨물어요</h1>
                 <div className={classes["d-none-d-md-block"]}>
                   <p>
-                    세이오앙 모래는 항상 우주네 곳간에 쟁여 놓는 벤토예요.
-                    먼지날림, 탈취력, 응고력의 밸런스가 골고루 좋고 입자가
-                    보들보들해서인지 우주의 선호도도 높더라고요😆
+                    궁디팡팡 진짜 살살 해주다가
+
+                    애옹 하면서 계속 해달라고 눕길래 쭉 궁디팡팡 해줬더니
+
+                    갑자기 콱 세게 깨물어요 ㅜㅜ…
                   </p>
                 </div>
-                <NavLink to={"/community/1"}>
+                <NavLink to={"/community/5"}>
                   <button className={classes["morebtn"]}>자세히보기</button>
                 </NavLink>
               </div>
