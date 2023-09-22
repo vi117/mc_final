@@ -4,7 +4,6 @@ import { Badge, Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
-import classes from "./FundingsDetail.module.css";
 
 // const placerholder = "https://via.placeholder.com/100x100";
 
@@ -98,40 +97,53 @@ const FundingsHome = function() {
         }}
       >
         {fetcherData.map((x) => (
-          <div
+          <FundingItem
             key={x.id}
+            item={x}
             style={{
               flex: "0 0 calc(33.33% - 25px)",
               marginRight: "10px",
               marginBottom: "10px",
               // height:"200px"
             }}
-          >
-            <NavLink to={`/fundings/${x.id}`}>
-              <img
-                src={x.thumbnail}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                alt="썸네일 이미지"
-              />
-              <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>
-              <h5>{x.title}</h5>
-              <h6 className={classes.zzzzzzzzzzzzzzz}>{x.content}</h6>
-              <div>
-                <ProgressBar
-                  now={(x.current_value / x.target_value) * 100}
-                  label={((x.current_value / x.target_value) * 100).toFixed(2)
-                    + "%"}
-                />
-              </div>
-            </NavLink>
-          </div>
+          />
         ))}
       </GridContainer>
     </Container>
   );
 };
+
+function FundingItem({
+  item: x,
+  ...rest
+}) {
+  return (
+    <div
+      key={x.id}
+      {...rest}
+    >
+      <NavLink to={`/fundings/${x.id}`}>
+        <img
+          src={x.thumbnail}
+          style={{
+            width: "100%",
+            height: "auto",
+          }}
+          alt="썸네일 이미지"
+        />
+        <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>
+        <h5>{x.title}</h5>
+        <h6>{x.content}</h6>
+        <div>
+          <ProgressBar
+            now={(x.current_value / x.target_value) * 100}
+            label={((x.current_value / x.target_value) * 100).toFixed(2)
+              + "%"}
+          />
+        </div>
+      </NavLink>
+    </div>
+  );
+}
 
 export default FundingsHome;
