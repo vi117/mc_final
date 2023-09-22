@@ -5,13 +5,19 @@
 .body {
     display: flex;
     flex-direction: row;
-    height: 80vh;
+    height: 60vh;
 }
 
 .left_body {
     width: 30%;
+    margin-left: 13%;
 }
 
 .right_body {
     width: 70%;
+    margin-right: 15%;
 }
+
+/* .table {
+    width: 60%;
+} */
