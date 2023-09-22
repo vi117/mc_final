@@ -17,74 +17,6 @@ import useFundingDetail from "../../hook/useFundingDetail";
 import { useLoginId } from "../../hook/useLogin";
 import classes from "./FundingsDetail.module.css";
 
-const placeholder = "https://via.placeholder.com/850x375";
-
-const fundings = [
-  {
-    id: 1,
-    title: "funding 1",
-    thumbnail: placeholder,
-    tag: "고양이",
-    content: "aaaaaaaaaaaaaaaa",
-    target_value: 1000,
-    current_value: 500,
-  },
-  {
-    id: 2,
-    title: "funding 1",
-    thumbnail: placeholder,
-    tag: "고양이",
-    content: "aaaaaaaaaaaaaaaa",
-    target_value: "1000",
-    current_value: "500",
-  },
-  {
-    id: 3,
-    title: "funding 1",
-    thumbnail: placeholder,
-    tag: "고양이",
-    content: "aaaaaaaaaaaaaaaa",
-    target_value: "1000",
-    current_value: "500",
-  },
-  {
-    id: 4,
-    title: "funding 1",
-    thumbnail: placeholder,
-    tag: "고양이",
-    content: "aaaaaaaaaaaaaaaa",
-    target_value: "1000",
-    current_value: "500",
-  },
-  {
-    id: 5,
-    title: "funding 1",
-    thumbnail: placeholder,
-    tag: "고양이",
-    content: "aaaaaaaaaaaaaaaa",
-    target_value: "1000",
-    current_value: "500",
-  },
-  {
-    id: 6,
-    title: "funding 1",
-    thumbnail: placeholder,
-    tag: "고양이",
-    content: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    target_value: "1000",
-    current_value: "500",
-  },
-  {
-    id: 7,
-    title: "funding 1",
-    thumbnail: placeholder,
-    tag: "고양이",
-    content: "aaaaaaaaaaaaaaaa",
-    target_value: "1000",
-    current_value: "500",
-  },
-];
-
 const FundingsDetail = function() {
   const { id } = useParams();
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
@@ -217,26 +149,6 @@ const FundingsDetail = function() {
           </Row>
         </Col>
       </Row>
-
-      <Container>
-        <Row md={3} xs={1}>
-          {fundings.map((x) => (
-            <div key={x.id}>
-              <NavLink to={`/fundings/${x.id}`}>
-                <img
-                  src={x.thumbnail}
-                  style={{ width: "100%" }}
-                  alt="썸네일 이미지"
-                />
-                <div>{x.tag}</div>
-                <h3>{x.title}</h3>
-                <div style={{ "overflow": "ellipsis" }}>{x.content}</div>
-                <h3>달성도:{(x.current_value / x.target_value) * 100}%</h3>
-              </NavLink>
-            </div>
-          ))}
-        </Row>
-      </Container>
     </Container>
   );
 
