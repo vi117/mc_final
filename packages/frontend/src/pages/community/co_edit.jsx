@@ -4,10 +4,9 @@ import { useParams } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useSWR from "swr";
 import { Editor } from "../../component/Editor";
+import { ANIMAL_CATEGORY } from "./constant";
 import baseClasses from "./styles/Co_base.module.css";
 import classes from "./styles/Co_write.module.css";
-import "react-quill/dist/quill.snow.css";
-import { ANIMAL_CATEGORY } from "./constant";
 
 const selectList = ANIMAL_CATEGORY.map((v) => ({
   value: v,

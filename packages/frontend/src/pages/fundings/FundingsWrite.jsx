@@ -7,7 +7,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { TagsInput } from "react-tag-input-component";
 
-import "react-quill/dist/quill.snow.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "../../component/Editor";
 import { Calender } from "./component/Calender";

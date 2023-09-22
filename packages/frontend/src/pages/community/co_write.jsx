@@ -1,12 +1,11 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
-import baseClasses from "./styles/Co_base.module.css";
-import classes from "./styles/Co_write.module.css";
-import "react-quill/dist/quill.snow.css";
 import { TagsInput } from "react-tag-input-component";
 import { Editor } from "../../component/Editor";
 import { ANIMAL_CATEGORY } from "./constant";
+import baseClasses from "./styles/Co_base.module.css";
+import classes from "./styles/Co_write.module.css";
 import "./styles/tags.css";
 import Cowritemodal from "./components/co_writemodal";
 

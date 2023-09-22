@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-quill/dist/quill.snow.css";
 
 import CommunityDetail from "./pages/community/Co_detail";
 import CommunityEdit from "./pages/community/co_edit";
