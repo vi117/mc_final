@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { TagsInput } from "react-tag-input-component";
 
 import "react-quill/dist/quill.snow.css";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "../../component/Editor";
 import { Calender } from "./component/Calender";
 import { ItemList } from "./component/ItemList";
@@ -169,14 +169,16 @@ const FundingsWrite = function() {
 
       <Row>
         완료
-        <Button
-          variant="success"
-          onClick={() => {
-            sendRequest();
-          }}
-        >
-          완료
-        </Button>
+        <NavLink to={"/fundings"}>
+          <Button
+            variant="success"
+            onClick={() => {
+              sendRequest();
+            }}
+          >
+            완료
+          </Button>
+        </NavLink>
       </Row>
     </Container>
   );
