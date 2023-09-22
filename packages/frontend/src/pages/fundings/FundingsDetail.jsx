@@ -33,13 +33,6 @@ const FundingsDetail = function() {
     setSelectedReward(reward);
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
-  function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}.${month}.${day}`;
-  }
-
   if (isLoading) {
     // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
     return <Spinner />;
@@ -47,6 +40,8 @@ const FundingsDetail = function() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+
+  const restTime = new Date(funding.end_date).getTime() - new Date().getTime();
   const content_thumbnails = funding.content_thumbnails.length > 0
     ? funding.content_thumbnails
     : [funding.thumbnail];
@@ -75,54 +70,43 @@ const FundingsDetail = function() {
           <Carousel className={classes.carousel}>
             {content_thumbnails.map((thumbnail) => (
               <Carousel.Item key={thumbnail}>
-                <img src={thumbnail} className={"d-block w-100"} />
+                <img
+                  src={thumbnail}
+                  className={"d-block w-100"}
+                  style={{ height: "400px", objectFit: "cover" }}
+                />
               </Carousel.Item>
             ))}
           </Carousel>
         </Col>
-        {/* TODO(vi117): 예쁘게 날짜 출력 */}
-        <Col
-          style={{
-            fontSize: "14px",
-          }}
-        >
-          <Row>
-            <Col sm={4}>
-              펀딩기간
-            </Col>
-            <Col sm={8}>
-              {formatDate(new Date(funding.begin_date))} ~{" "}
-              {formatDate(new Date(funding.end_date))}
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={4}>
-              달성도
-            </Col>
-            <Col sm={8}>
-              {funding.current_value}원 / {funding.target_value}원
-            </Col>
-          </Row>
-          {
-            /* <Row>
-            <Col sm={4}>
-              참여자수
-            </Col>
-            <Col sm={8}>
-              {funding.rewards.map((reward) => <div key={reward.id}>{reward.reward_current_count}</div>)}
-            </Col>
-          </Row>
-          총 인원을 어떻게 가져와야할지 몰라서 주석처리. 나중에 추가하면 좋을듯 */
-          }
-          {
-            /* <div style={{}}>
-            </div> */
-          }
-          <hr />
+        <Col sm={4}>
+          <Row className="mb-3">
+            <h4>남은 기간</h4>
 
+            {restTime / (1000 * 60 * 60 * 24) > 0
+              ? (
+                <strong>
+                  {(restTime / (1000 * 60 * 60 * 24)).toFixed(1)}일
+                </strong>
+              )
+              : <strong>종료</strong>}
+          </Row>
+          <Row className="mb-3">
+            <h4>달성도</h4>
+            <div style={{ fontSize: "14px" }}>
+              <strong>{funding.current_value} 원</strong>{" "}
+              <strong style={{ color: "green", fontSize: "12px" }}>
+                {(funding.current_value / funding.target_value * 100).toFixed(
+                  1,
+                )}%
+              </strong>
+            </div>
+          </Row>
           <Row>
+            <h4>호스트</h4>
             <div>{funding.host_nickname}</div>
           </Row>
+          <hr></hr>
           <Row style={{ "padding": "10px 0px 10px 0px" }}>
             <Col className="sns">
               <ButtonGroup vertical>
@@ -145,7 +129,7 @@ const FundingsDetail = function() {
           </Row>
         </Col>
       </Row>
-
+      <hr></hr>
       <Row>
         <Col sm={8}>
           <div
