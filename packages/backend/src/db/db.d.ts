@@ -7,6 +7,7 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export interface ArticleLikes {
   user_id: number;
   article_id: number;
+  created_at: Generated<Date>;
 }
 
 export interface ArticleReports {
@@ -93,6 +94,7 @@ export interface Fundings {
   current_value: Generated<number>;
   begin_date: Date;
   end_date: Date;
+  content_thumbnails: Generated<string>;
 }
 
 export interface FundingTagRel {
@@ -111,11 +113,16 @@ export interface FundingUsers {
   funding_id: number;
   reward_id: number;
   address: string;
+  created_at: Generated<Date>;
+
+  recipient: string;
+  phone: string;
 }
 
 export interface UserFundingInterest {
   user_id: number;
   funding_id: number;
+  created_at: Generated<Date>;
 }
 
 export interface Users {

@@ -1,20 +1,27 @@
 import { useState } from "react";
 import { Accordion, Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";
 
 export default function FundingsPay() {
   const location = useLocation();
-  const { funding, selectedReward } = location.state;
+  const userInfo = useLoginInfo();
   const [shippingInfo, setShippingInfo] = useState({
-    address: "",
+    address: userInfo?.address ?? "",
     addressDetail: "",
     name: "",
   });
 
+  if (!userInfo) {
+    return <div>로그인이 필요합니다.</div>;
+  }
+
+  const { funding, selectedReward } = location.state;
   const remainingDays =
     (new Date(funding.end_date).getTime() - new Date().getTime())
     / (1000 * 60 * 60 * 24);
+
   return (
     <div className={classes["ImgArea"]}>
       <a herf="">
@@ -107,8 +114,9 @@ export default function FundingsPay() {
       },
       body: JSON.stringify({
         address: shippingInfo.address + shippingInfo.addressDetail,
-        //
-        // name: shippingInfo.name,
+        recipient: shippingInfo.name,
+        // TODO(vi117): phone 입력 추가
+        phone: userInfo.phone,
       }),
     });
     if (!r.ok) {
