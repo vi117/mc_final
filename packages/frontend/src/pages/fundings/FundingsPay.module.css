@@ -2,6 +2,7 @@
   max-width: 150%;
   width: 150px;
   margin-top: 30px;
+  margin-left: 200px;
 }
 
 .styled-project .intro {
@@ -12,8 +13,8 @@
   color: rgb(158, 158, 158);
 
   float: left;
-  margin-top: -120px;
-  margin-left: 180px;
+  margin-top: -150px;
+  margin-left: 380px;
   
 }
 
@@ -23,15 +24,14 @@
   line-height: 16px;
   font-weight: bold;
   letter-spacing: -0.02em;
-  margin-top: -80px;
-  margin-left: 180px;
+  margin-top: -100px;
+  margin-left: 380px;
 }
 
 .account  { 
   font-size: 14px;
   font-weight: bold;
-  margin-left: 190px;
-  text-align: center;
+  margin-left: 380px;
   
 }
 
@@ -40,13 +40,98 @@
   color: rgb(255, 87, 87);
   text-align: center;
   margin-left: 10px;
-  margin-top: -100px;
+  
 }
 
 .state {
   font-size: 14px;
   text-align: center;
   margin-left: 10px;
+  
+
+}
+.container{
+  
+    padding: 18px 16px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    
+    
+
+}
+.container > p {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 200px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+
+.container table tbody th{
+  width: 98px;
+  vertical-align: top;
+  text-align: center;
+  padding: 4px 0px 4px 16px;
+  font-weight: bold;
+  
+}
+
+.reward-title{
+  margin-left: 40px;
+  text-align: left; 
+}
+
+.reward-list {
+  margin-left: 10px; 
+  text-align: left; 
+  
+}
+
+.reward-price {
+  margin-left: 40px; 
+  text-align: left; 
+  margin-top: 3px;
+
+}
+
+
+.Address > p { 
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 220px;
+  margin-top: 30px;
+
+}
+
+.ShippingInformation > Form.Control
+{ width: 50%;
+
+} 
+
+.RoundedWrapper > p {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 50px;
+  margin-top: 30px;
+}
+
+.RoundedWrapper{
+    border: 1px solid rgb(230, 230, 230);
+    border-radius: 4px;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-tap-highlight-color: rgba(0,0,0,.1);
+    margin-top: -600px;
+    margin-left: 500px;
+    width: 840px;
+    margin-bottom: 450px;
+   
+   
 
 }
 
