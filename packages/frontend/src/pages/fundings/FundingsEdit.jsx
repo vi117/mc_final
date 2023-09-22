@@ -52,7 +52,7 @@ const FundingsWrite = function() {
   const navigate = useNavigate();
 
   return (
-    <Container style={{}}>
+    <Container style={{ paddingLeft: "130px", paddingRight: "130px" }}>
       <Row>
         <TagWrite selected={tagSelected} onChange={setSelected} />
       </Row>
