@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { TagsInput } from "react-tag-input-component";
 
 import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom";
 import { Editor } from "../../component/Editor";
 import { Calender } from "./component/Calender";
 import { ItemList } from "./component/ItemList";
@@ -49,6 +50,7 @@ const FundingsWrite = function() {
   const [targetValue, setTargetValue] = useState(0);
   const [content, setContent] = useState("");
   const [rewards, setRewards] = useState([]);
+  const navigate = useNavigate();
 
   return (
     <Container style={{ "width": "50vw" }}>
@@ -195,6 +197,7 @@ const FundingsWrite = function() {
     if (r.status === 201) {
       // TODO(vi117): toast 띄우기.
       alert("요청이 접수되었습니다.");
+      navigate("/fundings");
     } else {
       alert("요청이 실패되었습니다.");
     }
