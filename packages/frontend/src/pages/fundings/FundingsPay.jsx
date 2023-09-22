@@ -23,7 +23,10 @@ export default function FundingsPay() {
     / (1000 * 60 * 60 * 24);
 
   return (
-    <div className={classes["ImgArea"]}>
+    <div
+      className={classes["ImgArea"]}
+      style={{ paddingLeft: "230px", paddingRight: "230px" }}
+    >
       <a herf="">
         <img
           src={funding.thumbnail}
