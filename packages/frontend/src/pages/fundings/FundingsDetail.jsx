@@ -101,6 +101,13 @@ const FundingsDetail = function() {
     setSelectedReward(reward);
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}.${month}.${day}`;
+  }
+
   if (isLoading) {
     // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
     return <Spinner />;
@@ -123,7 +130,6 @@ const FundingsDetail = function() {
         <Col sm={8} className={classes.fundingName}>
           <h1>{funding.title}</h1>
         </Col>
-
         <Col className={classes.tags}>
           {funding.tags.map((tag) => <Badge key={tag.id}>{tag.tag}</Badge>)}
         </Col>
@@ -152,16 +158,45 @@ const FundingsDetail = function() {
             </Carousel.Item>
           </Carousel>
         </Col>
-
-        <Col sm={4}>
-          <Row style={{ margin: "16px" }}>
-            {/* TODO(vi117): 예쁘게 날짜 출력 */}
-            <div>
-              개설기간: {(new Date(funding.begin_date)).toDateString()} ~
-              {(new Date(funding.end_date)).toDateString()}
-              달성도: {funding.current_value} 원/{funding.target_value} 원
-            </div>
+        {/* TODO(vi117): 예쁘게 날짜 출력 */}
+        <Col
+          style={{
+            fontSize: "14px",
+          }}
+        >
+          <Row>
+            <Col sm={4}>
+              펀딩기간
+            </Col>
+            <Col sm={8}>
+              {formatDate(new Date(funding.begin_date))} ~{" "}
+              {formatDate(new Date(funding.end_date))}
+            </Col>
           </Row>
+          <Row>
+            <Col sm={4}>
+              달성도
+            </Col>
+            <Col sm={8}>
+              {funding.current_value}원 / {funding.target_value}원
+            </Col>
+          </Row>
+          {
+            /* <Row>
+            <Col sm={4}>
+              참여자수
+            </Col>
+            <Col sm={8}>
+              {funding.rewards.map((reward) => <div key={reward.id}>{reward.reward_current_count}</div>)}
+            </Col>
+          </Row>
+          총 인원을 어떻게 가져와야할지 몰라서 주석처리. 나중에 추가하면 좋을듯 */
+          }
+          {
+            /* <div style={{}}>
+            </div> */
+          }
+          <hr />
 
           <Row>
             <div>{funding.host_nickname}</div>
