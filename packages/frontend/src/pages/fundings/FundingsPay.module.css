@@ -2,7 +2,7 @@
   max-width: 150%;
   width: 150px;
   margin-top: 30px;
-  margin-left: 200px;
+  
 }
 
 .styled-project .intro {
@@ -14,7 +14,7 @@
 
   float: left;
   margin-top: -150px;
-  margin-left: 380px;
+  margin-left: 180px;
   
 }
 
@@ -25,13 +25,13 @@
   font-weight: bold;
   letter-spacing: -0.02em;
   margin-top: -100px;
-  margin-left: 380px;
+  margin-left: 180px;
 }
 
 .account  { 
   font-size: 14px;
   font-weight: bold;
-  margin-left: 380px;
+  margin-left: 180px;
   
 }
 
@@ -56,10 +56,9 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    
-    
 
 }
+
 .container > p {
   font-size: 20px;
   font-weight: bold;
@@ -96,7 +95,6 @@
 
 }
 
-
 .Address > p { 
   font-size: 20px;
   font-weight: bold;
@@ -104,11 +102,6 @@
   margin-top: 30px;
 
 }
-
-.ShippingInformation > Form.Control
-{ width: 50%;
-
-} 
 
 .RoundedWrapper > p {
   font-size: 20px;
@@ -127,7 +120,7 @@
     align-items: center;
     -webkit-tap-highlight-color: rgba(0,0,0,.1);
     margin-top: -600px;
-    margin-left: 500px;
+    margin-left: 400px;
     width: 840px;
     margin-bottom: 450px;
    
