@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Component } from "react";
 import { Button, Container, Image, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 
@@ -30,7 +29,6 @@ const Calender = () => {
         locale={ko}
         dateFormat="yyyy년 MM월 dd일"
       />
-      ~
       <DatePicker
         showIcon
         selected={endDate}
@@ -89,90 +87,12 @@ const Editor = () => {
     </div>
   );
 };
-class ItemList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [], // 물건 목록을 저장할 상태
-      newItemName: "", // 새 물건의 이름을 저장할 상태
-      newItemDesc: "", // 새 물건의 설명을 저장할 상태
-      newItemPrice: "", // 새 물건의 가격을 저장할 상태
-    };
-  }
-
-  // 새 물건을 추가하는 함수
-  addItem = () => {
-    const { newItemName, newItemDesc, newItemPrice } = this.state;
-    if (newItemName && newItemDesc && newItemPrice) {
-      const newItem = {
-        name: newItemName,
-        description: newItemDesc,
-        price: newItemPrice,
-      };
-
-      this.setState(prevState => ({
-        items: [...prevState.items, newItem],
-        newItemName: "",
-        newItemDesc: "",
-        newItemPrice: "",
-      }));
-    }
-  };
-
-  // 물건을 삭제하는 함수
-  deleteItem = (index) => {
-    const updatedItems = [...this.state.items];
-    updatedItems.splice(index, 1);
-    this.setState({ items: updatedItems });
-  };
-
-  render() {
-    return (
-      <div>
-        <div>리워드 추가</div>
-        <input
-          type="text"
-          placeholder="이름"
-          value={this.state.newItemName}
-          onChange={(e) => this.setState({ newItemName: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="설명"
-          value={this.state.newItemDesc}
-          onChange={(e) => this.setState({ newItemDesc: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="가격"
-          value={this.state.newItemPrice}
-          onChange={(e) => this.setState({ newItemPrice: e.target.value })}
-        />
-        <button onClick={this.addItem}>추가</button>
-
-        <ul>
-          {this.state.items.map((item, index) => (
-            <li key={index} style={{ "listStyleType": "None" }}>
-              <strong>{item.name}</strong> - {item.description} - {item.price}
-              <button
-                onClick={() =>
-                  this.deleteItem(index)}
-              >
-                삭제
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-}
 
 const FundingsWrite = function() {
   return (
     <>
       <h1>수정가능한 부분만 남길것</h1>
-      <Container style={{ "border": "1px solid red", "width": "50vw" }}>
+      <Container>
         <Row>
           <TagWrite />
         </Row>
@@ -218,16 +138,9 @@ const FundingsWrite = function() {
           유저.이메일
           <Form.Control type="text" placeholder="유저.email" />
         </Row>
-
-        ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         <Row>
           <Editor />
         </Row>
-
-        <Row>
-          <ItemList />
-        </Row>
-        ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         <Row>
           계좌연결
           <Form.Select aria-label="Default select example">

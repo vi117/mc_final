@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, Form, ListGroup } from "react-bootstrap";
 
 function AddItemView({
   onAddItem = () => {},
@@ -9,33 +10,33 @@ function AddItemView({
   const [count, setCount] = useState("");
 
   return (
-    <>
-      <div>리워드 추가</div>
-      <input
+    <Form.Group>
+      <h2>리워드 추가</h2>
+      <Form.Control
         type="text"
         placeholder="이름"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <input
+      <Form.Control
         type="text"
         placeholder="설명"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
-      <input
+      <Form.Control
         type="number"
         placeholder="가격"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
       />
-      <input
+      <Form.Control
         type="number"
         placeholder="수량"
         value={count}
         onChange={(e) => setCount(e.target.value)}
       />
-      <button
+      <Button
         onClick={() => {
           onAddItem({
             title,
@@ -46,8 +47,8 @@ function AddItemView({
         }}
       >
         추가
-      </button>
-    </>
+      </Button>
+    </Form.Group>
   );
 }
 
@@ -65,12 +66,12 @@ export function ItemList({
           onChange(updatedItems);
         }}
       />
-      <ul>
+      <ListGroup>
         {items.map((item, index) => (
-          <li key={index} style={{ "listStyleType": "None" }}>
+          <ListGroup.Item key={index} style={{ "listStyleType": "None" }}>
             <strong>{item.title}</strong> - {item.content} - {item.price} -
             {item.reward_count}
-            <button
+            <Button
               onClick={() => {
                 const updatedItems = [...items];
                 updatedItems.splice(index, 1);
@@ -79,10 +80,10 @@ export function ItemList({
               }}
             >
               삭제
-            </button>
-          </li>
+            </Button>
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   );
 }

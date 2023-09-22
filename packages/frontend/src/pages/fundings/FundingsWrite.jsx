@@ -27,8 +27,7 @@ const TagWrite = ({
 }) => {
   return (
     <div>
-      <div>카테고리</div>
-      <pre>{JSON.stringify(selected)}</pre>
+      <h2>카테고리</h2>
       <TagsInput
         value={selected}
         onChange={onChange}
@@ -53,22 +52,27 @@ const FundingsWrite = function() {
   const navigate = useNavigate();
 
   return (
-    <Container style={{ "width": "50vw" }}>
+    <Container style={{}}>
       <Row>
         <TagWrite selected={tagSelected} onChange={setSelected} />
       </Row>
-
+      <hr></hr>
       <Row>
-        제목
-        <Form.Control
-          type="text"
-          placeholder="제목을 기입해주세요."
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-        />
+        <Form.Group>
+          <Form.Label>
+            <h2>제목</h2>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            className="mb-3"
+            placeholder="제목을 기입해주세요."
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+        </Form.Group>
       </Row>
       <Row>
-        썸네일
+        <h3>썸네일</h3>
         <Form.Group controlId="formFileMultiple" className="mb-3">
           <Form.Label>썸네일 사진을 업로드해주세요.</Form.Label>
           <Form.Control
@@ -84,7 +88,7 @@ const FundingsWrite = function() {
         {/* TODO(vi117): title thumbnail과 content thumbnail 을 업로드 */}
       </Row>
       <Row>
-        콘텐츠 썸네일
+        <h3>콘텐츠 썸네일</h3>
         <Form.Group controlId="formFileMultiple" className="mb-3">
           <Form.Label>콘텐츠 썸네일 사진을 업로드해주세요.</Form.Label>
           <Form.Control
@@ -98,29 +102,33 @@ const FundingsWrite = function() {
         </Form.Group>
       </Row>
       <Row>
-        개설기간
-        <Calender
-          startDate={startDate}
-          endDate={endDate}
-          onChange={(e) => {
-            setStartDate(e.startDate);
-            setEndDate(e.endDate);
-          }}
-        />
+        <h3>개설기간</h3>
+        <Form.Group className="mb-3">
+          <Calender
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(e) => {
+              setStartDate(e.startDate);
+              setEndDate(e.endDate);
+            }}
+          />
+        </Form.Group>
       </Row>
 
       <Row>
-        목표금액
-        <Form.Control
-          type="text"
-          placeholder="목표금액(숫자만)"
-          pattern="[0-9]*"
-          value={targetValue}
-          onChange={(e) => setTargetValue(parseInt(e.target.value))}
-        />
+        <Form.Group className="mb-3">
+          <h3>목표금액</h3>
+          <Form.Control
+            type="text"
+            placeholder="목표금액(숫자만)"
+            pattern="[0-9]*"
+            value={targetValue}
+            onChange={(e) => setTargetValue(parseInt(e.target.value))}
+          />
+        </Form.Group>
       </Row>
 
-      <Row>
+      <Row style={{ marginBottom: "60px" }}>
         <Editor
           onChange={(v) => {
             setContent(v);
@@ -128,6 +136,7 @@ const FundingsWrite = function() {
           value={content}
         />
       </Row>
+      <hr></hr>
 
       <Row>
         <ItemList
@@ -139,7 +148,7 @@ const FundingsWrite = function() {
       </Row>
 
       <Row>
-        계좌연결
+        <h3>계좌연결</h3>
         <Form.Select aria-label="Default select example">
           <option>은행명</option>
           <option value="1">기업</option>
