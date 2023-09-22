@@ -1,6 +1,6 @@
 import { AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useLoginId } from "../../hook/useLogin";
 import Profileimg from "./assets/user.png";
@@ -9,6 +9,7 @@ import classes from "./styles/Co_detail.module.css";
 
 export function CommunityDetail() {
   const user_id = useLoginId();
+  const navigate = useNavigate();
   const { id } = useParams();
   const {
     data: fetcherData,
@@ -88,6 +89,16 @@ export function CommunityDetail() {
   );
   async function deleteArticle() {
     if (confirm("정말로 삭제하시겠습니까?") == true) {
+      const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
+
+      const res = await fetch(url.href, {
+        method: "DELETE",
+      });
+      if (res.status == 200) {
+        alert("삭제이 완료되었습니다.");
+        navigate("/community");
+        return;
+      }
       alert("삭제되었습니다"); // 삭제 기능 나중에 구현
     } else {
       return false;

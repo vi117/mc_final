@@ -72,10 +72,10 @@ const FundingsDetail = function() {
 
       <Row>
         <Col sm={8}>
-          <Carousel slide={false}>
+          <Carousel className={classes.carousel}>
             {content_thumbnails.map((thumbnail) => (
               <Carousel.Item key={thumbnail}>
-                <img src={thumbnail} />
+                <img src={thumbnail} className={"d-block w-100"} />
               </Carousel.Item>
             ))}
           </Carousel>
@@ -148,7 +148,11 @@ const FundingsDetail = function() {
 
       <Row>
         <Col sm={8}>
-          <div dangerouslySetInnerHTML={{ __html: funding.content }}></div>
+          <div
+            className={classes.content}
+            dangerouslySetInnerHTML={{ __html: funding.content }}
+          >
+          </div>
         </Col>
         <Col sm={4}>
           <Row className={classes.rewardList}>

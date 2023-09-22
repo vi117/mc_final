@@ -40,8 +40,19 @@
   padding: 10px 0px 10px 0px;
 }
 
+.carousel{
+  background: #f1f1f1;
+  border-radius: 4px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+}
+.content {
+  
+}
 
-
+.content img {
+  width: 100%;
+  display: block;
+}
 /* // const customButtonStyle = { // 버튼을 컨셉색깔로 바꾸려고 해봤는데 실패..
   //   backgroundColor: '#00917C' , // 원하는 색상
   //   color: 'white' // 텍스트 색상
