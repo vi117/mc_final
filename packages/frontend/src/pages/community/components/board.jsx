@@ -70,6 +70,7 @@ const Board = () => {
           selectOrderBy={(o) => {
             setOrderBy(o);
           }}
+          setIsModalOpen={setIsModalOpen}
         />
         <table className={classes["board-table"]}>
           <thead>
