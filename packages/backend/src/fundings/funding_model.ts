@@ -97,6 +97,20 @@ export class FundingsRepository {
         });
         return qb;
       })
+      .select([
+        "fundings.id",
+        "fundings.title",
+        "fundings.thumbnail",
+        "fundings.content_thumbnails",
+        "fundings.created_at",
+        "fundings.updated_at",
+        "fundings.deleted_at",
+        "fundings.host_id",
+        "fundings.target_value",
+        "fundings.current_value",
+        "fundings.begin_date",
+        "fundings.end_date",
+      ])
       .selectAll(["fundings"])
       .select([
         "host.nickname as host_nickname",
@@ -133,6 +147,7 @@ export class FundingsRepository {
     const rows = await query.execute();
     return rows.map((row) => ({
       ...row,
+      content: "",
       content_thumbnails: JSON.parse(row.content_thumbnails) as string[],
     }));
   }
