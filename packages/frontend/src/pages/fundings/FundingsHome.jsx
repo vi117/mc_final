@@ -4,7 +4,6 @@ import { Badge, Button, Container, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
-import classes from "./FundingsDetail.module.css";
 
 // const placerholder = "https://via.placeholder.com/100x100";
 
@@ -55,26 +54,8 @@ const GridContainer = styled("div")({
 //   },
 // ];
 
-const TagSelcection = () => {
-  const [selected, setSelected] = useState(["태그1"]);
-
-  return (
-    <div>
-      <div>카테고리</div>
-      {/* <pre>{JSON.stringify(selected)}</pre> */}
-      <TagsInput
-        width="860px"
-        value={selected}
-        onChange={setSelected}
-        name="fruits"
-        placeHolder="enter..."
-      />
-      {/* <em>태그를 입력해주세요.</em> */}
-    </div>
-  );
-};
-
 const FundingsHome = function() {
+  const [selected, setSelected] = useState([]);
   const {
     data: fetcherData,
     error: fetcherError,
@@ -82,6 +63,7 @@ const FundingsHome = function() {
   } = useFundings({
     offset: 0,
     limit: 50,
+    tags: selected.length > 0 ? selected : undefined,
   });
 
   if (fetcherIsLoading) {
@@ -98,7 +80,16 @@ const FundingsHome = function() {
           <Button variant="success">작성</Button>
         </NavLink>
       </div>
-      <TagSelcection />
+
+      <div>카테고리</div>
+      {/* <pre>{JSON.stringify(selected)}</pre> */}
+      <TagsInput
+        width="860px"
+        value={selected}
+        onChange={setSelected}
+        name="fruits"
+        placeHolder="enter..."
+      />
 
       <GridContainer
         style={{
@@ -106,40 +97,53 @@ const FundingsHome = function() {
         }}
       >
         {fetcherData.map((x) => (
-          <div
+          <FundingItem
             key={x.id}
+            item={x}
             style={{
               flex: "0 0 calc(33.33% - 25px)",
               marginRight: "10px",
               marginBottom: "10px",
               // height:"200px"
             }}
-          >
-            <NavLink to={`/fundings/${x.id}`}>
-              <img
-                src={x.thumbnail}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                alt="썸네일 이미지"
-              />
-              <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>
-              <h5>{x.title}</h5>
-              <h6 className={classes.zzzzzzzzzzzzzzz}>{x.content}</h6>
-              <div>
-                <ProgressBar
-                  now={(x.current_value / x.target_value) * 100}
-                  label={((x.current_value / x.target_value) * 100).toFixed(2)
-                    + "%"}
-                />
-              </div>
-            </NavLink>
-          </div>
+          />
         ))}
       </GridContainer>
     </Container>
   );
 };
+
+function FundingItem({
+  item: x,
+  ...rest
+}) {
+  return (
+    <div
+      key={x.id}
+      {...rest}
+    >
+      <NavLink to={`/fundings/${x.id}`}>
+        <img
+          src={x.thumbnail}
+          style={{
+            width: "100%",
+            height: "auto",
+          }}
+          alt="썸네일 이미지"
+        />
+        <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>
+        <h5>{x.title}</h5>
+        <h6>{x.content}</h6>
+        <div>
+          <ProgressBar
+            now={(x.current_value / x.target_value) * 100}
+            label={((x.current_value / x.target_value) * 100).toFixed(2)
+              + "%"}
+          />
+        </div>
+      </NavLink>
+    </div>
+  );
+}
 
 export default FundingsHome;

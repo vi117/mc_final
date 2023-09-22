@@ -4,8 +4,7 @@ import logger from "morgan";
 
 import { testDBConnection } from "@/db/util";
 
-import { BadRequestError } from "@/util/assert_param";
-import { StatusCodes } from "http-status-codes";
+import { HandlerErrorBase } from "@/util/assert_param";
 import indexRouter from "./src/routes/index";
 
 const app = express();
@@ -51,8 +50,8 @@ app.use((req, res, _next) => {
 
 // error handler
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-  if (err instanceof BadRequestError) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: err.message });
+  if (err instanceof HandlerErrorBase) {
+    res.status(err.status).json({ message: err.message, ...err.options });
     return;
   }
   console.error("500 error", err);
