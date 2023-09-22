@@ -33,8 +33,6 @@ const FundingsDetail = function() {
     setSelectedReward(reward);
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
-  const restTime = new Date(funding.end_date).getTime() - new Date().getTime();
-
   if (isLoading) {
     // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
     return <Spinner />;
@@ -42,6 +40,8 @@ const FundingsDetail = function() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+
+  const restTime = new Date(funding.end_date).getTime() - new Date().getTime();
   const content_thumbnails = funding.content_thumbnails.length > 0
     ? funding.content_thumbnails
     : [funding.thumbnail];
@@ -60,7 +60,6 @@ const FundingsDetail = function() {
         <Col sm={8} className={classes.fundingName}>
           <h1>{funding.title}</h1>
         </Col>
-
         <Col className={classes.tags}>
           {funding.tags.map((tag) => <Badge key={tag.id}>{tag.tag}</Badge>)}
         </Col>
@@ -80,10 +79,9 @@ const FundingsDetail = function() {
             ))}
           </Carousel>
         </Col>
-
         <Col sm={4}>
           <Row className="mb-3">
-            <h3>남은 기간</h3>
+            <h4>남은 기간</h4>
 
             {restTime / (1000 * 60 * 60 * 24) > 0
               ? (
@@ -94,10 +92,10 @@ const FundingsDetail = function() {
               : <strong>종료</strong>}
           </Row>
           <Row className="mb-3">
-            <h3>달성도</h3>
-            <div>
+            <h4>달성도</h4>
+            <div style={{ fontSize: "14px" }}>
               <strong>{funding.current_value} 원</strong>{" "}
-              <strong style={{ color: "green", fontSize: "14px" }}>
+              <strong style={{ color: "green", fontSize: "12px" }}>
                 {(funding.current_value / funding.target_value * 100).toFixed(
                   1,
                 )}%

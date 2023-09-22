@@ -8,6 +8,7 @@ import SearchModal from "../SearchModal";
 import classes from "./Header.module.css";
 // import SearchBar from "../SearchBar";
 // import SearchBox from "../SearchBox";
+// import AutoSearch from "../AutoSearch";
 
 /**
  * Logs the user out by making a POST request to the "/api/v1/users/logout" endpoint.
@@ -119,6 +120,7 @@ export function Header() {
             </div>{" "}
             <div className={classes.right}>
               <SearchModal />
+              {/* <AutoSearch/> */}
             </div>
           </Nav>
         </Navbar>
