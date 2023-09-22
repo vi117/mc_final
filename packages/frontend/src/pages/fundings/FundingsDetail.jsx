@@ -33,6 +33,8 @@ const FundingsDetail = function() {
     setSelectedReward(reward);
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
+  const restTime = new Date(funding.end_date).getTime() - new Date().getTime();
+
   if (isLoading) {
     // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
     return <Spinner />;
@@ -69,25 +71,44 @@ const FundingsDetail = function() {
           <Carousel className={classes.carousel}>
             {content_thumbnails.map((thumbnail) => (
               <Carousel.Item key={thumbnail}>
-                <img src={thumbnail} className={"d-block w-100"} />
+                <img
+                  src={thumbnail}
+                  className={"d-block w-100"}
+                  style={{ height: "400px", objectFit: "cover" }}
+                />
               </Carousel.Item>
             ))}
           </Carousel>
         </Col>
 
         <Col sm={4}>
-          <Row style={{ margin: "16px" }}>
-            {/* TODO(vi117): 예쁘게 날짜 출력 */}
+          <Row className="mb-3">
+            <h3>남은 기간</h3>
+
+            {restTime / (1000 * 60 * 60 * 24) > 0
+              ? (
+                <strong>
+                  {(restTime / (1000 * 60 * 60 * 24)).toFixed(1)}일
+                </strong>
+              )
+              : <strong>종료</strong>}
+          </Row>
+          <Row className="mb-3">
+            <h3>달성도</h3>
             <div>
-              개설기간: {(new Date(funding.begin_date)).toDateString()} ~
-              {(new Date(funding.end_date)).toDateString()}
-              달성도: {funding.current_value} 원/{funding.target_value} 원
+              <strong>{funding.current_value} 원</strong>{" "}
+              <strong style={{ color: "green", fontSize: "14px" }}>
+                {(funding.current_value / funding.target_value * 100).toFixed(
+                  1,
+                )}%
+              </strong>
             </div>
           </Row>
-
           <Row>
+            <h4>호스트</h4>
             <div>{funding.host_nickname}</div>
           </Row>
+          <hr></hr>
           <Row style={{ "padding": "10px 0px 10px 0px" }}>
             <Col className="sns">
               <ButtonGroup vertical>
@@ -110,7 +131,7 @@ const FundingsDetail = function() {
           </Row>
         </Col>
       </Row>
-
+      <hr></hr>
       <Row>
         <Col sm={8}>
           <div
