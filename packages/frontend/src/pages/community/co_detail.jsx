@@ -99,7 +99,8 @@ export function CommunityDetail() {
       window.location.origin,
     );
     if (user_id == null) {
-      // TODO(vi117): alert login required
+      alert("비회원은 권한이 없습니다. 로그인 해주세요.");
+      location.href = "/login";
       return;
     }
     const res = await fetch(url.href, {
@@ -146,7 +147,8 @@ export function CommunityDetail() {
 
   async function setLike(like = true) {
     if (user_id == null) {
-      // TODO(vi117): alert login required
+      alert("비회원은 권한이 없습니다. 로그인 해주세요.");
+      location.href = "/login";
       return;
     }
     const url = new URL(`/api/v1/articles/${id}/like`, window.location.origin);
