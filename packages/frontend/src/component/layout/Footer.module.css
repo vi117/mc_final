@@ -2,13 +2,9 @@
     max-width: var(--max-content-width);
     margin: 0 auto;
     padding:30px 0px 60px 0px;
-
 }
 
-.footer_logo {
- 
-}
-.footer_logo >h1 {
+.footer_logo > h1 {
     color:var(--primary0);
     letter-spacing: -0.02em;
     font-weight: 700;
@@ -18,6 +14,7 @@
 
 .footer_details {
    color:var(--teritary);
+   padding: 0;
 }
 
 .footer_info {
