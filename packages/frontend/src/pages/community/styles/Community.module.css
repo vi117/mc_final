@@ -200,6 +200,7 @@ letter-spacing: -0.01px;
 }
 
 .writebtn > p {
+  font-weight: 700;
   color: var(--green);
   font-size: 14px;
 }

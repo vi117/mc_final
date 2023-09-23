@@ -1,18 +1,19 @@
 import { styled } from "@mui/material";
 import { useState } from "react";
-import { Badge, Button, Card, Container, ProgressBar } from "react-bootstrap";
+import { Badge, Card, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
+import classes from "./FundingsHome.module.css";
+// import "./FundingsHome_Item.css"
 
 // const placerholder = "https://via.placeholder.com/100x100";
 
 const GridContainer = styled("div")({
   display: "grid",
-  gridTemplateColumns: "repeat(3, 1fr)",
+  gridTemplateColumns: "repeat(4, 1fr)",
   gridGap: "12px",
   justifyContent: "center",
-  marginLeft: "12.5px",
 });
 
 // const fundings = [
@@ -75,41 +76,36 @@ const FundingsHome = function() {
   }
 
   return (
-    <Container style={{ paddingTop: "20px", "width": "860px" }}>
-      <div style={{ textAlign: "right" }}>
-        <NavLink to={"/fundings/post"}>
-          <Button variant="success">작성</Button>
-        </NavLink>
-      </div>
-
-      <div>카테고리</div>
+    <div className={classes["funding_container"]}>
       {/* <pre>{JSON.stringify(selected)}</pre> */}
-      <TagsInput
-        width="860px"
-        value={selected}
-        onChange={setSelected}
-        name="fruits"
-        placeHolder="enter..."
-      />
+      <div className={classes["funding_navarea"]}>
+        <div className={classes["funding_tagsearch"]}>
+          <TagsInput
+            value={selected}
+            onChange={setSelected}
+            name="fruits"
+            placeHolder={selected.length === 0
+              ? "태그 검색으로 원하는 펀딩을 찾아보세요!"
+              : ""}
+          />
+        </div>
 
-      <GridContainer
-        style={{
-          marginTop: "10px",
-          marginBottom: "10px",
-        }}
-      >
+        <div className={classes["funding_createbtn"]}>
+          <NavLink to={"/fundings/post"}>
+            <p className={classes["go_create"]}>펀딩 만들기</p>
+          </NavLink>
+        </div>
+      </div>
+      <GridContainer className={classes["funding_itemarea"]}>
         {fetcherData.map((x) => (
           <FundingItem
+            className={classes["funding_item"]}
             key={x.id}
             item={x}
-            style={{
-              padding: "4px",
-              // height:"200px"
-            }}
           />
         ))}
       </GridContainer>
-    </Container>
+    </div>
   );
 };
 
@@ -119,18 +115,14 @@ function FundingItem({
 }) {
   return (
     <Card
+      className={classes["funding_card"]}
       key={x.id}
       {...rest}
     >
       <NavLink to={`/fundings/${x.id}`}>
         <img
           src={x.thumbnail}
-          style={{
-            width: "100%",
-            height: "200px",
-            objectFit: "cover",
-            borderRadius: "5px",
-          }}
+          className={classes["funding_item_thumbnail"]}
           alt="썸네일 이미지"
         />
         <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>

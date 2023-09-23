@@ -54,14 +54,14 @@ select {
   border-radius: 12px;
   font-size: 16px;
   margin: 5px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .submitbutton button:hover {
   background-color: var(--green);
   border: 1px solid var(--green);
   color: var(--white);
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .catSelect {

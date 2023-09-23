@@ -1,11 +1,47 @@
 
-.zzzzzzzzzzzzzzz {
-  /* margin-left: 7000px; */
-  font-size: 4px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  /* font-weight: bold; */
+.funding_container{
+  padding: 10px 7px 50px 7px;
+  margin:0 auto;
+  max-width: 1080px;
 }
 
-/* css가 안먹어요.... */
+.funding_tagsearch {
+  width:60%;
+}
+.funding_navarea{
+  align-items: center;
+  width:100%;
+  display:flex;
+}
+
+.funding_createbtn {
+
+  margin-left: auto;
+
+}
+
+.go_create {
+  margin-bottom: 0px !important;
+  font-size: 16px;
+  color:var(--green);
+  font-weight: 700;
+}
+
+.funding_itemarea {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  padding: 20px 0px;
+}
+.funding_item {
+  display:flex;
+  align-items: center;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+
+.funding_item_thumbnail {
+  width: 100% !important;
+  height: 204px !important;
+  object-fit: cover !important;
+}
