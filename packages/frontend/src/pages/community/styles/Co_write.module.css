@@ -8,13 +8,12 @@ select {
 
 .write-container {
   max-width: 1080px;
+  padding: 10px 7px 50px 7px;
   margin: 0 auto;
 }
 
 .write-wrap {
-  padding: 50px 0px;
   margin: 0 auto;
-  width: 85%;
   justify-content: center;
 }
 
@@ -54,14 +53,14 @@ select {
   border-radius: 12px;
   font-size: 16px;
   margin: 5px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .submitbutton button:hover {
   background-color: var(--green);
   border: 1px solid var(--green);
   color: var(--white);
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .catSelect {
@@ -81,17 +80,13 @@ select {
 }
 
 
-/* .catSelect option:hover{
-  background-color: lime !important;
-}
-
-.catSelect option:focus {
-  background-color: lime;
-}
-
-.catSelect option:active {
-  background-color: lime;
-} */
+.tagsinputarea {
+  display:flex;
+  align-items: center;
+  height: 45px;
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+  }
 
 
 

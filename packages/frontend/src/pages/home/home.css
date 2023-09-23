@@ -1,7 +1,6 @@
 .main-home-container{
     margin: 0 auto !important;
     width:100%;
-    padding: 10px 0px;
     align-items: center;
 }
 .banner .carousel_img {
@@ -63,7 +62,7 @@
     align-items: center;
     margin: 0 auto !important;
     width:1100px;
-    padding: 20px 0px 50px 0px;
+    padding: 20px 7px 50px 7px;
 }
 
 .home-funding-title{

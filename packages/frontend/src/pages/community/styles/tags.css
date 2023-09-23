@@ -1,15 +1,31 @@
 
 .rti--container {
-    --rti-main: none !important;
+    --rti-main:none !important;
     --rti-tag-remove: #0d0d0d !important;
-    --rti-border: #d9d9d9 !important;
+    --rti-border: none !important;
+    outline:none !important;
+    width:100%;
+  }
+
+  .rti--container:focus{
+    outline:none !important;
   }
 
 .rti--input::placeholder {
     font-size: 14px;
+    color:var(--teritary);
 }
 
 .rti--tag {
     background-color: #d9d9d9 !important;
     margin-right:10px;
+}
+
+.rti--input:focus{
+    outline: none !important;
+    border: 0px !important;
+}
+
+.rti--input{
+  width:80% !important;
 }

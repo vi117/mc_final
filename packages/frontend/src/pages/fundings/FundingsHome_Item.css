@@ -1,0 +1,20 @@
+.funding_itemarea {
+    border: 1px solid red;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    padding: 20px 0px;
+  }
+  .funding_item {
+    display:flex;
+    align-items: center;
+    border-radius: 0 !important;
+    border:1px solid black;
+    height:392px;   
+  }
+  
+  
+  .funding_item_thumbnail {
+    width: "255px";
+    height: "204px";
+    objectFit: "cover";
+  }

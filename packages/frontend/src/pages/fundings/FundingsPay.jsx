@@ -47,20 +47,23 @@ export default function FundingsPay() {
           {funding.current_value} 원
         </span>
         <span className={classes["achivement"]}>
-          {((funding.current_value / funding.target_value) * 100).toFixed(2)}
+          {((funding.current_value / funding.target_value) * 100).toFixed(2)} %
         </span>
         <span className={classes["state"]}>
           {/* TODO(vi117): 일, 시간, 분 남음으로 바꾸기. 컴포넌트로 추출하고 setInterval로 실시간 갱신. */}
           {remainingDays.toFixed(2)}일 남음
         </span>
       </div>
+      <p className={classes["FundingInfor"]}>펀딩 정보</p>
       <div className={classes["container"]}>
         <table>
           <tbody>
             <tr>
               <th>펀딩 구성</th>
               <td>
-                <p>{selectedReward.title}</p>
+                <p className={classes["reward-title"]}>
+                  {selectedReward.title}
+                </p>
                 <ul className={classes["reward-list"]}>
                   {selectedReward.content}
                 </ul>
@@ -68,41 +71,48 @@ export default function FundingsPay() {
             </tr>
             <tr>
               <th>펀딩 금액</th>
-              <td>{selectedReward.price} 원</td>
+              <td>
+                <p className={classes["reward-price"]}>
+                  {selectedReward.price} 원
+                </p>
+              </td>
             </tr>
           </tbody>
         </table>
-        <Button variant="outline-dark">변경</Button>
       </div>
+      <p className={classes["AddressInfor"]}>배송 정보</p>
       <div className={classes["Address"]}>
-        <p>배송 정보</p>
         <ShippingInformation
           setShippingInfo={setShippingInfo}
           shippingInfo={shippingInfo}
         />
       </div>
+      <p className={classes["Payment"]}>결제수단</p>
       <div className={classes["RoundedWrapper"]}>
-        <p>결제수단</p>
         <PaymentMethod />
         <CardRegister />
-
-        <div className={classes["PledgeAmount"]}>
-          <p>
-            최종 후원 금액
-            <span>{selectedReward.price} 원</span>
-          </p>
-          <div className={classes["PledgeAmount-text"]}></div>
-          프로젝트가 무산되거나 중단된 경우 결제는 자동으로 취소됩니다.
-          <ConsentForm />
-          <FundingPrecaution />
-          <PrecautionForm />
-          <div className="mb-2">
-            <Link to={`/fundings/${funding.id}`}>
-              <Button variant="primary" size="lg" onClick={participate}>
-                후원하기
-              </Button>
-            </Link>
-          </div>
+      </div>
+      <div className={classes["Sponsorship"]}>
+        <p className={classes["FinalAmount"]} style={{ color: "#3A52CA" }}>
+          최종 후원 금액
+          <span
+            style={{ position: "relative", left: "80px", color: "#0C0002" }}
+          >
+            {selectedReward.price} 원
+          </span>
+        </p>
+      </div>
+      <div className={classes["PledgeAmount"]}>
+        프로젝트가 무산되거나 중단된 경우 결제는 취소되며 환불 진행됩니다.
+        <ConsentForm />
+        <FundingPrecaution />
+        <PrecautionForm />
+        <div className="mb-2">
+          <Link to={`/fundings/${funding.id}`}>
+            <Button variant="primary" size="lg" onClick={participate}>
+              후원하기
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
@@ -162,7 +172,11 @@ function CardRegister() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button
+        variant="primary"
+        onClick={handleShow}
+        style={{ width: "300px", left: "50px" }}
+      >
         + 카드 등록
       </Button>
 
@@ -296,9 +310,12 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
       <Form>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridName">
-            <Form.Label>받는 사람</Form.Label>
+            <Form.Label style={{ position: "relative", left: "50px" }}>
+              받는 사람
+            </Form.Label>
             <Form.Control
               type="Name"
+              style={{ width: "300px", position: "relative", left: "50px" }}
               placeholder="받는 분 성함을 입력해주세요."
               value={shippingInfo.name}
               onChange={(e) =>
@@ -309,9 +326,30 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
             />
           </Form.Group>
         </Row>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="formGridNumber">
+            <Form.Label style={{ position: "relative", left: "50px" }}>
+              연락처
+            </Form.Label>
+            <Form.Control
+              type="Number"
+              style={{ width: "300px", position: "relative", left: "50px" }}
+              placeholder="연락처를 입력해주세요."
+              value={shippingInfo.number}
+              onChange={(e) =>
+                setShippingInfo({
+                  ...shippingInfo,
+                  number: e.target.value,
+                })}
+            />
+          </Form.Group>
+        </Row>
         <Form.Group className="mb-3" controlId="formGridAddress1">
-          <Form.Label>배송지</Form.Label>
+          <Form.Label style={{ position: "relative", left: "50px" }}>
+            배송지
+          </Form.Label>
           <Form.Control
+            style={{ width: "300px", position: "relative", left: "50px" }}
             placeholder="ex) 성남시 분당구 동판교로 115"
             value={shippingInfo.address}
             onChange={(e) =>
@@ -323,8 +361,11 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGridAddress2">
-          <Form.Label>상세주소</Form.Label>
+          <Form.Label style={{ position: "relative", left: "50px" }}>
+            상세주소
+          </Form.Label>
           <Form.Control
+            style={{ width: "300px", position: "relative", left: "50px" }}
             placeholder="ex) 2층 201호"
             value={shippingInfo.addressDetail}
             onChange={(e) =>
@@ -336,10 +377,18 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
         </Form.Group>
 
         <Form.Group className="mb-3" id="formGridCheckbox">
-          <Form.Check type="checkbox" label="기본 배송지로 등록" />
+          <Form.Check
+            style={{ position: "relative", left: "50px" }}
+            type="checkbox"
+            label="기본 배송지로 등록"
+          />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button
+          style={{ width: "100px", position: "relative", left: "250px" }}
+          variant="primary"
+          type="submit"
+        >
           등록 완료
         </Button>
       </Form>

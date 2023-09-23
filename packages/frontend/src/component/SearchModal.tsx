@@ -15,7 +15,7 @@ function SearchModal() {
   };
 
   return (
-    <div>
+    <div className={classes["search_bar_area"]}>
       <div className={classes["search_bar_container"]}>
         <input
           className={classes["search_bar"]}

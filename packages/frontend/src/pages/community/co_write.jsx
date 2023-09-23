@@ -18,7 +18,7 @@ const TagWrite = ({
   onChange,
 }) => {
   return (
-    <div>
+    <div className={classes["tagsinputarea"]}>
       <TagsInput
         value={selected}
         onChange={onChange}
