@@ -8,6 +8,8 @@
 
 .funding_tagsearch {
   width:60%;
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
 }
 .funding_navarea{
   align-items: center;

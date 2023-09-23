@@ -85,7 +85,7 @@ const FundingsHome = function() {
             onChange={setSelected}
             name="fruits"
             placeHolder={selected.length === 0
-              ? "태그 검색으로 원하는 펀딩을 찾아보세요!"
+              ? "태그로 원하는 펀딩을 찾아보세요!"
               : ""}
           />
         </div>
