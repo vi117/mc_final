@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const login_event_target = new EventTarget();
 
-interface UserInfo {
+export interface UserInfo {
   id: number;
   nickname: string;
   address: string;
@@ -10,6 +10,7 @@ interface UserInfo {
   email: string;
   is_admin?: boolean;
 }
+
 function getLoginUser(): UserInfo | null {
   const cookiesStr = document.cookie;
   const cookies = cookiesStr.split(";");
@@ -31,19 +32,48 @@ function getLoginUser(): UserInfo | null {
   return null;
 }
 
-export function useLoginInfo() {
+/**
+ * This function is a custom React hook that retrieves the login information of the user.
+ *
+ * @param {Object} options - An optional object containing the following properties:
+ *   - interval: The interval in milliseconds at which the login information should be updated.
+ *               Default is 10000 milliseconds (10 seconds).
+ *               if interval is 0 or less, the login information will not be updated.
+ *   - updateWhenFocus: Whether the login information should be updated when the user focuses on window. Default is true.
+ * @return {UserInfo | null} The login information of the user.
+ */
+export function useLoginInfo({
+  interval = 1000 * 10,
+  updateWhenFocus = true,
+} = {}) {
   // TODO(vi117): For react 18, use `usesyncExternalstore`
   const [loginUser, setLoginUser] = useState(getLoginUser());
   useEffect(() => {
     const handler = () => {
       console.log("revalidate");
-      setLoginUser(getLoginUser());
+      const newLoginUser = getLoginUser();
+      if (newLoginUser?.id !== loginUser?.id) {
+        setLoginUser(newLoginUser);
+      }
     };
     login_event_target.addEventListener("revalidate", handler);
+    let timerId: number | undefined;
+    if (interval > 0) {
+      timerId = setInterval(handler, interval);
+    }
+    if (updateWhenFocus) {
+      window.addEventListener("focus", handler);
+    }
     return () => {
       login_event_target.removeEventListener("revalidate", handler);
+      if (timerId) {
+        clearInterval(timerId);
+      }
+      if (updateWhenFocus) {
+        window.removeEventListener("focus", handler);
+      }
     };
-  });
+  }, [loginUser, interval, updateWhenFocus]);
   return loginUser;
 }
 
