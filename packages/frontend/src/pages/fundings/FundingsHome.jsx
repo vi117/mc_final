@@ -1,20 +1,20 @@
-import { styled } from "@mui/material";
 import { useState } from "react";
-import { Badge, Card, ProgressBar } from "react-bootstrap";
+import { Card, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
+import "./progressbar.css";
 // import "./FundingsHome_Item.css"
 
 // const placerholder = "https://via.placeholder.com/100x100";
 
-const GridContainer = styled("div")({
-  display: "grid",
-  gridTemplateColumns: "repeat(4, 1fr)",
-  gridGap: "12px",
-  justifyContent: "center",
-});
+// const GridContainer = styled("div")({
+//   display: "grid",
+//   gridTemplateColumns: "repeat(3, 1fr)",
+//   gridGap: "20px",
+//   justifyContent: "center",
+// });
 
 // const fundings = [
 //   {
@@ -96,15 +96,15 @@ const FundingsHome = function() {
           </NavLink>
         </div>
       </div>
-      <GridContainer className={classes["funding_itemarea"]}>
+      <div className={classes["funding_itemarea"]}>
         {fetcherData.map((x) => (
           <FundingItem
-            className={classes["funding_item"]}
+            style={{ border: "none" }}
             key={x.id}
             item={x}
           />
         ))}
-      </GridContainer>
+      </div>
     </div>
   );
 };
@@ -113,27 +113,46 @@ function FundingItem({
   item: x,
   ...rest
 }) {
+  const restTime = new Date(x.end_date).getTime() - new Date().getTime();
   return (
     <Card
-      className={classes["funding_card"]}
       key={x.id}
       {...rest}
     >
       <NavLink to={`/fundings/${x.id}`}>
-        <img
-          src={x.thumbnail}
-          className={classes["funding_item_thumbnail"]}
-          alt="썸네일 이미지"
-        />
-        <div>{x.tags.map((t) => <Badge>{t.tag}</Badge>)}</div>
-        <h5>{x.title}</h5>
-        {/* <h6>{x.content}</h6> */}
-        <div>
-          <ProgressBar
-            now={(x.current_value / x.target_value) * 100}
-            label={((x.current_value / x.target_value) * 100).toFixed(2)
-              + "%"}
+        <div className={classes["funding_card"]}>
+          <img
+            src={x.thumbnail}
+            className={classes["funding_item_thumbnail"]}
+            alt="썸네일 이미지"
           />
+          <div>
+            <div className={classes["funding_tags_area"]}>
+              {x.tags.map((t) => (
+                <ul className={classes["funding_item_tags"]}>
+                  <li>{t.tag}</li>
+                </ul>
+              ))}
+            </div>
+            <div className={classes["funding_item_title"]}>{x.title}</div>
+            {/* <h6>{x.content}</h6> */}
+
+            <div className={classes["funding_progress_percantage"]}>
+              {Math.round((x.current_value / x.target_value) * 100).toFixed(0)
+                + "%"}달성!
+              <span>{x.current_value} 원</span>
+              <span className={classes["progress_resttime"]}>
+                {Math.round((restTime / (1000 * 60 * 60 * 24)).toFixed(0))}일
+                남음
+              </span>
+            </div>
+            <div>
+              <ProgressBar
+                className="funding_progressbar"
+                now={(x.current_value / x.target_value) * 100}
+              />
+            </div>
+          </div>
         </div>
       </NavLink>
     </Card>

@@ -15,14 +15,6 @@
 }
 
 
-.logo_container {
-    height:75px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-}
-
 .page_logo {
     margin-left: 10px;
 }
@@ -58,7 +50,7 @@
 .header_nav_container {
     margin-right:0 !important;
     margin-left: 0 !important;
-    margin: 0px 10px;
+    padding: 10px 0px;
     display:flex;
     width:100%;
     --bs-nav-link-font-weight: 700 !important;

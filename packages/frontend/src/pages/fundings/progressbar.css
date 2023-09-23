@@ -1,0 +1,16 @@
+.funding_progressbar {
+    border-radius: 0px !important;
+    height:3px;
+    background-color: var(--border);
+  }
+
+.funding_progressbar .progress-bar{
+    background-color: var(--green);
+}
+
+@media screen and (max-width: 570px) {
+  .progress-bar{
+
+    margin-left:15px;
+  }
+}
