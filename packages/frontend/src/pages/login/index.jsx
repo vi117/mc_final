@@ -1,9 +1,36 @@
 import { useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { GOOGLE_APP_CLIENT_ID } from "../../config";
 import { loginRevalidate } from "../../hook/useLogin";
 import classes from "./style.module.css";
+
+/**
+ * Authenticates a user by sending a login request to the server.
+ *
+ * @param {string} email - The user's email address.
+ * @param {string} password - The user's password.
+ * @return {Promise<[boolean, object]>} - A promise that resolves to a boolean indicating whether the login was successful and an object containing the user's data.
+ */
+async function login(email, password) {
+  const res = await fetch("/api/v1/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password,
+    }),
+  });
+  if (res.status !== 200) {
+    const data = await res.json();
+    return [false, data];
+  }
+  loginRevalidate();
+  return [true, await res.json()];
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,155 +39,138 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   async function onLoginClick() {
-    /**
-     * if you want to use axios
-     * ```ts
-     * try {
-     *  const data = await axios.post("/api/v1/users/login", {
-     *    email: email,
-     *    password: password,
-     *  });
-     *  console.log(data);
-     * }
-     * catch (err) {
-     *  //login fail
-     *  console.log(err);
-     * }
-     * ```
-     */
-    const res = await fetch("/api/v1/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
-    if (res.status !== 200) {
-      const data = await res.json();
-      console.log(data);
-      console.log("로그인에 실패했습니다.");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [success, _v] = await login(email, password);
+    if (success) {
+      navigate("/");
+    } else {
       // TODO(vi117): use modal to show error
       alert("로그인에 실패했습니다.");
       setPassword("");
-      return;
     }
-    loginRevalidate();
-    navigate("/");
   }
 
   return (
     <div className={classes["login-container"]}>
       <div className={classes["login-wrapper"]}>
         <h1>Login</h1>
-        <form
+        <Form
           className={classes["login-form"]}
           onSubmit={(e) => {
             e.preventDefault();
           }}
         >
-          <input
-            type="text"
-            name="userName"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            name="userPassword"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <label htmlFor="remember-check">
-            <input type="checkbox" id="remember-check"></input> 자동 로그인
-          </label>
-          <span>
-            <NavLink to="/forgot-password">아이디/비밀번호 찾기</NavLink>
-          </span>
-          <input
+          <Form.Group className="mb-1">
+            <Form.Label style={{ fontSize: "12px" }}>이메일</Form.Label>
+            <Form.Control
+              type="email"
+              className="login-form-input"
+              placeholder="이메일을 입력해주세요"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-1">
+            <Form.Label style={{ fontSize: "12px" }}>비밀번호</Form.Label>
+            <Form.Control
+              className="login-form-input"
+              type="password"
+              placeholder="비밀번호를 입력해주세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="d-flex justify-content-between mb-3">
+            <div
+              className="d-flex"
+              style={{ gap: "5px", justifyContent: "baseline" }}
+            >
+              <Form.Check
+                type="checkbox"
+                id="remember-check"
+                style={{ fontSize: "12px" }}
+              >
+              </Form.Check>
+              <Form.Label
+                htmlFor="remember-check"
+                className="text-muted"
+                style={{ fontSize: "12px" }}
+              >
+                자동 로그인
+              </Form.Label>
+            </div>
+            <NavLink
+              to="/forgot-password"
+              className={classes["login-form-forgot"]}
+            >
+              아이디/비밀번호 찾기
+            </NavLink>
+          </Form.Group>
+          <Button
             onClick={onLoginClick}
             type="submit"
-            value="Login"
-            className={classes["login-form-input"]}
-          />
-        </form>
-
-        <div className={classes["lfmFQa"]}>
-          <div className={classes["eiCjYy"]}></div>
-          <p>간편하게 SNS 로그인</p>
-          <button
-            onClick={() => {
-              const url = new URL(
-                "https://accounts.google.com/o/oauth2/v2/auth",
-              );
-              url.searchParams.set(
-                "client_id",
-                GOOGLE_APP_CLIENT_ID,
-              );
-              url.searchParams.set(
-                "redirect_uri",
-                "http://localhost:5173/google-login",
-              );
-              url.searchParams.set("response_type", "code");
-              url.searchParams.set("scope", "email profile openid");
-              window.location = url.href;
-            }}
+            className={classes["login-form-button"]}
           >
-            Google login
-          </button>
-          {/* <!-- 카카오 --> */}
-          <button className={classes["fmrIwS"]}>
-            <div className="">
-              <KakaoSvg />
-            </div>
-          </button>
+            Login
+          </Button>
+        </Form>
 
-          <button className={classes["fmrIwS"]}>
-            <div className="">
-              <NaverSvg />
-            </div>
-          </button>
-
-          {/* <!--페이스북 --> */}
-          <button className={classes["fmrIwS"]}>
-            <div className="Icon__SVGICON-sc-1xkf9cp-0 ccxeYs SocialMembershipMenu__StyledSVGIcon-sc-141itvp-2 cypxet">
-              <FacebookSvg />
-            </div>
-          </button>
-
-          {/*  애플  */}
-          <button className={classes["fmrIwS"]}>
-            <div className="">
-              <AppleSvg />
-            </div>
-            <div id="appleid-signin" data-type="sign-in">
-            </div>
-          </button>
-
-          <div className={classes["bQAztb"]}>
-            아직 Happytails 계정이 없으신가요?
-            <span
-              style={{
-                fontWeight: "500",
-              }}
-              className={classes["bKXWde"]}
-            >
-              <strong>
-                <NavLink to={"/register"}>
-                  회원가입
-                </NavLink>
-              </strong>
-            </span>
-          </div>
+        <SNSLogin />
+        <div className={classes["register_container"]}>
+          아직 Happytails 계정이 없으신가요?
+          <NavLink to={"/register"} className={classes["register_link"]}>
+            회원가입
+          </NavLink>
         </div>
       </div>
     </div>
   );
 }
+
+function SNSLogin() {
+  return (
+    <div>
+      <p className={classes["sns_login_phrase"]}>간편하게 SNS 로그인</p>
+
+      <div className={classes["sns_login_container"]}>
+        <button
+          onClick={() => {
+            const url = new URL(
+              "https://accounts.google.com/o/oauth2/v2/auth",
+            );
+            url.searchParams.set(
+              "client_id",
+              GOOGLE_APP_CLIENT_ID,
+            );
+            url.searchParams.set(
+              "redirect_uri",
+              "http://localhost:5173/google-login",
+            );
+            url.searchParams.set("response_type", "code");
+            url.searchParams.set("scope", "email profile openid");
+            window.location = url.href;
+          }}
+          className={classes["sns_login_button"]}
+        >
+          <GoogleSvg />
+        </button>
+        {/* <!-- 카카오 --> */}
+        <button className={classes["sns_login_button"]}>
+          <div className="">
+            <KakaoSvg />
+          </div>
+        </button>
+
+        <button className={classes["sns_login_button"]}>
+          <div className="">
+            <NaverSvg />
+          </div>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function KakaoSvg() {
   return (
     <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
@@ -205,37 +215,149 @@ function NaverSvg() {
   );
 }
 
-function FacebookSvg() {
+function GoogleSvg() {
+  // Generator: Sketch 3.3.3 (12081) - http://www.bohemiancoding.com/sketch
   return (
-    <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-      <path
-        d="M17 31.875C8.81875 31.875 2.125 25.1812 2.125 17C2.125 8.81875 8.81875 2.125 17 2.125C25.1812 2.125 31.875 8.81875 31.875 17C31.875 25.1812 25.1812 31.875 17 31.875Z"
-        fill="#1877F2"
+    <svg
+      width="34px"
+      height="34px"
+      viewBox="0 0 46 46"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+      style={{ backgroundColor: "#F0F0F0", borderRadius: "50%" }}
+    >
+      <title>btn_google_light_normal_ios</title>
+      <desc>Created with Sketch.</desc>
+      <defs>
+        <filter
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+          filterUnits="objectBoundingBox"
+          id="filter-1"
+        >
+          <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1">
+          </feOffset>
+          <feGaussianBlur
+            stdDeviation="0.5"
+            in="shadowOffsetOuter1"
+            result="shadowBlurOuter1"
+          >
+          </feGaussianBlur>
+          <feColorMatrix
+            values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.168 0"
+            in="shadowBlurOuter1"
+            type="matrix"
+            result="shadowMatrixOuter1"
+          >
+          </feColorMatrix>
+          <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter2">
+          </feOffset>
+          <feGaussianBlur
+            stdDeviation="0.5"
+            in="shadowOffsetOuter2"
+            result="shadowBlurOuter2"
+          >
+          </feGaussianBlur>
+          <feColorMatrix
+            values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.084 0"
+            in="shadowBlurOuter2"
+            type="matrix"
+            result="shadowMatrixOuter2"
+          >
+          </feColorMatrix>
+          <feMerge>
+            <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+            <feMergeNode in="shadowMatrixOuter2"></feMergeNode>
+            <feMergeNode in="SourceGraphic"></feMergeNode>
+          </feMerge>
+        </filter>
+        <rect id="path-2" x="0" y="0" width="40" height="40" rx="2"></rect>
+      </defs>
+      <g
+        id="Google-Button"
+        stroke="none"
+        stroke-width="1"
+        fill="none"
+        fill-rule="evenodd"
+        sketch:type="MSPage"
       >
-      </path>
-      <path
-        d="M27.625 16.9945C27.625 11.1325 22.8651 6.375 17 6.375C11.1349 6.375 6.375 11.1325 6.375 16.9945C6.375 22.2988 10.2595 26.6954 15.3477 27.4828V20.0568H12.634V16.9945H15.3477V14.6541C15.3477 11.9965 16.9234 10.52 19.3526 10.52C20.5125 10.52 21.7161 10.7387 21.7161 10.7387V13.3307H20.3812C19.0572 13.3307 18.6413 14.1619 18.6413 14.9931V16.9836H21.5958L21.1253 20.0459H18.6413V27.4719C23.7405 26.6954 27.625 22.2988 27.625 16.9945Z"
-        fill="#1877F2"
-      >
-      </path>
-      <path
-        d="M21.1361 20.0676L21.6067 17.0053H18.6522V15.0148C18.6522 14.1727 19.079 13.3524 20.3921 13.3524H21.727V10.7495C21.727 10.7495 20.5234 10.5308 19.3635 10.5308C16.9343 10.5308 15.3586 12.0072 15.3586 14.6648V17.0053H12.6449V20.0676H15.3586V27.4936C15.8948 27.5811 16.4528 27.6248 17.0109 27.6248C17.5689 27.6248 18.127 27.5811 18.6632 27.4936V20.0676H21.1361Z"
-        fill="white"
-      >
-      </path>
-    </svg>
-  );
-}
-
-function AppleSvg() {
-  return (
-    <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-      <circle cx="17" cy="17" r="14.875" fill="black"></circle>
-      <path
-        d="M17.1893 12.0962C17.8965 12.0962 18.783 11.6206 19.3109 10.9866C19.7891 10.412 20.1377 9.60956 20.1377 8.80711C20.1377 8.69813 20.1277 8.58916 20.1078 8.5C19.3209 8.52972 18.3746 9.02506 17.8068 9.68881C17.3586 10.1941 16.9502 10.9866 16.9502 11.799C16.9502 11.9178 16.9701 12.0367 16.9801 12.0763C17.0299 12.0862 17.1096 12.0962 17.1893 12.0962ZM14.699 24.0833C15.6652 24.0833 16.0936 23.4394 17.2988 23.4394C18.524 23.4394 18.793 24.0635 19.8688 24.0635C20.9246 24.0635 21.6318 23.0927 22.2992 22.1416C23.0463 21.0519 23.3551 19.9819 23.375 19.9324C23.3053 19.9126 21.2832 19.0903 21.2832 16.7821C21.2832 14.7809 22.877 13.8794 22.9666 13.81C21.9107 12.3042 20.307 12.2646 19.8688 12.2646C18.6834 12.2646 17.7172 12.9779 17.1096 12.9779C16.4521 12.9779 15.5855 12.3042 14.5596 12.3042C12.6072 12.3042 10.625 13.9091 10.625 16.9406C10.625 18.8228 11.3621 20.8141 12.2686 22.102C13.0455 23.1917 13.7229 24.0833 14.699 24.0833Z"
-        fill="white"
-      >
-      </path>
+        <g
+          id="9-PATCH"
+          sketch:type="MSArtboardGroup"
+          transform="translate(-608.000000, -160.000000)"
+        >
+        </g>
+        <g
+          id="btn_google_light_normal"
+          sketch:type="MSArtboardGroup"
+          transform="translate(-1.000000, -1.000000)"
+        >
+          <g
+            id="button"
+            sketch:type="MSLayerGroup"
+            transform="translate(4.000000, 4.000000)"
+            filter="url(#filter-1)"
+          >
+            <g id="button-bg">
+              <use
+                fill="#FFFFFF"
+                fill-rule="evenodd"
+                sketch:type="MSShapeGroup"
+                xlink:href="#path-2"
+              >
+              </use>
+              <use fill="none" xlink:href="#path-2"></use>
+              <use fill="none" xlink:href="#path-2"></use>
+              <use fill="none" xlink:href="#path-2"></use>
+            </g>
+          </g>
+          <g
+            id="logo_googleg_48dp"
+            sketch:type="MSLayerGroup"
+            transform="translate(15.000000, 15.000000)"
+          >
+            <path
+              d="M17.64,9.20454545 C17.64,8.56636364 17.5827273,7.95272727 17.4763636,7.36363636 L9,7.36363636 L9,10.845 L13.8436364,10.845 C13.635,11.97 13.0009091,12.9231818 12.0477273,13.5613636 L12.0477273,15.8195455 L14.9563636,15.8195455 C16.6581818,14.2527273 17.64,11.9454545 17.64,9.20454545 L17.64,9.20454545 Z"
+              id="Shape"
+              fill="#4285F4"
+              sketch:type="MSShapeGroup"
+            >
+            </path>
+            <path
+              d="M9,18 C11.43,18 13.4672727,17.1940909 14.9563636,15.8195455 L12.0477273,13.5613636 C11.2418182,14.1013636 10.2109091,14.4204545 9,14.4204545 C6.65590909,14.4204545 4.67181818,12.8372727 3.96409091,10.71 L0.957272727,10.71 L0.957272727,13.0418182 C2.43818182,15.9831818 5.48181818,18 9,18 L9,18 Z"
+              id="Shape"
+              fill="#34A853"
+              sketch:type="MSShapeGroup"
+            >
+            </path>
+            <path
+              d="M3.96409091,10.71 C3.78409091,10.17 3.68181818,9.59318182 3.68181818,9 C3.68181818,8.40681818 3.78409091,7.83 3.96409091,7.29 L3.96409091,4.95818182 L0.957272727,4.95818182 C0.347727273,6.17318182 0,7.54772727 0,9 C0,10.4522727 0.347727273,11.8268182 0.957272727,13.0418182 L3.96409091,10.71 L3.96409091,10.71 Z"
+              id="Shape"
+              fill="#FBBC05"
+              sketch:type="MSShapeGroup"
+            >
+            </path>
+            <path
+              d="M9,3.57954545 C10.3213636,3.57954545 11.5077273,4.03363636 12.4404545,4.92545455 L15.0218182,2.34409091 C13.4631818,0.891818182 11.4259091,0 9,0 C5.48181818,0 2.43818182,2.01681818 0.957272727,4.95818182 L3.96409091,7.29 C4.67181818,5.16272727 6.65590909,3.57954545 9,3.57954545 L9,3.57954545 Z"
+              id="Shape"
+              fill="#EA4335"
+              sketch:type="MSShapeGroup"
+            >
+            </path>
+            <path
+              d="M0,0 L18,0 L18,18 L0,18 L0,0 Z"
+              id="Shape"
+              sketch:type="MSShapeGroup"
+            >
+            </path>
+          </g>
+          <g id="handles_square" sketch:type="MSLayerGroup"></g>
+        </g>
+      </g>
     </svg>
   );
 }

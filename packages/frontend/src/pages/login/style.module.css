@@ -14,8 +14,9 @@
 
 .login-wrapper > h1{
   font-size: 40px;
-  color: rgb(39, 163, 255);
+  color: rgb(55, 55, 55);
   margin-bottom: 20px;
+  font-weight: 400;
 }
 
 .login-form-input{
@@ -28,56 +29,43 @@
   border-radius: 6px;
   background-color: #F8F8F8;
 }
-.login-form > input::placeholder{
-  color: #D2D2D2;
-}
-.login-form > input[value="Login"]{
-  color: #fff;
-  font-size: 16px;
-  background-color: rgb(39, 163, 255);
-  margin-top: 40px;
-}
-
-
-.login-form > input[type="checkbox"]{
-  display: none;
-}
-
-.login-form > label{
-  color: #999999;
-}
-
-.login-form input[type="checkbox"] + label{
+.login-form-button{
+  width: 100%;
+  height: 48px;
+  padding: 0 10px;
+  border: 0;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  background-color: #F8F8F8;
   cursor: pointer;
-  padding-left: 26px;
-  background-image: url("checkbox.png");
-  background-repeat: no-repeat;
-  background-size: contain;
+  color: black;
+}
+.login-form-button:hover{
+  background-color: #E8E8E8;
+  color: black;
 }
 
-.login-form input[type="checkbox"]:checked + label{
-  background-image: url("checkbox-active.png");
-  background-repeat: no-repeat;
-  background-size: contain;
+
+.login-form-input:focus{
+  outline: none;
 }
 
-.login-form > span{
-  float: right;  
-}
-
-.login-form > span > a{ 
+.login-form-forgot{ 
   text-decoration: none;
   line-height: 24px;
   color: #070707c4;
-  font-size: 14px;
-
+  font-size: 12px;
 }
 
-.fmrIwS {
-  width: 17px;
-  height: auto;
-  margin-left: 45px;
+.sns_login_container{
+  display: flex;
+  justify-content: center;
   margin-top: 10px;
+  gap: 16px;
+}
+
+.sns_login_button {
   padding: 0px;
   background-color: transparent;
   border: none;
@@ -85,27 +73,25 @@
   cursor: pointer;
 }
 
-.lfmFQa > p { 
- margin-left: 95px;
-}
+.sns_login_phrase{
+  margin: 0px auto;
+  text-align: center;
+} 
 
-.bQAztb {
+.register_container {
   display: flex;
-  -webkit-box-pack: center;
+  flex-wrap: wrap;
+
   justify-content: center;
-  margin: 50px 0px 0px;
+  margin: 50px 0px 0px 0px;
   font-size: 14px;
-  line-height: 19px;
   letter-spacing: -0.01em;
   font-weight: 500;
   color: rgb(158, 158, 158);
 }
 
-.bQAztb > span {
-  margin-left: 10px; 
-}
-
-.bQAztb > span > strong > a {
+.register_link {
+  margin-left: 10px;
   color: rgb(39, 163, 255);
   text-decoration: underline;
 }
