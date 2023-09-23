@@ -86,6 +86,7 @@ export function Header() {
                   <LoginButton></LoginButton>
                 </span>
               </Nav>
+              유저 _닉네임
               {userId !== null && (
                 <Nav>
                   <NavLink to={`/profile`}>

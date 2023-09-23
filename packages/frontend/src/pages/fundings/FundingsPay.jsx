@@ -47,15 +47,15 @@ export default function FundingsPay() {
           {funding.current_value} 원
         </span>
         <span className={classes["achivement"]}>
-          {((funding.current_value / funding.target_value) * 100).toFixed(2)}
+          {((funding.current_value / funding.target_value) * 100).toFixed(2)} %
         </span>
         <span className={classes["state"]}>
           {/* TODO(vi117): 일, 시간, 분 남음으로 바꾸기. 컴포넌트로 추출하고 setInterval로 실시간 갱신. */}
           {remainingDays.toFixed(2)}일 남음
         </span>
       </div>
+      <p className={classes["FundingInfor"]}>펀딩 정보</p>
       <div className={classes["container"]}>
-        <p>펀딩 정보</p>
         <table>
           <tbody>
             <tr>
@@ -80,35 +80,39 @@ export default function FundingsPay() {
           </tbody>
         </table>
       </div>
+      <p className={classes["AddressInfor"]}>배송 정보</p>
       <div className={classes["Address"]}>
-        <p>배송 정보</p>
         <ShippingInformation
           setShippingInfo={setShippingInfo}
           shippingInfo={shippingInfo}
         />
       </div>
+      <p className={classes["Payment"]}>결제수단</p>
       <div className={classes["RoundedWrapper"]}>
-        <p>결제수단</p>
         <PaymentMethod />
         <CardRegister />
-
-        <div className={classes["PledgeAmount"]}>
-          <p>
-            최종 후원 금액
-            <span>{selectedReward.price} 원</span>
-          </p>
-          <div className={classes["PledgeAmount-text"]}></div>
-          프로젝트가 무산되거나 중단된 경우 결제는 취소되며 환불 진행됩니다.
-          <ConsentForm />
-          <FundingPrecaution />
-          <PrecautionForm />
-          <div className="mb-2">
-            <Link to={`/fundings/${funding.id}`}>
-              <Button variant="primary" size="lg" onClick={participate}>
-                후원하기
-              </Button>
-            </Link>
-          </div>
+      </div>
+      <div className={classes["Sponsorship"]}>
+        <p className={classes["FinalAmount"]} style={{ color: "#3A52CA" }}>
+          최종 후원 금액
+          <span
+            style={{ position: "relative", left: "80px", color: "#0C0002" }}
+          >
+            {selectedReward.price} 원
+          </span>
+        </p>
+      </div>
+      <div className={classes["PledgeAmount"]}>
+        프로젝트가 무산되거나 중단된 경우 결제는 취소되며 환불 진행됩니다.
+        <ConsentForm />
+        <FundingPrecaution />
+        <PrecautionForm />
+        <div className="mb-2">
+          <Link to={`/fundings/${funding.id}`}>
+            <Button variant="primary" size="lg" onClick={participate}>
+              후원하기
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
@@ -168,7 +172,11 @@ function CardRegister() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button
+        variant="primary"
+        onClick={handleShow}
+        style={{ width: "300px", left: "50px" }}
+      >
         + 카드 등록
       </Button>
 
