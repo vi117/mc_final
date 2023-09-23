@@ -20,8 +20,10 @@
    color:var(--teritary);
 }
 
-.footer_info {
+ul{
     list-style: none;
+}
+.footer_info {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

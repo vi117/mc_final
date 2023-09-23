@@ -70,7 +70,7 @@ export function Header() {
     <>
       <header className={classes.header_container}>
         <Navbar expand="sm">
-          <Container className="header-brand-container">
+          <Container className={classes.header_brandcontainer}>
             <NavLink to={"/"}>
               <Navbar.Brand>
                 <LogoSvg
@@ -100,7 +100,7 @@ export function Header() {
                         }}
                       />
                       <span style={{ fontSize: "12px" }}>
-                        내정보
+                        내 정보
                       </span>
                     </span>
                   </NavLink>
@@ -112,7 +112,13 @@ export function Header() {
         <Navbar bg="transparent" data-bs-theme="light">
           <Nav variant="underline" className={classes.header_nav_container}>
             <div className={classes.left}>
-              <NavLink className={"nav-link"} to={"/"}>홈</NavLink>
+              <NavLink
+                className={"nav-link"}
+                to={"/"}
+                style={{ paddingLeft: "0px" }}
+              >
+                홈
+              </NavLink>
               <NavLink className={"nav-link"} to={"/fundings"}>펀딩</NavLink>
               <NavLink className={"nav-link"} to={"/community"}>
                 커뮤니티

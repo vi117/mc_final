@@ -1,7 +1,8 @@
 /* 모달창을 화면 중앙. 최상단에 노출 */
 .container {
   /* 모달창 크기 */
-  width: 200px;
+  margin-top: 50px;
+  width: 206px;
 
   /* 최상단 위치 */
   z-index: 100;
@@ -10,12 +11,13 @@
   /* top, bottom, left, right 는 브라우저 기준으로 작동한다. */
   /* translate는 본인의 크기 기준으로 작동한다. */
   position: absolute;
-  transform: translate(-50%, -50%);
+  /* transform: translate(-50%, -50%); */
 
   /* 모달창 디자인 */
   background-color: white;
   border: 1px solid var(--secondary);
   border-radius: 8px;
+  padding:10px 10px 0px 10px;
 }
 
 /* 모달창 내부 X버튼 */
@@ -25,13 +27,30 @@
   border-radius: 4px;
   position: absolute;
   right: 10px;
-  top: 5px;
+  top: 10px;
 }
 
-.recommendtxt {
+.recommendtxt >p {
+  font-size: 16px;
+  font-weight: 700;
+  margin:0px;
+}
+
+.recommendtxt{
+  padding-bottom: 10px;
 }
 
 .recommendlist {
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding-left: 0px;
+  letter-spacing: -0.02px;
+  font-size: 14px;
   list-style-type:none;
-  list-style: none;
+  line-height: 28px;
+  color: var(--teritary);
+}
+
+.recommendlist > li:hover{
+  color:var(--green);
 }

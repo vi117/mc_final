@@ -45,7 +45,7 @@ export function Community() {
                     너무 먹고 싶어해서요. 살짝만 핱아보라고 줘도 괜찮을까요?
                   </p>
                 </div>
-                <NavLink to={"/community/3"}>
+                <NavLink to={"/community/27"}>
                   <button className={classes["morebtn"]}>자세히보기</button>
                 </NavLink>
               </div>
@@ -66,7 +66,7 @@ export function Community() {
                     갑자기 콱 세게 깨물어요 ㅜㅜ…
                   </p>
                 </div>
-                <NavLink to={"/community/5"}>
+                <NavLink to={"/community/25"}>
                   <button className={classes["morebtn"]}>자세히보기</button>
                 </NavLink>
               </div>

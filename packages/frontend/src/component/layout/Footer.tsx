@@ -24,6 +24,17 @@ export default function Footer() {
                     @2023 HappyTails Inc. All Rights Reserved.
                   </li>
                 </ul>
+                <ul>
+                  <li>
+                    일부 상품의 경우 해피테일즈는 통신판매중개자이며 통신판매
+                    당사자가 아닙니다.
+                  </li>
+                  <li>
+                    해당되는 상품의 경우 삼품, 상품정보, 거래에 관한 의무와
+                    책임은 판매자에게 있으므로, 각 상품 페이지에서 구체적인
+                    내용을 확인하시기 바랍니다.
+                  </li>
+                </ul>
               </Col>
             </Row>
           </div>

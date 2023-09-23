@@ -1,8 +1,17 @@
 .header_container{
-    padding: 20px 0px 0px 0px;
-    max-width: var(--max-content-width);
+    padding: 20px 10px 0px 10px;
+    max-width: 1080px;
     margin: 0 auto;
     margin-bottom: 12px;
+}
+
+
+.header_brandcontainer {
+    display:flex;
+    width:100%;
+    min-width: 100%;
+    padding: 0px !important;
+    margin: 0px !important;
 }
 
 
@@ -34,6 +43,7 @@
     }
 }
 
+
 .header_logo_nav{
     height: 40px;
     display: flex;
@@ -46,6 +56,7 @@
 }
 
 .header_nav_container {
+    margin-right:0 !important;
     margin-left: 0 !important;
     margin: 0px 10px;
     display:flex;
@@ -56,6 +67,8 @@
 
 
 .header_nav_container .left{
+font-size: 16px;
+letter-spacing: -0.01px;
 align-items: center;
 display: flex;
 }

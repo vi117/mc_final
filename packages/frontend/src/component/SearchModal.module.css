@@ -9,6 +9,11 @@
     background: white;
 }
 
+.search_bar_area{
+    display: flex;
+    flex-direction: column;
+}
+
 .search_bar{
     border: 0px;
     box-sizing: border-box;

@@ -42,7 +42,7 @@ function SearchModalBasic({ setModalOpen }: PropsType) {
         <IoMdClose />
       </button>
       <div className={styles.recommendtxt}>
-        <p>추천 검색어:</p>
+        <p>추천 검색어</p>
         <ul className={styles.recommendlist}>
           <li>검색어1</li>
           <li>검색어2</li>
@@ -51,7 +51,7 @@ function SearchModalBasic({ setModalOpen }: PropsType) {
       </div>
 
       <div className={styles.recommendtxt}>
-        <p>연관 검색어:</p>
+        <p>연관 검색어</p>
         <ul className={styles.recommendlist}>
           <li>연관어1</li>
           <li>연관어2</li>
