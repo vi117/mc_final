@@ -1,16 +1,16 @@
-
+/*전체 페이지- padding값 모든 페이지 공통*/
 .funding_container{
   padding: 10px 7px 50px 7px;
   margin:0 auto;
   max-width: 1080px;
 }
 
-
 .funding_tagsearch {
   width:60%;
   border: 1px solid var(--secondary);
   border-radius: 5px;
 }
+/*태그검색, 펀딩 만들기*/
 .funding_navarea{
   align-items: center;
   width:100%;
@@ -18,9 +18,7 @@
 }
 
 .funding_createbtn {
-
-  margin-left: auto;
-
+margin-left: auto;
 }
 
 .go_create {
@@ -30,6 +28,7 @@
   font-weight: 700;
 }
 
+/*펀딩 목록 전체 박스*/
 .funding_itemarea {
   margin-left: 0px !important;
   margin-right: 0px !important;
@@ -40,7 +39,7 @@
  column-gap: 20px;
 }
 
-
+/*펀딩 목록*/
 .funding_card {
   align-items: center;
   border-radius: 0 !important;
@@ -85,7 +84,7 @@
   -webkit-line-clamp: 2;
 }
 
-
+/*펀딩 달성도, 남은 기간, 달성 금액*/
 .funding_progress_percantage {
   display:flex;
   margin-top: 10px;
@@ -116,7 +115,7 @@
 
 
 
-/*mobile*/
+/*반응형*/
 @media screen and (max-width: 860px) {
   .funding_itemarea {
     grid-template-columns: repeat(2, 1fr);
@@ -125,9 +124,7 @@
 
 @media screen and (max-width: 570px) {
   .funding_itemarea{
-    grid-template-columns: repeat(1, 1fr);
-    
-  }
+    grid-template-columns: repeat(1, 1fr);}
 
   .funding_card{
     display:flex;

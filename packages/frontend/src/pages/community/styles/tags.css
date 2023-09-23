@@ -1,8 +1,9 @@
-
 .rti--container {
     --rti-main:none !important;
     --rti-tag-remove: #0d0d0d !important;
-    --rti-border: none !important;
+    --rti-border: none !important; 
+    /*focus시 border 색이 변하는 문제가 있어 삭제함
+    각 컴포넌트에서 따로 border 속성 줄 것*/
     outline:none !important;
     width:100%;
   }
