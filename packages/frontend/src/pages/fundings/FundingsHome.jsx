@@ -1,61 +1,11 @@
 import { useState } from "react";
-import { Card, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
 import "./progressbar.css";
 import "../community/styles/tags.css";
-// import "./FundingsHome_Item.css"
-
-// const placerholder = "https://via.placeholder.com/100x100";
-
-// const GridContainer = styled("div")({
-//   display: "grid",
-//   gridTemplateColumns: "repeat(3, 1fr)",
-//   gridGap: "20px",
-//   justifyContent: "center",
-// });
-
-// const fundings = [
-//   {
-//     id: 1,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:1000,
-//     current_value:500,
-
-//   },
-//   {
-//     id: 2,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:"1000",
-//     current_value:"500",
-//   },
-//   {
-//     id: 3,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:"1000",
-//     current_value:"500",
-//   },
-//   {
-//     id: 4,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:"1000",
-//     current_value:"500",
-//   },
-// ];
+import FundingItem from "./component/Item";
 
 const FundingsHome = function() {
   const [selected, setSelected] = useState([]);
@@ -109,62 +59,5 @@ const FundingsHome = function() {
     </div>
   );
 };
-
-function FundingItem({
-  item: x,
-  ...rest
-}) {
-  const restTime = new Date(x.end_date).getTime() - new Date().getTime();
-  return (
-    <Card
-      key={x.id}
-      {...rest}
-    >
-      <NavLink to={`/fundings/${x.id}`}>
-        <div className={classes["funding_card"]}>
-          <img
-            src={x.thumbnail}
-            className={classes["funding_item_thumbnail"]}
-            alt="썸네일 이미지"
-          />
-          <div>
-            <div className={classes["funding_tags_area"]}>
-              {x.tags.map((t) => (
-                <ul className={classes["funding_item_tags"]}>
-                  <li>{t.tag}</li>
-                </ul>
-              ))}
-            </div>
-            <div className={classes["funding_item_title"]}>{x.title}</div>
-            {/* <h6>{x.content}</h6> */}
-
-            <div className={classes["funding_progress_percantage"]}>
-              {Math.round((x.current_value / x.target_value) * 100).toFixed(0)
-                + "%"}달성!
-              <span>{x.current_value} 원</span>
-              <span className={classes["progress_resttime"]}>
-                {restTime / (1000 * 60 * 60 * 24) > 0
-                  ? (
-                    <>
-                      {Math.round(
-                        (restTime / (1000 * 60 * 60 * 24)).toFixed(0),
-                      )}일 남음
-                    </>
-                  )
-                  : <>종료</>}
-              </span>
-            </div>
-            <div>
-              <ProgressBar
-                className="funding_progressbar"
-                now={(x.current_value / x.target_value) * 100}
-              />
-            </div>
-          </div>
-        </div>
-      </NavLink>
-    </Card>
-  );
-}
 
 export default FundingsHome;
