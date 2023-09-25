@@ -4,39 +4,33 @@
   max-width: 1080px;
 }
 
+/*title area*/
 .funding_title{
   text-align: center;
   border-bottom: 1px solid var(--border);
   box-shadow: var(--boxshadow);
-  height: 60px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 .funding_title > h1{
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 700;
   letter-spacing: -0.02px;
   color: var(--primary);
+  margin-bottom: 20px;
 }
 
 .funding_detail_tags{
+  justify-content: center;
   display:flex;
   color: var(--teritary);
   font-size: 16px;
   list-style: none;
   padding-left: 0px;
-  margin-bottom: 0px !important;
+  margin-bottom: 5px;
 }
-
-/*thumbnail, resttime, host, ... */
-.funding_detail_profilearea{
-  display:flex;
-}
-
-.funding_profile_h4{
-  font-weight: 400;
-  font-size: 18px;
-  color:var(--teritary);
-}
-
 
 .funding_detail_tags > li{
   margin-right: 7px;
@@ -46,9 +40,14 @@
   content:'#'
 }
 
+/*thumbnail, resttime, host, ... container */
+.funding_detail_profilearea{
+  display:flex;
+}
 
+/*thumbnail*/
 .funding_thumbnail_carousel{
-  width: 50%;
+  width:60%;
 }
 
 .carousel_thumbnail{
@@ -58,14 +57,28 @@ object-fit: cover;
 border: 1px solid var(--border);
 }
 
-.tags{
-  text-align: right;
-  margin-top: 30px; /* 태그를 해당 구역에서 최우하단에 놓고싶은데 어떻게 써야할지 모르곘습니당.. */
+/*resttime, host, value title*/
+.funding_profile_h4{
+  margin-bottom: 0px !important;
+  font-weight: 400;
+  font-size: 16px;
+  color:var(--teritary);
 }
 
-.fundingName h1{
-  font-weight: bold;
+
+.funding_profile_text{
+  color:var(--primary);
+  font-weight: 500;
+  font-size: 32px;
 }
+
+.funding_profile_small{
+  margin-left: 5px;
+  color:var(--teritary);
+  font-size: 14px;
+}
+
+
 
 .sujung{
   text-align: right;

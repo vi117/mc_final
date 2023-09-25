@@ -55,15 +55,17 @@ const FundingsDetail = function() {
       }
 
       <div className={classes["funding_title"]}>
+        <ul className={classes["funding_detail_tags"]}>
+          {funding.tags.map((tag) => <li key={tag.id}>{tag.tag}</li>)}
+        </ul>
         <h1>{funding.title}</h1>
       </div>
-      <ul className={classes["funding_detail_tags"]}>
-        {funding.tags.map((tag) => <li key={tag.id}>{tag.tag}</li>)}
-      </ul>
 
       <div className={classes["funding_detail_profilearea"]}>
         <Carousel
+          fade
           className={classes["funding_thumbnail_carousel"]}
+          controls={false}
           indicators={false}
         >
           {content_thumbnails.map((thumbnail) => (
@@ -79,25 +81,34 @@ const FundingsDetail = function() {
         <div className={classes["funding_detail_profile"]}>
           <div>
             <h4 className={classes["funding_profile_h4"]}>남은 기간</h4>
-
-            {restTime / (1000 * 60 * 60 * 24) > 0
-              ? (
-                <strong>
-                  {(restTime / (1000 * 60 * 60 * 24)).toFixed(1)}일
-                </strong>
-              )
-              : <strong>종료</strong>}
+            <span className={classes["funding_profile_text"]}>
+              {restTime / (1000 * 60 * 60 * 24) > 0
+                ? (
+                  <>
+                    {(restTime / (1000 * 60 * 60 * 24)).toFixed(0)}
+                    <span className={classes["funding_profile_small"]}>일</span>
+                  </>
+                )
+                : <>종료</>}
+            </span>
           </div>
 
           <div>
             <h4 className={classes["funding_profile_h4"]}>달성도</h4>
             <div>
-              <strong>{funding.current_value} 원</strong>{" "}
-              <strong style={{ color: "green", fontSize: "12px" }}>
+              <>
+                <span className={classes["funding_profile_text"]}>
+                  {funding.current_value.toLocaleString()}
+                </span>
+                <span className={classes["funding_profile_small"]}>
+                  원
+                </span>
+              </>{" "}
+              <>
                 {(funding.current_value / funding.target_value * 100).toFixed(
                   1,
-                )}%
-              </strong>
+                )}% 달성
+              </>
             </div>
           </div>
 
@@ -108,23 +119,23 @@ const FundingsDetail = function() {
               {funding.host_nickname}
             </div>
           </div>
+          <ButtonGroup vertical>
+            <DropdownButton
+              as={ButtonGroup}
+              title="공유하기💌"
+              id="bg-vertical-dropdown-1"
+            >
+              <Dropdown.Item eventKey="1">인스타</Dropdown.Item>
+              <Dropdown.Item eventKey="2">네이버블로그</Dropdown.Item>
+              <Dropdown.Item eventKey="3">트위터X</Dropdown.Item>
+              <Dropdown.Item eventKey="4">페이스북</Dropdown.Item>
+              <Dropdown.Item eventKey="5">링크</Dropdown.Item>
+            </DropdownButton>
+          </ButtonGroup>
+
+          <InterestButton funding={funding} setInterest={setInterest} />
         </div>
       </div>
-      <ButtonGroup vertical>
-        <DropdownButton
-          as={ButtonGroup}
-          title="공유하기💌"
-          id="bg-vertical-dropdown-1"
-        >
-          <Dropdown.Item eventKey="1">인스타</Dropdown.Item>
-          <Dropdown.Item eventKey="2">네이버블로그</Dropdown.Item>
-          <Dropdown.Item eventKey="3">트위터X</Dropdown.Item>
-          <Dropdown.Item eventKey="4">페이스북</Dropdown.Item>
-          <Dropdown.Item eventKey="5">링크</Dropdown.Item>
-        </DropdownButton>
-      </ButtonGroup>
-
-      <InterestButton funding={funding} setInterest={setInterest} />
 
       <hr></hr>
       <div>
