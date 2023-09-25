@@ -5,7 +5,7 @@
 .footer_container{
     max-width: var(--max-content-width);
     margin: 0 auto;
-    padding: 20px 7px 50px 7px;
+    padding: 30px 7px 50px 7px;
 }
 
 .footer_logo > h1 {
