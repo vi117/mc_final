@@ -17,46 +17,6 @@ import "../community/styles/tags.css";
 //   justifyContent: "center",
 // });
 
-// const fundings = [
-//   {
-//     id: 1,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:1000,
-//     current_value:500,
-
-//   },
-//   {
-//     id: 2,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:"1000",
-//     current_value:"500",
-//   },
-//   {
-//     id: 3,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:"1000",
-//     current_value:"500",
-//   },
-//   {
-//     id: 4,
-//     title: "funding 1",
-//     thumbnail: placerholder,
-//     tag: "고양이",
-//     content:"aaaaaaaaaaaaaaaa",
-//     target_value:"1000",
-//     current_value:"500",
-//   },
-// ];
-
 const FundingsHome = function() {
   const [selected, setSelected] = useState([]);
   const {
