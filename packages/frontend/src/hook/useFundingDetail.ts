@@ -1,6 +1,6 @@
 import { FundingObject, FundingRewards } from "dto";
 import useSWR from "swr";
-import { DateToString } from "./util";
+import { DateToString, fetcher } from "./util";
 
 export default function useFundingDetail(id: number) {
   return useSWR<
@@ -9,6 +9,6 @@ export default function useFundingDetail(id: number) {
     }
   >(
     `/api/v1/fundings/${id}`,
-    (url) => fetch(url).then((res) => res.json()),
+    fetcher,
   );
 }

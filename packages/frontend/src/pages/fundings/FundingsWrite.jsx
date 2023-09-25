@@ -78,15 +78,12 @@ const FundingsWrite = function() {
           <Form.Label>썸네일 사진을 업로드해주세요.</Form.Label>
           <Form.Control
             type="file"
-            // multiple
-            // thumbnail 여러개?
             onChange={(e) => {
               console.log(e.target.files);
               setThumbnail(e.target.files);
             }}
           />
         </Form.Group>
-        {/* TODO(vi117): title thumbnail과 content thumbnail 을 업로드 */}
       </Row>
       <Row>
         <h3>콘텐츠 썸네일</h3>
