@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Carousel } from "react-bootstrap";
-import "./home.css";
 import { Link } from "react-router-dom";
+import classes from "./home.module.css";
 
 export function HomePage() {
   const [index, setIndex] = useState(0);
@@ -11,8 +11,8 @@ export function HomePage() {
 
   return (
     <>
-      <div className="main-home-container">
-        <div className="banner">
+      <div className={classes["main-home-container"]}>
+        <div className={classes["banner"]}>
           <Carousel
             activeIndex={index}
             onSelect={handleSelect}
@@ -23,30 +23,30 @@ export function HomePage() {
                 <h3>시선집중 스페셜 기획전</h3>
                 <p>해피테일즈 단독 펀딩을 살펴보세요</p>
               </Carousel.Caption>
-              <div className="img-overlay" />
-              <img src="/sample.png" className="carousel_img"></img>
+              <div className={classes["img-overlay"]} />
+              <img src="/sample.png" className={classes["carousel_img"]}></img>
             </Carousel.Item>
             <Carousel.Item>
               <Carousel.Caption>
                 <h3>만나서 반가워요!</h3>
                 <p>즉시 할인 신규 가입 혜택 알아보기</p>
               </Carousel.Caption>
-              <div className="img-overlay" />
+              <div className={classes["img-overlay"]} />
               <img
                 src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjR5fRTjU1l0RaTtMemRHeUcJsoamu3P9NDYQ1pfol5UnLm0el77VzVGk-z1j73uvegJr3f9mySNDSG2kB-gvy6Fa-oArqx-jc68I8lKzSzetKSayZAk8HM1Z0zebs4T2d8mBwaru_VfswQURZO8Qv-fiZbCEEYw-iXajUbw-Tm5Tvv1RX11QGVW3slfZjx/s1920/banner1.jpg"
-                className="carousel_img"
+                className={classes["carousel_img"]}
               >
               </img>
             </Carousel.Item>
           </Carousel>
         </div>
 
-        <div className="funding-banner-container">
-          <div className="home-funding-title">
+        <div className={classes["funding-banner-container"]}>
+          <div className={classes["home-funding-title"]}>
             금주의<b style={{ fontWeight: "700" }}>&nbsp;베스트 펀딩</b>을
             확인해보세요!
           </div>
-          <div className="home-funding-banner">
+          <div className={classes["home-funding-banner"]}>
             <Carousel indicators={false} className="home-carousel2">
               <Carousel.Item>
                 <Link to={"/fundings/"}>
@@ -68,16 +68,19 @@ export function HomePage() {
               </Carousel.Item>
             </Carousel>
           </div>
-          <div className="home-funding-title" style={{ marginTop: "30px" }}>
+          <div
+            className={classes["home-funding-title"]}
+            style={{ marginTop: "30px" }}
+          >
             <b style={{ fontWeight: "700" }}>신규 펀딩</b>을 확인해 보세요!
           </div>
-          <div className="home-funding-banner">
-            <Carousel indicators={false} className="home-carousel2">
+          <div className={classes["home-funding-banner"]}>
+            <Carousel indicators={false} className={classes["home-carousel2"]}>
               <Carousel.Item>
                 <Link to={"/fundings/1"}>
                   <img
                     src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDYY2BzEkLZHTGqetYKSuN2lhSLl0fYmmGt6Og0YZLtQQpv4XrDyHgZE-9NmvfCmNW0-CevCQXEm8iD3CbBAyTMxGdRS_s-24EIVaDNUU3IS-ixaGRgnb_YMa2iNwdf4OIn5Er3GqVQSxY-vYP1oXntv8yZ71OAIJlzw2oLcVABXfngSsLLyJNglocE1PQ/s1178/funding2.jpg"
-                    className="carousel_img"
+                    className={classes["carousel_img"]}
                   >
                   </img>
                 </Link>
@@ -86,7 +89,7 @@ export function HomePage() {
                 <Link to={"/fundings/3"}>
                   <img
                     src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSObSVrzZy97-7DzmzA1db8c4vhSMZvrdioiDLRMC8BFv7Bh6diebLP1mdP41IBDKjspey2INOTnQ9Q5Rt6iZQBbKYvCbWC3yCldufr780bHzNa0HVnLR8I41_g45bkF-wXMqafSv85tLGR16kppPP02kOsd3dpkL9QYUZcHVPTjpidKB1hiBY07dGbUCW/s1178/funding3.jpg"
-                    className="carousel_img"
+                    className={classes["carousel_img"]}
                   >
                   </img>
                 </Link>

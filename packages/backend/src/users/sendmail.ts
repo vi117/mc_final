@@ -1,5 +1,6 @@
 import { getTransport } from "@/mail/service";
 import debug_fn from "debug";
+import verifyTemplate from "./mail_form";
 
 const debug = debug_fn("joinify:sendmail");
 
@@ -26,8 +27,9 @@ export async function sendVerificationMail(
     from: process.env.SMTP_FROM ?? `no-reply@${process.env.SMTP_HOST}`,
     to: email,
     subject: "회원가입 인증 코드",
-    text: `회원가입 인증 코드는 ${verificationCode} 입니다.
-      이 <a href="${frontendUrl.href}">링크</a>를 클릭해서 인증해주세요.`,
+    text: verifyTemplate({
+      frontendUrl: frontendUrl.href,
+    }),
     headers: {
       "content-type": "text/html",
     },

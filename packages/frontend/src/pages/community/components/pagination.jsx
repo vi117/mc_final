@@ -1,11 +1,17 @@
 import Pagination from "react-bootstrap/Pagination";
 import "../styles/pagination.css";
 
-const Page = ({ totalItems, itemsPerPage, activePage, handlePageChange }) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
+const Page = ({
+  activePage,
+  range = 5,
+  endPage,
+  handlePageChange,
+}) => {
+  const start = Math.max(activePage - Math.floor(range / 2), 1);
+  const last = Math.min(start + range, endPage);
   const pageItems = [];
-  for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+  console.log(start, endPage);
+  for (let pageNumber = start; pageNumber <= last; pageNumber++) {
     pageItems.push(
       <Pagination.Item
         key={pageNumber}
@@ -17,7 +23,7 @@ const Page = ({ totalItems, itemsPerPage, activePage, handlePageChange }) => {
     );
   }
 
-  return <Pagination className="co-page">{pageItems}</Pagination>;
+  return <Pagination className={"co-page_s4m49_1"}>{pageItems}</Pagination>;
 };
 
 export default Page;
