@@ -116,11 +116,11 @@
 
 .Address {
   border: 1px solid rgb(230, 230, 230);
-    border-radius: 4px;
-    padding: 30px;
-    padding-left: 60px;
-    width: 550px; 
-    margin-bottom: 150px;
+  border-radius: 4px;
+  padding: 30px;
+  padding-left: 60px;
+  width: 550px; 
+  margin-bottom: 150px;
     
 }
 
@@ -166,7 +166,7 @@
 
 .FinalAmount {
   position: absolute;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   border: 1px solid rgb(230, 230, 230);
   border-radius: 4px;
@@ -176,7 +176,6 @@
   height: 50px;
   margin-bottom: 450px;
   padding: 10px;
-  
   
 }
 
