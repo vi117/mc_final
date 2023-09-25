@@ -1,7 +1,17 @@
 import { useState } from "react";
 
-export default function TermOfPolicy() {
-  const [allArgeed, setAllAgreed] = useState(false);
+export interface Agreement {
+  termsAgreed: boolean;
+  personallnfoAgreed: boolean;
+  provisionAgreed: boolean;
+  locationAgreed: boolean;
+  eventAlarmAgreed: boolean;
+  serviceAlarmAgreed: boolean;
+}
+
+export function TermOfPolicy({
+  onChange = () => {},
+}: { onChange?: (agreements: Agreement) => void }) {
   const [agreements, setAgreements] = useState({
     termsAgreed: false,
     personallnfoAgreed: false,
@@ -10,29 +20,30 @@ export default function TermOfPolicy() {
     eventAlarmAgreed: false,
     serviceAlarmAgreed: false,
   });
+  const allAgreed = Object.values(agreements).every(
+    (value) => value === true,
+  );
 
-  const handleAgreementChange = (e) => {
+  const handleAgreementChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
+    const newAgreements = { ...agreements, [name]: checked };
 
-    setAgreements((prevAgreements) => ({ ...prevAgreements, [name]: checked }));
-    const allChecked = Object.values({ ...agreements, [name]: checked }).every(
-      (value) => value === true,
-    );
-    setAllAgreed(allChecked);
+    setAgreements(newAgreements);
+    onChange({ ...agreements, [name]: checked });
   };
 
-  const handleAllArgeementChange = (e) => {
+  const handleAllArgeementChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
-    setAgreements((prevAgreements) =>
-      Object.keys(prevAgreements).reduce(
-        (newAgreements, agreementKey) => ({
-          ...newAgreements,
-          [agreementKey]: checked,
-        }),
-        {},
-      )
-    );
-    setAllAgreed(checked);
+    const newAgreements = (Object.keys(agreements) as (keyof Agreement)[])
+      .reduce(
+        (acc, key) => {
+          acc[key] = checked;
+          return acc;
+        },
+        {} as Agreement,
+      );
+    setAgreements(newAgreements);
+    onChange(newAgreements);
   };
 
   return (
@@ -44,7 +55,7 @@ export default function TermOfPolicy() {
             type="checkbox"
             id="agree_check_all"
             name="agree_check_all"
-            checked={allArgeed}
+            checked={allAgreed}
             onChange={handleAllArgeementChange}
           />
           <label htmlFor="agree_check_all">이용약관 전체동의</label>
@@ -114,3 +125,5 @@ export default function TermOfPolicy() {
     </div>
   );
 }
+
+export default TermOfPolicy;

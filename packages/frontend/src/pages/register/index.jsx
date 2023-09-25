@@ -92,7 +92,7 @@ function RegisterPage() {
           backdrop="static"
           keyboard={false}
           handleConfirm={handleClose}
-          handleClose={handleClose}
+          handleClose={() => navigate("/login")}
         >
         </RegisterArgee>
         <Upload></Upload>
