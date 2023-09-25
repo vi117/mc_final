@@ -7,12 +7,11 @@ import "react-quill/dist/quill.snow.css";
 import CommunityDetail from "./pages/community/Co_detail";
 import CommunityEdit from "./pages/community/co_edit";
 import CommunityWrite from "./pages/community/Co_write";
-import Community from "./pages/community/Community";
+import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
 import FundingsPay from "./pages/fundings/FundingsPay";
-import FundingsSearch from "./pages/fundings/FundingsSearch";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
@@ -100,10 +99,6 @@ const browserRouter = createBrowserRouter([
        * 펀딩 홈
        */
       { path: "/fundings", element: <FundingsHome /> },
-      /**
-       * 펀딩 검색 ?q=검색어
-       */
-      { path: "/fundings/search", element: <FundingsSearch /> },
       /**
        * 펀딩 글
        */
