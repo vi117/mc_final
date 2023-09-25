@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Upload from "../uploadcomponent/Upload";
+import Upload from "../../component/UploadImage";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
 
@@ -92,7 +92,7 @@ function RegisterPage() {
           backdrop="static"
           keyboard={false}
           handleConfirm={handleClose}
-          handleClose={handleClose}
+          handleClose={() => navigate("/login")}
         >
         </RegisterArgee>
         <Upload></Upload>

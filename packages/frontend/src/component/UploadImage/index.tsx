@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
-import "./Upload.css";
-import { Button } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "react-bootstrap";
+import { AiOutlineCloudUpload, AiOutlineDelete } from "react-icons/ai";
+import classes from "./Upload.module.css";
 
 const Upload = () => {
   const [image, setImage] = useState({
     image_file: "",
+    preview_URL: "",
   });
 
-  let inputRef;
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const saveImage = (e) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ const Upload = () => {
     URL.revokeObjectURL(image.preview_URL);
     setImage({
       image_file: "",
+      preview_URL: "",
     });
   };
 
@@ -51,35 +54,34 @@ const Upload = () => {
   // };
 
   return (
-    <div className="uploader-wrapper">
+    <div className={classes["uploader-wrapper"]}>
       <input
         type="file"
         accept="image/*"
         onChange={saveImage}
-        onClick={(e) => e.target.value = null}
-        ref={refParam => inputRef = refParam}
+        ref={inputRef}
         style={{ display: "none" }}
-      />
-      <div className="img-wrapper">
-        <img className="imgSize" src={image.preview_URL} />
+      >
+      </input>
+      <div className={classes["img-wrapper"]}>
+        <img
+          className={classes["imgSize"]}
+          src={image.preview_URL}
+          onClick={() => inputRef.current?.click()}
+        />
+        {image.preview_URL === "" && (
+          <AiOutlineCloudUpload
+            className={classes["icon"]}
+            onClick={() => inputRef.current?.click()}
+          />
+        )}
       </div>
 
-      <div className="upload-button">
-        <Button
-          type="primary"
-          variant="contained"
-          onClick={() => inputRef.click()}
-        >
-          Preview
+      <div className={classes["upload-button"]}>
+        <Button variant="danger" onClick={deleteImage}>
+          <AiOutlineDelete />
+          Clear
         </Button>
-        <Button color="error" variant="contained" onClick={deleteImage}>
-          Delete
-        </Button>
-        {
-          /* <Button color="success" variant="contained" onClick={sendImageToServer}>
-          Upload
-        </Button> */
-        }
       </div>
     </div>
   );
