@@ -1,11 +1,14 @@
 import Button from "@mui/material/Button";
+import clsx from "clsx";
 import { useState } from "react";
-import { Accordion, Col, Form, Modal, Row } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Accordion, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import MyButton from "../../component/Button";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";
 
 export default function FundingsPay() {
+  const navigate = useNavigate();
   const location = useLocation();
   const userInfo = useLoginInfo();
   const [shippingInfo, setShippingInfo] = useState({
@@ -24,106 +27,113 @@ export default function FundingsPay() {
     / (1000 * 60 * 60 * 24);
 
   return (
-    <div
-      className={classes["ImgArea"]}
-      style={{ paddingLeft: "230px", paddingRight: "230px" }}
-    >
-      <a herf="">
-        <img
-          src={funding.thumbnail}
-          alt={funding.title}
+    <Container>
+      <div className="d-flex flex-wrap" style={{ gap: "15px" }}>
+        <div
+          className={classes["ImgArea"]}
         >
-        </img>
-      </a>
-      <div className={classes["styled-project"]}>
-        <span className={classes["intro"]}>
-          {selectedReward.title} | {funding.host_nickname}
-        </span>
-        <h3>
-          <a href="펀딩.url">{funding.title}</a>
-        </h3>
-      </div>
-      <div className={classes["styled-project"]}>
-        <span className={classes["account"]}>
-          {funding.current_value} 원
-        </span>
-        <span className={classes["achivement"]}>
-          {((funding.current_value / funding.target_value) * 100).toFixed(2)} %
-        </span>
-        <span className={classes["state"]}>
-          {/* TODO(vi117): 일, 시간, 분 남음으로 바꾸기. 컴포넌트로 추출하고 setInterval로 실시간 갱신. */}
-          {remainingDays.toFixed(2)}일 남음
-        </span>
-      </div>
-      <p className={classes["FundingInfor"]}>펀딩 정보</p>
-      <div className={classes["container"]}>
-        <table>
-          <tbody>
-            <tr>
-              <th>펀딩 구성</th>
-              <td>
-                <p className={classes["reward-title"]}>
-                  {selectedReward.title}
-                </p>
-                <ul className={classes["reward-list"]}>
-                  {selectedReward.content}
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <th>펀딩 금액</th>
-              <td>
-                <p className={classes["reward-price"]}>
-                  {selectedReward.price} 원
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p className={classes["AddressInfor"]}>배송 정보</p>
-      <div className={classes["Address"]}>
-        <ShippingInformation
-          setShippingInfo={setShippingInfo}
-          shippingInfo={shippingInfo}
-        />
-      </div>
-      <p className={classes["Payment"]}>결제수단</p>
-      <div className={classes["RoundedWrapper"]}>
-        <PaymentMethod />
-        <CardRegister />
-      </div>
-      <div className={classes["Sponsorship"]}>
-        <p className={classes["FinalAmount"]} style={{ color: "#3A52CA" }}>
-          최종 후원 금액
-          <span
-            style={{ position: "relative", left: "180px", color: "#0C0002" }}
-          >
-            {selectedReward.price} 원
-          </span>
-        </p>
-      </div>
-      <div className={classes["PledgeAmount"]}>
-        <p style={{ position: "relative", fontSize: "15px" }}>
-          * 프로젝트가 무산되거나 중단된 경우 결제는 취소되며 환불 진행됩니다.
-        </p>
-        <ConsentForm />
-        <FundingPrecaution />
-        <PrecautionForm />
-        <br></br>
-        <div className="mb-2">
-          <Link to={`/fundings/${funding.id}`}>
-            <Button
-              variant="outlined"
-              onClick={participate}
-              style={{ width: "300px", height: "50px", left: "100px" }}
+          <a herf="">
+            <img
+              src={funding.thumbnail}
+              alt={funding.title}
             >
-              후원하기
-            </Button>
-          </Link>
+            </img>
+          </a>
+        </div>
+        <div className="d-flex flex-column justify-content-between">
+          <div className={classes["styled-project"]}>
+            <span className={classes["intro"]}>
+              {selectedReward.title} | {funding.host_nickname}
+            </span>
+            <h3 style={{ marginTop: "10px" }}>
+              <a href="펀딩.url">{funding.title}</a>
+            </h3>
+          </div>
+          <div className={classes["styled-project"]}>
+            <span className={classes["account"]}>
+              {funding.current_value} 원
+            </span>
+            <span className={classes["achivement"]}>
+              {((funding.current_value / funding.target_value) * 100).toFixed(
+                2,
+              )} %
+            </span>
+            <span className={classes["state"]}>
+              {/* TODO(vi117): 일, 시간, 분 남음으로 바꾸기. 컴포넌트로 추출하고 setInterval로 실시간 갱신. */}
+              {remainingDays.toFixed(2)}일 남음
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+      <Row>
+        <Col sm={12} lg={6} className="mb-4">
+          <p className={clsx(classes["FundingInfor"], classes["Header"])}>
+            펀딩 정보
+          </p>
+          <div className={classes["container"]}>
+            <SelectRewardInfo selectedReward={selectedReward} />
+          </div>
+
+          <p className={clsx(classes["AddressInfor"], classes["Header"])}>
+            배송 정보
+          </p>
+          <div className={clsx(classes["Address"], classes["container"])}>
+            <ShippingInformation
+              setShippingInfo={setShippingInfo}
+              shippingInfo={shippingInfo}
+            />
+          </div>
+        </Col>
+        <Col sm={12} lg={6} className="mb-4">
+          <p className={clsx(classes["Payment"], classes["Header"])}>
+            결제수단
+          </p>
+          <div className={classes["RoundedWrapper"]}>
+            <PaymentMethod />
+            <CardRegister />
+          </div>
+          <div className={classes["Sponsorship"]}>
+            <p className={classes["FinalAmount"]} style={{ color: "#3A52CA" }}>
+              최종 후원 금액
+              <span
+                style={{
+                  color: "#0C0002",
+                }}
+              >
+                {selectedReward.price} 원
+              </span>
+            </p>
+          </div>
+          <div className={clsx(classes["PledgeAmount"])}>
+            <p style={{ position: "relative", fontSize: "15px" }}>
+              * 프로젝트가 무산되거나 중단된 경우 결제는 취소되며 환불
+              진행됩니다.
+            </p>
+            <ConsentForm />
+            <FundingPrecaution />
+            <PrecautionForm />
+            <br></br>
+            <div className="mb-2 w-100 d-flex justify-content-center">
+              <MyButton
+                variant="outlined"
+                className="w-100"
+                onClick={() => {
+                  participate().then(() => {
+                    navigate(`/fundings/${funding.id}`);
+                  });
+                }}
+                style={{
+                  maxWidth: "300px",
+                  height: "50px",
+                }}
+              >
+                후원하기
+              </MyButton>
+            </div>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
   async function participate() {
     const url = new URL(
@@ -150,6 +160,34 @@ export default function FundingsPay() {
     // TODO(vi117): navigate funding
     alert("요청이 접수되었습니다.");
   }
+}
+
+function SelectRewardInfo({ selectedReward }) {
+  return (
+    <table className={classes["fundingInfoTable"]}>
+      <tbody>
+        <tr>
+          <th className={classes["SmallHeader"]}>펀딩 구성</th>
+          <td>
+            <p className={classes["reward-title"]}>
+              {selectedReward.title}
+            </p>
+            <ul className={classes["reward-list"]}>
+              {selectedReward.content}
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <th className={classes["SmallHeader"]}>펀딩 금액</th>
+          <td>
+            <p className={classes["reward-price"]}>
+              {selectedReward.price} 원
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
 }
 
 function FundingPrecaution() {
@@ -185,13 +223,13 @@ function CardRegister() {
 
   return (
     <>
-      <Button
+      <MyButton
         variant="outlined"
         onClick={handleShow}
-        style={{ width: "550px", height: "40px", right: "20px" }}
+        style={{ height: "40px", margin: "0px -20px -20px -20px" }}
       >
         + 카드 등록
-      </Button>
+      </MyButton>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -337,15 +375,19 @@ function CardRegister() {
 function ShippingInformation({ shippingInfo, setShippingInfo }) {
   return (
     <>
-      <Form>
+      <Form
+        className="d-flex flex-column w-100"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridName">
-            <Form.Label style={{ position: "relative", left: "50px" }}>
+            <Form.Label className={classes["SmallHeader"]}>
               받는 사람
             </Form.Label>
             <Form.Control
               type="Name"
-              style={{ width: "300px", position: "relative", left: "50px" }}
+              style={{}}
+              className={""}
               placeholder="받는 분 성함을 입력해주세요."
               value={shippingInfo.name}
               onChange={(e) =>
@@ -358,12 +400,11 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridNumber">
-            <Form.Label style={{ position: "relative", left: "50px" }}>
+            <Form.Label className={classes["SmallHeader"]}>
               연락처
             </Form.Label>
             <Form.Control
-              type="Number"
-              style={{ width: "300px", position: "relative", left: "50px" }}
+              type="number"
               placeholder="연락처를 입력해주세요."
               value={shippingInfo.number}
               onChange={(e) =>
@@ -375,11 +416,10 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
           </Form.Group>
         </Row>
         <Form.Group className="mb-3" controlId="formGridAddress1">
-          <Form.Label style={{ position: "relative", left: "50px" }}>
+          <Form.Label className={classes["SmallHeader"]}>
             배송지
           </Form.Label>
           <Form.Control
-            style={{ width: "300px", position: "relative", left: "50px" }}
             placeholder="ex) 성남시 분당구 동판교로 115"
             value={shippingInfo.address}
             onChange={(e) =>
@@ -391,11 +431,10 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGridAddress2">
-          <Form.Label style={{ position: "relative", left: "50px" }}>
+          <Form.Label className={classes["SmallHeader"]}>
             상세주소
           </Form.Label>
           <Form.Control
-            style={{ width: "300px", position: "relative", left: "50px" }}
             placeholder="ex) 2층 201호"
             value={shippingInfo.addressDetail}
             onChange={(e) =>
@@ -408,52 +447,51 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
 
         <Form.Group className="mb-3" id="formGridCheckbox">
           <Form.Check
-            style={{ position: "relative", left: "50px", fontSize: "15px" }}
             type="checkbox"
             label="기본 배송지로 등록"
           />
         </Form.Group>
-
-        <Button
-          style={{ width: "150px", position: "relative", left: "250px" }}
+        <MyButton
           variant="outlined"
-          type="submit"
+          style={{
+            textAlign: "right",
+            alignSelf: "flex-end",
+          }}
         >
           등록 완료
-        </Button>
+        </MyButton>
       </Form>
     </>
   );
 }
 
 function PaymentMethod() {
+  const type = "radio";
   return (
-    <Form>
-      {["radio"].map((type) => (
-        <div key={`inline-${type}`} className="mb-3">
-          <Form.Check
-            inline
-            label="카드 간편결제"
-            name="group1"
-            type={type}
-            id={`inline-${type}-1`}
-          />
-          <Form.Check
-            inline
-            label="네이버페이"
-            name="group1"
-            type={type}
-            id={`inline-${type}-2`}
-          />
-          <Form.Check
-            inline
-            label="계좌이체"
-            name="group1"
-            type={type}
-            id={`inline-${type}-3`}
-          />
-        </div>
-      ))}
+    <Form className="d-flex flex-column w-100 mb-3">
+      <div key={`inline-${type}`}>
+        <Form.Check
+          inline
+          label="카드 간편결제"
+          name="group1"
+          type={type}
+          id={`inline-${type}-1`}
+        />
+        <Form.Check
+          inline
+          label="네이버페이"
+          name="group1"
+          type={type}
+          id={`inline-${type}-2`}
+        />
+        <Form.Check
+          inline
+          label="계좌이체"
+          name="group1"
+          type={type}
+          id={`inline-${type}-3`}
+        />
+      </div>
     </Form>
   );
 }
