@@ -69,7 +69,7 @@ export function Header() {
   return (
     <>
       <header className={classes.header_container}>
-        <Navbar expand="sm">
+        <Navbar expand="sm" className={classes.header_navbar}>
           <Container className={classes.header_brandcontainer}>
             <NavLink to={"/"}>
               <Navbar.Brand>

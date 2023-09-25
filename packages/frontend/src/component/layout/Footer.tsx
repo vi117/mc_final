@@ -4,12 +4,12 @@ import classes from "./Footer.module.css";
 export default function Footer() {
   return (
     <footer>
-      <div>
+      <div className={classes["footer_area"]}>
         <Container>
           <div className={classes["footer_container"]}>
             <Row>
               <Col xs={0} sm={3} className={classes.footer_logo}>
-                <h1>해피테일즈 고객센터</h1>
+                <h1>해피테일즈</h1>
               </Col>
               <Col xs={0} sm={9} className={classes.footer_details}>
                 <ul className={classes.footer_info}>
