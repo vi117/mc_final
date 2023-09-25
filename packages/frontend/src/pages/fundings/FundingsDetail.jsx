@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 import {
-  Badge,
   Button,
   ButtonGroup,
   Carousel,
-  Container,
   Dropdown,
   DropdownButton,
   ListGroup,
   Spinner,
 } from "react-bootstrap";
-import { Row } from "react-bootstrap";
-import { Col } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import useFundingDetail from "../../hook/useFundingDetail";
-import { useLoginId } from "../../hook/useLogin";
+// import { useLoginId } from "../../hook/useLogin";
 import Profileimg from "../community/assets/user.png";
 import classes from "./FundingsDetail.module.css";
 
@@ -22,7 +18,7 @@ const FundingsDetail = function() {
   const { id } = useParams();
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
 
-  const user_id = useLoginId();
+  // const user_id = useLoginId();
   const [selectedReward, setSelectedReward] = useState(null);
   useEffect(() => {
     if (isLoading) return;
@@ -47,42 +43,42 @@ const FundingsDetail = function() {
     ? funding.content_thumbnails
     : [funding.thumbnail];
   return (
-    <Container
-      style={{ paddingTop: "20px", "maxWidth": "var(--max-content-width)" }}
-    >
-      <div className={classes.sujung}>
+    <div className={classes["funding_detail_container"]}>
+      {
+        /* <div className={classes.sujung}>
         {user_id === funding.host_id && (
           <NavLink to={`/fundings/${id}/edit`}>
             <Button variant="success">수정</Button>
           </NavLink>
         )}
-      </div>
-      <Row>
-        <Col sm={8} className={classes.fundingName}>
-          <h1>{funding.title}</h1>
-        </Col>
-        <Col className={classes.tags}>
-          {funding.tags.map((tag) => <Badge key={tag.id}>{tag.tag}</Badge>)}
-        </Col>
-      </Row>
+      </div> */
+      }
 
-      <Row>
-        <Col sm={8}>
-          <Carousel className={classes.carousel}>
-            {content_thumbnails.map((thumbnail) => (
-              <Carousel.Item key={thumbnail}>
-                <img
-                  src={thumbnail}
-                  className={"d-block w-100"}
-                  style={{ height: "400px", objectFit: "cover" }}
-                />
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </Col>
-        <Col sm={4}>
-          <Row className="mb-3">
-            <h4>남은 기간</h4>
+      <div className={classes["funding_title"]}>
+        <h1>{funding.title}</h1>
+      </div>
+      <ul className={classes["funding_detail_tags"]}>
+        {funding.tags.map((tag) => <li key={tag.id}>{tag.tag}</li>)}
+      </ul>
+
+      <div className={classes["funding_detail_profilearea"]}>
+        <Carousel
+          className={classes["funding_thumbnail_carousel"]}
+          indicators={false}
+        >
+          {content_thumbnails.map((thumbnail) => (
+            <Carousel.Item key={thumbnail}>
+              <img
+                src={thumbnail}
+                className={classes["carousel_thumbnail"]}
+              />
+            </Carousel.Item>
+          ))}
+        </Carousel>
+
+        <div className={classes["funding_detail_profile"]}>
+          <div>
+            <h4 className={classes["funding_profile_h4"]}>남은 기간</h4>
 
             {restTime / (1000 * 60 * 60 * 24) > 0
               ? (
@@ -91,10 +87,11 @@ const FundingsDetail = function() {
                 </strong>
               )
               : <strong>종료</strong>}
-          </Row>
-          <Row className="mb-3">
-            <h4>달성도</h4>
-            <div style={{ fontSize: "14px" }}>
+          </div>
+
+          <div>
+            <h4 className={classes["funding_profile_h4"]}>달성도</h4>
+            <div>
               <strong>{funding.current_value} 원</strong>{" "}
               <strong style={{ color: "green", fontSize: "12px" }}>
                 {(funding.current_value / funding.target_value * 100).toFixed(
@@ -102,81 +99,73 @@ const FundingsDetail = function() {
                 )}%
               </strong>
             </div>
-          </Row>
-          <Row>
-            <h4>호스트</h4>
+          </div>
+
+          <div>
+            <h4 className={classes["funding_profile_h4"]}>호스트</h4>
             <div>
               <img src={Profileimg} className={classes["user"]} alt="Profile" />
               {funding.host_nickname}
             </div>
-          </Row>
-          <hr></hr>
-          <Row style={{ "padding": "10px 0px 10px 0px" }}>
-            <Col className="sns">
-              <ButtonGroup vertical>
-                <DropdownButton
-                  as={ButtonGroup}
-                  title="공유하기💌"
-                  id="bg-vertical-dropdown-1"
-                >
-                  <Dropdown.Item eventKey="1">인스타</Dropdown.Item>
-                  <Dropdown.Item eventKey="2">네이버블로그</Dropdown.Item>
-                  <Dropdown.Item eventKey="3">트위터X</Dropdown.Item>
-                  <Dropdown.Item eventKey="4">페이스북</Dropdown.Item>
-                  <Dropdown.Item eventKey="5">링크</Dropdown.Item>
-                </DropdownButton>
-              </ButtonGroup>
-            </Col>
-            <Col className={classes.wishList}>
-              <InterestButton funding={funding} setInterest={setInterest} />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <hr></hr>
-      <Row>
-        <Col sm={8}>
-          <div
-            className={classes.content}
-            dangerouslySetInnerHTML={{ __html: funding.content }}
-          >
           </div>
-        </Col>
-        <Col sm={4}>
-          <Row className={classes.rewardList}>
-            <SelectablRewardList
-              rewards={funding.rewards}
-              selectedReward={selectedReward}
-              onChange={(v) => setSelectedReward(v)}
-              disabled={!!funding.participated_reward_id}
-            />
-          </Row>
+        </div>
+      </div>
+      <ButtonGroup vertical>
+        <DropdownButton
+          as={ButtonGroup}
+          title="공유하기💌"
+          id="bg-vertical-dropdown-1"
+        >
+          <Dropdown.Item eventKey="1">인스타</Dropdown.Item>
+          <Dropdown.Item eventKey="2">네이버블로그</Dropdown.Item>
+          <Dropdown.Item eventKey="3">트위터X</Dropdown.Item>
+          <Dropdown.Item eventKey="4">페이스북</Dropdown.Item>
+          <Dropdown.Item eventKey="5">링크</Dropdown.Item>
+        </DropdownButton>
+      </ButtonGroup>
 
-          <Row className={classes.joinBtn}>
-            {funding.participated_reward_id
-              // TODO(vi117): 환불 창 추가
-              ? (
-                <Button variant="danger" onClick={withdrawFunding}>
-                  취소
-                </Button>
-              )
-              : (
-                <NavLink
-                  to={`/fundings/${id}/pay/`}
-                  state={{ funding: funding, selectedReward: selectedReward }}
-                >
-                  <Button
-                    variant="success"
-                    disabled={!selectedReward}
-                  >
-                    참가
-                  </Button>
-                </NavLink>
-              )}
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+      <InterestButton funding={funding} setInterest={setInterest} />
+
+      <hr></hr>
+      <div>
+        <div
+          className={classes.content}
+          dangerouslySetInnerHTML={{ __html: funding.content }}
+        >
+        </div>
+      </div>
+      <div className={classes.rewardList}>
+        <SelectablRewardList
+          rewards={funding.rewards}
+          selectedReward={selectedReward}
+          onChange={(v) => setSelectedReward(v)}
+          disabled={!!funding.participated_reward_id}
+        />
+      </div>
+
+      <div className={classes.joinBtn}>
+        {funding.participated_reward_id
+          // TODO(vi117): 환불 창 추가
+          ? (
+            <Button variant="danger" onClick={withdrawFunding}>
+              취소
+            </Button>
+          )
+          : (
+            <NavLink
+              to={`/fundings/${id}/pay/`}
+              state={{ funding: funding, selectedReward: selectedReward }}
+            >
+              <Button
+                variant="success"
+                disabled={!selectedReward}
+              >
+                참가
+              </Button>
+            </NavLink>
+          )}
+      </div>
+    </div>
   );
 
   async function setInterest(id, like = true) {

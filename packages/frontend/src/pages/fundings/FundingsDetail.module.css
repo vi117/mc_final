@@ -1,5 +1,61 @@
-.fundingName{
+.funding_detail_container{
+  padding: 10px 7px 50px 7px;
+  margin:0 auto;
+  max-width: 1080px;
+}
+
+.funding_title{
   text-align: center;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--boxshadow);
+  height: 60px;
+}
+.funding_title > h1{
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02px;
+  color: var(--primary);
+}
+
+.funding_detail_tags{
+  display:flex;
+  color: var(--teritary);
+  font-size: 16px;
+  list-style: none;
+  padding-left: 0px;
+  margin-bottom: 0px !important;
+}
+
+/*thumbnail, resttime, host, ... */
+.funding_detail_profilearea{
+  display:flex;
+}
+
+.funding_profile_h4{
+  font-weight: 400;
+  font-size: 18px;
+  color:var(--teritary);
+}
+
+
+.funding_detail_tags > li{
+  margin-right: 7px;
+}
+
+.funding_detail_tags > li::before{
+  content:'#'
+}
+
+
+.funding_thumbnail_carousel{
+  width: 50%;
+}
+
+.carousel_thumbnail{
+width:594px;
+height:445px;
+object-fit: cover;
+border: 1px solid var(--border);
 }
 
 .tags{
