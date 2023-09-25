@@ -1,6 +1,6 @@
 import { FundingObject } from "dto";
 import useSWR from "swr";
-import { DateToString } from "./util";
+import { DateToString, fetcher } from "./util";
 
 interface UseFundingsOptions {
   offset?: number;
@@ -25,6 +25,6 @@ export default function useFundings({
 
   return useSWR<DateToString<FundingObject>[]>(
     url.href,
-    (url) => fetch(url).then((res) => res.json()),
+    fetcher,
   );
 }

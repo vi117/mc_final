@@ -1,5 +1,6 @@
 import { ArticleObject } from "dto";
 import useSWR from "swr";
+import { DateToString, fetcher } from "./util";
 
 export default function useArticleDetail(id: number, {
   with_comments = false,
@@ -10,8 +11,8 @@ export default function useArticleDetail(id: number, {
     url.searchParams.append("with_comments", "true");
   }
 
-  return useSWR<ArticleObject>(
+  return useSWR<DateToString<ArticleObject>>(
     url.href,
-    (url) => fetch(url).then((res) => res.json()),
+    fetcher,
   );
 }

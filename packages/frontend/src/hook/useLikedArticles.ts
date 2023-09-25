@@ -1,6 +1,6 @@
 import { ArticleObject } from "dto";
 import useSWR from "swr";
-import { DateToString } from "./util";
+import { DateToString, fetcher } from "./util";
 
 interface UseArticleOptions {
   offset?: number;
@@ -25,6 +25,6 @@ export default function useLikedArticles({
 
   return useSWR<DateToString<ArticleObject>[]>(
     url.href,
-    (url) => fetch(url).then((res) => res.json()),
+    fetcher,
   );
 }
