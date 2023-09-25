@@ -1,5 +1,6 @@
+import Button from "@mui/material/Button";
 import { useState } from "react";
-import { Accordion, Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Accordion, Col, Form, Modal, Row } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";
@@ -96,20 +97,27 @@ export default function FundingsPay() {
         <p className={classes["FinalAmount"]} style={{ color: "#3A52CA" }}>
           최종 후원 금액
           <span
-            style={{ position: "relative", left: "80px", color: "#0C0002" }}
+            style={{ position: "relative", left: "180px", color: "#0C0002" }}
           >
             {selectedReward.price} 원
           </span>
         </p>
       </div>
       <div className={classes["PledgeAmount"]}>
-        프로젝트가 무산되거나 중단된 경우 결제는 취소되며 환불 진행됩니다.
+        <p style={{ position: "relative", fontSize: "15px" }}>
+          * 프로젝트가 무산되거나 중단된 경우 결제는 취소되며 환불 진행됩니다.
+        </p>
         <ConsentForm />
         <FundingPrecaution />
         <PrecautionForm />
+        <br></br>
         <div className="mb-2">
           <Link to={`/fundings/${funding.id}`}>
-            <Button variant="primary" size="lg" onClick={participate}>
+            <Button
+              variant="outlined"
+              onClick={participate}
+              style={{ width: "300px", height: "50px", left: "100px" }}
+            >
               후원하기
             </Button>
           </Link>
@@ -146,15 +154,20 @@ export default function FundingsPay() {
 
 function FundingPrecaution() {
   return (
-    <Accordion>
+    <Accordion
+      style={{ position: "relative", marginBottom: "20px" }}
+    >
       <Accordion.Item>
         <Accordion.Header>후원 유의사항</Accordion.Header>
-        <Accordion.Body>
+        <Accordion.Body
+          style={{ position: "relative", fontSize: "13px" }}
+        >
           후원은 구매가 아닌 창의적인 계획에 자금을 지원하는 일입니다.
           HappyTails에서의 후원은 아직 실현되지 않은 프로젝트가 실현될 수 있도록
           제작비를 후원하는 과정으로, 기존의 상품 또는 용역을 거래의 대상으로
           하는 매매와는 차이가 있습니다. 따라서 전자상거래법상 청약철회 등의
           규정이 적용되지 않습니다.
+          <br></br>
           <br></br>
           프로젝트는 계획과 달리 진행될 수 있습니다. 예상을 뛰어넘는 멋진 결과가
           나올 수 있지만 진행 과정에서 계획이 지연, 변경되거나 무산될 수도
@@ -173,9 +186,9 @@ function CardRegister() {
   return (
     <>
       <Button
-        variant="primary"
+        variant="outlined"
         onClick={handleShow}
-        style={{ width: "300px", left: "50px" }}
+        style={{ width: "550px", height: "40px", right: "20px" }}
       >
         + 카드 등록
       </Button>
@@ -210,6 +223,7 @@ function CardRegister() {
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label>카드번호</Form.Label>
                 <Form.Control
+                  style={{ position: "relative", width: "300px" }}
                   type="number"
                   placeholder="0000-0000-0000-0000 "
                 />
@@ -217,7 +231,10 @@ function CardRegister() {
             </Form>
 
             <p>카드 유효기간</p>
-            <Form.Select aria-label="Default select example">
+            <Form.Select
+              aria-label="Default select example"
+              style={{ position: "relative", width: "100px" }}
+            >
               <option>1월</option>
               <option value="1">2월</option>
               <option value="2">3월</option>
@@ -232,7 +249,10 @@ function CardRegister() {
               <option value="11">12월</option>
             </Form.Select>
 
-            <Form.Select aria-label="Default select example">
+            <Form.Select
+              aria-label="Default select example"
+              style={{ position: "relative", width: "100px" }}
+            >
               <option>2023년</option>
               <option value="1">2024년</option>
               <option value="2">2025년</option>
@@ -245,28 +265,32 @@ function CardRegister() {
               <option value="9">2032년</option>
               <option value="10">2033년</option>
             </Form.Select>
-
+            <br></br>
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label>카드 비밀번호 앞 두자리</Form.Label>
                 <Form.Control
+                  style={{ position: "relative", width: "300px" }}
                   type="number"
                   placeholder="앞 두자리를 입력해주세요."
                 />
               </Form.Group>
             </Form>
-
             <Form>
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label>소유주 생년월일</Form.Label>
-                <Form.Control type="number" placeholder="예) 920101" />
+                <Form.Control
+                  style={{ position: "relative", width: "300px" }}
+                  type="number"
+                  placeholder="예) 920101"
+                />
               </Form.Group>
             </Form>
-
             <Form>
               {["checkbox"].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
                   <Form.Check
+                    style={{ fontSize: "15px" }}
                     inline
                     label="결정사 정보제공 동의"
                     name="group1"
@@ -280,6 +304,7 @@ function CardRegister() {
               {["checkbox"].map((type) => (
                 <div key={`inline-${type}`} className="mb-3">
                   <Form.Check
+                    style={{ fontSize: "15px" }}
                     inline
                     label="기본 결제수단으로 등록"
                     name="group1"
@@ -292,10 +317,15 @@ function CardRegister() {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            variant="outlined"
+            color="error"
+            style={{ right: "8px" }}
+            onClick={handleClose}
+          >
             취소
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="outlined" onClick={handleClose}>
             등록 완료
           </Button>
         </Modal.Footer>
@@ -378,15 +408,15 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
 
         <Form.Group className="mb-3" id="formGridCheckbox">
           <Form.Check
-            style={{ position: "relative", left: "50px" }}
+            style={{ position: "relative", left: "50px", fontSize: "15px" }}
             type="checkbox"
             label="기본 배송지로 등록"
           />
         </Form.Group>
 
         <Button
-          style={{ width: "100px", position: "relative", left: "250px" }}
-          variant="primary"
+          style={{ width: "150px", position: "relative", left: "250px" }}
+          variant="outlined"
           type="submit"
         >
           등록 완료
@@ -434,6 +464,7 @@ function ConsentForm() {
       {["checkbox"].map((type) => (
         <div key={`inline-${type}`} className="mb-3">
           <Form.Check
+            style={{ fontSize: "15px" }}
             inline
             label="개인정보 제 3자 제공 동의"
             name="group1"
@@ -452,6 +483,7 @@ function PrecautionForm() {
       {["checkbox"].map((type) => (
         <div key={`inline-${type}`} className="mb-3">
           <Form.Check
+            style={{ fontSize: "15px" }}
             inline
             label="후원 유의사항 확인"
             name="group1"

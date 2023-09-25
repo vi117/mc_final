@@ -61,7 +61,7 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    width: 600px;
+    width: 550px;
     margin-bottom: 40px;
 }
 
@@ -101,7 +101,7 @@
 
 .reward-list {
   margin-top: 60px;
-  margin-left: 80px; 
+  margin-left: 110px; 
   text-align: left; 
   
 }
@@ -117,8 +117,11 @@
 .Address {
   border: 1px solid rgb(230, 230, 230);
     border-radius: 4px;
-    width: 600px; 
-
+    padding: 30px;
+    padding-left: 60px;
+    width: 550px; 
+    margin-bottom: 150px;
+    
 }
 
 .AddressInfor { 
@@ -133,37 +136,48 @@
 .Payment {
   font-size: 20px;
   font-weight: bold;
-  margin-left: 20px;
-  margin-top: 30px;
+  margin-left: 600px;
+  margin-top: -966px;
   margin-bottom: 20px;
-  
+  position: absolute;
 }
 
-.RoundedWrapper{
+.RoundedWrapper {
   display: flex;
   flex-direction: column;
   padding: 0px 0px 20px;
   border: 1px solid rgb(230, 230, 230);
   border-radius: 4px;
-  -webkit-tap-highlight-color: rgba(0,0,0,.1);
-  width: 840px;
-  height: 150px;
-  margin-bottom: 60px;
-     
+  position: absolute;
+  margin-top: -915px;
+  margin-left: 600px;
+  padding: 20px;
+  width: 550px;
+  height: 98px;
+  
+}
+
+.Sponsorship {
+  position: absolute;
+  margin-top: -440px;
+  width: 550px;
+  
 }
 
 .FinalAmount {
-  
+  position: absolute;
   font-size: 20px;
   font-weight: bold;
   border: 1px solid rgb(230, 230, 230);
   border-radius: 4px;
-  margin-top: -500px;
+  margin-top: -330px;
   margin-left: 600px;
-  width: 540px;
+  width: 400px;
+  height: 50px;
   margin-bottom: 450px;
+  padding: 10px;
   
-
+  
 }
 
 .PledgeAmount{
@@ -175,9 +189,10 @@
   -webkit-box-align: center;
   align-items: center;
   -webkit-tap-highlight-color: rgba(0,0,0,.1);
-  margin-top: -800px;
+  margin-top: -680px;
   margin-left: 600px;
-  width: 540px;
+  padding: 30px;
+  width: 550px;
   margin-bottom: 450px;
+  position: absolute;
 }
-
