@@ -1,0 +1,33 @@
+.uploader-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.img-wrapper{
+    margin: 50px 0 20px 0;
+    position: relative;
+}
+.imgSize{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+.icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    color: var(--teritary);
+
+    width: 60px;
+    height: 60px;
+}
+.upload-button{
+    margin: 0 5px;
+}

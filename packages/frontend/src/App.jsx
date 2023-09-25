@@ -76,6 +76,7 @@ const browserRouter = createBrowserRouter([
        * 접속한 유저의 자기 프로필 수정
        */
       { path: "/profile/edit", element: <ProfileEdit /> },
+
       /**
        * 커뮤니티 홈
        */
