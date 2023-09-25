@@ -52,7 +52,7 @@ function AddItemView({
   );
 }
 
-export function ItemList({
+export function RewardItemList({
   onChange = () => {},
 }) {
   const [items, setItems] = useState([]);
