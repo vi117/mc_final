@@ -34,6 +34,13 @@ export default function Profile() {
               회원탈퇴
             </Link>
           </Row>
+          {userInfo.is_admin && (
+            <Row>
+              <Link to={`/admin`}>
+                Admin
+              </Link>
+            </Row>
+          )}
         </Col>
         <Col md={9}>
           <AccordionList />
