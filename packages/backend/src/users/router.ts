@@ -4,7 +4,7 @@ import { verify } from "argon2";
 
 import { isDuplKeyError } from "@/db/util";
 import upload from "@/file/multer";
-import { parseQueryToNumber } from "@/util/query_param";
+import { parseQueryToNumber, parseQueryToString } from "@/util/query_param";
 import debug_fn from "debug";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -105,7 +105,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
       password,
       address,
       phone,
-      profile_image: file?.filename,
+      profile_image: file?.url,
     });
     if (user_id === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -309,6 +309,40 @@ export const queryAll = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json(users);
 };
 
+export const checkEmail = async (req: Request, res: Response) => {
+  const userRepository = getUserRepository();
+  const email = parseQueryToString(req.query.email);
+  if (!email) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "email가 주어지지 않았습니다",
+    });
+    return;
+  }
+  const user = await userRepository.findByEmail(email);
+  if (user) {
+    res.json(false);
+    return;
+  }
+  res.status(StatusCodes.OK).json(true);
+};
+
+export const checkNickname = async (req: Request, res: Response) => {
+  const userRepository = getUserRepository();
+  const nickname = parseQueryToString(req.query.nickname);
+  if (!nickname) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "nickname가 주어지지 않았습니다",
+    });
+    return;
+  }
+  const user = await userRepository.findByNickname(nickname);
+  if (user) {
+    res.json(false);
+    return;
+  }
+  res.status(StatusCodes.OK).json(true);
+};
+
 router.post("/login", RouterCatch(login));
 router.post("/signup", upload.single("profile"), RouterCatch(signup));
 router.post("/verify_resend", RouterCatch(resendVerificationCode));
@@ -317,7 +351,9 @@ router.post("/reset-password", RouterCatch(resetPassword));
 router.post("/send-reset-password", RouterCatch(sendPasswordReset));
 router.post("/logout", RouterCatch(logout));
 router.post("/google-login", RouterCatch(googleLogin));
-router.get("/:id(\\d+)", RouterCatch(queryById));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
+router.get("/:id(\\d+)", RouterCatch(queryById));
+router.get("/check-email", RouterCatch(checkEmail));
+router.get("/check-nickname", RouterCatch(checkNickname));
 
 export default router;

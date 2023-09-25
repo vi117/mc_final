@@ -1,5 +1,8 @@
-import { useState } from "react";
+import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
+import { Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
 import Upload from "../../component/UploadImage";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
@@ -16,6 +19,7 @@ window.emailPattern = emailPattern;
 function RegisterPage() {
   const navigate = useNavigate();
 
+  const profileImageRef = useRef(null);
   const [Email, setEmail] = useState("");
   // const [Name, setName] = useState("");
   const [Password, setPassword] = useState("");
@@ -26,66 +30,24 @@ function RegisterPage() {
   const [Article, setArticle] = useState("");
   const [show, setShow] = useState(true);
 
-  async function signUp() {
-    const formData = new FormData();
-    formData.append("email", Email);
-    formData.append("password", Password);
-    formData.append("nickname", NickName);
-    formData.append("phone", Phone);
-    formData.append("address", Address);
-    formData.append("introduction", Article);
-
-    const r = await fetch("/api/v1/users/signup", {
-      method: "POST",
-      body: formData,
-    });
-    const msg = await r.json();
-    if (r.status === 201) {
-      /// 회원가입 성공!
-      return [true, msg.message];
-    } else {
-      /// 회원 가입 실패!
-      return [false, msg.message];
-    }
-  }
   const handleClose = () => setShow(false);
 
-  const onEmailHandler = (event) => {
-    setEmail(event.currentTarget.value);
-  };
-  // const onNameHandler = (event) => {
-  //   setName(event.currentTarget.value);
-  // };
-  const onPasswordHandler = (event) => {
-    setPassword(event.currentTarget.value);
-  };
-  const onConfirmPasswordHandler = (event) => {
-    setConfirmPassword(event.currentTarget.value);
-  };
-  const onNickNameHandler = (event) => {
-    setNickName(event.currentTarget.value);
-  };
-  const onPhoneHandler = (event) => {
-    setPhone(event.currentTarget.value);
-  };
-  const onAddressHandler = (event) => {
-    setAddress(event.currentTarget.value);
-  };
-  const onArticleHandler = (event) => {
-    setArticle(event.currentTarget.value);
-  };
-
   return (
-    <div
+    <Container
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
+      className="mb-3"
     >
-      <div
+      <Form
         style={{ display: "flex", flexDirection: "column" }}
         className={classes.form}
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
       >
         <RegisterArgee
           show={show}
@@ -95,68 +57,66 @@ function RegisterPage() {
           handleClose={() => navigate("/login")}
         >
         </RegisterArgee>
-        <Upload></Upload>
-        {
-          /* <RegisterLabel>Name</RegisterLabel>
-        <input name="" type="text" value={Name} onChange={onNameHandler} /> */
-        }
-        <RegisterLabel>Email</RegisterLabel>
-        <input
-          name="email"
+        <Upload imageFile={profileImageRef}></Upload>
+
+        <ValidationInput
+          name="Email"
           type="email"
           value={Email}
-          onChange={onEmailHandler}
+          onChange={(e) => setEmail(e.target.value)}
+          pattern={emailPattern}
+          validateAsync={emailCheck}
         />
-        <RegisterLabel>password</RegisterLabel>
-        <input
-          name="password"
+
+        <ValidationInput
+          name="Password"
           type="password"
           value={Password}
-          onChange={onPasswordHandler}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <RegisterLabel>Confirm Password</RegisterLabel>
-        <input
+        <ValidationInput
+          name="ConfirmPassword"
           type="password"
           value={ConfirmPassword}
-          onChange={onConfirmPasswordHandler}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          validate={(value) => value === Password}
         />
-        <RegisterLabel>NickName</RegisterLabel>
-        <input
-          name="nickname"
+
+        <ValidationInput
+          name="NickName"
           type="text"
           value={NickName}
-          onChange={onNickNameHandler}
+          onChange={(e) => setNickName(e.target.value)}
+          validateAsync={nicknameCheck}
         />
-        <RegisterLabel>Phone</RegisterLabel>
-        <input
-          name="phone"
+
+        <ValidationInput
+          name="Phone"
           type="text"
           value={Phone}
-          onChange={onPhoneHandler}
+          onChange={(e) => setPhone(e.target.value)}
         />
-        <RegisterLabel>Address</RegisterLabel>
-        <input
-          name="address"
+
+        <ValidationInput
+          name="Address"
           type="text"
           value={Address}
-          onChange={onAddressHandler}
+          onChange={(e) => setAddress(e.target.value)}
         />
-        <RegisterLabel>Introduce</RegisterLabel>
-        <input
-          name="introduction"
+        <ValidationInput
+          name="Introduction"
           type="text"
           value={Article}
-          onChange={onArticleHandler}
+          onChange={(e) => setArticle(e.target.value)}
         />
-        <br />
         <button
           className={classes.button_submit}
           onClick={() => onSubmitHandler()}
         >
           회원가입
         </button>
-      </div>
-    </div>
+      </Form>
+    </Container>
   );
 
   async function onSubmitHandler() {
@@ -186,7 +146,15 @@ function RegisterPage() {
     // if (!passwordPattern.test(Password)) {
     //   return alert("올바른 비밀번호를 입력하세요.");
     // }
-    const [result, msg] = await signUp();
+    const [result, msg] = await signUp({
+      Email,
+      Password,
+      NickName,
+      Phone,
+      Address,
+      Article,
+      ProfileImage: profileImageRef.current,
+    });
     if (result) {
       // TODO(vi117): 이메일을 확인하라는 모달을 띄우고 나서 navigate
       navigate("/login");
@@ -199,10 +167,70 @@ function RegisterPage() {
 
 export default RegisterPage;
 
+function ValidationInput({
+  children,
+  className,
+  name,
+  type,
+  value,
+  onChange,
+  pattern,
+  validate,
+  validateAsync,
+}) {
+  const checkSync = (value, pattern, validate) => {
+    return (pattern?.test(value) ?? true) && (validate?.(value) ?? true);
+  };
+  const [isValid, setIsValid] = useState(
+    checkSync(value, pattern, validate),
+  );
+  const isEmpty = value === undefined || value?.length === 0;
+
+  useEffect(() => {
+    const v = checkSync(value, pattern, validate);
+    setIsValid(v);
+    if (v && validateAsync) {
+      const abortController = new AbortController();
+      (async () => {
+        try {
+          const result = await validateAsync(value, abortController.signal);
+          setIsValid(result);
+        } catch (e) {
+          if (e instanceof DOMException && e.name === "AbortError") {
+            // do nothing
+          } else {
+            throw e;
+          }
+        }
+      })();
+      return () => abortController.abort();
+    }
+  }, [value, validateAsync, pattern, validate]);
+
+  return (
+    <>
+      <RegisterLabel>{name}</RegisterLabel>
+      <Form.Control
+        className={clsx(className, {
+          [classes.label_error]: !isValid && !isEmpty,
+        })}
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+      >
+        {children}
+      </Form.Control>
+    </>
+  );
+}
+
 function RegisterLabel({ children }) {
   return (
-    <label className={classes.label}>
+    <Form.Label
+      className={classes.label}
+    >
       {children}
-    </label>
+    </Form.Label>
   );
 }
