@@ -224,8 +224,7 @@ function GoogleSvg() {
       viewBox="0 0 46 46"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
       style={{ backgroundColor: "#F0F0F0", borderRadius: "50%" }}
     >
       <title>btn_google_light_normal_ios</title>
@@ -280,7 +279,7 @@ function GoogleSvg() {
       <g
         id="Google-Button"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
         fill-rule="evenodd"
         sketch:type="MSPage"

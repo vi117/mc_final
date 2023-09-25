@@ -1,27 +1,9 @@
-import { useState } from "react";
 import { Carousel } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import Sampledata from "./assets/sampledata";
 import Board from "./components/board";
-import Page from "./components/Pagination";
 import classes from "./styles/Community.module.css";
 
 export function Community() {
-  const [state, setState] = useState({
-    data: Sampledata,
-    limit: 10,
-    activePage: 1,
-  });
-
-  const handlePageChange = (pageNumber) => {
-    setState((prev) => ({ ...prev, activePage: pageNumber }));
-  };
-
-  const { data, limit, activePage } = state;
-  const startIndex = (activePage - 1) * limit;
-  const endIndex = startIndex + limit;
-  const currentPageData = data.slice(startIndex, endIndex);
-
   return (
     <>
       <div className={classes["list-wrap"]}>
@@ -75,17 +57,7 @@ export function Community() {
         </Carousel>
 
         <div className={classes["container"]}>
-          <Board data={currentPageData}></Board>
-        </div>
-
-        <div className={classes["pagination"]}>
-          <Page
-            totalItems={data.length}
-            itemsPerPage={limit}
-            activePage={activePage}
-            handlePageChange={handlePageChange}
-          >
-          </Page>
+          <Board></Board>
         </div>
       </div>
     </>

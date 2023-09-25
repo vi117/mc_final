@@ -1,10 +1,16 @@
-.co-page .page-link{
+.co-page_s4m49_1 .page-link{
     background-color: var(--white) !important;
     border: 1px solid var(--teritary) !important;
     color: var(--teritary) !important;
 }
 
-.co-page .page-link:hover{
+.co-page_s4m49_1 .page-link:hover{
+    background-color: var(--green) !important;
+    border: 1px solid var(--green) !important;
+    color: var(--white) !important;
+}
+
+.co-page_s4m49_1 .active .page-link{
     background-color: var(--green) !important;
     border: 1px solid var(--green) !important;
     color: var(--white) !important;

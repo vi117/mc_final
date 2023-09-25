@@ -108,6 +108,7 @@ export interface ArticleObject {
   author_email: string;
 
   like_user_id?: number | null;
+  like_created_at?: Date | null;
 
   tags: {
     tag: string;

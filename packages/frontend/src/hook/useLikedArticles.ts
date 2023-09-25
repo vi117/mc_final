@@ -1,19 +1,19 @@
-import { FundingObject } from "dto";
+import { ArticleObject } from "dto";
 import useSWR from "swr";
 import { DateToString, fetcher } from "./util";
 
-interface UseFundingsOptions {
+interface UseArticleOptions {
   offset?: number;
   limit?: number;
   tags?: string[];
 }
 
-export default function useFundings({
+export default function useLikedArticles({
   offset = 0,
   limit = 50,
   tags = undefined,
-}: UseFundingsOptions = {}) {
-  const url = new URL("/api/v1/fundings", window.location.href);
+}: UseArticleOptions = {}) {
+  const url = new URL("/api/v1/articles/likes", window.location.href);
   url.searchParams.append("offset", offset.toString());
   url.searchParams.append("limit", limit.toString());
 
@@ -23,7 +23,7 @@ export default function useFundings({
     });
   }
 
-  return useSWR<DateToString<FundingObject>[]>(
+  return useSWR<DateToString<ArticleObject>[]>(
     url.href,
     fetcher,
   );

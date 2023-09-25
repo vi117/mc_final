@@ -143,8 +143,15 @@ function FundingItem({
                 + "%"}달성!
               <span>{x.current_value} 원</span>
               <span className={classes["progress_resttime"]}>
-                {Math.round((restTime / (1000 * 60 * 60 * 24)).toFixed(0))}일
-                남음
+                {restTime / (1000 * 60 * 60 * 24) > 0
+                  ? (
+                    <>
+                      {Math.round(
+                        (restTime / (1000 * 60 * 60 * 24)).toFixed(0),
+                      )}일 남음
+                    </>
+                  )
+                  : <>종료</>}
               </span>
             </div>
             <div>

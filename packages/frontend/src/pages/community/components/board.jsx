@@ -5,6 +5,7 @@ import useArticles from "../../../hook/useArticles";
 import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
 import Category from "./category";
+import Page from "./Pagination";
 
 const animals = ANIMAL_CATEGORY;
 
@@ -30,14 +31,20 @@ const Board = () => {
     getRestAnimals(loadCategoryFilter() ?? []),
   );
   const [orderBy, setOrderBy] = useState("id");
+  const itemsPerPage = 10;
+  const [activePage, setActivePage] = useState(1);
+  const itemsRange = 7;
+  const offset = (activePage - 1) * itemsPerPage;
+  const endPageoffset = offset + itemsPerPage * Math.floor(itemsRange / 2);
+  const limit = endPageoffset - offset;
 
   const {
     data: fetcherData,
     error: fetcherError,
     isLoading: fetcherIsLoading,
   } = useArticles({
-    offset: 0,
-    limit: 50,
+    offset: offset,
+    limit: limit,
     categories: categoryFiltered,
     orderBy,
   });
@@ -49,6 +56,7 @@ const Board = () => {
   if (fetcherError) {
     return <div>에러가 발생했습니다.</div>;
   }
+  console.log(Math.floor(fetcherData.length / itemsPerPage), activePage);
   return (
     <>
       <FilterModal
@@ -93,7 +101,7 @@ const Board = () => {
             </tr>
           </thead>
           <tbody>
-            {fetcherData.map((item) => (
+            {fetcherData.slice(0, itemsPerPage).map((item) => (
               <tr
                 key={`board-${item.id}`}
               >
@@ -110,6 +118,17 @@ const Board = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className={classes["pagination"]}>
+        <Page
+          range={itemsRange}
+          activePage={activePage}
+          endPage={Math.floor(fetcherData.length / itemsPerPage) + activePage}
+          handlePageChange={(pageNumber) => {
+            setActivePage(pageNumber);
+          }}
+        >
+        </Page>
       </div>
     </>
   );

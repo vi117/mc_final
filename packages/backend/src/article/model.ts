@@ -36,6 +36,15 @@ export interface FindAllUsersOptions {
   allow_categories?: string[];
 }
 
+export interface FindLikes {
+  limit?: number;
+  offset?: number;
+
+  orderBy?: "created_at";
+
+  tags?: string[];
+}
+
 export interface FindOneOptions {
   user_id?: number;
   /**
@@ -57,6 +66,11 @@ interface FindBaseOptions {
    * tags to search
    */
   tags?: string[];
+  /**
+   * only user likes articles
+   * @default false
+   */
+  user_likes?: boolean;
 }
 
 export class ArticleRepository {
@@ -68,6 +82,7 @@ export class ArticleRepository {
     const {
       user_id = null,
       tags,
+      user_likes = false,
     } = options;
 
     return this.db.selectFrom("articles")
@@ -79,14 +94,25 @@ export class ArticleRepository {
         "author.email as author_email",
       ])
       .$if(user_id !== null, (qb) =>
-        qb.leftJoin(
-          "article_likes as like",
-          (join) =>
-            join.onRef("articles.id", "=", "like.article_id")
-              .on("like.user_id", "=", user_id),
-        ).select([
-          "like.user_id as like_user_id",
-        ]))
+        user_likes
+          ? qb.innerJoin(
+            "article_likes as like",
+            (join) =>
+              join.on("like.user_id", "=", user_id)
+                .onRef("articles.id", "=", "like.article_id"),
+          ).select([
+            "like.created_at as like_created_at",
+            "like.user_id as like_user_id",
+          ])
+          : qb.leftJoin(
+            "article_likes as like",
+            (join) =>
+              join.onRef("articles.id", "=", "like.article_id")
+                .on("like.user_id", "=", user_id),
+          ).select([
+            "like.created_at as like_created_at",
+            "like.user_id as like_user_id",
+          ]))
       .$if(tags !== undefined, (qb) => {
         tags?.forEach((tag, index) => {
           qb = qb.innerJoin(
@@ -207,6 +233,33 @@ export class ArticleRepository {
       .$call(log_query(debug))
       .executeTakeFirst();
     return ret;
+  }
+
+  async findAllLikes(user_id: number, options?: FindLikes) {
+    const {
+      limit = 50,
+      offset = 0,
+      orderBy,
+      tags,
+    } = options ?? {};
+    const query = this.getFindBaseQuery({
+      user_id,
+      tags,
+      user_likes: true,
+    });
+    const result = query.selectAll("articles")
+      .where("articles.deleted_at", "is", null)
+      .limit(limit)
+      .offset(offset)
+      .$if(
+        orderBy !== undefined,
+        (qb) => {
+          return qb.orderBy(`like_created_at`, "desc");
+        },
+      )
+      .$call(log_query(debug))
+      .execute();
+    return result;
   }
 
   async updateViewCount(id: number) {

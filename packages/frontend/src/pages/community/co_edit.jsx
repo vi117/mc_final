@@ -44,34 +44,6 @@ const CommunityEdit = () => {
     (url) => fetch(url).then((res) => res.json()),
   );
   const item = fetcherData;
-  // const initialBoardState = fetcherData || {
-  //   title: "",
-  //   category: "",
-  //   tag: "",
-  //   contents: "",
-  // };
-  // const [board, setBoard] = useState(initialBoardState);
-  // const { title, category, tag, contents } = board;
-  // const onChange = (event) => {
-  //   const { value, name } = event.target; // event.target에서 name과 value만 가져오기
-  //   setBoard({
-  //     ...board,
-  //     [name]: value,
-  //   });
-  // };
-
-  // const saveBoard = async () => {
-  //   const newPost = {
-  //     title,
-  //     category,
-  //     tag,
-  //     contents,
-  //   };
-  //   sampledata.push(newPost);
-
-  //   alert("등록되었습니다.");
-  //   navigate("/community");
-  // };
 
   const onChange = (e) => {
     const { name, value } = e.target;

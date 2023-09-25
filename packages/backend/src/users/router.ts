@@ -288,6 +288,8 @@ export const queryById = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({
     ...user,
     password: null,
+    address: null,
+    phone: null,
   });
   return;
 };

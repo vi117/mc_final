@@ -10,8 +10,7 @@
 }
 
 @media screen and (max-width: 570px) {
-  .progress-bar{
-
+  .funding_progressbar {
     margin-left:15px;
   }
 }
