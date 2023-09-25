@@ -14,7 +14,10 @@ export default function Profile() {
   //   api 연결 후 닉네임 집어넣기
   //   내가 만든 펀딩 및 후원 펀딩 리스트 연결하기
   return (
-    <Container className="my-5">
+    <Container
+      className="my-5"
+      style={{ maxWidth: "var(--max-content-width)" }}
+    >
       <Row>
         <Col md={3} className="my-3">
           <Row>

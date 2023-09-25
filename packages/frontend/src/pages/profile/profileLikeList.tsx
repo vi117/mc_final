@@ -1,5 +1,88 @@
-import Accordion from "react-bootstrap/Accordion";
+import { Accordion, Placeholder } from "react-bootstrap";
+import useLikedArticles from "../../hook/useLikedArticles";
+
 import "./Profile.css";
+
+function LikedArticlesList() {
+  const {
+    data: likedArticles,
+    error,
+    isLoading,
+  } = useLikedArticles();
+  if (isLoading) {
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">번호</th>
+            <th scope="col">카테고리</th>
+            <th scope="col">제목</th>
+            <th scope="col">글쓴이</th>
+            <th scope="col">조회수</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[1, 2, 3].map((key) => (
+            <tr key={key}>
+              <th scope="row">
+                <Placeholder animation="glow">
+                  <Placeholder style={{ width: "20px" }} />
+                </Placeholder>
+              </th>
+              <td>
+                <Placeholder animation="glow">
+                  <Placeholder style={{ width: "40px" }} />
+                </Placeholder>
+              </td>
+              <td>
+                <Placeholder animation="glow">
+                  <Placeholder style={{ width: "200px" }} />
+                </Placeholder>
+              </td>
+              <td>
+                <Placeholder animation="glow">
+                  <Placeholder style={{ width: "30px" }} />
+                </Placeholder>
+              </td>
+              <td>
+                <Placeholder animation="glow">
+                  <Placeholder style={{ width: "30px" }} />
+                </Placeholder>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  }
+  if (error) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">번호</th>
+          <th scope="col">카테고리</th>
+          <th scope="col">제목</th>
+          <th scope="col">글쓴이</th>
+          <th scope="col">조회수</th>
+        </tr>
+      </thead>
+      <tbody>
+        {likedArticles?.map((article) => (
+          <tr key={article.id}>
+            <th scope="row">{article.id}</th>
+            <td>{article.category}</td>
+            <td>{article.title}</td>
+            <td>{article.author_nickname}</td>
+            <td>{article.view_count}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 function AccordionList() {
   return (
@@ -42,40 +125,7 @@ function AccordionList() {
       <Accordion.Item eventKey="1">
         <Accordion.Header>좋아요 게시물</Accordion.Header>
         <Accordion.Body>
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">번호</th>
-                <th scope="col">카테고리</th>
-                <th scope="col">제목</th>
-                <th scope="col">글쓴이</th>
-                <th scope="col">조회수</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>강아지</td>
-                <td>귀여운 초코</td>
-                <td>초코에몽</td>
-                <td>756</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>고양이</td>
-                <td>츤데레 고영희씨</td>
-                <td>개냥이</td>
-                <td>945</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>햄스터</td>
-                <td>해바라기씨 먹방</td>
-                <td>햄토리</td>
-                <td>824</td>
-              </tr>
-            </tbody>
-          </table>
+          <LikedArticlesList />
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="2">
