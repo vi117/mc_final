@@ -105,7 +105,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
       password,
       address,
       phone,
-      profile_image: file?.filename,
+      profile_image: file?.url,
     });
     if (user_id === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)

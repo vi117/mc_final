@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { emailCheck, nicknameCheck } from "../../api/mod";
+import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
 import Upload from "../../component/UploadImage";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
@@ -19,6 +19,7 @@ window.emailPattern = emailPattern;
 function RegisterPage() {
   const navigate = useNavigate();
 
+  const profileImageRef = useRef(null);
   const [Email, setEmail] = useState("");
   // const [Name, setName] = useState("");
   const [Password, setPassword] = useState("");
@@ -29,28 +30,6 @@ function RegisterPage() {
   const [Article, setArticle] = useState("");
   const [show, setShow] = useState(true);
 
-  async function signUp() {
-    const formData = new FormData();
-    formData.append("email", Email);
-    formData.append("password", Password);
-    formData.append("nickname", NickName);
-    formData.append("phone", Phone);
-    formData.append("address", Address);
-    formData.append("introduction", Article);
-
-    const r = await fetch("/api/v1/users/signup", {
-      method: "POST",
-      body: formData,
-    });
-    const msg = await r.json();
-    if (r.status === 201) {
-      /// 회원가입 성공!
-      return [true, msg.message];
-    } else {
-      /// 회원 가입 실패!
-      return [false, msg.message];
-    }
-  }
   const handleClose = () => setShow(false);
 
   return (
@@ -65,6 +44,10 @@ function RegisterPage() {
       <Form
         style={{ display: "flex", flexDirection: "column" }}
         className={classes.form}
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
       >
         <RegisterArgee
           show={show}
@@ -74,7 +57,7 @@ function RegisterPage() {
           handleClose={() => navigate("/login")}
         >
         </RegisterArgee>
-        <Upload></Upload>
+        <Upload imageFile={profileImageRef}></Upload>
 
         <ValidationInput
           name="Email"
@@ -163,7 +146,15 @@ function RegisterPage() {
     // if (!passwordPattern.test(Password)) {
     //   return alert("올바른 비밀번호를 입력하세요.");
     // }
-    const [result, msg] = await signUp();
+    const [result, msg] = await signUp({
+      Email,
+      Password,
+      NickName,
+      Phone,
+      Address,
+      Article,
+      ProfileImage: profileImageRef.current,
+    });
     if (result) {
       // TODO(vi117): 이메일을 확인하라는 모달을 띄우고 나서 navigate
       navigate("/login");
