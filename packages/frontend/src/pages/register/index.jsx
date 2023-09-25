@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { Container, Form } from "react-bootstrap";
+import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
 import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
 import Upload from "../../component/UploadImage";
@@ -18,6 +19,7 @@ window.emailPattern = emailPattern;
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const DaumPostcodePopup = useDaumPostcodePopup();
 
   const profileImageRef = useRef(null);
   const [Email, setEmail] = useState("");
@@ -103,6 +105,19 @@ function RegisterPage() {
           value={Address}
           onChange={(e) => setAddress(e.target.value)}
         />
+
+        <button
+          onClick={() => {
+            DaumPostcodePopup({
+              onComplete(resultAddress) {
+                setAddress(resultAddress.address);
+              },
+            });
+          }}
+        >
+          set Adress
+        </button>
+
         <ValidationInput
           name="Introduction"
           type="text"

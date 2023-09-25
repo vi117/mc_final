@@ -92,9 +92,10 @@
   margin-bottom: 0;
 }
 
-/* .Address {
-
-} */
+/*
+.Address {
+}
+*/
 
 .RoundedWrapper {
   display: flex;
@@ -111,7 +112,7 @@
 
 .FinalAmount {
 
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   border: 1px solid rgb(230, 230, 230);
   border-radius: 5px;
