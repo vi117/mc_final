@@ -11,7 +11,6 @@ const animals = ANIMAL_CATEGORY;
 const Category = (
   { selectCategoryFilter, selectOrderBy, setIsModalOpen },
 ) => {
-  console.log("setIsModalOpen:", setIsModalOpen);
   const navigate = useNavigate();
   const goWrite = () => {
     navigate("/community/:id/post");
