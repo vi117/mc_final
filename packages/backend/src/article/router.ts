@@ -1,6 +1,7 @@
 import { getDB } from "@/db/util";
 import { checkLogin } from "@/users/jwt";
 import ajv from "@/util/ajv";
+import { assert_param } from "@/util/assert_param";
 import {
   parseQueryToNumber,
   parseQueryToString,
@@ -90,6 +91,28 @@ async function getAllCommentsHandler(req: Request, res: Response) {
   assert(!isNaN(id));
 
   const result = await commentRepository.findAllByArticleId(id);
+  res.json(result).status(StatusCodes.OK);
+}
+
+async function getAllLikesHandler(req: Request, res: Response) {
+  const articleRepository = new ArticleRepository(getDB());
+  const id = req.user?.id;
+  assert(id !== undefined);
+  const offset = parseQueryToNumber(req.query.offset, 0);
+  const limit = parseQueryToNumber(req.query.limit, 50);
+  const tags = parseQueryToStringList(req.query.tags);
+  const orderBy = parseQueryToString(req.query.orderBy) ?? "created_at";
+  assert_param(
+    orderBy === "created_at",
+    "orderBy must be created_at",
+  );
+
+  const result = await articleRepository.findAllLikes(id, {
+    offset,
+    limit,
+    tags: tags,
+    orderBy: orderBy,
+  });
   res.json(result).status(StatusCodes.OK);
 }
 
@@ -292,6 +315,7 @@ const router = Router();
 router.get("/", RouterCatch(getAllArticleHandler));
 router.get("/:id(\\d+)", RouterCatch(getSingleArticleHandler));
 router.get("/:id(\\d+)/comments", RouterCatch(getAllCommentsHandler));
+router.get("/likes", RouterCatch(getAllLikesHandler));
 
 router.post("/", checkLogin(), RouterCatch(postArticleHandler));
 router.delete("/:id(\\d+)", checkLogin(), RouterCatch(deleteArticleHandler));

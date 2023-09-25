@@ -1,7 +1,11 @@
+.footer_area{
+    background-color: var(--border);
+}
+
 .footer_container{
     max-width: var(--max-content-width);
     margin: 0 auto;
-    padding:30px 0px 60px 0px;
+    padding: 30px 7px 50px 7px;
 }
 
 .footer_logo > h1 {
@@ -12,13 +16,21 @@
 }
 
 
+.footer_logo {
+    text-align: center;
+    padding-left: 0px !important;
+    margin-bottom:10px;
+}
+
 .footer_details {
    color:var(--teritary);
-   padding: 0;
+   padding-left: 0px !important;
+   padding-right: 0px !important;
 }
 
 ul{
     list-style: none;
+    padding-left: 0px !important;
 }
 .footer_info {
     display: flex;
@@ -43,3 +55,10 @@ content: "|";
 .footer_info > li:last-child::after {
   content: none; 
 }
+
+
+@media screen and (max-width: 570px) {
+  
+  }
+  
+  
