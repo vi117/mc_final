@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
 import Upload from "../../component/UploadImage";
 import RegisterArgee from "./registerArgeeModal";
@@ -15,6 +16,7 @@ window.emailPattern = emailPattern;
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const DaumPostcodePopup = useDaumPostcodePopup();
 
   const [Email, setEmail] = useState("");
   // const [Name, setName] = useState("");
@@ -141,6 +143,17 @@ function RegisterPage() {
           value={Address}
           onChange={onAddressHandler}
         />
+        <button
+          onClick={() => {
+            DaumPostcodePopup({
+              onComplete(resultAddress) {
+                setAddress(resultAddress.address);
+              },
+            });
+          }}
+        >
+          set Adress
+        </button>
         <RegisterLabel>Introduce</RegisterLabel>
         <input
           name="introduction"
