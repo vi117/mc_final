@@ -5,6 +5,7 @@ import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
 import "./progressbar.css";
+import "../community/styles/tags.css";
 // import "./FundingsHome_Item.css"
 
 // const placerholder = "https://via.placeholder.com/100x100";
