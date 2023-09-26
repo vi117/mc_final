@@ -25,6 +25,8 @@ import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
 
 import AdminPage from "./pages/admin/index";
+import UserFundings from "./pages/profile/UserFundings";
+import UserProfileView from "./pages/profile/UserProfileView";
 import { GoogleLogin } from "./pages/sns_login/google";
 
 const browserRouter = createBrowserRouter([
@@ -127,6 +129,10 @@ const browserRouter = createBrowserRouter([
         path: "/admin",
         element: <AdminPage />,
       },
+      // 펀딩유저 프로필 뷰
+      { path: "/userview", element: <UserProfileView /> },
+      // 펀딩유저 프로필 펀딩 뷰
+      { path: "/userfundings", element: <UserFundings /> },
       /**
        * Not Found
        */
