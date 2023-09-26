@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Form, ListGroup } from "react-bootstrap";
+import classes from "../FundingWrite.module.css";
 
 function AddItemView({
   onAddItem = () => {},
@@ -10,8 +11,13 @@ function AddItemView({
   const [count, setCount] = useState("");
 
   return (
-    <Form.Group>
-      <h2>리워드 추가</h2>
+    <Form.Group className={classes.reward_area}>
+      <h1>리워드 설계</h1>
+      <p>
+        선물은 후원자에게 프로젝트의 가치를 전달하는 수단입니다.<br></br>
+        다양한 금액대로 여러 개의 선물을 만들어주세요. <br></br>
+        펀딩 성공률이 높아지고, 더 많은 후원 금액을 모금할 수 있어요.
+      </p>
       <Form.Control
         type="text"
         placeholder="이름"

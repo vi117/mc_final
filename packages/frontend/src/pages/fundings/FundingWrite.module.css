@@ -1,0 +1,120 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+*:focus {
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.funding_write_wrap{
+    padding: 10px 7px 50px 7px;
+    margin:0 auto;
+    max-width: 1080px;
+    display:flex;
+}
+
+.funding_profile_container{
+    width:220px;
+    display: flex;
+    flex-direction: column;
+    min-height:650px;
+}
+.profile_container{
+    margin-top: 20px;
+}
+.profile_container > button {
+    background-color: transparent !important;
+    width:100%;
+    border: 1px solid var(--secondary) !important;
+    margin-bottom: 10px;
+    border-radius: none !important;
+    padding: 10px;
+    text-align: left;
+    color:var(--teritary);
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .profile_container > button:hover,
+  .profile_container > button:active,
+  .profile_container > button:focus {
+    border: 1px solid var(--green) !important;
+    color: var(--green);
+  }
+
+
+.go_write{
+    margin-top: 10px;
+    color: var(--white);
+    border: none !important;
+    text-align: left;
+    padding: 10px;
+    width:100%;
+    border-radius: 0px 15px 0px 15px;
+    background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: background-color 1s;
+}
+
+
+.profile_title{
+    border-radius: 0px 15px 0px 15px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2;
+justify-content: center;
+padding: 30px 10px;
+    color:white;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    place-content: center;
+    transition: background-color 1s;
+}
+
+.profile_title:hover, 
+.go_write:hover{
+    background-color: var(--green-dark);
+}
+
+.profile_title > p{
+    margin:10px 0px;
+    font-size: 14px;
+}
+.funding_write_container{
+    margin: 0px auto;
+    width:70%;
+}
+
+.funding_write_tagsearch{
+    margin:0 auto;
+    width:100%;
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+}
+
+.info_area, .story_area, .maker_area, .reward_area {
+margin-bottom: 30px;
+}
+
+.funding_write_container h1{
+    color:var(--primary);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+}
+
+.funding_write_container p {
+    color:var(--teritary);
+font-size: 14px;
+letter-spacing: -0.01em;
+line-height: 24px;
+}
+
