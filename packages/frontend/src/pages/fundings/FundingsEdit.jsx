@@ -10,7 +10,7 @@ import { TagsInput } from "react-tag-input-component";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "../../component/Editor";
 import { Calender } from "./component/Calender";
-import { ItemList } from "./component/ItemList";
+import { RewardItemList } from "./component/RewardItemList";
 
 /**
  * Renders the TagWrite component.
@@ -138,7 +138,7 @@ const FundingsWrite = function() {
       <hr></hr>
 
       <Row>
-        <ItemList
+        <RewardItemList
           onChange={(v) => {
             setRewards(v);
             console.log(v);

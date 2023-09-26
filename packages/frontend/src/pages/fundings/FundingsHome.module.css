@@ -117,13 +117,13 @@ margin-left: auto;
 
 
 /*반응형*/
-@media screen and (max-width: 860px) {
+@media screen and (max-width: 768px/* md - medium screens */) {
   .funding_itemarea {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 576px/* sm - small screens */) {
   .funding_itemarea{
     grid-template-columns: repeat(1, 1fr);}
 

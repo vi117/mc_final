@@ -5,20 +5,38 @@
 
 
   --teritary: #6d6d6d;
+  --teritary-rgb: 109, 109, 109;
+
   --gray: #9e9e9e;
+  --gray-rgb: 158, 158, 158;
 
   /*border, hover*/
   --secondary: #d9d9d9;
+  --secondary-rgb: 217, 217, 217;
 
   /*그림자, background, border*/
   --border: #f3f3f3;
+  --border-rgb: 243, 243, 243;
+
   --white: #fff;
+  --white-rgb: 255, 255, 255;
 
   /*포인트 컬러*/
   --green-dark: #206A5D;
+  --green-dark-rgb: 32, 106, 93;
+
   --green: #1FAB89;
+  --green-rgb: 31, 171, 137;
+
   --green-light: #EBECF1;
+  --green-light-rgb:235, 236, 241;
+
+
   --blue: #1F4068;
+  --blue-rgb:31, 64, 104;
+
+  --beige: #d6cda4;
+  --beige-rgb: 214, 205, 164;
 
   /*카테고리용 그림자*/
   --boxshadow: rgba(0, 0, 0, 0.08) 0px 6px 6px -7px;
