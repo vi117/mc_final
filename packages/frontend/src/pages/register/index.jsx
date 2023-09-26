@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { Container, Form } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
 import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
@@ -105,8 +105,15 @@ function RegisterPage() {
           value={Address}
           onChange={(e) => setAddress(e.target.value)}
         />
+        <ValidationInput
+          name="Address"
+          type="text"
+          value={Address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="상세주소"
+        />
 
-        <button
+        <Button
           onClick={() => {
             DaumPostcodePopup({
               onComplete(resultAddress) {
@@ -116,7 +123,7 @@ function RegisterPage() {
           }}
         >
           set Adress
-        </button>
+        </Button>
 
         <ValidationInput
           name="Introduction"

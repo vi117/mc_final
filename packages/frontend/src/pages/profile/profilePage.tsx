@@ -30,6 +30,11 @@ export default function Profile() {
             </Link>
           </Row>
           <Row>
+            <Link to={`/reset-password`}>
+              비밀번호 재설정
+            </Link>
+          </Row>
+          <Row>
             <Link to={`/withdraw`}>
               회원탈퇴
             </Link>
