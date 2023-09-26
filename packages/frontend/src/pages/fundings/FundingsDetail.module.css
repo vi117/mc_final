@@ -416,10 +416,10 @@ border-bottom: 1px solid var(--border);
   }
 
   .funding_profile_text{
-    font-size: 24px;
+    font-size: 20px;
   }
-  .funding_profile_h4, {
-    font-size: 16px;
+  .funding_profile_h4 {
+    font-size: 12px;
   }
   .funding_profile_small,
   .funding_profile_text{
