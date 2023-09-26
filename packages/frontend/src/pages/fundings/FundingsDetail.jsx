@@ -1,13 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Carousel,
-  Dropdown,
-  DropdownButton,
-  ListGroup,
-  Spinner,
-} from "react-bootstrap";
+import { Button, Carousel, ListGroup, Spinner } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import useFundingDetail from "../../hook/useFundingDetail";
 // import { useLoginId } from "../../hook/useLogin";
@@ -17,11 +9,13 @@ import classes from "./FundingsDetail.module.css";
 import clsx from "clsx";
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
+import FundingDetailModal from "./FundingsDetailModal";
 
 import { withdrawFunding as withdrawFundingAPI } from "../../api/mod";
 import { InterestButton } from "./component/InterestButton";
 
 const FundingsDetail = function() {
+  const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
   const [isMoreView, setIsMoreView] = useState(false);
@@ -42,12 +36,16 @@ const FundingsDetail = function() {
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
   if (isLoading) {
-    // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
+    // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
     return <Spinner />;
   }
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
 
   const restTime = new Date(funding.end_date).getTime() - new Date().getTime();
 
@@ -87,15 +85,12 @@ const FundingsDetail = function() {
 
   return (
     <div className={classes["funding_detail_container"]}>
-      {
-        /* <div className={classes.sujung}>
-        {user_id === funding.host_id && (
-          <NavLink to={`/fundings/${id}/edit`}>
-            <Button variant="success">수정</Button>
-          </NavLink>
-        )}
-      </div> */
-      }
+      {showModal && (
+        <FundingDetailModal
+          show={showModal}
+          handleClose={() => setShowModal(false)}
+        />
+      )}
 
       <div className={classes["funding_title"]}>
         <ul className={classes["funding_detail_tags"]}>
@@ -183,22 +178,16 @@ const FundingsDetail = function() {
           </table>
 
           <div className={classes["funding_btn_area"]}>
-            <DropdownButton
-              as={ButtonGroup}
-              title={
-                <BiShareAlt
-                  className={classes["btn_svg"]}
-                />
-              }
-              id="bg-vertical-dropdown-1"
-              className={classes.funding_btn}
+            <Button
+              className={classes.share_button}
+              onClick={() => {
+                handleOpenModal();
+              }}
             >
-              <Dropdown.Item eventKey="1">인스타</Dropdown.Item>
-              <Dropdown.Item eventKey="2">네이버블로그</Dropdown.Item>
-              <Dropdown.Item eventKey="3">트위터X</Dropdown.Item>
-              <Dropdown.Item eventKey="4">페이스북</Dropdown.Item>
-              <Dropdown.Item eventKey="5">링크</Dropdown.Item>
-            </DropdownButton>
+              <BiShareAlt
+                className={classes["btn_svg"]}
+              />
+            </Button>
 
             <InterestButton
               funding={funding}
