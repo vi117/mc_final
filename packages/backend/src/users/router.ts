@@ -4,7 +4,9 @@ import { verify } from "argon2";
 
 import { isDuplKeyError } from "@/db/util";
 import upload from "@/file/multer";
+import { assert_param, ForbiddenError } from "@/util/assert_param";
 import { parseQueryToNumber, parseQueryToString } from "@/util/query_param";
+import assert from "assert";
 import debug_fn from "debug";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -294,6 +296,30 @@ export const queryById = async (req: Request, res: Response) => {
   return;
 };
 
+export const updateUserById = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  if (!req.user?.is_admin && req.user?.id !== id) {
+    throw new ForbiddenError("권한이 없습니다.");
+  }
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      nickname: { type: "string" },
+      address: { type: "string" },
+      phone: { type: "string" },
+    },
+  }, req.body);
+  assert_param(v, "유효하지 않은 요청입니다.", {
+    errors: ajv.errors,
+  });
+
+  const userRepository = getUserRepository();
+  await userRepository.updateById(id, req.body);
+
+  res.status(StatusCodes.OK).json({ message: "success" });
+};
+
 export const queryAll = async (req: Request, res: Response) => {
   const userRepository = getUserRepository();
   const queryParams = req.query;
@@ -353,6 +379,7 @@ router.post("/logout", RouterCatch(logout));
 router.post("/google-login", RouterCatch(googleLogin));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 router.get("/:id(\\d+)", RouterCatch(queryById));
+router.patch("/:id(\\d+)", checkLogin(), RouterCatch(updateUserById));
 router.get("/check-email", RouterCatch(checkEmail));
 router.get("/check-nickname", RouterCatch(checkNickname));
 
