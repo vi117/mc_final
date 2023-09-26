@@ -22,3 +22,8 @@
 .host_nickname{
   font-weight: 700;
 }
+
+.title{
+  height: 50px;
+  margin-top: 20px;
+}
