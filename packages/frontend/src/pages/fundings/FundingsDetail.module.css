@@ -92,6 +92,15 @@ object-fit: cover;
   margin: 20px 0px;
 }
 
+.funding_current_value{
+  margin-left: 15px;
+  background-color: var(--green-light);
+  color:var(--green);
+  font-weight: 700;
+  padding:3px 7px;
+  border-radius: 4px;
+}
+
 /*description-table*/
 .funding_profile_table{
   margin: 20px 0px;
@@ -416,10 +425,10 @@ border-bottom: 1px solid var(--border);
   }
 
   .funding_profile_text{
-    font-size: 24px;
+    font-size: 20px;
   }
-  .funding_profile_h4, {
-    font-size: 16px;
+  .funding_profile_h4 {
+    font-size: 12px;
   }
   .funding_profile_small,
   .funding_profile_text{
