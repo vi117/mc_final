@@ -334,7 +334,7 @@ const FundingsDetail = function() {
     if (!selectedReward) {
       throw new Error("not selected reward");
     }
-    await withdrawFundingAPI();
+    await withdrawFundingAPI(funding.id, selectedReward.id);
     mutate({
       ...funding,
       participated_reward_id: null,
