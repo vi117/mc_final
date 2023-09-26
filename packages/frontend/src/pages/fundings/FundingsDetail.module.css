@@ -117,10 +117,18 @@ object-fit: cover;
   display:flex;
 }
 
-.funding_btn > button, .interest_btn
+.go_funding_btn {
+  background-color: var(--green) !important;
+  border: none !important;
+  height:50px !important;
+  width:100%;
+}
+
+.funding_btn_area .share_button,
+ .interest_btn
 {
-  width:50px;
-  height:50px;
+  width:50px !important;
+  height:50px !important;
   color: var(--gray) !important;
   background-color: transparent !important;
   border: 1px solid var(--secondary) !important;
@@ -132,18 +140,12 @@ object-fit: cover;
 
 }
 
-.funding_btn > button:hover > .btn_svg, 
+.share_button:hover > .btn_svg, 
 .interest_btn:hover > .btn_svg {
   transition: transform 200ms ease;
   transform: scale(1.05);
 }
 
-.go_funding_btn {
-  background-color: var(--green) !important;
-  border: none !important;
-  height:50px !important;
-  width:100%;
-}
 
 .withdraw_funding_btn{
   background-color: transparent !important;
@@ -378,6 +380,54 @@ border-bottom: 1px solid var(--border);
   --bs-btn-disabled-opacity: none !important;
 }
 
+/*모달*/
+.modal_container{
+  padding:20px;
+  border-radius: 30px !important;
+}
+.modal_title {
+  display:flex;
+}
+
+.modal_title > p {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modal_svg{
+  margin-left: auto !important;
+}
+
+.modal_icon_area{
+  padding:20px 0px;
+  justify-content: center;
+  display:flex;
+}
+.modal_svg,
+.modal_icon_kakao,
+.modal_icon_facebook,
+.modal_icon_twitter,
+.modal_icon_link{
+  color:var(--white);
+  width:24px;
+  height:24px;
+}
+
+.modal_svg{
+  color: var(--primary);
+}
+.modal_icon_kakao{
+  color:#3f2626;
+}
+.modal_icon{
+  margin:0px 10px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:64px;
+  height:64px;
+  border-radius: 100%;
+}
 
 /*반응형*/
 @media screen and (max-width: 1080px) {
