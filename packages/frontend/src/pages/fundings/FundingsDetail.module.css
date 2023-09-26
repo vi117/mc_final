@@ -1,3 +1,7 @@
+.hr{
+  border-color:var(--gray);
+}
+
 .funding_detail_container{
   padding: 10px 7px 50px 7px;
   margin:0 auto;
@@ -12,7 +16,7 @@
   display:flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 45px;
 }
 .funding_title > h1{
   font-size: 36px;
@@ -41,30 +45,36 @@
 }
 
 /*thumbnail, resttime, host, ... container */
-.funding_detail_profilearea{
+.funding_detail_profilearea,
+.content_area {
+  width:100%;
   display:flex;
+  margin-bottom: 45px;
 }
 
 /*thumbnail*/
-.funding_thumbnail_carousel{
-  width:60%;
+.funding_thumbnail_carousel {
+  width:57%;
 }
 
 .carousel_thumbnail{
 width:594px;
 height:445px;
 object-fit: cover;
-border: 1px solid var(--border);
 }
 
 /*resttime, host, value title*/
+.funding_detail_description,
+.reward_area{
+  width:40%;
+  margin-left:45px;
+}
 .funding_profile_h4{
   margin-bottom: 0px !important;
   font-weight: 400;
   font-size: 16px;
   color:var(--teritary);
 }
-
 
 .funding_profile_text{
   color:var(--primary);
@@ -78,8 +88,262 @@ border: 1px solid var(--border);
   font-size: 14px;
 }
 
+.funding_detail_value{
+  margin: 20px 0px;
+}
+
+.funding_current_value{
+  margin-left: 15px;
+  background-color: var(--green-light);
+  color:var(--green);
+  font-weight: 700;
+  padding:3px 7px;
+  border-radius: 4px;
+}
+
+/*description-table*/
+.funding_profile_table{
+  margin: 20px 0px;
+  font-size: 13px;
+  color: var(--primary);
+  width:100%;
+}
+
+.funding_table_bold{
+  font-weight: 700;
+}
+
+.funding_btn_area {
+  display:flex;
+}
+
+.funding_btn > button
+{
+  width:50px !important;
+  height:50px !important;
+  color: var(--gray) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--secondary) !important;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  border-radius: 7px !important;
+}
+
+.funding_btn > button:hover > .btn_svg {
+  transition: transform 200ms ease;
+  transform: scale(1.05);
+}
 
 
+.withdraw_funding_btn{
+  background-color: transparent !important;
+  border: 1px solid var(--green) !important;
+  height:50px !important;
+  width:100%;
+}
+
+.go_funding_btn:hover{
+  background-color: var(--green-dark) !important;
+}
+/*share, interest btn svg*/
+.btn_svg {
+  color: var(--gray);
+  width:24px;
+  height:24px;
+}
+
+.funding_btn  > ::after {
+ display:none !important;
+}
+
+
+/*host profile*/
+
+.funding_host_profile {
+  margin-top: 20px;
+  width:100%;
+  border: 1px solid var(--secondary);
+  border-radius: 7px ;
+  display:flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.funding_host_profile_h4{
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.user {
+  width: 40px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 1px solid var(--border);
+  margin-right: 10px;
+}
+
+.host_nickname{
+  font-weight: 700;
+}
+
+.content {
+  max-width:594px;
+  width:100%;
+}
+
+.content-wrapper {
+  max-height: 630px; 
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.content-wrapper.expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.content img{
+  width:590px !important;
+}
+.content img {
+  width: 594px;
+  max-width:594px;
+}
+
+.content {
+  width:594px;
+}
+
+.more-view-button{
+  margin-top: 20px;
+  background-color: var(--white);
+  padding:15px 10px;
+  width:100%;
+  border: 1px solid var(--green);
+  border-radius: 7px;
+  color:var(--green);
+  box-shadow: rgba(157, 243, 196, 0.2) 0px 7px 29px 0px;
+}
+
+.more-view-button-wrapper {
+  position: relative;
+}
+
+.more-view-button-wrapper-shrink::before {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 50px; /* 그라데이션 높이 */
+  background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 90%);
+  content: "";
+}
+
+/*reward list */
+.reward_list_area{
+  max-height: 490px;
+  overflow-y: auto;
+}
+.reward_list {
+  background-color: transparent !important;
+  width:100%;
+  border: 1px solid var(--secondary) !important;
+  margin-bottom: 10px;
+  border-spacing: 0;
+  border-radius: 7px !important;
+  padding: 20px 15px;
+  text-align: left;
+}
+
+.reward_list:hover{
+  border: 1px solid var(--green) !important;
+  background-color: var(--green-light) !important;
+}
+
+.reward_list:hover .reward_restitem{
+  background-color: var(--green);
+  color:var(--white);
+}
+.rewardtitle{
+  color:var(--primary);
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.reward_title , 
+.reward_content {
+  display:flex;
+  align-items: center;
+padding: 10px 0px;
+border-bottom: 1px solid var(--border);
+}
+
+.reward_count{
+  padding:10px 0px 0px 0px;
+  display:flex;
+  align-items: center;
+}
+
+.reward_count > b{
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+.reportbtn {
+  font-size: 13px;
+  width:100%;
+  display:flex;
+  color:var(--teritary);
+  background-color: var(--border);
+  padding: 10px 15px;
+  border-radius: 7px;
+  margin: 40px 0px;
+}
+
+.report_svg{
+  width:18px;
+  height:18px;
+  color:var(--teritary);
+}
+
+.report_right{
+  margin-left: auto !important;
+}
+.reward_table{
+  display:flex;
+  align-items: center;
+}
+
+.reward_restitem{
+  border-radius: 4px;
+  margin-left: 10px;
+  font-weight: 500;
+  font-size: 12px;
+  padding:3px 7px;
+  color:var(--green);
+  background-color: var(--green-light);
+}
+
+.fixed-reward-area {
+  position: fixed; /* 요소를 고정합니다. */
+  bottom: 0; /* 아래로 고정합니다. */
+  left: 0; /* 왼쪽으로 고정합니다. */
+  right: 0; /* 오른쪽으로 고정합니다. */
+  background-color: white; /* 요소의 배경색을 설정합니다. */
+  z-index: 999; /* 다른 요소 위에 표시합니다. */
+}
+
+
+.reward_price{
+  font-size: 16px;
+  letter-spacing: -0.02px ;
+  font-weight: 700;
+}
 .sujung{
   text-align: right;
 }
@@ -101,44 +365,133 @@ border: 1px solid var(--border);
   /* align-items: flex-end; */
 }
 
-.joinBtn{
-  /* width: 415px; */
-  /* justify-items: center; */
-  /* align-items: center; */
-  margin-right: 0px;
-  padding: 10px 0px 10px 0px;
+.go_funding_btn:disabled{
+  --bs-btn-disabled-opacity: none !important;
 }
 
-.carousel{
-  background: #f1f1f1;
-  border-radius: 4px;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
-
+/*모달*/
+.modal_container{
+  padding:20px;
+  border-radius: 30px !important;
+}
+.modal_title {
+  display:flex;
 }
 
-.user {
-  width: 40%;
-  aspect-ratio: 1 / 1;
-  max-width: 45px;
-  object-fit: cover;
+.modal_title > p {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modal_svg{
+  margin-left: auto !important;
+}
+
+.modal_icon_area{
+  padding:20px 0px;
+  justify-content: center;
+  display:flex;
+}
+.modal_svg,
+.modal_icon_kakao,
+.modal_icon_facebook,
+.modal_icon_twitter,
+.modal_icon_link{
+  color:var(--white);
+  width:24px;
+  height:24px;
+}
+
+.modal_svg{
+  color: var(--primary);
+}
+.modal_icon_kakao{
+  color:#3f2626;
+}
+.modal_icon{
+  margin:0px 10px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:64px;
+  height:64px;
   border-radius: 100%;
-  border: 1px solid var(--secondary);
-  /* margin-right: 7px; */
 }
 
-.content img {
-  width: 100%;
-  display: block;
+/*반응형*/
+@media screen and (max-width: 1080px) {
+  .funding_title > h1{
+    font-size:24px;
+  }
+  .funding_detail_container{
+    width:100%;}
+  .funding_detail_profilearea{
+    display:inline;
+    flex-direction: column;
+  }
+  .funding_thumbnail_carousel,
+  .carousel_thumbnail, 
+  .funding_detail_description,
+  .reward_area
+  {
+    margin-left: 0px !important;
+    width:100%;
+  }
+
+  .date_value_area{
+    padding: 20px 10px;
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0px !important;
+  }
+
+  .funding_detail_value,
+  .funding_detail_enddate{
+    padding: 0px 15px;
+    justify-content: center;
+    align-items: center;
+   display:flex;
+    margin: 0px !important;
+  }
+  .funding_detail_enddate{
+    border-right:1px solid var(--secondary);
+  }
+  hr{
+    padding:0px !important;
+    margin: 0px !important;
+  }
+
+  .funding_profile_text{
+    font-size: 20px;
+  }
+  .funding_profile_h4 {
+    font-size: 16px;
+  }
+  .funding_profile_small,
+  .funding_profile_text{
+    margin-left:5px;
+  }
+  .funding_current_value{
+    margin-left: 10px;
+    background-color: var(--green-light);
+    color:var(--green);
+    font-weight: 700;
+    padding:3px 7px;
+    border-radius: 4px;
+  }
+
+  .content_area{
+    width:100%;
+    display:inline;
+    flex-direction: column;
+  }
+
+  .content, .content img {
+    width:100%;
+  }
+  .reportbtn{
+    margin: 20px 0px !important;
+  }
 }
-/* // const customButtonStyle = { // 버튼을 컨셉색깔로 바꾸려고 해봤는데 실패..
-  //   backgroundColor: '#00917C' , // 원하는 색상
-  //   color: 'white' // 텍스트 색상
-  // }; */
-/* 
-
-
-<div className="btn-group btn-group-lg" role="group" aria-label="...">...</div>
-
-<Button variant="success"
-style={{"--bs-btn-width":"20000px", "--bs-btn-padding-y":"11rem", "--bs-btn-padding-x":".5rem", "--bs-btn-font-size":".75rem"}}>참가버튼</Button>
-*/

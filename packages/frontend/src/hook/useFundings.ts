@@ -6,16 +6,63 @@ interface UseFundingsOptions {
   offset?: number;
   limit?: number;
   tags?: string[];
+  host_id?: number;
+  begin_date?: Date;
+  /**
+   * 펀딩의 `begin_date`가 주어진 `end_date` 보다 작은 펀딩을 찾음.
+   *
+   * admin only
+   */
+  end_date?: Date;
+  /**
+   * include deleted fundings
+   *
+   * admin only
+   */
+  include_deleted?: boolean;
+
+  /**
+   * show user interested fundings
+   */
+  interest?: boolean;
+  /**
+   * show user participated fundings
+   */
+  participated?: boolean;
 }
 
 export default function useFundings({
   offset = 0,
   limit = 50,
   tags = undefined,
+  host_id = undefined,
+  begin_date = undefined,
+  end_date = undefined,
+  include_deleted = false,
+  interest = false,
+  participated = false,
 }: UseFundingsOptions = {}) {
   const url = new URL("/api/v1/fundings", window.location.href);
   url.searchParams.append("offset", offset.toString());
   url.searchParams.append("limit", limit.toString());
+  if (host_id !== undefined) {
+    url.searchParams.append("host_id", host_id.toString());
+  }
+  if (begin_date !== undefined) {
+    url.searchParams.append("begin_date", begin_date.toISOString());
+  }
+  if (end_date !== undefined) {
+    url.searchParams.append("end_date", end_date.toISOString());
+  }
+  if (interest) {
+    url.searchParams.append("interest", "true");
+  }
+  if (include_deleted) {
+    url.searchParams.append("include_deleted", "true");
+  }
+  if (participated) {
+    url.searchParams.append("participated", "true");
+  }
 
   if (tags && tags.length > 0) {
     tags.forEach((tag) => {

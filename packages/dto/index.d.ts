@@ -65,6 +65,7 @@ export interface FundingObject {
   host_nickname: string;
   host_profile_image: string | null;
   host_email: string;
+  host_introduction: string | null;
 
   interest_funding_id?: number | null;
   participated_reward_id?: number | null;
