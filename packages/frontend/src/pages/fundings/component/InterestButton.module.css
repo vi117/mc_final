@@ -1,0 +1,23 @@
+.interest_btn {
+  width:50px;
+  height:50px;
+  color: var(--gray) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--secondary) !important;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  border-radius: 7px !important;
+}
+
+.btn_svg {
+    color: var(--gray);
+    width:24px;
+    height:24px;
+}
+
+.interest_btn:hover > .btn_svg {
+    transition: transform 200ms ease;
+    transform: scale(1.05);
+}

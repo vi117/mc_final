@@ -5,6 +5,17 @@ import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
 import "./progressbar.css";
 import "../community/styles/tags.css";
+// import FundingsHome_placeholder from "./FundingsHome_placeholder";
+// import "./FundingsHome_Item.css"
+
+// const placerholder = "https://via.placeholder.com/100x100";
+
+// const GridContainer = styled("div")({
+//   display: "grid",
+//   gridTemplateColumns: "repeat(3, 1fr)",
+//   gridGap: "20px",
+//   justifyContent: "center",
+// });
 import FundingItem from "./component/Item";
 
 const FundingsHome = function() {
@@ -20,8 +31,9 @@ const FundingsHome = function() {
   });
 
   if (fetcherIsLoading) {
-    return <div>로딩중...</div>;
+    return <div>로딩 중..</div>;
   }
+
   if (fetcherError) {
     return <div>에러가 발생했습니다.</div>;
   }

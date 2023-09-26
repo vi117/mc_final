@@ -123,6 +123,17 @@ export async function participateFunding({
   phone: string;
 }) {
   return await safeTransaction(async (db) => {
+    const fundingRepo = new FundingsRepository(db);
+    const rewardRepo = new FundingRewardsRepository(db);
+
+    const funding = await fundingRepo.findById(funding_id);
+    if (funding === undefined) {
+      throw new FundingUsersError("funding does not exist");
+    }
+    if (funding.end_date < new Date()) {
+      throw new FundingUsersError("funding is ended");
+    }
+
     try {
       await new FundingUsersRepository(db).insert({
         user_id,
@@ -139,7 +150,6 @@ export async function participateFunding({
       throw error;
     }
 
-    const rewardRepo = new FundingRewardsRepository(db);
     const reward = await rewardRepo.findById(reward_id);
     if (reward === undefined) {
       throw new FundingUsersError("reward does not exist");
@@ -150,7 +160,6 @@ export async function participateFunding({
     reward.reward_current_count += 1;
     rewardRepo.updateById(reward_id, reward);
 
-    const fundingRepo = new FundingsRepository(db);
     fundingRepo.addCurrentValue(funding_id, reward.price);
   });
 }
@@ -164,6 +173,16 @@ export async function withdrawFunding({
   reward_id: number;
 }) {
   return await safeTransaction(async (db) => {
+    const fundingRepo = new FundingsRepository(db);
+
+    const funding = await fundingRepo.findById(funding_id);
+    if (funding === undefined) {
+      throw new FundingUsersError("funding does not exist");
+    }
+    if (funding.end_date < new Date()) {
+      throw new FundingUsersError("funding is ended");
+    }
+
     await new FundingUsersRepository(db).deleteByUserIdAndFundingId(
       user_id,
       funding_id,
@@ -179,7 +198,6 @@ export async function withdrawFunding({
     reward.reward_current_count -= 1;
     rewardRepo.updateById(reward_id, reward);
 
-    const fundingRepo = new FundingsRepository(db);
     fundingRepo.addCurrentValue(funding_id, -reward.price);
   });
 }

@@ -86,8 +86,9 @@ export function Header() {
                   <LoginButton></LoginButton>
                 </span>
               </Nav>
-              유저 _닉네임
+
               {userId !== null && (
+                // TODO: 유저닉네임 노출
                 <Nav>
                   <NavLink to={`/profile`}>
                     <span className={classes.header_logo_nav}>

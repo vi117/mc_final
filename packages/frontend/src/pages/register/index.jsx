@@ -104,9 +104,6 @@ function RegisterPage() {
           type="text"
           value={Address}
           onChange={(e) => setAddress(e.target.value)}
-        />
-
-        <button
           onClick={() => {
             DaumPostcodePopup({
               onComplete(resultAddress) {
@@ -114,9 +111,12 @@ function RegisterPage() {
               },
             });
           }}
-        >
-          set Adress
-        </button>
+        />
+        <ValidationInput
+          name=""
+          type="text"
+          placeholder="상세주소"
+        />
 
         <ValidationInput
           name="Introduction"
@@ -192,6 +192,8 @@ function ValidationInput({
   pattern,
   validate,
   validateAsync,
+  placeholder,
+  onClick,
 }) {
   const checkSync = (value, pattern, validate) => {
     return (pattern?.test(value) ?? true) && (validate?.(value) ?? true);
@@ -233,6 +235,8 @@ function ValidationInput({
         type={type}
         value={value}
         onChange={onChange}
+        placeholder={placeholder}
+        onClick={onClick}
       >
         {children}
       </Form.Control>

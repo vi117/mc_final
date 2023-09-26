@@ -36,6 +36,18 @@ export interface FindAllUsersOptions {
    * tags to search
    */
   tags?: string[];
+  /**
+   * host filter
+   */
+  host_id?: number;
+  /**
+   * interest
+   */
+  interest?: boolean;
+  /**
+   * participated filter
+   */
+  participated?: boolean;
 }
 
 export interface FindOneOptions {
@@ -57,30 +69,54 @@ export class FundingsRepository {
     const end_date = options?.end_date ?? new Date();
     const include_deleted = options?.include_deleted ?? false;
     const tags = options?.tags;
+    const host_id = options?.host_id;
+    const interest = options?.interest;
+    const participated = options?.participated;
 
     const query = this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
       .$if(user_id !== null, (qb) =>
-        qb.leftJoin(
-          "user_funding_interest as interest",
-          (join) =>
-            join
-              .onRef("interest.funding_id", "=", "fundings.id")
-              .on("interest.user_id", "=", user_id),
-        )
-          .select([
-            "interest.user_id as interest_user_id",
-          ]))
+        interest
+          ? qb.innerJoin(
+            "user_funding_interest as interest",
+            (join) =>
+              join
+                .onRef("interest.funding_id", "=", "fundings.id")
+                .on("interest.user_id", "=", user_id),
+          )
+            .select([
+              "interest.user_id as interest_user_id",
+            ])
+          : qb.leftJoin(
+            "user_funding_interest as interest",
+            (join) =>
+              join
+                .onRef("interest.funding_id", "=", "fundings.id")
+                .on("interest.user_id", "=", user_id),
+          )
+            .select([
+              "interest.user_id as interest_user_id",
+            ]))
       .$if(user_id !== null, (qb) =>
-        qb.leftJoin(
-          "funding_users",
-          (join) =>
-            join.onRef("funding_users.funding_id", "=", "fundings.id")
-              .on("funding_users.user_id", "=", user_id),
-        )
-          .select([
-            "funding_users.reward_id as participated_reward_id",
-          ]))
+        participated
+          ? qb.innerJoin(
+            "funding_users",
+            (join) =>
+              join.onRef("funding_users.funding_id", "=", "fundings.id")
+                .on("funding_users.user_id", "=", user_id),
+          )
+            .select([
+              "funding_users.reward_id as participated_reward_id",
+            ])
+          : qb.leftJoin(
+            "funding_users",
+            (join) =>
+              join.onRef("funding_users.funding_id", "=", "fundings.id")
+                .on("funding_users.user_id", "=", user_id),
+          )
+            .select([
+              "funding_users.reward_id as participated_reward_id",
+            ]))
       .$if(tags !== undefined, (qb) => {
         tags?.forEach((tag, index) => {
           qb = qb.innerJoin(
@@ -111,11 +147,12 @@ export class FundingsRepository {
         "fundings.begin_date",
         "fundings.end_date",
       ])
-      .selectAll(["fundings"])
       .select([
+        "host.id as host_id",
         "host.nickname as host_nickname",
         "host.profile_image as host_profile_image",
         "host.email as host_email",
+        "host.introduction as host_introduction",
       ])
       .select((eb) => [
         jsonArrayFrom(
@@ -138,6 +175,10 @@ export class FundingsRepository {
       .$if(
         begin_date !== undefined,
         (qb) => qb.where("fundings.end_date", "<=", begin_date ?? new Date()),
+      )
+      .$if(
+        host_id !== undefined,
+        (qb) => qb.where("fundings.host_id", "=", host_id ?? null),
       )
       .limit(limit)
       .offset(offset)
@@ -194,6 +235,7 @@ export class FundingsRepository {
         "host.nickname as host_nickname",
         "host.profile_image as host_profile_image",
         "host.email as host_email",
+        "host.introduction as host_introduction",
       ])
       .select((eb) => [
         jsonArrayFrom(

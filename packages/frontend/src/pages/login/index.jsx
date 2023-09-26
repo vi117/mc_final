@@ -281,7 +281,7 @@ function GoogleSvg() {
         stroke="none"
         strokeWidth="1"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         sketch:type="MSPage"
       >
         <g
@@ -304,19 +304,18 @@ function GoogleSvg() {
             <g id="button-bg">
               <use
                 fill="#FFFFFF"
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 sketch:type="MSShapeGroup"
-                xlink:href="#path-2"
+                xlinkHref="#path-2"
               >
               </use>
-              <use fill="none" xlink:href="#path-2"></use>
-              <use fill="none" xlink:href="#path-2"></use>
-              <use fill="none" xlink:href="#path-2"></use>
+              <use fill="none" xlinkHref="#path-2"></use>
+              <use fill="none" xlinkHref="#path-2"></use>
+              <use fill="none" xlinkHref="#path-2"></use>
             </g>
           </g>
           <g
             id="logo_googleg_48dp"
-            sketch:type="MSLayerGroup"
             transform="translate(15.000000, 15.000000)"
           >
             <path

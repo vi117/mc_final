@@ -1,0 +1,29 @@
+.funding_container{
+  padding: 10px 7px 50px 7px;
+  margin:0 auto;
+  max-width: 1080px;
+}
+
+.user {
+  width: 40px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 1px solid var(--border);
+  margin-right: 10px;
+}
+
+.introduce{
+  width: 100%;
+  padding: 30px 10px;
+  min-height: 400px;
+}
+
+.host_nickname{
+  font-weight: 700;
+}
+
+.title{
+  height: 50px;
+  margin-top: 20px;
+}

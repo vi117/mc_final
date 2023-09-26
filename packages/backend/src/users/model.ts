@@ -130,6 +130,13 @@ export class UserRepository implements IUserRepository {
       .where("email", "=", email)
       .executeTakeFirst();
   }
+
+  async updateById(id: number, user: Partial<UserObject>): Promise<void> {
+    await this.db.updateTable("users")
+      .set(user)
+      .where("id", "=", id)
+      .executeTakeFirst();
+  }
 }
 
 export default function getUserRepository(trx?: Kysely<DB>): UserRepository {
