@@ -5,17 +5,20 @@
 }
 
 .user {
-  width: 40%;
+  width: 40px;
   aspect-ratio: 1 / 1;
-  max-width: 45px;
   object-fit: cover;
   border-radius: 100%;
-  border: 1px solid var(--secondary);
-  /* margin-right: 7px; */
+  border: 1px solid var(--border);
+  margin-right: 10px;
 }
 
 .introduce{
   width: 100%;
   padding: 30px 10px;
   min-height: 400px;
+}
+
+.host_nickname{
+  font-weight: 700;
 }

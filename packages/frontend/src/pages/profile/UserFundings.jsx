@@ -1,10 +1,10 @@
 // import FundingsDetail from "../fundings/FundingsDetail";
 
-const UserFundings = function() {
+const OpendFundings = function() {
   return (
     <p></p>
     // <FundingsDetail />
   );
 };
 
-export default UserFundings;
+export default OpendFundings;
