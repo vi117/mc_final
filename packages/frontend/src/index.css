@@ -22,14 +22,18 @@
   --white-rgb: 255, 255, 255;
 
   /*포인트 컬러*/
-  --green-dark: #1c6758;
-  --green-dark-rgb: 28, 103, 88;
+  --green-dark: #206A5D;
+  --green-dark-rgb: 32, 106, 93;
 
-  --green: #3d8361;
-  --green-rgb: 61, 133, 97;
+  --green: #1FAB89;
+  --green-rgb: 31, 171, 137;
 
-  --green-light: #eef2e6;
-  --green-light-rgb: 238, 242, 230;
+  --green-light: #EBECF1;
+  --green-light-rgb:235, 236, 241;
+
+
+  --blue: #1F4068;
+  --blue-rgb:31, 64, 104;
 
   --beige: #d6cda4;
   --beige-rgb: 214, 205, 164;
