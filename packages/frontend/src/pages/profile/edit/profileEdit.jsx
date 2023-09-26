@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Button } from "../../../component/Button";
+import { useLoginInfo } from "../../../hook/useLogin";
 import classes from "../../register/registerForm.module.css";
 
 /**
@@ -23,10 +24,12 @@ import classes from "../../register/registerForm.module.css";
 // }
 
 function ProfileEditPage() {
+  const loginInfo = useLoginInfo();
+
   const formRef = useRef(null);
-  const [Phone, setPhone] = useState("");
-  const [Address, setAddress] = useState("");
-  const [Article, setArticle] = useState("");
+  const [phone, setPhone] = useState(loginInfo.phone);
+  const [address, setAddress] = useState(loginInfo.address);
+  const [introduction, setArticle] = useState(loginInfo.phone);
 
   const onPhoneHandler = (event) => {
     setPhone(event.currentTarget.value);
@@ -50,59 +53,62 @@ function ProfileEditPage() {
         ref={formRef}
         style={{ display: "flex", flexDirection: "column" }}
         className={classes.form}
+        onSubmit={onSubmitHandler}
       >
-        <RegisterLabel>Email</RegisterLabel>
-        <input
-          name="email"
-          type="email"
-          value={"admin@gmail.com"}
-          disabled
-        />
-        <RegisterLabel>NickName</RegisterLabel>
-        <input
-          name="nickname"
-          type="text"
-          value={"홍길동"}
-          disabled
-        />
         <RegisterLabel>Phone</RegisterLabel>
         <input
           name="phone"
           type="text"
-          value={Phone}
+          value={phone}
           onChange={onPhoneHandler}
         />
         <RegisterLabel>Address</RegisterLabel>
         <input
           name="address"
           type="text"
-          value={Address}
+          value={address}
           onChange={onAddressHandler}
         />
         <RegisterLabel>Article</RegisterLabel>
         <input
           name="introduction"
           type="text"
-          value={Article}
+          value={introduction}
           onChange={onArticleHandler}
         />
         <br />
 
-        <Link to={`/profile`}>
-          <button
-            id="form-controls"
-            type="submit"
-            onClick={onSubmitHandler}
-            className={classes.button_submit}
-          >
-            수정 완료
-          </button>
-        </Link>
+        <Button
+          id="form-controls"
+          type="submit"
+          onClick={onSubmitHandler}
+          className={classes.button_submit}
+        >
+          수정 완료
+        </Button>
       </form>
     </div>
   );
 
-  function onSubmitHandler() {
+  function onSubmitHandler(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    fetch(`/api/v1/users/${loginInfo.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone,
+        address,
+        introduction,
+      }),
+    }).then((res) => {
+      if (res.status === 200) {
+        alert("success");
+      }
+    });
     // if (
     //   !Phone || !Address
     // ) {

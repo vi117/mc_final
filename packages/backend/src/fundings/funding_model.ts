@@ -147,7 +147,6 @@ export class FundingsRepository {
         "fundings.begin_date",
         "fundings.end_date",
       ])
-      .selectAll(["fundings"])
       .select([
         "host.id as host_id",
         "host.nickname as host_nickname",

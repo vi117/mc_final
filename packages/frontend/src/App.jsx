@@ -25,7 +25,6 @@ import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
 
 import AdminPage from "./pages/admin/index";
-import OpendFundings from "./pages/profile/UserFundings";
 import UserProfileView from "./pages/profile/UserProfileView";
 
 import { GoogleLogin } from "./pages/sns_login/google";
@@ -134,10 +133,6 @@ const browserRouter = createBrowserRouter([
       {
         path: "/userview",
         element: <UserProfileView />,
-        children: [
-          // 펀딩유저 프로필 펀딩 뷰
-          { path: "/userview/opendfundings", element: <OpendFundings /> },
-        ],
       },
       /**
        * Not Found

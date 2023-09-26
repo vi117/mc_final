@@ -1,4 +1,3 @@
-import { Nav, Navbar } from "react-bootstrap";
 import Profileimg from "../community/assets/user.png";
 import classes from "./UserProfileView.module.css";
 
@@ -13,15 +12,13 @@ const UserProfileView = function() {
             <span>소개글</span>
           </div>
         </div>
-        <div>
-          <Navbar bg="transparent" data-bs-theme="light">
-            <Nav variant="underline">
-              <Nav.Link href="/userview/opendfundings">열린 펀딩</Nav.Link>
-              <Nav.Link href="#">#닫힌 펀딩</Nav.Link>
-              <Nav.Link href="##">#펀딩 후기</Nav.Link>
-            </Nav>
-          </Navbar>
+        <div
+          style={{ fontSize: "24px", fontWeight: "700" }}
+          className={classes["title"]}
+        >
+          펀딩 리스트
         </div>
+        <div>펀딩목록</div>
         <hr />
       </div>
     </>

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
 import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
@@ -104,16 +104,6 @@ function RegisterPage() {
           type="text"
           value={Address}
           onChange={(e) => setAddress(e.target.value)}
-        />
-        <ValidationInput
-          name="Address"
-          type="text"
-          value={Address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="상세주소"
-        />
-
-        <Button
           onClick={() => {
             DaumPostcodePopup({
               onComplete(resultAddress) {
@@ -121,9 +111,12 @@ function RegisterPage() {
               },
             });
           }}
-        >
-          set Adress
-        </Button>
+        />
+        <ValidationInput
+          name=""
+          type="text"
+          placeholder="상세주소"
+        />
 
         <ValidationInput
           name="Introduction"
@@ -199,6 +192,8 @@ function ValidationInput({
   pattern,
   validate,
   validateAsync,
+  placeholder,
+  onClick,
 }) {
   const checkSync = (value, pattern, validate) => {
     return (pattern?.test(value) ?? true) && (validate?.(value) ?? true);
@@ -240,6 +235,8 @@ function ValidationInput({
         type={type}
         value={value}
         onChange={onChange}
+        placeholder={placeholder}
+        onClick={onClick}
       >
         {children}
       </Form.Control>

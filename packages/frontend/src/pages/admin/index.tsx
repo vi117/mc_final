@@ -1,5 +1,7 @@
+import Button from "@mui/material/Button";
 import { Badge, Container } from "react-bootstrap";
 import useFundingRequest from "../../hook/useFundingRequest";
+import classes from "./admin.module.css";
 
 export default function AdminPage() {
   const { data, error, isLoading, mutate } = useFundingRequest();
@@ -12,29 +14,46 @@ export default function AdminPage() {
   }
   return (
     <Container>
-      <div>
+      <h3>펀딩 심사 관리</h3>
+      <div className={classes["fundingState"]}>
         {data && data.map((funding) => {
           return (
             <div key={funding.id}>
               {funding.deleted_at !== null && (
                 <div>거부된 펀딩 요청입니다.</div>
               )}
-              <div>{funding.funding_state}</div>
-              <h1>
-                {funding.title}
-              </h1>
-              {funding.host_email}
-              <img src={funding.thumbnail}>
-              </img>
-              <div>{funding.host_nickname}</div>
-              <div>목표 {funding.target_value}원</div>
-              <div>
-                {funding.meta_parsed?.tags.map((tag) => (
-                  <Badge key={tag}>{tag}</Badge>
-                ))}
+              <div className={classes["Fundingthumbnail"]}>
+                <img src={funding.thumbnail}>
+                </img>
+                <div>{funding.funding_state}</div>
+                <h1 style={{ fontSize: "16px", textAlign: "left" }}>
+                  {funding.title}
+                </h1>
+                <div className={classes["Funding-hmaile"]}>
+                  {funding.host_email}
+                </div>
+                <div>{funding.host_nickname}</div>
+                <div>목표 {funding.target_value}원</div>
+                <div>
+                  {funding.meta_parsed?.tags.map((tag) => (
+                    <Badge key={tag}>{tag}</Badge>
+                  ))}
+                </div>
+                <Button
+                  variant="outlined"
+                  onClick={() => onApproveClick(funding.id)}
+                >
+                  승인
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  style={{ left: "5px" }}
+                  onClick={() => onRejectClick(funding.id)}
+                >
+                  거부
+                </Button>
               </div>
-              <button onClick={() => onApproveClick(funding.id)}>승인</button>
-              <button onClick={() => onRejectClick(funding.id)}>거부</button>
             </div>
           );
         })}
