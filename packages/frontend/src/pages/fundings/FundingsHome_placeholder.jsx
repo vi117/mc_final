@@ -1,9 +1,11 @@
-import classes from "./FundingsHome.module.css";
+import classes from "./FundingsHome_placeholder.module.css";
 import "./progressbar.css";
 import "../community/styles/tags.css";
+import { Card } from "react-bootstrap";
+// import { TagsInput } from "react-tag-input-component";
 // import "./FundingsHome_Item.css"
 
-// const placerholder = "https://via.placeholder.com/100x100";
+const placeholder = "https://via.placeholder.com/342X273.59";
 
 // const GridContainer = styled("div")({
 //   display: "grid",
@@ -14,59 +16,53 @@ import "../community/styles/tags.css";
 
 const FundingsHome_placeholder = function() {
   return (
-    <>
-      <div className={classes["funding_container"]}>
-        {
-          /* <div class="placeholder" className={classes["funding_navarea"]}>
-        <div class="placeholder" className={classes["funding_tagsearch"]}>
-          mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+    <div className={classes["funding_container"]}>
+      {/* <div style={{border:"red solid 1px", height:"46px"}}></div> */}
+      <div className={classes["funding_navarea"]}>
+        <div className={classes["funding_tagsearch"]}>
         </div>
-
         <div className={classes["funding_createbtn"]}>
-            <p class="placeholder">펀딩 만들기</p>
+          <p className={classes["go_create"]}></p>
         </div>
       </div>
-      <div class="placeholder col-4" className={classes["funding_itemarea"]}>
-      </div> */
-        }
-      </div>
-
-      <div class="placeholder col-4" className={classes["funding_card"]}>
-        <img class="placeholder" />
-        <div>
-          <div
-            class="placeholder col-4"
-            className={classes["funding_tags_area"]}
-          >
-            <ul
-              class="placeholder col-4"
-              className={classes["funding_item_tags"]}
+      <div className={classes["funding_itemarea"]}>
+        <Card>
+          <div className={classes["funding_card"]}>
+            <img
+              src={placeholder}
+              className={classes["funding_item_thumbnail"]}
+              class="placeholder"
+              // style={{
+              //   border:"red solid 1px",
+              //   width:"342px",
+              //   height:"273.59px"
+              // }}
             >
-              <li>tag</li>
-              <li>tag</li>
-            </ul>
+            </img>
           </div>
-          <div
-            class="placeholder col-4"
-            className={classes["funding_item_title"]}
-          >
-            title
+          <div className={classes["funding_card"]} class="placeholder">
+            <div
+              style={{
+                border: "red solid 1px",
+                width: "342px",
+                height: "273.59px",
+              }}
+            >
+            </div>
           </div>
-          <div
-            class="placeholder col-4"
-            className={classes["funding_progress_percantage"]}
-          >
-            100%달성!
-            <span>000000원</span>
-            <span className={classes["progress_resttime"]}>
-              000000일 남음
-            </span>
+          <div className={classes["funding_card"]} class="placeholder">
+            <div
+              style={{
+                border: "red solid 1px",
+                width: "342px",
+                height: "273.59px",
+              }}
+            >
+            </div>
           </div>
-          <div class="placeholder col-4">
-          </div>
-        </div>
+        </Card>
       </div>
-    </>
+    </div>
   );
 };
 

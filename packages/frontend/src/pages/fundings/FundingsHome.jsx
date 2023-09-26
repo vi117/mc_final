@@ -6,7 +6,7 @@ import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
 import "./progressbar.css";
 import "../community/styles/tags.css";
-import FundingsHome_placeholder from "./FundingsHome_placeholder";
+// import FundingsHome_placeholder from "./FundingsHome_placeholder";
 // import "./FundingsHome_Item.css"
 
 // const placerholder = "https://via.placeholder.com/100x100";
@@ -31,7 +31,7 @@ const FundingsHome = function() {
   });
 
   if (fetcherIsLoading) {
-    return <FundingsHome_placeholder />;
+    return <div>로딩 중..</div>;
   }
 
   if (fetcherError) {

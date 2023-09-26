@@ -35,7 +35,7 @@ const FundingsDetail = function() {
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
   if (isLoading) {
-    // TODO(vi117): sippner 대신 Bootstrap.Placeholder 띄우기.
+    // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
     return <Spinner />;
   }
   if (error) {
