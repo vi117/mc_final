@@ -15,10 +15,10 @@
   --white: #fff;
 
   /*포인트 컬러*/
-  --green-dark: #1c6758;
-  --green: #3d8361;
-  --green-light: #eef2e6;
-  --beige: #d6cda4;
+  --green-dark: #206A5D;
+  --green: #1FAB89;
+  --green-light: #EBECF1;
+  --blue: #1F4068;
 
   /*카테고리용 그림자*/
   --boxshadow: rgba(0, 0, 0, 0.08) 0px 6px 6px -7px;
