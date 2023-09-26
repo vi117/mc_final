@@ -1,3 +1,5 @@
+export * from "./funding";
+
 export async function emailCheck(email: string, signal: AbortSignal) {
   const url = new URL(
     "/api/v1/users/check-email",

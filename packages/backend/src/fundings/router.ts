@@ -35,10 +35,14 @@ async function getAllFundingHandler(req: Request, res: Response) {
   const queryParams = req.query;
   const limit = parseQueryToNumber(queryParams.limit, 50);
   const offset = parseQueryToNumber(queryParams.offset, 0);
-
+  const host_id = parseQueryToNumber(queryParams.host_id);
   const tags = parseQueryToStringList(queryParams.tags);
-
+  const interest = queryParams.interest === "true";
+  const participated = queryParams.participated === "true";
   const user = req.user;
+
+  const include_deleted = queryParams.include_deleted === "true"
+    && user?.is_admin;
 
   let begin_date: Date | undefined;
   let end_date: Date | undefined;
@@ -62,6 +66,10 @@ async function getAllFundingHandler(req: Request, res: Response) {
     begin_date,
     end_date,
     tags,
+    host_id,
+    include_deleted,
+    interest,
+    participated,
   });
   res.json(result).status(StatusCodes.OK);
 }
