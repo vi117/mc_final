@@ -149,9 +149,11 @@ export class FundingsRepository {
       ])
       .selectAll(["fundings"])
       .select([
+        "host.id as host_id",
         "host.nickname as host_nickname",
         "host.profile_image as host_profile_image",
         "host.email as host_email",
+        "host.introduction as host_introduction",
       ])
       .select((eb) => [
         jsonArrayFrom(
@@ -234,6 +236,7 @@ export class FundingsRepository {
         "host.nickname as host_nickname",
         "host.profile_image as host_profile_image",
         "host.email as host_email",
+        "host.introduction as host_introduction",
       ])
       .select((eb) => [
         jsonArrayFrom(

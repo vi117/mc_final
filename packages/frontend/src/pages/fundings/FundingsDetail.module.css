@@ -1,6 +1,7 @@
-hr{
+.hr{
   border-color:var(--gray);
 }
+
 .funding_detail_container{
   padding: 10px 7px 50px 7px;
   margin:0 auto;
@@ -52,8 +53,7 @@ hr{
 }
 
 /*thumbnail*/
-.funding_thumbnail_carousel,
-.content {
+.funding_thumbnail_carousel {
   width:57%;
 }
 
@@ -117,7 +117,7 @@ object-fit: cover;
   display:flex;
 }
 
-.funding_btn > button, .interest_btn
+.funding_btn > button
 {
   width:50px;
   height:50px;
@@ -129,11 +129,9 @@ object-fit: cover;
   align-items: center;
   margin-right: 10px;
   border-radius: 7px !important;
-
 }
 
-.funding_btn > button:hover > .btn_svg, 
-.interest_btn:hover > .btn_svg {
+.funding_btn > button:hover > .btn_svg {
   transition: transform 200ms ease;
   transform: scale(1.05);
 }
@@ -214,12 +212,16 @@ object-fit: cover;
   overflow: visible;
 }
 
-.more-view-button-wrapper {
-  position: relative;
-}r
-
 .content img{
   width:590px !important;
+}
+.content img {
+  width: 594px;
+  max-width:594px;
+}
+
+.content {
+  width:594px;
 }
 
 .more-view-button{
@@ -232,7 +234,12 @@ object-fit: cover;
   color:var(--green);
   box-shadow: rgba(157, 243, 196, 0.2) 0px 7px 29px 0px;
 }
-.more-view-button-wrapper::before {
+
+.more-view-button-wrapper {
+  position: relative;
+}
+
+.more-view-button-wrapper-shrink::before {
   position: absolute;
   left: 0;
   right: 0;
@@ -240,16 +247,6 @@ object-fit: cover;
   height: 50px; /* 그라데이션 높이 */
   background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 90%);
   content: "";
-}
-
-
-.content img {
-  width: 594px;
-  max-width:594px;
-}
-
-.content {
-  width:594px;
 }
 
 /*reward list */
@@ -428,7 +425,7 @@ border-bottom: 1px solid var(--border);
     font-size: 20px;
   }
   .funding_profile_h4 {
-    font-size: 12px;
+    font-size: 16px;
   }
   .funding_profile_small,
   .funding_profile_text{

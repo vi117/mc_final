@@ -13,14 +13,18 @@ import useFundingDetail from "../../hook/useFundingDetail";
 // import { useLoginId } from "../../hook/useLogin";
 import Profileimg from "../community/assets/user.png";
 import classes from "./FundingsDetail.module.css";
-import "./funding_btn.css";
-import { BiBookmark, BiShareAlt, BiSolidBookmark } from "react-icons/bi";
+
+import clsx from "clsx";
+import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 
+import { withdrawFunding as withdrawFundingAPI } from "../../api/mod";
+import { InterestButton } from "./component/InterestButton";
+
 const FundingsDetail = function() {
-  const [isMoreView, setIsMoreView] = useState(false);
   const { id } = useParams();
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
+  const [isMoreView, setIsMoreView] = useState(false);
   const JoinBtnRef = useRef(null);
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
@@ -77,16 +81,9 @@ const FundingsDetail = function() {
     }
   };
 
-  const wrapImages = (html) => {
-    const imgRegex = /<img(.*?)>/g;
-    return html.replace(
-      imgRegex,
-      "<div class=\"image-container\"><img$1></div>",
-    );
-  };
-
   const content = funding.content;
-  const wrappedContent = wrapImages(content);
+  const wrappedContent = content;
+  // const wrappedContent = wrapImages(content);
 
   return (
     <div className={classes["funding_detail_container"]}>
@@ -161,7 +158,7 @@ const FundingsDetail = function() {
               </span>
             </div>
           </div>
-          <hr></hr>
+          <hr className={classes.hr} />
           <table className={classes["funding_profile_table"]}>
             <tbody>
               <tr>
@@ -223,13 +220,17 @@ const FundingsDetail = function() {
               </h4>
             </div>
             <div style={{ display: "flex" }}>
-              <img src={Profileimg} className={classes["user"]} alt="Profile" />
+              <img
+                src={funding.host_profile_image ?? Profileimg}
+                className={classes["user"]}
+                alt="Profile"
+              />
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <span className={classes["host_nickname"]}>
                   {funding.host_nickname}
                 </span>
                 <span className={classes["host_introduce"]}>
-                  회원가입창에서 입력한 소개글
+                  {funding.host_introduction}
                 </span>
               </div>
             </div>
@@ -240,9 +241,9 @@ const FundingsDetail = function() {
       <div className={classes.content_area}>
         <div>
           <div
-            className={`${classes["content-wrapper"]} ${
-              isMoreView ? classes["expanded"] : classes["content-hidden"]
-            }`}
+            className={clsx(classes["content-wrapper"], {
+              [classes["expanded"]]: isMoreView,
+            })}
           >
             <div
               className={classes.content}
@@ -250,8 +251,9 @@ const FundingsDetail = function() {
             />
           </div>
           <div
-            className={`${classes["more-view-button-wrapper"]} 
-        ${isMoreView ? classes["button-hidden"] : ""}`}
+            className={clsx(classes["more-view-button-wrapper"], {
+              [classes["more-view-button-wrapper-shrink"]]: !isMoreView,
+            })}
           >
             <button
               className={classes["more-view-button"]}
@@ -343,19 +345,7 @@ const FundingsDetail = function() {
     if (!selectedReward) {
       throw new Error("not selected reward");
     }
-    const url = new URL(
-      `/api/v1/fundings/${id}/rewards/${selectedReward.id}/withdraw`,
-      window.location.origin,
-    );
-    const res = await fetch(url.href, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!res.ok) {
-      throw new Error("withdraw error");
-    }
+    await withdrawFundingAPI();
     mutate({
       ...funding,
       participated_reward_id: null,
@@ -364,37 +354,6 @@ const FundingsDetail = function() {
   }
 };
 
-function InterestButton({ funding, setInterest }) {
-  return (
-    <>
-      {funding.interest_user_id
-        ? (
-          <Button
-            className={classes["interest_btn"]}
-            onClick={() => {
-              setInterest(funding.id, false);
-            }}
-          >
-            <BiBookmark
-              className={classes["btn_svg"]}
-            />
-          </Button>
-        )
-        : (
-          <Button
-            className={classes["interest_btn"]}
-            onClick={() => {
-              setInterest(funding.id);
-            }}
-          >
-            <BiSolidBookmark
-              className={classes["btn_svg"]}
-            />
-          </Button>
-        )}
-    </>
-  );
-}
 function SelectablRewardList(
   { rewards, selectedReward, onChange = () => {}, disabled = false },
 ) {

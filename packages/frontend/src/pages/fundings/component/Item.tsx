@@ -1,7 +1,7 @@
-import { DateToString } from "@/hook/util";
 import { FundingObject } from "dto";
 import { Card, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { DateToString } from "../../../hook/util";
 import classes from "../FundingsHome.module.css";
 
 export function FundingItem({
@@ -14,7 +14,6 @@ export function FundingItem({
   const restTime = new Date(x.end_date).getTime() - new Date().getTime();
   return (
     <Card
-      key={x.id}
       {...rest}
     >
       <NavLink to={`/fundings/${x.id}`}>
