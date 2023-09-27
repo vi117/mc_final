@@ -12,6 +12,7 @@ export async function withdrawFunding(id: number, selectedReward_id: number) {
     },
   });
   if (!res.ok) {
-    throw new APIError("withdraw error");
+    const data = await res.json();
+    throw new APIError(data.message);
   }
 }
