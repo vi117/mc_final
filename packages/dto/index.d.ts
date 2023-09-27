@@ -85,6 +85,7 @@ export interface UserObject {
   is_admin: number;
   phone: string;
   address: string;
+  address_detail: string;
   password: string;
   introduction: string | null;
   created_at: Date;

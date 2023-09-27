@@ -79,6 +79,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
       email: { type: "string", format: "email" },
       password: { type: "string" },
       address: { type: "string" },
+      address_detail: { type: "string" },
       phone: { type: "string" },
     },
     required: ["nickname", "email", "password", "address", "phone"],
@@ -96,6 +97,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     password,
     address,
     phone,
+    address_detail,
   } = req.body;
   const userRepository = getUserRepository();
   let user_id: number | undefined;
@@ -108,6 +110,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
       address,
       phone,
       profile_image: file?.url,
+      address_detail: address_detail ?? "",
     });
     if (user_id === undefined) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR)

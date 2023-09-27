@@ -13,7 +13,7 @@ export default function FundingsPay() {
   const userInfo = useLoginInfo();
   const [shippingInfo, setShippingInfo] = useState({
     address: userInfo?.address ?? "",
-    addressDetail: "",
+    addressDetail: userInfo?.address_detail ?? "",
     name: "",
   });
 
