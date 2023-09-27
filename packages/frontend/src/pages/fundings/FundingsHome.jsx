@@ -4,17 +4,7 @@ import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
 import "./progressbar.css";
 import "../community/styles/tags.css";
-// import FundingsHome_placeholder from "./FundingsHome_placeholder";
-// import "./FundingsHome_Item.css"
 
-// const placerholder = "https://via.placeholder.com/100x100";
-
-// const GridContainer = styled("div")({
-//   display: "grid",
-//   gridTemplateColumns: "repeat(3, 1fr)",
-//   gridGap: "20px",
-//   justifyContent: "center",
-// });
 import FundingItem from "./component/Item";
 
 const FundingsHome = function() {
@@ -70,6 +60,7 @@ const FundingsHome = function() {
         {fetcherData.map((x) => (
           <FundingItem
             style={{ border: "none" }}
+            is_empahsis_tag={(t) => selected.includes(t)}
             key={x.id}
             item={x}
           />

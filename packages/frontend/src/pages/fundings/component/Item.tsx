@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { FundingObject } from "dto";
 import { Card, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
@@ -6,9 +7,11 @@ import classes from "./Item.module.css";
 
 export function FundingItem({
   item: x,
+  is_empahsis_tag = () => false,
   ...rest
 }: {
   item: DateToString<FundingObject>;
+  is_empahsis_tag?: (tag: string) => boolean;
   [key: string]: unknown;
 }) {
   const restTime = new Date(x.end_date).getTime() - new Date().getTime();
@@ -24,17 +27,21 @@ export function FundingItem({
             alt="썸네일 이미지"
           />
           <div>
-            <div className={classes["funding_tags_area"]}>
+            <ul className={classes["funding_tags_area"]}>
               {x.tags.map((t) => (
-                <ul className={classes["funding_item_tags"]}>
-                  <li>
-                    <NavLink to={`/fundings?tag=${t.tag}`}>
-                      {t.tag}
-                    </NavLink>
-                  </li>
-                </ul>
+                <li
+                  className={clsx(classes["funding_item_tags"], {
+                    [classes["funding_item_tags_emphasis"]]: is_empahsis_tag(
+                      t.tag,
+                    ),
+                  })}
+                >
+                  <NavLink to={`/fundings?tag=${t.tag}`}>
+                    #{t.tag}
+                  </NavLink>
+                </li>
               ))}
-            </div>
+            </ul>
             <div className={classes["funding_item_title"]}>{x.title}</div>
             {/* <h6>{x.content}</h6> */}
 
