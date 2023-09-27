@@ -12,6 +12,7 @@ import { GoChevronRight, GoShield } from "react-icons/go";
 import FundingDetailModal from "./FundingsDetailModal";
 
 import { withdrawFunding as withdrawFundingAPI } from "../../api/mod";
+import { useAlertModal } from "../../hook/useAlertModal";
 import { InterestButton } from "./component/InterestButton";
 
 const FundingsDetail = function() {
@@ -20,6 +21,7 @@ const FundingsDetail = function() {
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
   const [isMoreView, setIsMoreView] = useState(false);
   const JoinBtnRef = useRef(null);
+  const { AlertModal, showAlertModal } = useAlertModal();
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
   };
@@ -91,6 +93,7 @@ const FundingsDetail = function() {
           handleClose={() => setShowModal(false)}
         />
       )}
+      <AlertModal />
 
       <div className={classes["funding_title"]}>
         <ul className={classes["funding_detail_tags"]}>
@@ -337,7 +340,13 @@ const FundingsDetail = function() {
     if (!selectedReward) {
       throw new Error("not selected reward");
     }
-    await withdrawFundingAPI(funding.id, selectedReward.id);
+    try {
+      await withdrawFundingAPI(funding.id, selectedReward.id);
+    } catch (e) {
+      console.log(e);
+      await showAlertModal("withdraw error", e.message);
+      return;
+    }
     mutate({
       ...funding,
       participated_reward_id: null,
