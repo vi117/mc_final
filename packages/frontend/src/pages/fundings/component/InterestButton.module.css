@@ -13,6 +13,7 @@
 
 .btn_svg {
     color: var(--gray);
+      fill:var(--gray);
     width:24px;
     height:24px;
 }
