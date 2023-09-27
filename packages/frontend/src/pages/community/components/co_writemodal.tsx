@@ -1,9 +1,15 @@
+import { FundingObject } from "dto";
 import { Button, Card, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { DateToString } from "src/hook/util";
 import useFunding from "../../../hook/useFundings";
 import classes from "../styles/community.module.css";
 
-const Cowritemodal = ({ show, handleClose }) => {
+const Cowritemodal = ({ show, handleClose, handleSelect }: {
+  show: boolean;
+  handleClose: () => void;
+  handleSelect: (funding: DateToString<FundingObject>) => void;
+}) => {
   const { data: fundings, error, isLoading } = useFunding({
     limit: 3,
     offset: 0,
@@ -21,7 +27,7 @@ const Cowritemodal = ({ show, handleClose }) => {
         {isLoading && <div>로딩중...</div>}
         {!isLoading && !error && (
           <div className={classes["selectfundingcardarea"]}>
-            {fundings.map((funding) => (
+            {(fundings ?? []).map((funding) => (
               <Card key={funding.id} className={classes["selectfundingcard"]}>
                 <Card.Img variant="top" src={funding.thumbnail} />
                 <Card.Body className={classes["sel_card_body"]}>
@@ -29,7 +35,11 @@ const Cowritemodal = ({ show, handleClose }) => {
                   <Card.Text>
                     <Link to={`/fundings/${funding.id}`}>[더보기]</Link>
                   </Card.Text>
-                  <Button className={classes["sel_card_btn"]}>
+                  <Button
+                    className={classes["sel_card_btn"]}
+                    onClick={() =>
+                      handleSelect(funding)}
+                  >
                     지금 작성하기
                   </Button>
                 </Card.Body>

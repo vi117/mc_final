@@ -45,7 +45,6 @@ async function getAllArticleHandler(req: Request, res: Response) {
       message: "orderBy must be id or like_count",
     });
     return;
-    // throw new RouterCatch(StatusCodes.BAD_REQUEST, "orderBy must be id or like_count");
   }
 
   const result = await articleRepository.findAll({
@@ -130,6 +129,7 @@ async function postArticleHandler(req: Request, res: Response) {
       title: { type: "string" },
       content: { type: "string" },
       category: { type: "string" },
+      related_funding_id: { type: "number" },
       tags: {
         type: "array",
         items: {
@@ -156,7 +156,9 @@ async function postArticleHandler(req: Request, res: Response) {
     content: body.content,
     user_id,
     category: body.category,
+    related_funding_id: body.related_funding_id,
   });
+  // TODO(vi117): add tags
 
   res.status(StatusCodes.CREATED)
     .json({ message: "success", id: inserted_id });
