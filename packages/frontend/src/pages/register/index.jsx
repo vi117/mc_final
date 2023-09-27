@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Container, Form } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,8 @@ import Upload from "../../component/UploadImage";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
 
-const emailPattern = // eslint-disable-next-line no-useless-escape
+const emailPattern = () =>
+  // eslint-disable-next-line no-useless-escape
   /("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])/u;
 
 window.emailPattern = emailPattern;
@@ -67,8 +68,9 @@ function RegisterPage() {
           type="email"
           value={Email}
           onChange={(e) => setEmail(e.target.value)}
-          pattern={emailPattern}
-          validateAsync={emailCheck}
+          pattern={emailPattern()}
+          validateAsync={(email, signal) => emailCheck(email, signal)}
+          validateAsyncMessage={"이미 사용되는 이메일입니다."}
         />
 
         <ValidationInput
@@ -76,12 +78,16 @@ function RegisterPage() {
           type="password"
           value={Password}
           onChange={(e) => setPassword(e.target.value)}
+          minLength={6}
+          minMessage={"6자리 이상이어야 합니다."}
         />
+
         <ValidationInput
           name="ConfirmPassword"
           type="password"
           value={ConfirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          minLength={6}
           validate={(value) => value === Password}
         />
 
@@ -91,6 +97,7 @@ function RegisterPage() {
           value={NickName}
           onChange={(e) => setNickName(e.target.value)}
           validateAsync={nicknameCheck}
+          validateAsyncMessage={"닉네임이 중복됩니다."}
         />
 
         <ValidationInput
@@ -196,26 +203,56 @@ function ValidationInput({
   pattern,
   validate,
   validateAsync,
+  validateAsyncMessage,
   placeholder,
   onClick,
+  minLength,
+  minMessage,
 }) {
-  const checkSync = (value, pattern, validate) => {
-    return (pattern?.test(value) ?? true) && (validate?.(value) ?? true);
-  };
+  const checkSync = useCallback((value) => {
+    const checklist = [];
+    if (pattern !== undefined) {
+      checklist.push(pattern.test(value));
+    }
+    if (validate) {
+      checklist.push(validate(value));
+    }
+    if (minLength !== undefined) {
+      checklist.push(value.length > minLength);
+    }
+    return checklist.every(x => x);
+  }, [minLength, pattern, validate]);
+
   const [isValid, setIsValid] = useState(
     checkSync(value, pattern, validate),
   );
+  const [errorMessage, setErrorMessage] = useState("");
   const isEmpty = value === undefined || value?.length === 0;
 
   useEffect(() => {
     const v = checkSync(value, pattern, validate);
     setIsValid(v);
+
+    //
+    if (minLength && minLength >= value.length) {
+      setErrorMessage(minMessage);
+    }
+    if (pattern && !pattern.test(value)) {
+      setErrorMessage(`타입이 맞지 않습니다.`);
+    }
+    // sync check 통과했을 때 validateAsync가 있으면 시도.
     if (v && validateAsync) {
       const abortController = new AbortController();
       (async () => {
         try {
           const result = await validateAsync(value, abortController.signal);
+          console.log(result);
           setIsValid(result);
+          if (!result) {
+            setErrorMessage(validateAsyncMessage);
+          } else {
+            setErrorMessage("");
+          }
         } catch (e) {
           if (e instanceof DOMException && e.name === "AbortError") {
             // do nothing
@@ -226,7 +263,17 @@ function ValidationInput({
       })();
       return () => abortController.abort();
     }
-  }, [value, validateAsync, pattern, validate]);
+  }, [
+    value,
+    pattern,
+    validate,
+    validateAsync,
+    validateAsyncMessage,
+    minMessage,
+    minLength,
+    setIsValid,
+    checkSync,
+  ]);
 
   return (
     <>
@@ -244,6 +291,9 @@ function ValidationInput({
       >
         {children}
       </Form.Control>
+      {(!isValid && !isEmpty)
+        ? <div className="error-message">#{errorMessage}</div>
+        : null}
     </>
   );
 }
