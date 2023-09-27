@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { TagsInput } from "react-tag-input-component";
 
+import { GoInfo } from "react-icons/go";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "../../component/Editor";
 import { Calender } from "./component/Calender";
@@ -135,13 +136,35 @@ const FundingsWrite = function() {
               <Form.Group className={classes.info_area}>
                 <h1>목표금액</h1>
                 <p>프로젝트를 완수하기 위해 필요한 금액을 설정해주세요.</p>
-                <Form.Control
-                  type="text"
-                  placeholder="목표금액(숫자만)"
-                  pattern="[0-9]*"
-                  value={targetValue}
-                  onChange={(e) => setTargetValue(parseInt(e.target.value))}
-                />
+                <ul className={classes.guide}>
+                  <li className={classes.guide_bold}>
+                    <GoInfo className={classes.guide_svg}></GoInfo>
+                    목표 금액 설정 시 꼭 알아두세요!
+                  </li>
+                  <li>
+                    종료일까지 목표금액을 달성하지 못하면 후원자 결제가 진행되지
+                    않습니다.
+                  </li>
+                  <li>
+                    후원 취소 및 결제 누락을 대비해 10% 이상 초과 달성을 목표로
+                    해주세요.
+                  </li>
+                  <li>
+                    제작비, 선물 배송비, 인건비, 예비 비용 등을 함께
+                    고려해주세요.
+                  </li>
+                </ul>
+                <div className={classes.value_input}>
+                  <Form.Control
+                    className={classes.title_input}
+                    type="text"
+                    placeholder="목표금액(숫자만)"
+                    pattern="[0-9]*"
+                    value={targetValue}
+                    onChange={(e) => setTargetValue(parseInt(e.target.value))}
+                  />
+                  <span>원</span>
+                </div>
               </Form.Group>
             </>
           )}
@@ -166,7 +189,7 @@ const FundingsWrite = function() {
                 className={classes.story_area}
               >
                 <h1>콘텐츠 썸네일</h1>
-                <Form.Label>콘텐츠 썸네일 사진을 업로드해주세요.</Form.Label>
+                <p>콘텐츠 썸네일 사진을 업로드해주세요.</p>
                 <Form.Control
                   type="file"
                   multiple
@@ -178,6 +201,24 @@ const FundingsWrite = function() {
               </Form.Group>
 
               <div className={classes.story_area}>
+                <h1>펀딩 스토리</h1>
+                <p>무엇을 만들기 위한 프로젝트인지 분명히 알려주세요.</p>
+                <ul className={classes.guide}>
+                  <li className={classes.guide_bold}>
+                    <GoInfo className={classes.guide_svg}></GoInfo>
+                    스토리 작성 TIP
+                  </li>
+                  <li>
+                    이미지로만 구성된 스토리는 이미지 로딩 속도가 느려 방문자가
+                    상세 페이지를 벗어날 확률이 높아져요.
+                  </li>
+                  <li>
+                    아래의 질문에 대한 답이 내용에 포함되도록 작성해보세요.
+                  </li>
+                  <li>Q. 무엇을 만들기 위한 펀딩인가요?</li>
+                  <li>Q. 펀딩을 간단히 소개한다면?</li>
+                  <li>Q. 이 펀딩이 왜 의미있나요?</li>
+                </ul>
                 <Editor
                   onChange={(v) => {
                     setContent(v);
@@ -204,16 +245,26 @@ const FundingsWrite = function() {
               <div className={classes.maker_area}>
                 <h1>계좌연결</h1>
                 <p>
-                  후원금을 전달받을 계좌를 등록해주세요. 법인사업자는
-                  법인계좌로만 정산받을 수 있습니다.
+                  ・ 후원금을 전달받을 계좌를 등록해주세요. 법인사업자는
+                  법인계좌로만 정산받을 수 있습니다. <br></br>
+                  ・ 입금이 가능한 계좌인지 확인 후 입력해 주세요.<br></br>
+                  ・ 저축성 예금 계좌, 외화 예금 계좌, CMA 계좌, 평생
+                  계좌번호(휴대전화 번호) 등은 입금이 불가합니다.
                 </p>
-                <Form.Select aria-label="Default select example">
+                <Form.Select
+                  className={classes.option_form}
+                  aria-label="Default select example"
+                >
                   <option>은행명</option>
                   <option value="1">기업</option>
                   <option value="2">국민</option>
                   <option value="3">신한</option>
                 </Form.Select>
-                <Form.Control type="text" placeholder="계좌번호" />
+                <Form.Control
+                  className={classes.title_input}
+                  type="text"
+                  placeholder="계좌번호"
+                />
               </div>
 
               <div className={classes.maker_area}>
