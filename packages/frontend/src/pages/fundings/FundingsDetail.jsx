@@ -289,6 +289,7 @@ const FundingsDetail = function() {
               // TODO(vi117): 환불 창 추가
               ? (
                 <Button
+                  ref={JoinBtnRef}
                   className={classes["withdraw_funding_btn"]}
                   onClick={withdrawFunding}
                 >
