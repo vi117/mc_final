@@ -14,7 +14,7 @@ export default function AdminPage() {
   }
   return (
     <Container>
-      <h3>펀딩 심사 관리</h3>
+      <h3 className={classes["h3"]}>펀딩 심사 관리</h3>
       <div className={classes["fundingState"]}>
         {data && data.map((funding) => {
           return (
