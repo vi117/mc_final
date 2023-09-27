@@ -209,7 +209,7 @@ const FundingsDetail = function() {
             </Button>
           </div>
 
-          <NavLink to={`/hostprofile/${funding.host_id}`}>
+          <NavLink to={`/host-profile/${funding.host_id}`}>
             <div className={classes["funding_host_profile"]}>
               <div>
                 <div>

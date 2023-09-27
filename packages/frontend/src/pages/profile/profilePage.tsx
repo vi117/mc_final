@@ -46,6 +46,7 @@ export default function Profile() {
               </Link>
             </Row>
           )}
+          <hr className="d-block d-md-none" />
         </Col>
         <Col md={9}>
           <AccordionList />

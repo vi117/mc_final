@@ -2,35 +2,9 @@ import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../api/user";
 import { GOOGLE_APP_CLIENT_ID } from "../../config";
-import { loginRevalidate } from "../../hook/useLogin";
 import classes from "./style.module.css";
-
-/**
- * Authenticates a user by sending a login request to the server.
- *
- * @param {string} email - The user's email address.
- * @param {string} password - The user's password.
- * @return {Promise<[boolean, object]>} - A promise that resolves to a boolean indicating whether the login was successful and an object containing the user's data.
- */
-async function login(email, password) {
-  const res = await fetch("/api/v1/users/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-  });
-  if (res.status !== 200) {
-    const data = await res.json();
-    return [false, data];
-  }
-  loginRevalidate();
-  return [true, await res.json()];
-}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

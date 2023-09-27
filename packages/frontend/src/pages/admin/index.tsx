@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import { Badge, Container } from "react-bootstrap";
+import { fundingApprove, fundingReject } from "src/api/mod";
 import useFundingRequest from "../../hook/useFundingRequest";
 import classes from "./admin.module.css";
 
@@ -60,32 +61,25 @@ export default function AdminPage() {
     </Container>
   );
   async function onApproveClick(id: number) {
-    const url = new URL(
-      `/api/v1/fundings/request/${id}/approve`,
-      window.location.origin,
-    );
-    const res = await fetch(url.href, {
-      method: "POST",
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      // TODO(vi117): show error message modal
-      alert("요청이 실패했습니다." + data.message);
+    try {
+      await fundingApprove(id);
+    } catch (e) {
+      if (e instanceof Error) {
+        // TODO(vi117): show error message modal
+        alert("요청이 실패했습니다." + e.message);
+      } else throw e;
       return;
     }
     mutate(data?.filter((f) => f.id !== id));
   }
   async function onRejectClick(id: number) {
-    const url = new URL(
-      `/api/v1/fundings/request/${id}/reject`,
-      window.location.origin,
-    );
-    const res = await fetch(url.href, {
-      method: "POST",
-    });
-    if (!res.ok) {
-      // TODO(vi117): show error message modal
-      alert("요청이 실패했습니다.");
+    try {
+      await fundingReject(id);
+    } catch (e) {
+      if (e instanceof Error) {
+        // TODO(vi117): show error message modal
+        alert("요청이 실패했습니다." + e.message);
+      } else throw e;
       return;
     }
     mutate(

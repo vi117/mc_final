@@ -131,7 +131,7 @@ const browserRouter = createBrowserRouter([
       },
       // 호스트 프로필 뷰
       {
-        path: "/hostprofile/:id",
+        path: "/host-profile/:id",
         element: <HostProfile />,
       },
       /**
