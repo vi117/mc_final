@@ -16,6 +16,7 @@ export interface TokenInfo {
   id: number;
   nickname: string;
   is_admin: boolean;
+  email: string;
   email_approved: boolean;
 }
 
@@ -24,11 +25,13 @@ export function isTokenInfo(obj: object | string): obj is TokenInfo {
   return "id" in obj
     && "nickname" in obj
     && "is_admin" in obj
+    && "email" in obj
     && "email_approved" in obj
-    && typeof obj["is_admin"] == "boolean"
-    && typeof obj["email_approved"] == "boolean"
     && typeof obj["id"] == "number"
-    && typeof obj["nickname"] == "string";
+    && typeof obj["nickname"] == "string"
+    && typeof obj["is_admin"] == "boolean"
+    && typeof obj["email"] == "string"
+    && typeof obj["email_approved"] == "boolean";
 }
 
 export function createTokenFromUser(
@@ -39,6 +42,7 @@ export function createTokenFromUser(
     id: user.id,
     nickname: user.nickname,
     is_admin: user.is_admin == 1,
+    email: user.email,
     email_approved: user.email_approved == 1,
   }, refresh);
 }
@@ -49,6 +53,7 @@ export function createToken(user: TokenInfo, refresh: boolean = false): string {
       id: user.id,
       nickname: user.nickname,
       is_admin: user.is_admin,
+      email: user.email,
       email_approved: user.email_approved,
       // exp: Math.floor(Date.now() / 1000) + 60 * 60 * 2, // 2h
     } as TokenInfo,
