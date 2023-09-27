@@ -330,6 +330,7 @@ const FundingsDetail = function() {
       });
     }
   }
+
   async function withdrawFunding() {
     if (!selectedReward) {
       throw new Error("not selected reward");

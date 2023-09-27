@@ -26,6 +26,7 @@ export async function signUp({
   NickName,
   Phone,
   Address,
+  AddressDetail,
   Article,
   ProfileImage,
 }: {
@@ -34,8 +35,9 @@ export async function signUp({
   NickName: string;
   Phone: string;
   Address: string;
+  AddressDetail?: string;
   Article: string;
-  ProfileImage: File;
+  ProfileImage?: File;
 }) {
   const formData = new FormData();
   formData.append("email", Email);
@@ -44,7 +46,9 @@ export async function signUp({
   formData.append("phone", Phone);
   formData.append("address", Address);
   formData.append("introduction", Article);
-  formData.append("profile", ProfileImage);
+
+  if (AddressDetail) formData.append("address_detail", AddressDetail);
+  if (ProfileImage) formData.append("profile", ProfileImage);
 
   const r = await fetch("/api/v1/users/signup", {
     method: "POST",

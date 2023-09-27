@@ -215,6 +215,7 @@ export function setLoginToken(res: Response, user: UserObject) {
       id: user.id,
       nickname: user.nickname,
       address: user.address,
+      address_detail: user.address_detail,
       phone: user.phone,
       email: user.email,
       is_admin: user.is_admin == 1 ? true : undefined,
