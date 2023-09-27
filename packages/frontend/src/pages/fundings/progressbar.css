@@ -1,5 +1,6 @@
 /*class module이 안먹어서 따로 분리*/
 .funding_progressbar {
+  margin-top: 5px;
     border-radius: 0px !important;
     height:3px;
     background-color: var(--border);

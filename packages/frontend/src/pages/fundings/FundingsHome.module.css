@@ -36,7 +36,7 @@ margin-left: auto;
  display:grid;
  justify-content: center;
  grid-template-columns: repeat(3, 1fr);
- column-gap: 20px;
+ column-gap: 25px;
 }
 
 .funding_taginput {
@@ -56,6 +56,7 @@ margin-left: auto;
 @media screen and (max-width: 576px/* sm - small screens */) {
   .funding_itemarea{
     grid-template-columns: repeat(1, 1fr);
+    width:100%;
   }
 }
 

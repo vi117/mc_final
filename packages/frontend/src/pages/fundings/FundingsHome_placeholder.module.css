@@ -52,9 +52,10 @@
 
 .funding_item_thumbnail {
   width:100%;
-  aspect-ratio: 5/4;
+  border-radius: 20px;
   border: 1px solid var(--border);
   object-fit: cover !important;
+  aspect-ratio: 5/4;
 }
 
 .funding_tags_area {

@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Form } from "react-bootstrap";
+import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingWrite.module.css";
-
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -51,43 +51,42 @@ const FundingsWrite = function() {
   const [content, setContent] = useState("");
   const [rewards, setRewards] = useState([]);
   const navigate = useNavigate();
+  const userInfo = useLoginInfo();
   const infoAreaRef = useRef(null);
   const StoryAreaRef = useRef(null);
   const RewardAreaRef = useRef(null);
   const MakerAreaRef = useRef(null);
   const scrollToInfoArea = () => {
-    infoAreaRef.current.scrollIntoView({ block: "center", behavior: "smooth" });
+    infoAreaRef.current.scrollIntoView({ behavior: "auto", block: "end" });
   };
   const scrollToStoryArea = () => {
-    StoryAreaRef.current.scrollIntoView({ behavior: "smooth" });
+    StoryAreaRef.current.scrollIntoView({});
   };
   const scrollToRewardArea = () => {
-    RewardAreaRef.current.scrollIntoView({ behavior: "smooth" });
+    RewardAreaRef.current.scrollIntoView({});
   };
   const scrollToMakerArea = () => {
-    MakerAreaRef.current.scrollIntoView({ behavior: "smooth" });
+    MakerAreaRef.current.scrollIntoView({});
   };
 
   return (
     <>
       <div className={classes.funding_write_wrap}>
         <div className={classes.funding_profile_container}>
-          <div className={classes.profile_title}>
-            안녕하세요<br></br> user 님!
-            <p>
-              해피테일즈에서<br></br>
-              멋진 프로젝트를 만들어보세요
-            </p>
-          </div>
+          <ul className={classes.profile_title}>
+            <li className={classes.list_big}>환영해요,</li>
+            <li className={classes.list_big} style={{ marginBottom: "10px" }}>
+              <b>{userInfo.nickname}</b> 님!
+            </li>
+            <li>해피테일즈에서</li>
+            <li>멋진 프로젝트를 만들어보세요</li>
+          </ul>
           <ListGroup
             variant="flush"
             className={classes.profile_container}
           >
             <button onClick={() => scrollToInfoArea()}>
-              <span>프로젝트 기본 정보</span>
-              <p>
-                프로젝트<br></br>기본정보
-              </p>
+              프로젝트 기본 정보
             </button>
             <button onClick={() => scrollToStoryArea()}>
               스토리 작성
@@ -259,6 +258,7 @@ const FundingsWrite = function() {
           <hr></hr>
           <div
             className={classes.item_container}
+            style={{ paddingBottom: "50px" }}
             ref={MakerAreaRef}
           >
             <div className={classes.maker_area}>
