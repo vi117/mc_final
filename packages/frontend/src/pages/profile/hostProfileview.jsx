@@ -1,6 +1,6 @@
 import Profileimg from "../community/assets/user.png";
 import FundingItem from "../fundings/component/Item";
-import classes from "./UserProfileView.module.css";
+import classes from "./hostProfileview.module.css";
 // import { useState } from "react";
 import { useParams } from "react-router-dom";
 import useFundingDetail from "../../hook/useFundingDetail";
@@ -8,7 +8,7 @@ import useFundings from "../../hook/useFundings";
 // import { useLoginInfo } from "../../hook/useLogin";
 // import { UserObject } from "../";
 
-const UserProfileView = function() {
+const HostProfile = function() {
   const { id } = useParams();
   const { data: funding, error, isLoading } = useFundingDetail(id);
   // const user1 = UserObject();
@@ -68,4 +68,4 @@ const UserProfileView = function() {
   );
 };
 
-export default UserProfileView;
+export default HostProfile;
