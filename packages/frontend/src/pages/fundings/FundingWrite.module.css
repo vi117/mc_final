@@ -278,6 +278,7 @@ hr{
         display:block;
     }
     .funding_profile_container{
+        top: 0px !important;
         padding:10px 0px 20px 0px;
         z-index: 1;
         background-color: var(--white);
@@ -296,6 +297,8 @@ hr{
         display:none;
     }
     .profile_container{
+        top:0;
+    position: sticky;
     margin-top: 0px;
     width:100%;
     display:flex;
