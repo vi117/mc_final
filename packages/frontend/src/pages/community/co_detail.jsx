@@ -1,5 +1,5 @@
 import { AiFillHeart } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useLoginId } from "../../hook/useLogin";
@@ -42,8 +42,13 @@ export function CommunityDetail() {
           </div>
         </div>
         <div className={classes["createdArea"]}>
-          <img src={Profileimg} className={classes["user"]} alt="Profile" />
-          <div className={classes["createdBy"]}>{item.author_nickname}</div>
+          <NavLink
+            to={`/userview/${item.author_id}`}
+            className={classes["linkto"]}
+          >
+            <img src={Profileimg} className={classes["user"]} alt="Profile" />
+            <div className={classes["createdBy"]}>{item.author_nickname}</div>
+          </NavLink>
           <div className={classes["dateArea"]}>
             <div className={classes["date"]}>{item.created_at}</div>
             <div className={classes["views"]}>조회수:{item.view_count}</div>

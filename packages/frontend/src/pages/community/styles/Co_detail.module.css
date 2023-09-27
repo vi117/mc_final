@@ -63,20 +63,24 @@
   padding: 10px 5px;
 }
 
+.linkto{
+  display:flex
+}
+
 .user {
-  width: 40%;
+  width: 40px;
   aspect-ratio: 1 / 1;
-  max-width: 45px;
   object-fit: cover;
   border-radius: 100%;
-  border: 1px solid var(--secondary);
-  margin-right: 7px;
+  border: 1px solid var(--border);
+  margin-right: 5px;
 }
 
 .createdBy {
   padding: 0 !important;
   color: var(--teritary);
   margin-right: auto !important;
+  margin-top: 5px;
 }
 
 .dateArea {

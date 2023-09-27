@@ -25,7 +25,7 @@ import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
 
 import AdminPage from "./pages/admin/index";
-import UserProfileView from "./pages/profile/UserProfileView";
+import UserProfileView from "./pages/profile/userprofileview";
 
 import { GoogleLogin } from "./pages/sns_login/google";
 
@@ -131,7 +131,7 @@ const browserRouter = createBrowserRouter([
       },
       // 펀딩유저 프로필 뷰
       {
-        path: "/userview",
+        path: "/userview/:id",
         element: <UserProfileView />,
       },
       /**
