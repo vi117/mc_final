@@ -39,3 +39,31 @@ export async function setFundingInterest(id: number, like = true) {
     return "OK";
   }
 }
+
+export async function fundingApprove(id: number) {
+  const url = new URL(
+    `/api/v1/fundings/request/${id}/approve`,
+    window.location.origin,
+  );
+  const res = await fetch(url.href, {
+    method: "POST",
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError(data.message);
+  }
+}
+
+export async function fundingReject(id: number) {
+  const url = new URL(
+    `/api/v1/fundings/request/${id}/reject`,
+    window.location.origin,
+  );
+  const res = await fetch(url.href, {
+    method: "POST",
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError(data.message);
+  }
+}
