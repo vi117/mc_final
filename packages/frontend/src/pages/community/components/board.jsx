@@ -112,7 +112,11 @@ const Board = () => {
                     {item.title}
                   </Link>
                 </td>
-                <td>{item.author_nickname}</td>
+                <td>
+                  <Link to={`/host-profile/${item.author_id}`}>
+                    {item.author_nickname}
+                  </Link>
+                </td>
                 <td>{item.view_count}</td>
               </tr>
             ))}

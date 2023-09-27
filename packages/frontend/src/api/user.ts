@@ -1,3 +1,4 @@
+import { loginRevalidate } from "../hook/useLogin";
 import { APIError } from "./error";
 
 export async function emailCheck(email: string, signal: AbortSignal) {
@@ -89,4 +90,32 @@ export async function resetPassword(password: string, code?: string) {
   if (!res.ok) {
     throw new APIError("token expired or invalid");
   }
+}
+/**
+ * Authenticates a user by sending a login request to the server.
+ *
+ * @param {string} email - The user's email address.
+ * @param {string} password - The user's password.
+ * @return {Promise<[boolean, object]>} - A promise that resolves to a boolean indicating whether the login was successful and an object containing the user's data.
+ */
+export async function login(
+  email: string,
+  password: string,
+): Promise<[boolean, object]> {
+  const res = await fetch("/api/v1/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password,
+    }),
+  });
+  if (res.status !== 200) {
+    const data = await res.json();
+    return [false, data];
+  }
+  loginRevalidate();
+  return [true, await res.json()];
 }

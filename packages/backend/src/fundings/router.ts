@@ -269,7 +269,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   }
   assert(!(files instanceof Array));
   const thumbnailArr = files["thumbnail"];
-  assert_param(thumbnailArr.length > 0, "썸네일이 필요합니다.");
+  assert_param(thumbnailArr && thumbnailArr.length > 0, "썸네일이 필요합니다.");
   const thumbnail = thumbnailArr[0].url;
 
   const content_thumbnails = files["content_thumbnail"].map((file) => file.url);

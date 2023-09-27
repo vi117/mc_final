@@ -1,17 +1,15 @@
-h3 {
+.h3 {
     font-size: 24px;
     font-weight: bold;
     margin-left: 100px;
     margin-bottom: 40px;
-    
-
-  }
+}
   
 .fundingState {
   display: grid;
   justify-content: center;
   align-items: center;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   column-gap: 20px;
   margin-left: 100px;
   margin-bottom: 50px;

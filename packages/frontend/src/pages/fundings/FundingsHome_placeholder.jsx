@@ -5,7 +5,7 @@ import { Card } from "react-bootstrap";
 // import { TagsInput } from "react-tag-input-component";
 // import "./FundingsHome_Item.css"
 
-const placeholder = "https://via.placeholder.com/342X273.59";
+const placeholderimage = "https://via.placeholder.com/342X273.59";
 
 // const GridContainer = styled("div")({
 //   display: "grid",
@@ -27,20 +27,40 @@ const FundingsHome_placeholder = function() {
       </div>
       <div className={classes["funding_itemarea"]}>
         <Card>
+          {/* <div > */}
           <div className={classes["funding_card"]}>
-            <img
-              src={placeholder}
-              className={classes["funding_item_thumbnail"]}
-              class="placeholder"
-              // style={{
-              //   border:"red solid 1px",
-              //   width:"342px",
-              //   height:"273.59px"
-              // }}
-            >
-            </img>
+            {[1, 2, 3, 4, 5, 6].map((index) => (
+              <tr key={index}>
+                {/* <Placeholder> */}
+                <img
+                  src={placeholderimage}
+                  className={classes["funding_item_thumbnail"]}
+                  class="placeholder"
+                  // style={{
+                  //   border:"red solid 1px",
+                  //   width:"342px",
+                  //   height:"273.59px"}}
+                >
+                </img>
+                {/* </Placeholder> */}
+                {
+                  /* <Placeholder as="td" animation="glow">
+                    <Placeholder style={{ width: "50px" }} />
+                  </Placeholder>
+                  <Placeholder as="td" animation="glow">
+                    <Placeholder style={{ width: "100px" }} />
+                  </Placeholder>
+                  <Placeholder as="td" animation="glow">
+                    <Placeholder style={{ width: "50px" }} />
+                  </Placeholder> */
+                }
+              </tr>
+            ))}
           </div>
-          <div className={classes["funding_card"]} class="placeholder">
+
+          {/* </div> */}
+          {
+            /* <div className={classes["funding_card"]} class="placeholder">
             <div
               style={{
                 border: "red solid 1px",
@@ -59,7 +79,8 @@ const FundingsHome_placeholder = function() {
               }}
             >
             </div>
-          </div>
+          </div> */
+          }
         </Card>
       </div>
     </div>
