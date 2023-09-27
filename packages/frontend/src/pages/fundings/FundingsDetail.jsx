@@ -202,28 +202,30 @@ const FundingsDetail = function() {
             </Button>
           </div>
 
-          <div className={classes["funding_host_profile"]}>
-            <div>
-              <h4 className={classes["funding_host_profile_h4"]}>
-                창작자 소개
-              </h4>
-            </div>
-            <div style={{ display: "flex" }}>
-              <img
-                src={funding.host_profile_image ?? Profileimg}
-                className={classes["user"]}
-                alt="Profile"
-              />
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <span className={classes["host_nickname"]}>
-                  {funding.host_nickname}
-                </span>
-                <span className={classes["host_introduce"]}>
-                  {funding.host_introduction}
-                </span>
+          <NavLink to={`/userview/${funding.host_id}`}>
+            <div className={classes["funding_host_profile"]}>
+              <div>
+                <h4 className={classes["funding_host_profile_h4"]}>
+                  창작자 소개
+                </h4>
+              </div>
+              <div style={{ display: "flex" }}>
+                <img
+                  src={funding.host_profile_image ?? Profileimg}
+                  className={classes["user"]}
+                  alt="Profile"
+                />
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span className={classes["host_nickname"]}>
+                    {funding.host_nickname}
+                  </span>
+                  <span className={classes["host_introduce"]}>
+                    {funding.host_introduction}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          </NavLink>
         </div>
       </div>
 

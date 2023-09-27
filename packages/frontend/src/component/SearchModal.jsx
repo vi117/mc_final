@@ -23,7 +23,7 @@ function SearchModal() {
           placeholder="검색어를 입력하세요."
           onClick={openModal} // 검색 창을 클릭하면 모달 열기
         />
-        <NavLink to={"/fundings/search"}>
+        <NavLink to={"/fundings"}>
           <FiSearch className={classes["search_bar_button"]} />
         </NavLink>
       </div>
