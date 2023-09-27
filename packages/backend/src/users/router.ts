@@ -4,7 +4,11 @@ import { verify } from "argon2";
 
 import { isDuplKeyError } from "@/db/util";
 import upload from "@/file/multer";
-import { assert_param, ForbiddenError } from "@/util/assert_param";
+import {
+  assert_param,
+  ForbiddenError,
+  UnauthorizedError,
+} from "@/util/assert_param";
 import { parseQueryToNumber, parseQueryToString } from "@/util/query_param";
 import assert from "assert";
 import debug_fn from "debug";
@@ -239,29 +243,27 @@ export async function sendPasswordReset(req: Request, res: Response) {
 
 export async function resetPassword(req: Request, res: Response) {
   const userRepository = getUserRepository();
+  const user = req.user;
   const v = ajv.validate({
     type: "object",
     properties: {
       code: { type: "string" },
       password: { type: "string" },
     },
-    required: ["code", "password"],
+    required: user ? ["password"] : ["code", "password"],
   }, req.body);
+  assert_param(v, "유효하지 않은 요청입니다.");
 
-  if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
-      errors: ajv.errors,
-    });
-    return;
+  let email;
+  if (user) {
+    email = user.email;
+  } else {
+    email = getAuthCodeRepository().verify(req.body.code);
+    if (!email) {
+      throw new UnauthorizedError("만료되었거나 유효하지 않습니다.");
+    }
   }
-  const email = getAuthCodeRepository().verify(req.body.code);
-  if (!email) {
-    res.status(StatusCodes.UNAUTHORIZED).json({
-      message: "만료되었거나 유효하지 않습니다.",
-    });
-    return;
-  }
+
   await userRepository.resetPassword(email, req.body.password);
   res.status(StatusCodes.OK).json({
     message: "success",

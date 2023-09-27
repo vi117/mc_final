@@ -63,3 +63,5 @@ export default function useArticles({
     fetcher,
   );
 }
+
+export { useArticles };

@@ -84,3 +84,5 @@ export default function useFundings({
     fetcher,
   );
 }
+
+export { useFundings };

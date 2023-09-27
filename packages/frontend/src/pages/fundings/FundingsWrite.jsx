@@ -183,7 +183,6 @@ const FundingsWrite = function() {
 
           <div
             className={classes.item_container}
-            style={{ paddingTop: "20px" }}
             ref={StoryAreaRef}
           >
             <div className={classes.story_area}>
@@ -246,7 +245,6 @@ const FundingsWrite = function() {
 
           <div
             className={classes.item_container}
-            style={{ paddingTop: "20px" }}
             ref={RewardAreaRef}
           >
             <div>
@@ -261,7 +259,6 @@ const FundingsWrite = function() {
           <hr></hr>
           <div
             className={classes.item_container}
-            style={{ paddingTop: "20px" }}
             ref={MakerAreaRef}
           >
             <div className={classes.maker_area}>
