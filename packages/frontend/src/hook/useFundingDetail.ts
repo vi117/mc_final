@@ -12,3 +12,5 @@ export default function useFundingDetail(id: number) {
     fetcher,
   );
 }
+
+export { useFundingDetail };

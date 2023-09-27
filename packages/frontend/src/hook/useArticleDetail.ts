@@ -16,3 +16,5 @@ export default function useArticleDetail(id: number, {
     fetcher,
   );
 }
+
+export { useArticleDetail };

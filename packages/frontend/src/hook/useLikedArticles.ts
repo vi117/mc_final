@@ -28,3 +28,5 @@ export default function useLikedArticles({
     fetcher,
   );
 }
+
+export { useLikedArticles };
