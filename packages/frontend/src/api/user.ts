@@ -1,3 +1,5 @@
+import { APIError } from "./error";
+
 export async function emailCheck(email: string, signal: AbortSignal) {
   const url = new URL(
     "/api/v1/users/check-email",
@@ -61,5 +63,30 @@ export async function signUp({
   } else {
     /// 회원 가입 실패!
     return [false, msg.message];
+  }
+}
+
+/**
+ * Resets the password for a user.
+ *
+ * @param {string} password - The new password.
+ * @param {string} [code] - The reset code (optional) to verify.
+ * it used for non local users.
+ * @return {Promise<void>} - A promise that resolves when the password reset is successful.
+ * @throws {APIError} - If the token(`code`) has expired or is invalid
+ */
+export async function resetPassword(password: string, code?: string) {
+  const res = await fetch("/api/v1/users/reset-password", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      code,
+      password,
+    }),
+  });
+  if (!res.ok) {
+    throw new APIError("token expired or invalid");
   }
 }
