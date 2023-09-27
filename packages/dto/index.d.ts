@@ -102,6 +102,7 @@ export interface ArticleObject {
   user_id: number;
   category: string;
   view_count: number;
+  related_funding_id: number | null;
 
   author_id: number;
   author_nickname: string;

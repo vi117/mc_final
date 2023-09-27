@@ -148,7 +148,6 @@ export default function FundingsPay() {
       body: JSON.stringify({
         address: shippingInfo.address + shippingInfo.addressDetail,
         recipient: shippingInfo.name,
-        // TODO(vi117): phone 입력 추가
         phone: userInfo.phone,
       }),
     });

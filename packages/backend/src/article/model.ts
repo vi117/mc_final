@@ -34,6 +34,10 @@ export interface FindAllUsersOptions {
    * category
    */
   allow_categories?: string[];
+  /**
+   * related_funding_id
+   */
+  related_funding_id?: number;
 }
 
 export interface FindLikes {
@@ -155,6 +159,7 @@ export class ArticleRepository {
       tags,
       allow_categories,
       orderBy,
+      related_funding_id,
     } = options ?? {};
 
     const ret = await this.getFindBaseQuery({
@@ -175,6 +180,15 @@ export class ArticleRepository {
         // allow_categories is an array of strings
         // that are categories of articles
         (qb) => qb.where("articles.category", "in", allow_categories ?? []),
+      )
+      .$if(
+        related_funding_id !== undefined,
+        (qb) =>
+          qb.where(
+            "articles.related_funding_id",
+            "=",
+            related_funding_id ?? null,
+          ),
       )
       .limit(limit)
       .offset(offset)

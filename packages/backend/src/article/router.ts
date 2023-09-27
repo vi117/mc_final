@@ -38,6 +38,8 @@ async function getAllArticleHandler(req: Request, res: Response) {
   const tags = parseQueryToStringList(req.query.tags);
   const categories = parseQueryToStringList(req.query.categories);
   const orderBy = parseQueryToString(req.query.orderBy) ?? "id";
+  const related_funding_id = parseQueryToNumber(req.query.related_funding_id);
+
   if (orderBy !== "id" && orderBy !== "like_count") {
     res.status(StatusCodes.BAD_REQUEST).json({
       message: "orderBy must be id or like_count",
@@ -55,6 +57,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
     cursor: cursor,
     allow_categories: categories,
     orderBy: orderBy,
+    related_funding_id: related_funding_id,
   });
   res.json(result).status(StatusCodes.OK);
 }

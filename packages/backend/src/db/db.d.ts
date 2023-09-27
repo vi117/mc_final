@@ -29,6 +29,7 @@ export interface Articles {
   user_id: number;
   category: string;
   view_count: Generated<number>;
+  related_funding_id: number | null;
 }
 
 export interface ArticleTagRel {
