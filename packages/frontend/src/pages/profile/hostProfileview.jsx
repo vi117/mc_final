@@ -24,11 +24,11 @@ const HostProfile = function() {
     // tags: selected.length > 0 ? selected : undefined,
   });
 
-  if (fetcherIsLoading ?? isLoading) {
+  if (fetcherIsLoading || isLoading) {
     return <div>로딩 중..</div>;
   }
 
-  if (fetcherError ?? error) {
+  if (fetcherError || error) {
     return <div>에러가 발생했습니다.</div>;
   }
 
