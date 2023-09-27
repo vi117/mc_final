@@ -29,6 +29,7 @@ export interface Articles {
   user_id: number;
   category: string;
   view_count: Generated<number>;
+  related_funding_id: number | null;
 }
 
 export interface ArticleTagRel {
@@ -134,6 +135,8 @@ export interface Users {
   is_admin: Generated<number>;
   phone: string;
   address: string;
+  address_detail: string;
+
   password: string;
   introduction: string | null;
   created_at: Generated<Date>;

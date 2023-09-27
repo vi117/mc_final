@@ -36,6 +36,8 @@ const CommunityWrite = () => {
   const [tagSelected, setSelected] = useState(["QnA"]);
   const [showModal, setShowModal] = useState(true);
 
+  const [reviewedFunding, setReviewedFunding] = useState(undefined);
+
   const backToList = () => {
     navigate("/community");
   };
@@ -52,7 +54,14 @@ const CommunityWrite = () => {
       {
         <Cowritemodal
           show={showModal}
-          handleClose={() => setShowModal(false)}
+          handleClose={() => {
+            setShowModal(false);
+            setReviewedFunding(undefined);
+          }}
+          handleSelect={(reviewedFunding) => {
+            setReviewedFunding(reviewedFunding);
+            setShowModal(false);
+          }}
         >
         </Cowritemodal>
       }
@@ -60,6 +69,7 @@ const CommunityWrite = () => {
         <div className={classes["write-header"]}>
           <h4>커뮤니티 글 작성</h4>
         </div>
+
         <Form.Select
           className={classes["catSelect"]}
           onChange={onChange}
@@ -88,6 +98,14 @@ const CommunityWrite = () => {
         >
           <TagWrite selected={tagSelected} onChange={setSelected} />
         </div>
+        <h1 className={baseClasses["co_h1"]}>관련 펀딩</h1>
+        <div
+          className={baseClasses["co_input"]}
+          onClick={() => setShowModal(true)}
+        >
+          {reviewedFunding ? reviewedFunding.title : "선택하려면 클릭해주세요."}
+        </div>
+
         <h1 className={baseClasses["co_h1"]}>커뮤니티 글 작성</h1>
         <input
           className={baseClasses["co_input"]}
@@ -125,6 +143,7 @@ const CommunityWrite = () => {
         title,
         content,
         category,
+        related_funding_id: reviewedFunding?.id,
       }),
     });
 

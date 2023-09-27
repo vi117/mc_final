@@ -1,25 +1,16 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
 import "./progressbar.css";
 import "../community/styles/tags.css";
-// import FundingsHome_placeholder from "./FundingsHome_placeholder";
-// import "./FundingsHome_Item.css"
 
-// const placerholder = "https://via.placeholder.com/100x100";
-
-// const GridContainer = styled("div")({
-//   display: "grid",
-//   gridTemplateColumns: "repeat(3, 1fr)",
-//   gridGap: "20px",
-//   justifyContent: "center",
-// });
 import FundingItem from "./component/Item";
 
 const FundingsHome = function() {
-  const [selected, setSelected] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selected = searchParams.getAll("tag");
+
   const {
     data: fetcherData,
     error: fetcherError,
@@ -44,8 +35,14 @@ const FundingsHome = function() {
       <div className={classes["funding_navarea"]}>
         <div className={classes["funding_tagsearch"]}>
           <TagsInput
+            classNames={{
+              input: classes["funding_taginput"],
+              tag: classes["funding_tag"],
+            }}
             value={selected}
-            onChange={setSelected}
+            onChange={(v) => {
+              setSearchParams({ tag: v });
+            }}
             name="fruits"
             placeHolder={selected.length === 0
               ? "태그로 원하는 펀딩을 찾아보세요!"
@@ -63,6 +60,7 @@ const FundingsHome = function() {
         {fetcherData.map((x) => (
           <FundingItem
             style={{ border: "none" }}
+            is_empahsis_tag={(t) => selected.includes(t)}
             key={x.id}
             item={x}
           />

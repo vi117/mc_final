@@ -29,6 +29,7 @@ function RegisterPage() {
   const [NickName, setNickName] = useState("");
   const [Phone, setPhone] = useState("");
   const [Address, setAddress] = useState("");
+  const [AddressDetail, setAddressDetail] = useState("");
   const [Article, setArticle] = useState("");
   const [show, setShow] = useState(true);
 
@@ -116,6 +117,8 @@ function RegisterPage() {
           name=""
           type="text"
           placeholder="상세주소"
+          value={AddressDetail}
+          onChange={(e) => setAddressDetail(e.target.value)}
         />
 
         <ValidationInput
@@ -167,6 +170,7 @@ function RegisterPage() {
       NickName,
       Phone,
       Address,
+      AddressDetail,
       Article,
       ProfileImage: profileImageRef.current,
     });

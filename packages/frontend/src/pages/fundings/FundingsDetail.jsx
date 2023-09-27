@@ -1,18 +1,21 @@
+import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { Button, Carousel, ListGroup, Spinner } from "react-bootstrap";
-import { NavLink, useParams } from "react-router-dom";
-import useFundingDetail from "../../hook/useFundingDetail";
-// import { useLoginId } from "../../hook/useLogin";
-import Profileimg from "../community/assets/user.png";
-import classes from "./FundingsDetail.module.css";
-
-import clsx from "clsx";
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+
+import { useAlertModal } from "../../hook/useAlertModal";
+import useFundingDetail from "../../hook/useFundingDetail";
+import Profileimg from "../community/assets/user.png";
+import { InterestButton } from "./component/InterestButton";
+import classes from "./FundingsDetail.module.css";
 import FundingDetailModal from "./FundingsDetailModal";
 
-import { withdrawFunding as withdrawFundingAPI } from "../../api/mod";
-import { InterestButton } from "./component/InterestButton";
+import {
+  setFundingInterest,
+  withdrawFunding as withdrawFundingAPI,
+} from "../../api/mod";
 
 const FundingsDetail = function() {
   const [showModal, setShowModal] = useState(false);
@@ -20,6 +23,8 @@ const FundingsDetail = function() {
   const { data: funding, error, isLoading, mutate } = useFundingDetail(id);
   const [isMoreView, setIsMoreView] = useState(false);
   const JoinBtnRef = useRef(null);
+  const { AlertModal, showAlertModal } = useAlertModal();
+  const navigate = useNavigate();
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
   };
@@ -91,6 +96,7 @@ const FundingsDetail = function() {
           handleClose={() => setShowModal(false)}
         />
       )}
+      <AlertModal />
 
       <div className={classes["funding_title"]}>
         <ul className={classes["funding_detail_tags"]}>
@@ -202,28 +208,30 @@ const FundingsDetail = function() {
             </Button>
           </div>
 
-          <div className={classes["funding_host_profile"]}>
-            <div>
-              <h4 className={classes["funding_host_profile_h4"]}>
-                창작자 소개
-              </h4>
-            </div>
-            <div style={{ display: "flex" }}>
-              <img
-                src={funding.host_profile_image ?? Profileimg}
-                className={classes["user"]}
-                alt="Profile"
-              />
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <span className={classes["host_nickname"]}>
-                  {funding.host_nickname}
-                </span>
-                <span className={classes["host_introduce"]}>
-                  {funding.host_introduction}
-                </span>
+          <NavLink to={`/userview/${funding.host_id}`}>
+            <div className={classes["funding_host_profile"]}>
+              <div>
+                <h4 className={classes["funding_host_profile_h4"]}>
+                  창작자 소개
+                </h4>
+              </div>
+              <div style={{ display: "flex" }}>
+                <img
+                  src={funding.host_profile_image ?? Profileimg}
+                  className={classes["user"]}
+                  alt="Profile"
+                />
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span className={classes["host_nickname"]}>
+                    {funding.host_nickname}
+                  </span>
+                  <span className={classes["host_introduce"]}>
+                    {funding.host_introduction}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          </NavLink>
         </div>
       </div>
 
@@ -281,6 +289,7 @@ const FundingsDetail = function() {
               // TODO(vi117): 환불 창 추가
               ? (
                 <Button
+                  ref={JoinBtnRef}
                   className={classes["withdraw_funding_btn"]}
                   onClick={withdrawFunding}
                 >
@@ -308,33 +317,38 @@ const FundingsDetail = function() {
   );
 
   async function setInterest(id, like = true) {
-    const url = new URL(
-      `/api/v1/fundings/${id}/interest`,
-      window.location.origin,
-    );
-    url.searchParams.append("disset", !like);
-    const res = await fetch(url.href, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (res.status === 401) {
-      return "Unauthorized";
-    } else if (res.status === 409) {
-      return "Conflict";
-    } else {
-      mutate({
-        ...funding,
-        interest_user_id: like ? funding.host_id : null,
-      });
+    if (!funding) {
+      return;
     }
+    const status = await setFundingInterest(id, like);
+    if (status === "Conflict") {
+      return;
+    }
+    if (status === "Unauthorized") {
+      // need login
+      await showAlertModal("error", "로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
+    mutate({
+      ...funding,
+      interest_user_id: like ? funding.host_id : null,
+    });
   }
+
   async function withdrawFunding() {
     if (!selectedReward) {
+      // unreachable
       throw new Error("not selected reward");
     }
-    await withdrawFundingAPI(funding.id, selectedReward.id);
+    try {
+      await withdrawFundingAPI(funding.id, selectedReward.id);
+    } catch (e) {
+      console.log(e);
+      await showAlertModal("withdraw error", e.message);
+      return;
+    }
     mutate({
       ...funding,
       participated_reward_id: null,

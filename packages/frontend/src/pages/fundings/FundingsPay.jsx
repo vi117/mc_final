@@ -13,7 +13,7 @@ export default function FundingsPay() {
   const userInfo = useLoginInfo();
   const [shippingInfo, setShippingInfo] = useState({
     address: userInfo?.address ?? "",
-    addressDetail: "",
+    addressDetail: userInfo?.address_detail ?? "",
     name: "",
   });
 
@@ -148,7 +148,6 @@ export default function FundingsPay() {
       body: JSON.stringify({
         address: shippingInfo.address + shippingInfo.addressDetail,
         recipient: shippingInfo.name,
-        // TODO(vi117): phone 입력 추가
         phone: userInfo.phone,
       }),
     });

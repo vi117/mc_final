@@ -23,18 +23,17 @@ export default function AdminPage() {
                 <div>거부된 펀딩 요청입니다.</div>
               )}
               <div className={classes["Fundingthumbnail"]}>
-                <img src={funding.thumbnail}>
-                </img>
+                <img src={funding.thumbnail}></img>
                 <div>{funding.funding_state}</div>
                 <h1 style={{ fontSize: "16px", textAlign: "left" }}>
                   {funding.title}
                 </h1>
-                <div className={classes["Funding-hmaile"]}>
+                <div className={classes["FundingHost"]}>
                   {funding.host_email}
+                  <div>{funding.host_nickname}</div>
+                  목표 {funding.target_value}원
                 </div>
-                <div>{funding.host_nickname}</div>
-                <div>목표 {funding.target_value}원</div>
-                <div>
+                <div className={classes["FundingTag"]}>
                   {funding.meta_parsed?.tags.map((tag) => (
                     <Badge key={tag}>{tag}</Badge>
                   ))}
