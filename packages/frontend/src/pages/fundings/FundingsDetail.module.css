@@ -140,13 +140,14 @@ object-fit: cover;
 
 .go_funding_btn,
 .joinBtn Button {
-  background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2;
   border: none;
   height:50px !important;
   width:100%;
   moz-transition: all .4s ease-in-out;
   -o-transition: all .4s ease-in-out;
   -webkit-transition: all .4s ease-in-out;
+  --bs-btn-disabled-bg: var(--gray) !important;
+  --bs-btn-bg: var(--green) !important;
 }
 
 .go_funding_btn:hover,
