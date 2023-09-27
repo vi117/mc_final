@@ -2,7 +2,7 @@
 .funding_container{
   padding: 10px 7px 50px 7px;
   margin:0 auto;
-  max-width: 1080px;
+  max-width: var(--max-content-width);
 }
 
 .funding_tagsearch {
@@ -39,81 +39,6 @@ margin-left: auto;
  column-gap: 20px;
 }
 
-/*펀딩 목록*/
-.funding_card {
-  align-items: center;
-  border-radius: 0 !important;
-  border: none !important;
-  padding-bottom: 50px;
-}
-
-
-.funding_item_thumbnail {
-  width:100%;
-  aspect-ratio: 5/4;
-  border: 1px solid var(--border);
-  object-fit: cover !important;
-}
-
-.funding_tags_area {
-  margin-top: 10px;
-  padding:5px 0px;
-  margin-bottom: 0px !important;
-  display:flex;
-}
-.funding_item_tags  {
-  color: var(--teritary);
-  font-size: 14px;
-  list-style: none;
-  padding-left: 0px;
-  margin-right: 7px;
-  margin-bottom: 0px !important;
-}
-
-.funding_item_tags > li::before{
-  content:'#'
-}
-
-.funding_item_title {
-  height:55px;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.01px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-}
-
-/*펀딩 달성도, 남은 기간, 달성 금액*/
-.funding_progress_percantage {
-  display:flex;
-  margin-top: 10px;
-  padding:5px 0px;
-  align-items: center;
-  color:var(--green);
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.funding_progress_percantage > span {
-  margin-left: 5px;
-  font-weight: 500;
-  color:var(--gray);
-  font-size: 12px;
-
-}
-.progress_resttime{
-  margin-left: auto !important;
-  font-size: 12px;
-  font-weight: 500;
-  color:var(--green);
-  text-align: center;
-  justify-content: center;
-  padding:0px 5px;
-  background-color: var(--green-light);
-  border-radius: 4px;
-}
-
 .funding_taginput {
   flex: 1 1 10%;
 }
@@ -130,20 +55,7 @@ margin-left: auto;
 
 @media screen and (max-width: 576px/* sm - small screens */) {
   .funding_itemarea{
-    grid-template-columns: repeat(1, 1fr);}
-
-  .funding_card{
-    display:flex;
-  }
-  .funding_item_thumbnail{
-    width:40%;
-  }
-  .funding_item_title, .funding_tags_area{
-    margin-left: 15px;
-  }
-
-  .funding_progress_percantage {
-    margin-left: 15px; 
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 

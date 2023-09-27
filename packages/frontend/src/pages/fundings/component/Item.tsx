@@ -2,7 +2,7 @@ import { FundingObject } from "dto";
 import { Card, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { DateToString } from "../../../hook/util";
-import classes from "../FundingsHome.module.css";
+import classes from "./Item.module.css";
 
 export function FundingItem({
   item: x,
