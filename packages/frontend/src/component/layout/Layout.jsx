@@ -7,7 +7,6 @@ export function Layout() {
     <div>
       <Header />
       <Outlet />
-      {/* <hr style={{ maxWidth: "1080px", margin: "0px auto" }} /> */}
       <Footer />
     </div>
   );
