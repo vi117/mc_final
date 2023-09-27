@@ -3,7 +3,7 @@ import classes from "./Footer.module.css";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className={classes.footer}>
       <div className={classes["footer_area"]}>
         <Container>
           <div className={classes["footer_container"]}>

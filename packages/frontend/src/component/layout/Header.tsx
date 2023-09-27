@@ -68,7 +68,7 @@ export function Header() {
 
   return (
     <>
-      <header className={classes.header_container}>
+      <Container as={"header"} className={classes.header_container}>
         <Navbar expand="sm" className={classes.header_navbar}>
           <Container className={classes.header_brandcontainer}>
             <NavLink to={"/"}>
@@ -132,7 +132,7 @@ export function Header() {
             </div>
           </Nav>
         </Navbar>
-      </header>
+      </Container>
     </>
   );
 }
