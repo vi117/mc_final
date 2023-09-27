@@ -179,7 +179,7 @@ const FundingsWrite = function() {
               </div>
             </Form.Group>
           </div>
-          <hr></hr>
+          <hr className={classes.hr} />
 
           <div
             className={classes.item_container}
@@ -241,7 +241,7 @@ const FundingsWrite = function() {
               />
             </div>
           </div>
-          <hr></hr>
+          <hr className={classes.hr} />
 
           <div
             className={classes.item_container}
@@ -256,7 +256,7 @@ const FundingsWrite = function() {
               />
             </div>
           </div>
-          <hr></hr>
+          <hr className={classes.hr} />
           <div
             className={classes.item_container}
             ref={MakerAreaRef}

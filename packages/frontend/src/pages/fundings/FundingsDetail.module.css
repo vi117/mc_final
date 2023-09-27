@@ -493,7 +493,7 @@ border-bottom: 1px solid var(--border);
   .funding_detail_enddate{
     border-right:1px solid var(--secondary);
   }
-  hr{
+  .hr{
     padding:0px !important;
     margin: 0px !important;
   }
