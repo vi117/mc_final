@@ -208,7 +208,7 @@ const FundingsDetail = function() {
             </Button>
           </div>
 
-          <NavLink to={`/userview/${funding.host_id}`}>
+          <NavLink to={`/hostprofile/${funding.host_id}`}>
             <div className={classes["funding_host_profile"]}>
               <div>
                 <h4 className={classes["funding_host_profile_h4"]}>

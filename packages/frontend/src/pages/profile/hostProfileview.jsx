@@ -1,12 +1,16 @@
 import Profileimg from "../community/assets/user.png";
 import FundingItem from "../fundings/component/Item";
-import classes from "./UserProfileView.module.css";
+import classes from "./hostProfileview.module.css";
 // import { useState } from "react";
+import { useParams } from "react-router-dom";
+import useFundingDetail from "../../hook/useFundingDetail";
 import useFundings from "../../hook/useFundings";
 // import { useLoginInfo } from "../../hook/useLogin";
 // import { UserObject } from "../";
 
-const UserProfileView = function() {
+const HostProfile = function() {
+  const { id } = useParams();
+  const { data: funding, error, isLoading } = useFundingDetail(id);
   // const user1 = UserObject();
   // const userInfo = useLoginInfo();
   // const [selected, setSelected] = useState([]);
@@ -20,11 +24,11 @@ const UserProfileView = function() {
     // tags: selected.length > 0 ? selected : undefined,
   });
 
-  if (fetcherIsLoading) {
+  if (fetcherIsLoading ?? isLoading) {
     return <div>로딩 중..</div>;
   }
 
-  if (fetcherError) {
+  if (fetcherError ?? error) {
     return <div>에러가 발생했습니다.</div>;
   }
 
@@ -32,10 +36,15 @@ const UserProfileView = function() {
     <>
       <div className={classes["funding_container"]}>
         <div style={{ display: "flex" }}>
-          <img src={Profileimg} className={classes["user"]} />
+          <img
+            src={funding.host_profile_image ?? Profileimg}
+            className={classes["user"]}
+          />
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span className={classes["host_nickname"]}>닉네임</span>
-            <span>소개글</span>
+            <span className={classes["host_nickname"]}>
+              {funding.host_nickname}
+            </span>
+            <span>{funding.host_introduction}</span>
           </div>
         </div>
         <div
@@ -59,4 +68,4 @@ const UserProfileView = function() {
   );
 };
 
-export default UserProfileView;
+export default HostProfile;
