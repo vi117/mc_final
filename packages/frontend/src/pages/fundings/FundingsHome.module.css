@@ -114,7 +114,12 @@ margin-left: auto;
   border-radius: 4px;
 }
 
-
+.funding_taginput {
+  flex: 1 1 10%;
+}
+.funding_tag{
+  flex: 0 0 auto;
+}
 
 /*반응형*/
 @media screen and (max-width: 768px/* md - medium screens */) {

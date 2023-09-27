@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
@@ -19,7 +18,9 @@ import "../community/styles/tags.css";
 import FundingItem from "./component/Item";
 
 const FundingsHome = function() {
-  const [selected, setSelected] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selected = searchParams.getAll("tag");
+
   const {
     data: fetcherData,
     error: fetcherError,
@@ -44,8 +45,14 @@ const FundingsHome = function() {
       <div className={classes["funding_navarea"]}>
         <div className={classes["funding_tagsearch"]}>
           <TagsInput
+            classNames={{
+              input: classes["funding_taginput"],
+              tag: classes["funding_tag"],
+            }}
             value={selected}
-            onChange={setSelected}
+            onChange={(v) => {
+              setSearchParams({ tag: v });
+            }}
             name="fruits"
             placeHolder={selected.length === 0
               ? "태그로 원하는 펀딩을 찾아보세요!"

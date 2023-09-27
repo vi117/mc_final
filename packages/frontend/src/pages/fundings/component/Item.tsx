@@ -27,7 +27,11 @@ export function FundingItem({
             <div className={classes["funding_tags_area"]}>
               {x.tags.map((t) => (
                 <ul className={classes["funding_item_tags"]}>
-                  <li>{t.tag}</li>
+                  <li>
+                    <NavLink to={`/fundings?tag=${t.tag}`}>
+                      {t.tag}
+                    </NavLink>
+                  </li>
                 </ul>
               ))}
             </div>
