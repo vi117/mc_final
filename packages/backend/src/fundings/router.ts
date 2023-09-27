@@ -14,7 +14,11 @@ import {
   assert_param,
   BadRequestError,
 } from "@/util/assert_param";
-import { parseQueryToNumber, parseQueryToStringList } from "@/util/query_param";
+import {
+  parseQueryToNumber,
+  parseQueryToString,
+  parseQueryToStringList,
+} from "@/util/query_param";
 import assert from "assert";
 import {
   approveFundingRequest,
@@ -39,6 +43,14 @@ async function getAllFundingHandler(req: Request, res: Response) {
   const tags = parseQueryToStringList(queryParams.tags);
   const interest = queryParams.interest === "true";
   const participated = queryParams.participated === "true";
+  const reviewed = parseQueryToString(queryParams?.reviewed);
+
+  assert_param(
+    reviewed === undefined || reviewed === "reviewed"
+      || reviewed === "not_reviewed",
+    "reviewed must be 'reviewed' or 'not_reviewed'",
+  );
+
   const user = req.user;
 
   const include_deleted = queryParams.include_deleted === "true"
@@ -70,6 +82,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
     include_deleted,
     interest,
     participated,
+    reviewed,
   });
   res.json(result).status(StatusCodes.OK);
 }

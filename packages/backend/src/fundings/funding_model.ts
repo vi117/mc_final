@@ -48,6 +48,10 @@ export interface FindAllUsersOptions {
    * participated filter
    */
   participated?: boolean;
+  /**
+   * user reviewed(or not) funding filter
+   */
+  reviewed?: "reviewed" | "not_reviewed";
 }
 
 export interface FindOneOptions {
@@ -72,6 +76,7 @@ export class FundingsRepository {
     const host_id = options?.host_id;
     const interest = options?.interest;
     const participated = options?.participated;
+    const reviewed = options?.reviewed;
 
     const query = this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
@@ -97,6 +102,33 @@ export class FundingsRepository {
             .select([
               "interest.user_id as interest_user_id",
             ]))
+      .$if(user_id !== undefined, (qb) => {
+        if (reviewed === "reviewed") {
+          // user reviewed article
+          return qb.innerJoin(
+            "articles",
+            "fundings.id",
+            "articles.related_funding_id",
+          )
+            .where("articles.related_funding_id", "=", user_id)
+            .select([
+              "articles.id as reviewed_article_id",
+            ]);
+        } else {
+          // user not reviewed article
+          return qb.leftJoin(
+            "articles",
+            "fundings.id",
+            "articles.related_funding_id",
+          )
+            .$if(reviewed === "not_reviewed", (qb) => {
+              return qb.where("articles.related_funding_id", "is", null);
+            })
+            .select([
+              "articles.id as reviewed_article_id",
+            ]);
+        }
+      })
       .$if(user_id !== null, (qb) =>
         participated
           ? qb.innerJoin(
