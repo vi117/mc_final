@@ -19,18 +19,21 @@
 }
 
 .funding_profile_container{
+    height:500px;
+    position:sticky;
+    top: 50px !important;
     width:220px;
     display: flex;
     flex-direction: column;
-    min-height:650px;
+    top: 50%;
 }
 .profile_container{
     margin-top: 20px;
 }
 .profile_container > button {
-    background-color: transparent !important;
+    background-color: transparent;
     width:100%;
-    border: 1px solid var(--secondary) !important;
+    border: 1px solid var(--secondary);
     margin-bottom: 10px;
     border-radius: none !important;
     padding: 10px;
@@ -42,20 +45,24 @@
   .profile_container > button:hover,
   .profile_container > button:active,
   .profile_container > button:focus {
-    border: 1px solid var(--green) !important;
+    border: 1px solid var(--green);
     color: var(--green);
   }
 
+  .profile_container > button > p{
+    display: none;
+  }
 
-.go_write{
+  .go_write{
     margin-top: 10px;
-    color: var(--white);
+    border: none !important;
+    color: var(--white) !important;
     border: none !important;
     text-align: left;
     padding: 10px;
     width:100%;
     border-radius: 0px 15px 0px 15px;
-    background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2;
+    background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2 !important;
     moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
@@ -80,7 +87,7 @@ padding: 30px 10px;
 
 .profile_title:hover, 
 .go_write:hover{
-    background-color: var(--green-dark);
+    background-color: var(--green-dark) !important;
 }
 
 .profile_title > p{
@@ -99,10 +106,22 @@ padding: 30px 10px;
     border-radius: 5px;
 }
 
-.info_area, .story_area, .maker_area, .reward_area {
-margin-bottom: 50px;
+.item_container{
+    padding-top: 50px;
+}
+.item_container, .item_container_title{
+    height:100vw;
 }
 
+.info_area, .story_area, .maker_area, .reward_area {
+padding-bottom: 40px;
+}
+
+
+.story_area_editor{
+    padding-top: 20px;
+    padding-bottom: 60px;
+}
 .reward_area{
     display: flex;
     flex-direction: column;
@@ -113,7 +132,7 @@ margin-bottom: 50px;
     align-items: center !important;
 }
 
-.date_area > span{
+.date_item > span{
     font-weight: 700;
     font-size: 14px;
     margin-right: 10px;
@@ -219,6 +238,7 @@ margin-bottom: 10px;
     background-color: var(--green-light);
     padding:20px;
     border-radius: 7px;
+    margin-bottom: 40px;
 }
 
 .reward_btn{
@@ -234,3 +254,102 @@ margin-bottom: 10px;
     border: 1px solid var(--green);
     color: var(--white);
 }
+
+.hr{
+    border-color:var(--gray);
+    display:none;
+}
+
+
+
+  @media screen and (max-width: 870px) {
+    .funding_write_wrap{
+        margin-top: -10px;
+        padding: 0px 7px;
+        flex-direction: column;
+    }
+
+    .item_container{
+        height:auto;
+        padding: 10px 0px;
+    }
+    
+    .hr{
+        display:block;
+    }
+    .funding_profile_container{
+        top: 0px !important;
+        padding:10px 0px 20px 0px;
+        z-index: 1;
+        background-color: var(--white);
+        height:auto;
+        width:100%;
+        display: inline-block;
+        align-items: center;
+    }
+
+    .item_container{
+        padding-top: 100px !important;
+    }
+
+
+    .profile_title{
+        display:none;
+    }
+    .profile_container{
+        top:0;
+    position: sticky;
+    margin-top: 0px;
+    width:100%;
+    display:flex;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    }
+    .funding_write_container{
+        width:100%;
+    }
+    .go_write{
+        width:20%;
+        font-size: 13px;
+        padding: 10px;
+        margin-top: 0px;
+        border-radius: 0px 0px 0px 0px;
+    }
+    .profile_container > button{
+        font-size: 13px;
+        height:60px;
+        text-align: center;
+        margin-bottom: 0px;
+        margin-right: 5px;
+    }
+
+    .profile_container > button > span{
+        display:none;
+    }
+    .profile_container > button > p{
+        display: inline-block;
+        margin-bottom: 0px;
+      }
+
+    .funding_write_container{
+        padding:20px 0px;
+    }
+
+   .hr{
+    margin-bottom: 40px !important;
+   }
+
+  }
+  
+  @media screen and (max-width: 620px){
+.date_area{
+    display:contents;
+}
+.date_item{
+    margin-top: 10px;
+    align-items: center;
+    width: 100%;
+    display:flex;
+}
+  }

@@ -43,7 +43,7 @@ export function CommunityDetail() {
         </div>
         <div className={classes["createdArea"]}>
           <NavLink
-            to={`/userview/${item.author_id}`}
+            to={`/host-profile/${item.author_id}`}
             className={classes["linkto"]}
           >
             <img src={Profileimg} className={classes["user"]} alt="Profile" />

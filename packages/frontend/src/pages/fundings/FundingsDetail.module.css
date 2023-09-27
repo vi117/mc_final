@@ -140,13 +140,14 @@ object-fit: cover;
 
 .go_funding_btn,
 .joinBtn Button {
-  background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2;
   border: none;
   height:50px !important;
   width:100%;
   moz-transition: all .4s ease-in-out;
   -o-transition: all .4s ease-in-out;
   -webkit-transition: all .4s ease-in-out;
+  --bs-btn-disabled-bg: var(--gray) !important;
+  --bs-btn-bg: var(--green) !important;
 }
 
 .go_funding_btn:hover,
@@ -182,9 +183,10 @@ object-fit: cover;
   width:100%;
   border: 1px solid var(--secondary);
   border-radius: 7px ;
-  display:flex;
-  flex-direction: column;
   padding: 15px;
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
 .funding_host_profile_h4{
@@ -211,6 +213,32 @@ object-fit: cover;
   width:100%;
 }
 
+.edit_btn_area{
+  right:0;
+  margin-right: 15px;
+  position: absolute;
+}
+
+.edit_btn{
+  color:var(--green);
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  background-color: var(--white);
+  padding:5px 10px;
+  border: 1px solid var(--green);
+  border-radius: 7px;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+}
+
+.edit_btn:hover,
+.edit_btn:active{
+  font-weight: 700;
+  border: 1px solid var(--green);
+  background-color: var(--green-light);
+  color:var(--green);
+}
 .content-wrapper {
   max-height: 630px; 
   overflow: hidden;
@@ -465,11 +493,14 @@ border-bottom: 1px solid var(--border);
   .funding_detail_enddate{
     border-right:1px solid var(--secondary);
   }
-  hr{
+  .hr{
     padding:0px !important;
     margin: 0px !important;
   }
 
+  .funding_host_profile{
+    margin-bottom: 20px;
+  }
   .funding_profile_text{
     font-size: 20px;
   }
@@ -499,6 +530,6 @@ border-bottom: 1px solid var(--border);
     width:100%;
   }
   .reportbtn{
-    margin: 20px 0px !important;
+    margin: 30px 0px !important;
   }
 }

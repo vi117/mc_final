@@ -6,6 +6,7 @@ import "./progressbar.css";
 import "../community/styles/tags.css";
 
 import FundingItem from "./component/Item";
+// import FundingsHome_placeholder from "./FundingsHome_placeholder";
 
 const FundingsHome = function() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +24,7 @@ const FundingsHome = function() {
 
   if (fetcherIsLoading) {
     return <div>로딩 중..</div>;
+    // <FundingsHome_placeholder/>);
   }
 
   if (fetcherError) {

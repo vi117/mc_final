@@ -4,6 +4,7 @@ import { Button, Carousel, ListGroup, Spinner } from "react-bootstrap";
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useLoginId } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
 import useFundingDetail from "../../hook/useFundingDetail";
@@ -28,7 +29,7 @@ const FundingsDetail = function() {
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
   };
-  // const user_id = useLoginId();
+  const user_id = useLoginId();
   const [selectedReward, setSelectedReward] = useState(null);
   useEffect(() => {
     if (isLoading) return;
@@ -208,27 +209,42 @@ const FundingsDetail = function() {
             </Button>
           </div>
 
-          <NavLink to={`/userview/${funding.host_id}`}>
+          <NavLink to={`/host-profile/${funding.host_id}`}>
             <div className={classes["funding_host_profile"]}>
               <div>
-                <h4 className={classes["funding_host_profile_h4"]}>
-                  창작자 소개
-                </h4>
-              </div>
-              <div style={{ display: "flex" }}>
-                <img
-                  src={funding.host_profile_image ?? Profileimg}
-                  className={classes["user"]}
-                  alt="Profile"
-                />
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span className={classes["host_nickname"]}>
-                    {funding.host_nickname}
-                  </span>
-                  <span className={classes["host_introduce"]}>
-                    {funding.host_introduction}
-                  </span>
+                <div>
+                  <h4 className={classes["funding_host_profile_h4"]}>
+                    창작자 소개
+                  </h4>
                 </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <img
+                    src={funding.host_profile_image ?? Profileimg}
+                    className={classes["user"]}
+                    alt="Profile"
+                  />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <span className={classes["host_nickname"]}>
+                      {funding.host_nickname}
+                    </span>
+                    <span className={classes["host_introduce"]}>
+                      {funding.host_introduction}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className={classes.edit_btn_area}>
+                {
+                  <>
+                    {user_id === funding.host_id && (
+                      <NavLink to={`/fundings/${id}/edit`}>
+                        <button className={classes.edit_btn}>
+                          펀딩<br></br>수정하기
+                        </button>
+                      </NavLink>
+                    )}
+                  </>
+                }
               </div>
             </div>
           </NavLink>
@@ -289,6 +305,7 @@ const FundingsDetail = function() {
               // TODO(vi117): 환불 창 추가
               ? (
                 <Button
+                  ref={JoinBtnRef}
                   className={classes["withdraw_funding_btn"]}
                   onClick={withdrawFunding}
                 >

@@ -12,3 +12,5 @@ export default function useUserInfo(id: number) {
     fetcher,
   );
 }
+
+export { useUserInfo };

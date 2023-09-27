@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { loginRevalidate, useLoginId } from "../../hook/useLogin";
+import { loginRevalidate, useLoginId, useLoginInfo } from "../../hook/useLogin";
 import LogoSvg from "../Logo";
 import SearchModal from "../SearchModal";
 import classes from "./Header.module.css";
@@ -64,11 +64,13 @@ function LoginButton() {
 
 export function Header() {
   const userId = useLoginId();
+  const userInfo = useLoginInfo();
+
   console.log(userId);
 
   return (
     <>
-      <header className={classes.header_container}>
+      <Container as={"header"} className={classes.header_container}>
         <Navbar expand="sm" className={classes.header_navbar}>
           <Container className={classes.header_brandcontainer}>
             <NavLink to={"/"}>
@@ -90,6 +92,14 @@ export function Header() {
               {userId !== null && (
                 // TODO: 유저닉네임 노출
                 <Nav>
+                  <div
+                    style={{
+                      marginTop: "6px",
+                      fontFamily: "Noto Sans KR, sans-serif",
+                    }}
+                  >
+                    {userInfo.nickname}
+                  </div>
                   <NavLink to={`/profile`}>
                     <span className={classes.header_logo_nav}>
                       <CgProfile
@@ -132,7 +142,7 @@ export function Header() {
             </div>
           </Nav>
         </Navbar>
-      </header>
+      </Container>
     </>
   );
 }
