@@ -117,8 +117,8 @@ object-fit: cover;
   display:flex;
 }
 
-.funding_btn > button
-{
+.funding_btn_area .share_button,
+ .interest_btn {
   width:50px !important;
   height:50px !important;
   color: var(--gray) !important;
@@ -137,16 +137,32 @@ object-fit: cover;
 }
 
 
+
+.go_funding_btn,
+.joinBtn Button {
+  background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2;
+  border: none;
+  height:50px !important;
+  width:100%;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+}
+
+.go_funding_btn:hover,
+.withdraw_funding_btn:hover {
+  background-color: var(--green-dark) !important;
+}
+
 .withdraw_funding_btn{
-  background-color: transparent !important;
-  border: 1px solid var(--green) !important;
+  color:var(--green-dark);
+  background:none !important;
+  background-color: var(--green-light) !important;
+  border: 1px solid var(--green-dark) !important;
   height:50px !important;
   width:100%;
 }
 
-.go_funding_btn:hover{
-  background-color: var(--green-dark) !important;
-}
 /*share, interest btn svg*/
 .btn_svg {
   color: var(--gray);
@@ -327,15 +343,6 @@ border-bottom: 1px solid var(--border);
   padding:3px 7px;
   color:var(--green);
   background-color: var(--green-light);
-}
-
-.fixed-reward-area {
-  position: fixed; /* 요소를 고정합니다. */
-  bottom: 0; /* 아래로 고정합니다. */
-  left: 0; /* 왼쪽으로 고정합니다. */
-  right: 0; /* 오른쪽으로 고정합니다. */
-  background-color: white; /* 요소의 배경색을 설정합니다. */
-  z-index: 999; /* 다른 요소 위에 표시합니다. */
 }
 
 
