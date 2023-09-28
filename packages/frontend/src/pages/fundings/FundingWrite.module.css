@@ -2,6 +2,7 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    scroll-behavior:unset !important;
 }
 
 
@@ -16,78 +17,83 @@
     margin:0 auto;
     max-width: 1080px;
     display:flex;
+    justify-content: center;
 }
 
 .funding_profile_container{
     height:500px;
+    top: 50px;
     position:sticky;
-    top: 50px !important;
     width:220px;
-    display: flex;
     flex-direction: column;
-    top: 50%;
 }
 .profile_container{
-    margin-top: 20px;
+    align-items: end;
+    margin-top: 10px;
 }
 .profile_container > button {
     background-color: transparent;
-    width:100%;
-    border: 1px solid var(--secondary);
-    margin-bottom: 10px;
-    border-radius: none !important;
-    padding: 10px;
+    width:80%;
+    border: none;
+    padding: 10px 20px;
     text-align: left;
-    color:var(--teritary);
+    margin-bottom:10px;
+    color:var(--primary);
     font-size: 14px;
     letter-spacing: -0.01em;
+    border-radius: 20px;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
   }
   .profile_container > button:hover,
   .profile_container > button:active,
   .profile_container > button:focus {
-    border: 1px solid var(--green);
-    color: var(--green);
-  }
-
-  .profile_container > button > p{
-    display: none;
+    background-color: var(--border);
   }
 
   .go_write{
-    margin-top: 10px;
-    border: none !important;
-    color: var(--white) !important;
-    border: none !important;
-    text-align: left;
-    padding: 10px;
-    width:100%;
-    border-radius: 0px 15px 0px 15px;
-    background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2 !important;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
+    border-radius: 20px;
+    color: var(--green) !important;  
     transition: background-color 1s;
 }
 
 
 .profile_title{
-    border-radius: 0px 15px 0px 15px;
+    border-radius: 25px 25px 0px 25px;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(90deg, #1FAB89, transparent) #62D2A2;
+    background-color: var(--green);
 justify-content: center;
 padding: 30px 10px;
-    color:white;
-    font-weight: 500;
-    font-size: 16px;
-    letter-spacing: -0.01em;
     place-content: center;
     transition: background-color 1s;
 }
 
-.profile_title:hover, 
+.list_big{
+    font-size:16px !important;
+}
+
+.list_big b{
+    color:var(--white);
+    font-weight: 700;
+}
+
+.profile_title > li{
+    font-size: 13px;
+    color:var(--white);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    padding-left: 20px;
+}
+
 .go_write:hover{
-    background-color: var(--green-dark) !important;
+    background-color: var(--green)!important;
+    color:var(--white) !important;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
 }
 
 .profile_title > p{
@@ -95,8 +101,8 @@ padding: 30px 10px;
     font-size: 14px;
 }
 .funding_write_container{
-    margin: 0px auto;
-    width:70%;
+    margin-left: 80px;
+    width:80%;
 }
 
 .funding_write_tagsearch{
@@ -107,10 +113,11 @@ padding: 30px 10px;
 }
 
 .item_container{
-    padding-top: 50px;
+    padding-top: 60px;
 }
 .item_container, .item_container_title{
     height:100vw;
+
 }
 
 .info_area, .story_area, .maker_area, .reward_area {
@@ -146,6 +153,14 @@ height:45px;
 padding:0px 15px;
 }
 
+.profile_container > button > p{
+    margin: 0px;
+    display:block;
+}
+
+.profile_container ul {
+    display:none;
+}
 
 .date_picker:focus{
     border:1px solid var(--green) !important;
@@ -172,8 +187,7 @@ line-height: 24px;
 }
 
 .guide{
-    background-color: var(--green-light);
-    color:var(--primary);
+    background-color: var(--border);
     font-size: 14px;
     letter-spacing: -0.01em;
     padding:20px !important;
@@ -235,7 +249,7 @@ margin-bottom: 10px;
 }
 
 .reward_item_area{
-    background-color: var(--green-light);
+    background-color: var(--border);
     padding:20px;
     border-radius: 7px;
     margin-bottom: 40px;
@@ -255,17 +269,25 @@ margin-bottom: 10px;
     color: var(--white);
 }
 
-.hr{
-    border-color:var(--gray);
+hr{
     display:none;
 }
 
 
 
-  @media screen and (max-width: 870px) {
+  @media screen and (max-width: 900px) {
+
+    .funding_write_wrap h1 {
+        font-size: 18px;
+    }
+
+    .profile_container ul {
+        display:block;
+    }
+
     .funding_write_wrap{
         margin-top: -10px;
-        padding: 0px 7px;
+        padding: 0px;
         flex-direction: column;
     }
 
@@ -274,40 +296,61 @@ margin-bottom: 10px;
         padding: 10px 0px;
     }
     
-    .hr{
+    .guide{
+        background-color: var(--beige);
+        border: 1px solid var(--beige);
+        margin: 30px 0px;
+    }
+    hr{
+        border-color:var(--gray);
+        margin-bottom: 30px !important;
         display:block;
     }
+
+    .profile_container{
+        border: none; 
+    }
+
+
     .funding_profile_container{
-        top: 0px !important;
-        padding:10px 0px 20px 0px;
+        top:0;
         z-index: 1;
         background-color: var(--white);
         height:auto;
         width:100%;
         display: inline-block;
         align-items: center;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 6px 7px, rgba(0, 0, 0, 0.02) 0px 1px 0px;
     }
 
     .item_container{
-        padding-top: 100px !important;
+        padding-top: 130px !important;
     }
 
+    .item_container_title{
+        margin-top: 30px;
+    }
+    .info_area, .story_area, .maker_area, .reward_area {
+        margin-bottom: 20px;
+        }
 
     .profile_title{
         display:none;
     }
     .profile_container{
-        top:0;
+    height:auto;
+    padding:20px 7px;
     position: sticky;
-    margin-top: 0px;
     width:100%;
-    display:flex;
     flex-direction: row !important;
     align-items: center;
     justify-content: center;
     }
     .funding_write_container{
+        margin:0px;
+        padding: 10px 20px;
         width:100%;
+        background-color: #f9f9f9;
     }
     .go_write{
         width:20%;
@@ -318,28 +361,23 @@ margin-bottom: 10px;
     }
     .profile_container > button{
         font-size: 13px;
+        padding:10px;
+        border-radius: 0px;
         height:60px;
+        border-radius: 7px;
         text-align: center;
         margin-bottom: 0px;
         margin-right: 5px;
+        word-break:  keep-all;
+        border-radius: none;
     }
 
-    .profile_container > button > span{
-        display:none;
-    }
-    .profile_container > button > p{
-        display: inline-block;
-        margin-bottom: 0px;
-      }
-
-    .funding_write_container{
-        padding:20px 0px;
-    }
-
-   .hr{
-    margin-bottom: 40px !important;
-   }
-
+   .item_container, .item_container_title{
+    height:auto;
+}
+.reward_item_area{
+    background-color: var(--beige);
+}
   }
   
   @media screen and (max-width: 620px){

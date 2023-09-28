@@ -5,7 +5,7 @@
 .funding_detail_container{
   padding: 10px 7px 50px 7px;
   margin:0 auto;
-  max-width: 1080px;
+  width: 1080px;
 }
 
 /*title area*/
@@ -54,12 +54,12 @@
 
 /*thumbnail*/
 .funding_thumbnail_carousel {
-  width:57%;
+  width:594px ;
 }
 
-.carousel_thumbnail{
-width:594px;
-height:445px;
+.carousel_thumbnail {
+width:594px ;
+height:445px ;
 object-fit: cover;
 }
 
@@ -103,7 +103,7 @@ object-fit: cover;
 
 /*description-table*/
 .funding_profile_table{
-  margin: 20px 0px;
+  margin: 30px 0px;
   font-size: 13px;
   color: var(--primary);
   width:100%;
@@ -166,7 +166,7 @@ object-fit: cover;
 
 /*share, interest btn svg*/
 .btn_svg {
-  color: var(--gray);
+  fill:var(--gray);
   width:24px;
   height:24px;
 }
@@ -251,16 +251,9 @@ object-fit: cover;
 }
 
 .content img{
-  width:590px !important;
-}
-.content img {
-  width: 594px;
-  max-width:594px;
+  width:590px;
 }
 
-.content {
-  width:594px;
-}
 
 .more-view-button{
   margin-top: 20px;
@@ -457,6 +450,7 @@ border-bottom: 1px solid var(--border);
 @media screen and (max-width: 1080px) {
   .funding_title > h1{
     font-size:24px;
+    margin-top: 5px;
   }
   .funding_detail_container{
     width:100%;}
@@ -469,12 +463,13 @@ border-bottom: 1px solid var(--border);
   .funding_detail_description,
   .reward_area
   {
+    width: 100%;
     margin-left: 0px !important;
-    width:100%;
+  
   }
 
   .date_value_area{
-    padding: 20px 10px;
+    padding: 30px 10px;
     text-align: center;
     display:flex;
     justify-content: center;
@@ -490,6 +485,10 @@ border-bottom: 1px solid var(--border);
    display:flex;
     margin: 0px !important;
   }
+
+  .funding_btn_area{
+   padding:10px 0px;
+  }
   .funding_detail_enddate{
     border-right:1px solid var(--secondary);
   }
@@ -499,7 +498,7 @@ border-bottom: 1px solid var(--border);
   }
 
   .funding_host_profile{
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
   .funding_profile_text{
     font-size: 20px;

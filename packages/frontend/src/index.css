@@ -2,10 +2,11 @@
   --max-content-width: 1080px;
   font-family: 'Roboto', 'Noto Sans KR', sans-serif;
   --black: #000;
+  --primary: #242424;
 
 
-  --teritary: #6d6d6d;
-  --teritary-rgb: 109, 109, 109;
+  --teritary: #A2A2A2;
+  --teritary-rgb: 162, 162, 162;
 
   --gray: #9e9e9e;
   --gray-rgb: 158, 158, 158;
@@ -22,21 +23,23 @@
   --white-rgb: 255, 255, 255;
 
   /*포인트 컬러*/
-  --green-dark: #206A5D;
+  --green-dark: #1C6758;
   --green-dark-rgb: 32, 106, 93;
 
-  --green: #1FAB89;
-  --green-rgb: 31, 171, 137;
+  --green: #2aa971;
+  --green-rgb: 42, 169, 113;
 
   --green-light: #EBECF1;
   --green-light-rgb:235, 236, 241;
 
 
-  --blue: #1F4068;
-  --blue-rgb:31, 64, 104;
+  --blue: #0079ff;
+  --blue-rgb:0, 121, 255;
 
-  --beige: #d6cda4;
-  --beige-rgb: 214, 205, 164;
+  --beige: #edeae3;
+  --beige-rgb: 237, 234, 227;
+
+
 
   /*카테고리용 그림자*/
   --boxshadow: rgba(0, 0, 0, 0.08) 0px 6px 6px -7px;

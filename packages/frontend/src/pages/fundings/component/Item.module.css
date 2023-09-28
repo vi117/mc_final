@@ -77,16 +77,34 @@
 
 @media screen and (max-width: 576px/* sm - small screens */) {
     .funding_card{
+      width:100%;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 0px;
       display:flex;
+      padding:30px 0px;
+      border-bottom: 1px solid var(--border) !important;
+    }
+
+    .card{
+      width:35%;
     }
     .funding_item_thumbnail{
-      width:40%;
+      aspect-ratio: 5/4;
+    }
+
+    .responsive_wrap{
+      flex-direction: row;
+      align-items: center;
+      width:60%;
     }
     .funding_item_title, .funding_tags_area{
+      margin-top: 0px;
       margin-left: 15px;
     }
   
     .funding_progress_percantage {
-      margin-left: 15px; 
+      margin-top: 0px;
+      margin-left: 15px;
     }
 }

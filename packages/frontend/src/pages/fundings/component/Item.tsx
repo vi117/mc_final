@@ -20,14 +20,16 @@ export function FundingItem({
       {...rest}
     >
       <div className={classes["funding_card"]}>
-        <NavLink to={`/fundings/${x.id}`}>
-          <img
-            src={x.thumbnail}
-            className={classes["funding_item_thumbnail"]}
-            alt="썸네일 이미지"
-          />
-        </NavLink>
-        <div>
+        <div className={classes["card"]}>
+          <NavLink to={`/fundings/${x.id}`}>
+            <img
+              src={x.thumbnail}
+              className={classes["funding_item_thumbnail"]}
+              alt="썸네일 이미지"
+            />
+          </NavLink>
+        </div>
+        <div className={classes["responsive_wrap"]}>
           <ul className={classes["funding_tags_area"]}>
             {x.tags.map((t) => (
               <li
