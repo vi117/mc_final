@@ -1,10 +1,12 @@
 import Button from "@mui/material/Button";
 import { Badge, Container } from "react-bootstrap";
 import { fundingApprove, fundingReject } from "src/api/mod";
+import useAlertModal from "src/hook/useAlertModal";
 import useFundingRequest from "../../hook/useFundingRequest";
 import classes from "./admin.module.css";
 
 export default function AdminPage() {
+  const { AlertModal, showAlertModal } = useAlertModal();
   const { data, error, isLoading, mutate } = useFundingRequest();
 
   if (isLoading) {
@@ -15,6 +17,7 @@ export default function AdminPage() {
   }
   return (
     <Container>
+      <AlertModal />
       <h3 className={classes["h3"]}>펀딩 심사 관리</h3>
       <div className={classes["fundingState"]}>
         {data && data.map((funding) => {
@@ -65,8 +68,7 @@ export default function AdminPage() {
       await fundingApprove(id);
     } catch (e) {
       if (e instanceof Error) {
-        // TODO(vi117): show error message modal
-        alert("요청이 실패했습니다." + e.message);
+        await showAlertModal("요청 실패", "요청이 실패했습니다." + e.message);
       } else throw e;
       return;
     }
@@ -77,8 +79,7 @@ export default function AdminPage() {
       await fundingReject(id);
     } catch (e) {
       if (e instanceof Error) {
-        // TODO(vi117): show error message modal
-        alert("요청이 실패했습니다." + e.message);
+        await showAlertModal("요청 실패", "요청이 실패했습니다." + e.message);
       } else throw e;
       return;
     }
