@@ -12,6 +12,7 @@
     aspect-ratio: 5/4;
     border: 1px solid var(--border);
     object-fit: cover !important;
+    border-radius: 7px;
 }
 
 .funding_tags_area {

@@ -6,6 +6,9 @@
     각 컴포넌트에서 따로 border 속성 줄 것*/
     outline:none !important;
     width:100%;
+    --rti-radius: none !important;
+    background-color: transparent !important;
+    padding-left: 10px !important;
   }
 
   .rti--container:focus{
@@ -18,8 +21,27 @@
 }
 
 .rti--tag {
-    background-color: #EBECF1 !important;
-    margin-right:10px;
+    background-color: transparent !important;
+    border-radius: 10px !important;
+    padding:0px !important;
+}
+
+.rti--tag > span{
+  color: var(--green) !important;
+  font-weight: 500;
+}
+
+.rti--tag > button{
+  display: none;
+}
+
+.rti--tag > span::before{
+  content:"#"
+}
+
+.rti--tag > span::after{
+  content:" , ";
+  color:var(--secondary);
 }
 
 .rti--input:focus{

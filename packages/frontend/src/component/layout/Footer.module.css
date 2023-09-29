@@ -3,17 +3,19 @@
 }
 
 .footer_area{
-    background-color: var(--border);
+    margin-top: 20px;
+    background-color: var(--primary);
 }
 
 .footer_container{
     max-width: var(--max-content-width);
     margin: 0 auto;
-    padding: 30px 7px 50px 7px;
+    padding: 50px 20px;
 }
 
 .footer_logo > h1 {
-    color:var(--primary0);
+    text-align: left;
+    color:var(--white);
     letter-spacing: -0.02em;
     font-weight: 700;
     font-size: 1.4em;
@@ -21,7 +23,8 @@
 
 
 .footer_logo {
-    text-align: center;
+    width:100%;
+    display:flex;
     padding-left: 0px !important;
     margin-bottom:10px;
 }
@@ -43,9 +46,10 @@ ul{
 }
 
 
-.footer_info > li {
-font-size:14px;
-line-height: 28px;
+.footer_details > ul > li{
+    color:var(--secondary);
+    font-size:13px;
+line-height: 24px;
 }
 
 .footer_info > li::after{

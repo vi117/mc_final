@@ -106,10 +106,14 @@ padding: 30px 10px;
 }
 
 .funding_write_tagsearch{
+    display: flex;
+    justify-content: center;
     margin:0 auto;
     width:100%;
     border: 1px solid var(--secondary);
     border-radius: 5px;
+    min-height:45px;
+    background-color: var(--white);
 }
 
 .item_container{
@@ -286,6 +290,8 @@ hr{
     }
 
     .funding_write_wrap{
+        margin-left: 0px;
+        margin-right: 0px;
         margin-top: -10px;
         padding: 0px;
         flex-direction: column;
@@ -347,7 +353,7 @@ hr{
     justify-content: center;
     }
     .funding_write_container{
-        margin:0px;
+        margin-left: 0px;
         padding: 10px 20px;
         width:100%;
         background-color: #f9f9f9;

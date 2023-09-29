@@ -8,10 +8,10 @@ export default function Footer() {
         <Container>
           <div className={classes["footer_container"]}>
             <Row>
-              <Col xs={0} sm={3} className={classes.footer_logo}>
+              <Col xs={3} sm={3} className={classes.footer_logo}>
                 <h1>해피테일즈</h1>
               </Col>
-              <Col xs={0} sm={9} className={classes.footer_details}>
+              <Col xs={0} sm={7} className={classes.footer_details}>
                 <ul className={classes.footer_info}>
                   <li>해피테일즈㈜</li>
                   <li>대표이사 백재웅</li>

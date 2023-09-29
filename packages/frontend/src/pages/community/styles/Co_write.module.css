@@ -7,14 +7,21 @@ select {
 }
 
 .write-container {
-  max-width: 1080px;
-  padding: 10px 7px 50px 7px;
+  width:100%;
+  max-width: var(--max-content-width);
+  padding: 0px 7px 50px 7px;
   margin: 0 auto;
 }
 
 .write-wrap {
+  background-color: #f9f9f9;
+  border-radius: 7px;
+  padding:0px 20px;
+  width:100%;
   margin: 0 auto;
   justify-content: center;
+  display:flex;
+  flex-direction: column;
 }
 
 .write-wrap h4 {
@@ -29,9 +36,6 @@ select {
   margin-bottom: 40px;
 }
 
-.form-select:active {
-  background-color: var(--border);
-}
 
 .label {
   font-size: 18px;
@@ -41,8 +45,8 @@ select {
 }
 
 .submitbutton {
+  position: relative;
   display: flex;
-  width: 100%;
   justify-content: center;
   align-items: center;
 }
@@ -64,10 +68,10 @@ select {
 }
 
 .catSelect {
+  border-radius: 7px;
   height: 45px;
   width: 100%;
   font-size: 14px;
-  margin-top: 30px;
   margin-bottom: 20px;
   padding: 7px !important;
   color: var(--teritary);
@@ -84,8 +88,8 @@ select {
   display:flex;
   align-items: center;
   height: 45px;
-    border: 1px solid var(--secondary);
-    border-radius: 5px;
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
   }
 
 
