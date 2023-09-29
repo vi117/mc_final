@@ -119,3 +119,26 @@ export async function login(
   loginRevalidate();
   return [true, await res.json()];
 }
+
+/**
+ * Sends a reset password email to the specified email address.
+ *
+ * @param {string} email - The email address to send the reset password email to.
+ * @return {Promise<boolean>} - A promise that resolves to true if the reset password email was successfully sent, and false otherwise.
+ */
+export async function send_reset_password(email: string) {
+  // it equals 'await axios.post("/api/v1/users/send-reset-password", {email});'
+  const res = await fetch("/api/v1/users/send-reset-password", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+    }),
+  });
+  if (!res.ok) {
+    return false;
+  }
+  return true;
+}

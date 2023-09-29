@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
+import { send_reset_password } from "../../api/user";
 import classes from "./forgot.module.css";
 
 export default function ForgotPasswordPage() {
@@ -34,16 +35,7 @@ export default function ForgotPasswordPage() {
     </div>
   );
   async function forgetPassword() {
-    // await axios.post("/api/v1/users/send-reset-password", {email});
-    const res = await fetch("/api/v1/users/send-reset-password", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-      }),
-    });
+    const res = await send_reset_password(email);
     if (!res.ok) {
       console.log("error!");
     }
