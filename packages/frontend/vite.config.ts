@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import { svgPlugin } from "vite-plugin-fast-react-svg";
 
@@ -15,5 +16,11 @@ export default defineConfig({
         ws: true,
       },
     },
+  },
+  resolve: {
+    alias: [{
+      find: "@",
+      replacement: resolve(__dirname, "src"),
+    }],
   },
 });
