@@ -383,8 +383,11 @@ function SelectablRewardList(
           const restItem = reward.reward_count - reward.reward_current_count;
           return (
             <ListGroup.Item
-              className={classes.reward_list}
+              className={clsx(classes.reward_list, {
+                [classes.reward_selected]: selectedReward?.id === reward.id,
+              })}
               action
+              bsPrefix="5151a"
               variant="success"
               key={reward.id}
               onClick={() => {
