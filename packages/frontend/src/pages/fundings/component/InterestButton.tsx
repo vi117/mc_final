@@ -19,7 +19,7 @@ export function InterestButton({ funding, setInterest }: {
               setInterest(funding.id, false);
             }}
           >
-            <BiBookmark
+            <BiSolidBookmark
               className={classes["btn_svg"]}
             />
           </Button>
@@ -31,7 +31,7 @@ export function InterestButton({ funding, setInterest }: {
               setInterest(funding.id);
             }}
           >
-            <BiSolidBookmark
+            <BiBookmark
               className={classes["btn_svg"]}
             />
           </Button>
