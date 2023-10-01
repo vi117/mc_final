@@ -11,6 +11,7 @@ import { TagsInput } from "react-tag-input-component";
 import { GoInfo } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "../../component/Editor";
+import { cutNickname } from "../../util/cut";
 import { Calender } from "./component/Calender";
 import { RewardItemList } from "./component/RewardItemList";
 
@@ -57,7 +58,7 @@ const FundingsWrite = function() {
   const RewardAreaRef = useRef(null);
   const MakerAreaRef = useRef(null);
   const scrollToInfoArea = () => {
-    infoAreaRef.current.scrollIntoView({ behavior: "auto", block: "end" });
+    document.body.scrollIntoView();
   };
   const scrollToStoryArea = () => {
     StoryAreaRef.current.scrollIntoView({});
@@ -72,44 +73,32 @@ const FundingsWrite = function() {
   return (
     <>
       <div className={classes.funding_write_wrap}>
-        <div className={classes.funding_profile_container}>
-          <ul className={classes.profile_title}>
-            <li className={classes.list_big}>환영해요,</li>
-            <li className={classes.list_big} style={{ marginBottom: "10px" }}>
-              <b>{userInfo.nickname}</b> 님!
-            </li>
-            <li>해피테일즈에서</li>
-            <li>멋진 프로젝트를 만들어보세요</li>
-          </ul>
-          <ListGroup
-            variant="flush"
-            className={classes.profile_container}
+        <FundingWriteNavigator nickname={userInfo.nickname}>
+          <button onClick={() => scrollToInfoArea()}>
+            프로젝트 기본 정보
+          </button>
+          <button onClick={() => scrollToStoryArea()}>
+            스토리 작성
+          </button>
+          <button onClick={() => scrollToRewardArea()}>
+            리워드 설계
+          </button>
+          <button onClick={() => scrollToMakerArea()}>
+            메이커 정보
+          </button>
+          <button
+            className={classes.go_write}
+            onClick={() => {
+              sendRequest();
+            }}
           >
-            <button onClick={() => scrollToInfoArea()}>
-              프로젝트 기본 정보
-            </button>
-            <button onClick={() => scrollToStoryArea()}>
-              스토리 작성
-            </button>
-            <button onClick={() => scrollToRewardArea()}>
-              리워드 설계
-            </button>
-            <button onClick={() => scrollToMakerArea()}>
-              메이커 정보
-            </button>
-            <button
-              className={classes.go_write}
-              onClick={() => {
-                sendRequest();
-              }}
-            >
-              완료
-            </button>
-          </ListGroup>
-        </div>
+            완료
+          </button>
+        </FundingWriteNavigator>
+
         <div className={classes.funding_write_container}>
-          <div className={classes.item_container_title}>
-            <div ref={infoAreaRef} className={classes.info_area}>
+          <div className={classes.item_container_title} ref={infoAreaRef}>
+            <div className={classes.info_area}>
               <h1>카테고리 태그 선택</h1>
               <p>
                 펀딩과 가장 잘 어울리는 태그를 입력해 주세요.
@@ -148,23 +137,7 @@ const FundingsWrite = function() {
             <Form.Group className={classes.info_area}>
               <h1>목표금액</h1>
               <p>프로젝트를 완수하기 위해 필요한 금액을 설정해주세요.</p>
-              <ul className={classes.guide}>
-                <li className={classes.guide_bold}>
-                  <GoInfo className={classes.guide_svg}></GoInfo>
-                  목표 금액 설정 시 꼭 알아두세요!
-                </li>
-                <li>
-                  종료일까지 목표금액을 달성하지 못하면 후원자 결제가 진행되지
-                  않습니다.
-                </li>
-                <li>
-                  후원 취소 및 결제 누락을 대비해 10% 이상 초과 달성을 목표로
-                  해주세요.
-                </li>
-                <li>
-                  제작비, 선물 배송비, 인건비, 예비 비용 등을 함께 고려해주세요.
-                </li>
-              </ul>
+              <TargetValueGuide />
               <div className={classes.value_input}>
                 <Form.Control
                   className={classes.title_input}
@@ -216,22 +189,7 @@ const FundingsWrite = function() {
             <div className={classes.story_area_editor}>
               <h1>펀딩 스토리</h1>
               <p>무엇을 만들기 위한 프로젝트인지 분명히 알려주세요.</p>
-              <ul className={classes.guide}>
-                <li className={classes.guide_bold}>
-                  <GoInfo className={classes.guide_svg}></GoInfo>
-                  스토리 작성 TIP
-                </li>
-                <li>
-                  이미지로만 구성된 스토리는 이미지 로딩 속도가 느려 방문자가
-                  상세 페이지를 벗어날 확률이 높아져요.
-                </li>
-                <li>
-                  아래의 질문에 대한 답이 내용에 포함되도록 작성해보세요.
-                </li>
-                <li>Q. 무엇을 만들기 위한 펀딩인가요?</li>
-                <li>Q. 펀딩을 간단히 소개한다면?</li>
-                <li>Q. 이 펀딩이 왜 의미있나요?</li>
-              </ul>
+              <StoryTipGuide />
               <Editor
                 onChange={(v) => {
                   setContent(v);
@@ -314,6 +272,7 @@ const FundingsWrite = function() {
       }
     </>
   );
+
   async function sendRequest() {
     const url = new URL("/api/v1/fundings/request", window.location.href);
 
@@ -345,5 +304,80 @@ const FundingsWrite = function() {
     }
   }
 };
+
+function FundingWriteNavigator({
+  nickname,
+  children,
+}) {
+  return (
+    <nav className={classes.funding_profile_container}>
+      <ul className={classes.profile_title}>
+        <li className={classes.list_big}>환영해요,</li>
+        <li className={classes.list_big} style={{ marginBottom: "10px" }}>
+          <b>{cutNickname(nickname, 8)}</b> 님!
+        </li>
+        <li>해피테일즈에서</li>
+        <li>멋진 프로젝트를 만들어보세요</li>
+      </ul>
+      <ListGroup
+        variant="flush"
+        className={classes.profile_container}
+      >
+        {children}
+      </ListGroup>
+    </nav>
+  );
+}
+
+function StoryTipGuide() {
+  return (
+    <Guide>
+      <li className={classes.guide_bold}>
+        <GoInfo className={classes.guide_svg}></GoInfo>
+        스토리 작성 TIP
+      </li>
+      <li>
+        이미지로만 구성된 스토리는 이미지 로딩 속도가 느려 방문자가 상세
+        페이지를 벗어날 확률이 높아져요.
+      </li>
+      <li>
+        아래의 질문에 대한 답이 내용에 포함되도록 작성해보세요.
+      </li>
+      <li>Q. 무엇을 만들기 위한 펀딩인가요?</li>
+      <li>Q. 펀딩을 간단히 소개한다면?</li>
+      <li>Q. 이 펀딩이 왜 의미있나요?</li>
+    </Guide>
+  );
+}
+
+function TargetValueGuide() {
+  return (
+    <Guide>
+      <li className={classes.guide_bold}>
+        <GoInfo className={classes.guide_svg}></GoInfo>
+        목표 금액 설정 시 꼭 알아두세요!
+      </li>
+      <li>
+        종료일까지 목표금액을 달성하지 못하면 후원자 결제가 진행되지 않습니다.
+      </li>
+      <li>
+        후원 취소 및 결제 누락을 대비해 10% 이상 초과 달성을 목표로 해주세요.
+      </li>
+      <li>
+        제작비, 선물 배송비, 인건비, 예비 비용 등을 함께 고려해주세요.
+      </li>
+    </Guide>
+  );
+}
+
+function Guide({
+  children,
+}) {
+  return (
+    <ul className={classes.guide}>
+      {children}
+    </ul>
+  );
+}
 
 export default FundingsWrite;
