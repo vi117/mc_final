@@ -116,6 +116,10 @@ padding: 30px 10px;
     background-color: var(--white);
 }
 
+.funding_write_tagsearch:focus-within{
+    border: 1px solid var(--green);
+}
+
 .item_container{
     padding-top: 60px;
 }

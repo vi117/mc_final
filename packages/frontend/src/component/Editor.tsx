@@ -88,7 +88,6 @@ export const Editor = ({
   return (
     <ReactQuill
       ref={quillRef}
-      style={{ height: "330px" }}
       value={value}
       onChange={onChange}
       modules={modules}

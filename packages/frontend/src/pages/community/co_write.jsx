@@ -8,6 +8,8 @@ import baseClasses from "./styles/Co_base.module.css";
 import classes from "./styles/Co_write.module.css";
 import "./styles/tags.css";
 import Cowritemodal from "./components/co_writemodal";
+import "./styles/editor.css";
+import { GoArrowLeft } from "react-icons/go";
 
 const selectList = ANIMAL_CATEGORY.map((v) => ({
   value: v,
@@ -41,7 +43,13 @@ const CommunityWrite = () => {
   const [reviewedFunding, setReviewedFunding] = useState(undefined);
 
   const backToList = () => {
-    navigate("/community");
+    const userConfirmed = window.confirm(
+      "지금까지 작성한 내용이 모두 사라집니다.",
+    );
+
+    if (userConfirmed) {
+      navigate("/community");
+    }
   };
 
   const onChange = (e) => {
@@ -127,7 +135,10 @@ const CommunityWrite = () => {
           </div>
         </div>
         <div className={classes["submitbutton"]}>
-          <button onClick={backToList}>돌아가기</button>
+          <button onClick={backToList}>
+            <GoArrowLeft className={classes["create_svg"]}>
+            </GoArrowLeft>돌아가기
+          </button>
           <button onClick={sendRequest}>글 등록</button>
         </div>
       </div>

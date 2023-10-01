@@ -29,9 +29,11 @@
 }
 
 .co_textarea {
-  margin-bottom: 10px;
-  margin-top: 10px;
+  position: relative;
+  height:380px;
+  
 }
+
 
 .co_tagarea{
   border: 1px solid var(--secondary);

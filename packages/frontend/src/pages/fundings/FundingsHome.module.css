@@ -15,6 +15,10 @@
   background-color: var(--white);
 }
 
+.funding_tagsearch:focus-within {
+  border-color: var(--green); 
+}
+
 /*태그검색, 펀딩 만들기*/
 .funding_navarea{
   padding:10px;

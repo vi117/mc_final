@@ -16,7 +16,7 @@ select {
 .write-wrap {
   background-color: #f9f9f9;
   border-radius: 7px;
-  padding:0px 20px;
+  padding:30px 20px;
   width:100%;
   margin: 0 auto;
   justify-content: center;
@@ -27,13 +27,6 @@ select {
 .write-wrap h4 {
   font-weight: 700;
   text-align: center;
-}
-
-.write-header {
-  height: 50px;
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--boxshadow);
-  margin-bottom: 40px;
 }
 
 
@@ -47,24 +40,34 @@ select {
 .submitbutton {
   position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: flex-end;
+}
+
+.create_svg{
+  fill:var(--green); 
+  margin-right: 5px;
 }
 
 .submitbutton button {
-  border: 1px solid var(--secondary);
-  padding: 5px 30px;
-  border-radius: 12px;
-  font-size: 16px;
+  border: 1px solid var(--green);
+  background-color: var(--white);
+  color:var(--green);
+  padding: 7px 25px;
+  border-radius: 7px;
+  font-size: 14px;
   margin: 5px;
-  font-weight: 700;
+  transition: border-color .2s,color .2s,background-color .2s;
 }
 
 .submitbutton button:hover {
   background-color: var(--green);
   border: 1px solid var(--green);
   color: var(--white);
-  font-weight: 700;
+}
+
+.submitbutton button:hover .create_svg{
+  fill:var(--white);
 }
 
 .catSelect {
