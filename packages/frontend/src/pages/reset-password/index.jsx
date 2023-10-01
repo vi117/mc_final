@@ -59,7 +59,7 @@ export default function ResetpasswordPage() {
   async function resetPassword() {
     const code = param.get("code");
     try {
-      await resetPasswordAPI(password, code);
+      await resetPasswordAPI(password, code ?? undefined);
     } catch (error) {
       await showAlertModal("reset password error", error.message);
       return;

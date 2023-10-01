@@ -252,7 +252,9 @@ export async function resetPassword(req: Request, res: Response) {
     },
     required: user ? ["password"] : ["code", "password"],
   }, req.body);
-  assert_param(v, "유효하지 않은 요청입니다.");
+  assert_param(v, "유효하지 않은 요청입니다.", {
+    errors: ajv.errors,
+  });
 
   let email;
   if (user) {
