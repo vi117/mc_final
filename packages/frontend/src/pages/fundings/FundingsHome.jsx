@@ -4,6 +4,7 @@ import useFundings from "../../hook/useFundings";
 import classes from "./FundingsHome.module.css";
 import "./progressbar.css";
 import "../community/styles/tags.css";
+import { GoArrowRight } from "react-icons/go";
 
 import FundingItem from "./component/Item";
 // import FundingsHome_placeholder from "./FundingsHome_placeholder";
@@ -31,6 +32,26 @@ const FundingsHome = function() {
     return <div>에러가 발생했습니다.</div>;
   }
 
+  let fundingContents;
+  if (fetcherData.length === 0) {
+    fundingContents = (
+      <div className={classes["no_tagresult"]}>
+        이런, 검색 결과를 찾을 수 없어요
+        <div>
+          검색 태그의 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.
+        </div>
+      </div>
+    );
+  } else {
+    fundingContents = fetcherData.map((x) => (
+      <FundingItem
+        style={{ border: "none" }}
+        is_empahsis_tag={(t) => selected.includes(t)}
+        key={x.id}
+        item={x}
+      />
+    ));
+  }
   return (
     <div className={classes["funding_container"]}>
       {/* <pre>{JSON.stringify(selected)}</pre> */}
@@ -54,19 +75,13 @@ const FundingsHome = function() {
 
         <div className={classes["funding_createbtn"]}>
           <NavLink to={"/fundings/post"}>
-            <p className={classes["go_create"]}>펀딩 만들기</p>
+            <GoArrowRight className={classes["create_svg"]}></GoArrowRight>{" "}
+            펀딩 만들기
           </NavLink>
         </div>
       </div>
       <div className={classes["funding_itemarea"]}>
-        {fetcherData.map((x) => (
-          <FundingItem
-            style={{ border: "none" }}
-            is_empahsis_tag={(t) => selected.includes(t)}
-            key={x.id}
-            item={x}
-          />
-        ))}
+        {fundingContents}
       </div>
     </div>
   );

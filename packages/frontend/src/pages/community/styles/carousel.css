@@ -1,0 +1,194 @@
+.bestitem-container{
+    background-color: var(--border);
+    padding:20px;
+    height:375px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.community-carousel-wrap{
+    max-width: 1080px;
+    background-color: var(--white);
+    border-radius: 20px;
+    border: 1px solid var(--secondary);
+    width:100%;
+    margin: 0 auto;
+    padding:20px 30px;
+    display:flex;
+    flex-direction: column;
+    height:335px;
+}
+
+.community-carousel-wrap > h1{
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.thunder_svg {
+    margin-right: 5px;
+}
+
+
+
+.community-carousel-wrap .carousel{
+    display: flex;
+    height:235px;
+}
+
+
+.community-carousel-wrap .carousel .carousel-inner{
+    width:80%;
+}
+
+/*컨트롤러*/
+/* .community-carousel-wrap .carousel{
+    max-width:100%;
+    height:75%;
+    display:flex;
+} */
+
+
+.community-carousel-wrap .carousel .carousel-control-prev,
+.community-carousel-wrap .carousel .carousel-control-next{
+    border: 1px solid var(--secondary);
+    width:36px;
+    height:36px;
+    border-radius: 100%;
+    background-color: var(--white);
+    opacity: 1;
+    top:85%;
+}
+
+.community-carousel-wrap .carousel .carousel-control-next{
+    right:0;
+}
+
+.community-carousel-wrap .carousel .carousel-control-prev{
+    left: auto !important;
+    right:0;
+    margin-right:50px;
+}
+.best-prev-icon,
+.best-next-icon {
+    width:20px !important;
+    height:20px !important;
+}
+
+
+
+/*이미지*/
+.best-carousel-item{
+    display:flex;
+    max-height:325px;
+    width:100%;
+}
+
+.best-carousel-item img{
+height:235px;
+aspect-ratio: 9/6;
+object-fit: cover;
+border-radius: 20px;
+border: 1px solid var(--seconadry);
+}
+
+/*문구*/
+.best-carousel-text-wrap {
+  padding:10px;
+  width: 100%;
+  margin-left: 10px;
+display:flex;
+flex-direction: column;
+height:235px;
+justify-content: space-between;
+}
+
+.best-carousel-text-title{
+  font-size: 20px;
+  font-weight: 700;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: unset;
+  -webkit-line-clamp: 2;
+ margin-bottom: 5px;
+}
+
+.best-carousel-text-author{
+  font-size: 14px;
+  color:var(--teritary);
+}
+
+.best-carousel-text-desc{
+  color:var(--teritary);
+  font-size: 16px;
+  width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: unset;
+    -webkit-line-clamp: 5;
+    margin-top: auto; 
+}
+
+/*반응형*/
+@media screen and (max-width: 770px) {
+  .best-carousel-item{
+    display:flex;
+    flex-direction: column;
+    max-height:325px;
+    width:100%;
+}
+
+.best-carousel-item img{
+  width:100%;
+  height:170px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1px solid var(--seconadry);
+  }
+
+  .best-carousel-text-wrap {
+  margin-top: 10px;
+  padding: 0px;
+  margin-left: 0px;
+  }
+
+  .community-carousel-wrap .carousel .carousel-inner{
+    width:85%;
+}
+
+  .best-carousel-text-title{
+    font-size: 18px;
+    font-weight: 700;
+    width: 95%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: unset;
+    -webkit-line-clamp: 2;
+    height:55px;
+  }
+
+  .best-carousel-text-desc{
+    display:none;
+  }
+
+
+.community-carousel-wrap .carousel .carousel-control-next{
+  top:85%;
+}
+
+.community-carousel-wrap .carousel .carousel-control-prev{
+    margin-right:0px !important;
+    top:65%;
+}
+
+
+
+}

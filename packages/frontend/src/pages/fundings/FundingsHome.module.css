@@ -1,32 +1,84 @@
 /*전체 페이지- padding값 모든 페이지 공통*/
 .funding_container{
-  padding: 10px 7px 50px 7px;
+  padding: 0px 7px 50px 7px;
   margin:0 auto;
+  width:100%;
   max-width: var(--max-content-width);
 }
 
 .funding_tagsearch {
+  min-height: 45px;
+  display:flex;
   width:60%;
   border: 1px solid var(--secondary);
-  border-radius: 5px;
+  border-radius: 20px;
+  background-color: var(--white);
 }
+
+.funding_tagsearch:focus-within {
+  border-color: var(--green); 
+}
+
 /*태그검색, 펀딩 만들기*/
 .funding_navarea{
+  padding:10px;
+  border-radius: 4px;
   align-items: center;
+  background-color: var(--border);
   width:100%;
   display:flex;
 }
 
 .funding_createbtn {
+  display:flex;
+  align-items: center;
+  padding:0px 15px;
+  height:45px;
+  border-radius: 20px;
+  margin-bottom: 0px !important;
+  font-size: 14px;
+  color:var(--green);
+  border: 1px solid var(--green);
+  background-color: var(--white);
 margin-left: auto;
 }
 
-.go_create {
-  margin-bottom: 0px !important;
-  font-size: 16px;
-  color:var(--green);
-  font-weight: 700;
+.funding_createbtn:hover {
+  border: 1px solid var(--green);
+  color:var(--white);
+  background-color: var(--green);
+  moz-transition: all .4s ease-in-out;
+-o-transition: all .4s ease-in-out;
+-webkit-transition: all .4s ease-in-out;
 }
+
+.funding_createbtn:hover .create_svg{
+  fill:var(--white);
+  moz-transition: all .4s ease-in-out;
+-o-transition: all .4s ease-in-out;
+-webkit-transition: all .4s ease-in-out;
+}
+
+.create_svg{
+  fill:var(--green);
+}
+
+/*태그 검색결과가 0일 때*/
+.no_tagresult{
+  margin: 0 auto;
+  font-size: 16px;
+  min-width:600px;
+  font-weight: 500;
+  padding-left: 10px;
+}
+
+.no_tagresult > div{
+  font-weight: 400;
+  margin-top: 10px;
+  border-radius: 7px;
+  color:var(--teritary);
+}
+
 
 /*펀딩 목록 전체 박스*/
 .funding_itemarea {
@@ -55,6 +107,7 @@ margin-left: auto;
 
 @media screen and (max-width: 576px/* sm - small screens */) {
   .funding_itemarea{
+    padding: 0px;
     grid-template-columns: repeat(1, 1fr);
     width:100%;
   }

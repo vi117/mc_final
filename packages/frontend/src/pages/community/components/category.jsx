@@ -49,12 +49,12 @@ const Category = (
           </button>
         </div>
         <div className={classes["writebtn"]}>
-          <p onClick={goWrite}>
+          <button className={classes["writebtn-button"]} onClick={goWrite}>
             <BiSolidPencil
-              style={{ width: "14px", fill: "#3d8361", marginRight: "5px" }}
+              className={classes["pencil-svg"]}
             />
             글쓰기
-          </p>
+          </button>
         </div>
       </div>
     </>

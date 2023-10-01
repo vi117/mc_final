@@ -1,14 +1,19 @@
 .rti--container {
     --rti-main:none !important;
     --rti-tag-remove: #0d0d0d !important;
-    --rti-border: none !important; 
+    --rti-border: none !important;
     /*focus시 border 색이 변하는 문제가 있어 삭제함
     각 컴포넌트에서 따로 border 속성 줄 것*/
     outline:none !important;
     width:100%;
+    --rti-radius: none !important;
+    background-color: transparent !important;
+    padding-left: 10px !important;
   }
 
+
   .rti--container:focus{
+    border: 1px solid var(--green) !important;
     outline:none !important;
   }
 
@@ -18,11 +23,30 @@
 }
 
 .rti--tag {
-    background-color: #EBECF1 !important;
-    margin-right:10px;
+    background-color: transparent !important;
+    border-radius: 10px !important;
+    padding:0px !important;
 }
 
-.rti--input:focus{
+.rti--tag > span{
+  color: var(--green) !important;
+  font-weight: 500;
+}
+
+.rti--tag > button{
+  display: none;
+}
+
+.rti--tag > span::before{
+  content:"#"
+}
+
+.rti--tag > span::after{
+  content:" , ";
+  color:var(--secondary);
+}
+
+.rti--input:focus {
     outline: none !important;
     border: 0px !important;
 }

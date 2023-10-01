@@ -1,12 +1,15 @@
 
-/*전체 박스*/
+/*베스트 밑 게시판 전체 영역*/
 .list-wrap {
   padding: 10px 7px 50px 7px;
   justify-content: center;
   align-items: center;
   max-width: 1080px;
   margin: 0 auto;
+  width: 100%; /* 추가한 속성: 화면 너비를 100%로 설정하여 가운데 정렬 */
 }
+
+
 
 /*모달창 ui*/
 
@@ -121,64 +124,7 @@ background-color: var(--green-dark);
   margin: 0 auto;
 }
 
-/*베스트 밑 게시판 전체 영역*/
-.container {
-  width: 100%;
-  border-top: 1px solid var(--border);
-  padding: 0 !important;
-}
 
-/*금주의 베스트*/
-.slidercontents,
-.slidercontents2 {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-}
-
-.slidercontents img,
-.slidercontents2 img {
-  width:40%;
-  max-height:280px;
-  border-radius: 8px;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background-color: var(--white) !important;
-}
-
-
-.slidercontents button,
-.slidercontents2 button {
-  border: none;
-  border-radius: 8px;
-  padding: 5px 10px;
-  background-color: var(--secondary);
-}
-
-.wrapText .morebtn {
-  font-size: 14px;
-  color: var(--teritary);
-  padding: 0;
-  border: none;
-  background-color: transparent;
-}
-
-.wrapText > h1 {
-font-size: 24px;
-font-weight: 700;
-letter-spacing: -0.01px;
-}
-
-.d-none-d-md-block > p {
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: -0.01px;
-  }
-
-.wrapText {
-  margin-left: 5%;
-}
 
 /*필터링, 좋아요, 최신순 정렬*/
 .nav {
@@ -194,16 +140,48 @@ letter-spacing: -0.01px;
 }
 
 .writebtn {
-  height: 32px;
-  line-height: 32px;
+  display: flex;
   margin-left: auto !important;
 }
 
-.writebtn > p {
-  font-weight: 700;
+.writebtn-button {
   color: var(--green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  border: 1px solid var(--green);
+  height: 32px;
   font-size: 14px;
+  border-radius: 4px;
+  padding: 0px 10px;
+  line-height: 32px;
+  margin: 0px 5px 0px 0px;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
 }
+
+.pencil-svg{
+  width:14px;
+  fill:var(--green);
+  margin-right: 5px;
+  moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+}
+
+.writebtn-button:hover {
+  color: var(--white);
+  background-color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.writebtn-button:hover  .pencil-svg{
+  fill:var(--white);
+}
+
+
 .control {
   display: flex;
   flex-wrap: wrap;
@@ -222,7 +200,7 @@ letter-spacing: -0.01px;
 
 .togglemenu {
   display: inline-flex;
-  border: 1px solid var(--green);
+  border: 1px solid var(--teritary);
   height: 32px;
   font-size: 14px;
   border-radius: 4px;
@@ -232,10 +210,10 @@ letter-spacing: -0.01px;
 }
 
 .control > button {
-  color: var(--green);
+  color: var(--teritary);
   display: inline-flex;
   background-color: var(--white);
-  border: 1px solid var(--green);
+  border: 1px solid var(--teritary);
   height: 32px;
   font-size: 14px;
   border-radius: 4px;
@@ -252,7 +230,7 @@ letter-spacing: -0.01px;
 .board {
   width: 100% !important;
   margin: 0 !important;
-  min-height: 600px;
+  height: 650px;
 }
 
 table {
