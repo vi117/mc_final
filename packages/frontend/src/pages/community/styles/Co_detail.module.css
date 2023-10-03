@@ -67,6 +67,11 @@
   display:flex
 }
 
+.related_funding_linkto{
+  color: var(--teritary);
+  font-size: 12px;
+}
+
 .user {
   width: 40px;
   aspect-ratio: 1 / 1;
