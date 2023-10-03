@@ -8,7 +8,7 @@ export default function Footer() {
         <Container>
           <div className={classes["footer_container"]}>
             <Row>
-              <Col xs={3} sm={3} className={classes.footer_logo}>
+              <Col xs={12} sm={3} className={classes.footer_logo}>
                 <h1>해피테일즈</h1>
               </Col>
               <Col xs={0} sm={7} className={classes.footer_details}>
