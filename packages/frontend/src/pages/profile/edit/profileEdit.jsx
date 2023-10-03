@@ -32,7 +32,7 @@ function ProfileEditPage() {
   const formRef = useRef(null);
   const [phone, setPhone] = useState(loginInfo.phone);
   const [address, setAddress] = useState(loginInfo.address);
-  const [introduction, setArticle] = useState(loginInfo.phone);
+  const [introduction, setArticle] = useState(loginInfo.introduction);
 
   const onPhoneHandler = (event) => {
     setPhone(event.currentTarget.value);
@@ -57,7 +57,10 @@ function ProfileEditPage() {
         ref={formRef}
         style={{ display: "flex", flexDirection: "column" }}
         className={classes.form}
-        onSubmit={onSubmitHandler}
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
       >
         <RegisterLabel>Phone</RegisterLabel>
         <input

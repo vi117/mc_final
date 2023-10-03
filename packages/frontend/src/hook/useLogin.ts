@@ -10,6 +10,7 @@ export interface UserInfo {
   email: string;
   is_admin?: boolean;
   address_detail: string;
+  introduction?: string;
 }
 
 function getLoginUser(): UserInfo | null {

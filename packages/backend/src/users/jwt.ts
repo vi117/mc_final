@@ -224,6 +224,7 @@ export function setLoginToken(res: Response, user: UserObject) {
       phone: user.phone,
       email: user.email,
       is_admin: user.is_admin == 1 ? true : undefined,
+      introduction: user.introduction,
     }),
     {
       maxAge: 1000 * 60 * 60 * 24 * 14,
