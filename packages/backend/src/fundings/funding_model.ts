@@ -52,6 +52,10 @@ export interface FindAllUsersOptions {
    * user reviewed(or not) funding filter
    */
   reviewed?: "reviewed" | "not_reviewed";
+  /**
+   * title
+   */
+  title?: string;
 }
 
 export interface FindOneOptions {
@@ -77,6 +81,7 @@ export class FundingsRepository {
     const interest = options?.interest;
     const participated = options?.participated;
     const reviewed = options?.reviewed;
+    const title = options?.title;
 
     const query = this.db.selectFrom("fundings")
       .innerJoin("users as host", "fundings.host_id", "host.id")
@@ -164,6 +169,9 @@ export class FundingsRepository {
             .where(`t${index}.tag`, "=", tag) as unknown as typeof qb;
         });
         return qb;
+      })
+      .$if(title !== undefined, (qb) => {
+        return qb.where("fundings.title", "like", `%${title}%`);
       })
       .select([
         "fundings.id",

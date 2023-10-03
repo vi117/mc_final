@@ -45,6 +45,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
   const interest = queryParams.interest === "true";
   const participated = queryParams.participated === "true";
   const reviewed = parseQueryToString(queryParams?.reviewed);
+  const title = parseQueryToString(queryParams?.title);
 
   assert_param(
     reviewed === undefined || reviewed === "reviewed"
@@ -84,6 +85,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
     interest,
     participated,
     reviewed,
+    title,
   });
   res.json(result).status(StatusCodes.OK);
 }
