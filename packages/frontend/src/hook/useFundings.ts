@@ -34,6 +34,10 @@ interface UseFundingsOptions {
    * reviewed fundings
    */
   reviewed?: "reviewed" | "not_reviewed";
+  /**
+   * title
+   */
+  title?: string;
 }
 
 export default function useFundings({
@@ -47,6 +51,7 @@ export default function useFundings({
   interest = false,
   participated = false,
   reviewed = undefined,
+  title = undefined,
 }: UseFundingsOptions = {}) {
   const url = new URL("/api/v1/fundings", window.location.href);
   url.searchParams.append("offset", offset.toString());
@@ -71,6 +76,9 @@ export default function useFundings({
   }
   if (reviewed !== undefined) {
     url.searchParams.append("reviewed", reviewed);
+  }
+  if (title !== undefined) {
+    url.searchParams.append("title", title);
   }
 
   if (tags && tags.length > 0) {

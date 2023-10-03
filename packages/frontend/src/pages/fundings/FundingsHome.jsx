@@ -12,7 +12,6 @@ import FundingItem from "./component/Item";
 const FundingsHome = function() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selected = searchParams.getAll("tag");
-
   const {
     data: fetcherData,
     error: fetcherError,
@@ -21,7 +20,9 @@ const FundingsHome = function() {
     offset: 0,
     limit: 50,
     tags: selected.length > 0 ? selected : undefined,
+    title: searchParams.get("title") || undefined,
   });
+  // console.log(searchParams, fetcherData);
 
   if (fetcherIsLoading) {
     return <div>로딩 중..</div>;
@@ -32,29 +33,8 @@ const FundingsHome = function() {
     return <div>에러가 발생했습니다.</div>;
   }
 
-  let fundingContents;
-  if (fetcherData.length === 0) {
-    fundingContents = (
-      <div className={classes["no_tagresult"]}>
-        이런, 검색 결과를 찾을 수 없어요
-        <div>
-          검색 태그의 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.
-        </div>
-      </div>
-    );
-  } else {
-    fundingContents = fetcherData.map((x) => (
-      <FundingItem
-        style={{ border: "none" }}
-        is_empahsis_tag={(t) => selected.includes(t)}
-        key={x.id}
-        item={x}
-      />
-    ));
-  }
   return (
     <div className={classes["funding_container"]}>
-      {/* <pre>{JSON.stringify(selected)}</pre> */}
       <div className={classes["funding_navarea"]}>
         <div className={classes["funding_tagsearch"]}>
           <TagsInput
@@ -64,9 +44,11 @@ const FundingsHome = function() {
             }}
             value={selected}
             onChange={(v) => {
-              setSearchParams({ tag: v });
+              setSearchParams((prev) => (Object.fromEntries([
+                ...prev.entries(),
+                ["tag", v],
+              ])));
             }}
-            name="fruits"
             placeHolder={selected.length === 0
               ? "태그로 원하는 펀딩을 찾아보세요!"
               : ""}
@@ -81,7 +63,26 @@ const FundingsHome = function() {
         </div>
       </div>
       <div className={classes["funding_itemarea"]}>
-        {fundingContents}
+        {fetcherData.length === 0
+          ? (
+            <div className={classes["no_tagresult"]} key={0}>
+              이런, 검색 결과를 찾을 수 없어요
+              <div>
+                검색 태그의 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해
+                보세요.
+              </div>
+            </div>
+          )
+          : (
+            fetcherData.map((x) => (
+              <FundingItem
+                style={{ border: "none" }}
+                is_empahsis_tag={(t) => selected.includes(t)}
+                key={x.id}
+                item={x}
+              />
+            ))
+          )}
       </div>
     </div>
   );

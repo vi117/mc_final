@@ -41,6 +41,10 @@
     margin-bottom: 0px !important;
 }
 
+.funding_item_tags_ps_approved {
+    color: var(--blue);
+}
+
 .funding_item_tags_emphasis {
     color: var(--green);
 }

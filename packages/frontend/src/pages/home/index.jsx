@@ -19,7 +19,7 @@ export function HomePage() {
             indicators={false}
           >
             <Carousel.Item>
-              <Carousel.Caption>
+              <Carousel.Caption className={classes["carousel-caption"]}>
                 <h3>시선집중 스페셜 기획전</h3>
                 <p>해피테일즈 단독 펀딩을 살펴보세요</p>
               </Carousel.Caption>
@@ -27,7 +27,7 @@ export function HomePage() {
               <img src="/sample.png" className={classes["carousel_img"]}></img>
             </Carousel.Item>
             <Carousel.Item>
-              <Carousel.Caption>
+              <Carousel.Caption className={classes["carousel-caption"]}>
                 <h3>만나서 반가워요!</h3>
                 <p>즉시 할인 신규 가입 혜택 알아보기</p>
               </Carousel.Caption>
@@ -47,12 +47,12 @@ export function HomePage() {
             확인해보세요!
           </div>
           <div className={classes["home-funding-banner"]}>
-            <Carousel indicators={false} className="home-carousel2">
+            <Carousel indicators={false} className={classes["home-carousel2"]}>
               <Carousel.Item>
                 <Link to={"/fundings/"}>
                   <img
                     src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIgGrfevQhicyAFH9OQJ0-rtlQi3Al6uzthfS9SBfJx1yzgH7YQSmOZ67k7uqnyBxbxPdLEBiACRiyXXghnuPK9M_633_P6F_3LNT98Xf9NxgzL6idMJmC0JJb2Fkyd3zWi-7raV8AMwHMT_3AKmT9sWdm6bIt231Qu-UdjGw869T_kn6BOZYU0IAGRq0b/s1178/funding1.jpg"
-                    className="carousel_img"
+                    className={classes["carousel_img"]}
                   >
                   </img>
                 </Link>
@@ -61,7 +61,7 @@ export function HomePage() {
                 <Link to={"/fundings/2"}>
                   <img
                     src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaCXnYJqJV0CWbJumvp_dlYSf6p9D0uzCGho7vbgVeOk26dksQuyOxdhtM-hEXHRJiugXNKBStP2x4ykZ11cSU5raxTtfYIOXsEZJ1kPKDO60lNy6MiF7-gb9LwJGRL8Ujg2JVOskPbjpTLJHN2h3i5GTHlSthkSuFNQDuV2QPm_PVOCnGbl3PXLVEnJeJ/s1178/funding4.jpg"
-                    className="carousel_img"
+                    className={classes["carousel_img"]}
                   >
                   </img>
                 </Link>

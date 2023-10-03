@@ -3,6 +3,7 @@ import { FundingObject } from "dto";
 import { Card, ProgressBar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { DateToString } from "../../../hook/util";
+import { isPSApprovedTag } from "./../../../util/tag";
 import classes from "./Item.module.css";
 
 export function FundingItem({
@@ -36,6 +37,9 @@ export function FundingItem({
                 className={clsx(classes["funding_item_tags"], {
                   [classes["funding_item_tags_emphasis"]]: is_empahsis_tag(
                     t.tag,
+                  ),
+                  [classes["funding_item_tags_ps_approved"]]: isPSApprovedTag(
+                    t,
                   ),
                 })}
               >

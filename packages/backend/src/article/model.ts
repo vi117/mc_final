@@ -1,8 +1,8 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
-import { ArticleObject, CommentObject } from "dto";
+import { ArticleObject, ArticleSingleObject, CommentObject } from "dto";
 import { Insertable, Kysely } from "kysely";
-import { jsonArrayFrom } from "kysely/helpers/mysql";
+import { jsonArrayFrom, jsonObjectFrom } from "kysely/helpers/mysql";
 
 export { ArticleObject, CommentObject };
 
@@ -204,9 +204,8 @@ export class ArticleRepository {
     id: number,
     options?: FindOneOptions,
   ): Promise<
-    ArticleObject & {
-      comments?: CommentObject[];
-    } | undefined
+    | ArticleSingleObject
+    | undefined
   > {
     const {
       user_id,
@@ -242,6 +241,19 @@ export class ArticleRepository {
             .limit(comment_limit),
         ).as("comments"),
       ]))
+      .select((eb) =>
+        jsonObjectFrom(
+          eb.selectFrom("fundings as rf").where(
+            "id",
+            "=",
+            eb.ref("related_funding_id"),
+          ).select([
+            "rf.id",
+            "rf.title",
+            "rf.thumbnail",
+          ]),
+        ).as("related_funding")
+      )
       .selectAll("articles")
       .where("articles.id", "=", id)
       .$call(log_query(debug))

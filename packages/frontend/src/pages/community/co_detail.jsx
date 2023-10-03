@@ -54,6 +54,14 @@ export function CommunityDetail() {
             <div className={classes["views"]}>조회수:{item.view_count}</div>
           </div>
         </div>
+        {item.related_funding_id && (
+          <Link
+            to={`/fundings/${item.related_funding_id}`}
+            className={classes["related_funding_linkto"]}
+          >
+            펀딩 | {`${item.related_funding.title}`}
+          </Link>
+        )}
         <div className={classes["contentArea"]}>
           <p
             // TODO(vi117): sanitize content

@@ -40,8 +40,8 @@
   margin-right: 7px;
 }
 
-.funding_detail_tags > li::before{
-  content:'#'
+.funding_detail_tags_ps_approved{
+  color: var(--blue);
 }
 
 /*thumbnail, resttime, host, ... container */

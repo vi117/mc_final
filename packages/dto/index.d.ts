@@ -118,6 +118,15 @@ export interface ArticleObject {
   }[];
 }
 
+export interface ArticleSingleObject extends ArticleObject {
+  comments?: CommentObject[];
+  related_funding: {
+    id: number;
+    title: string;
+    thumbnail: string;
+  } | null;
+}
+
 export interface CommentObject {
   id: number;
   content: string;

@@ -8,7 +8,7 @@ import Upload from "../../component/UploadImage";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
 
-const emailPattern = () =>
+const emailPattern =
   // eslint-disable-next-line no-useless-escape
   /("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])/u;
 
@@ -67,9 +67,10 @@ function RegisterPage() {
           name="Email"
           type="email"
           value={Email}
-          onChange={(e) => setEmail(e.target.value)}
-          pattern={emailPattern()}
-          validateAsync={(email, signal) => emailCheck(email, signal)}
+          onChange={(value) => setEmail(value)}
+          pattern={emailPattern}
+          patternMessage="타입이 맞지 않습니다."
+          validateAsync={emailCheck}
           validateAsyncMessage={"이미 사용되는 이메일입니다."}
         />
 
@@ -77,7 +78,7 @@ function RegisterPage() {
           name="Password"
           type="password"
           value={Password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(value) => setPassword(value)}
           minLength={6}
           minMessage={"6자리 이상이어야 합니다."}
         />
@@ -86,16 +87,17 @@ function RegisterPage() {
           name="ConfirmPassword"
           type="password"
           value={ConfirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={(value) => setConfirmPassword(value)}
           minLength={6}
           validate={(value) => value === Password}
+          validateMessage="비밀번호와 비밀번호 확인이 동일해야 합니다."
         />
 
         <ValidationInput
           name="NickName"
           type="text"
           value={NickName}
-          onChange={(e) => setNickName(e.target.value)}
+          onChange={(value) => setNickName(value)}
           validateAsync={nicknameCheck}
           validateAsyncMessage={"닉네임이 중복됩니다."}
         />
@@ -104,14 +106,14 @@ function RegisterPage() {
           name="Phone"
           type="text"
           value={Phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(value) => setPhone(value)}
         />
 
         <ValidationInput
           name="Address"
           type="text"
           value={Address}
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={(value) => setAddress(value)}
           onClick={() => {
             DaumPostcodePopup({
               onComplete(resultAddress) {
@@ -125,14 +127,14 @@ function RegisterPage() {
           type="text"
           placeholder="상세주소"
           value={AddressDetail}
-          onChange={(e) => setAddressDetail(e.target.value)}
+          onChange={(value) => setAddressDetail(value)}
         />
 
         <ValidationInput
           name="Introduction"
           type="text"
           value={Article}
-          onChange={(e) => setArticle(e.target.value)}
+          onChange={(value) => setArticle(value)}
         />
         <button
           className={classes.button_submit}
@@ -193,6 +195,29 @@ function RegisterPage() {
 
 export default RegisterPage;
 
+/**
+ * Generates a function comment for the given function body in a markdown code block with the correct language syntax.
+ *
+ * @param {Object} props - The input object containing the following properties:
+ * @param {ReactNode} props.children - The child components.
+ * @param {string} props.className - The CSS class name.
+ * @param {string} props.name - The name of the input.
+ * @param {string} [props.type] - The type of the input.
+ * @param {string} props.value - The value of the input.
+ * @param {(value: string)=>void} props.onChange - The function called when the input value changes.
+ * @param {number} [props.minLength] - The minimum length of the input value.
+ * @param {string} [props.minMessage] - The error message for the minimum length validation.
+ * @param {RegExp} [props.pattern] - The regular expression to validate the input.
+ * @param {string} [props.patternMessage] - The error message for the regular expression validation.
+ * @param {((value: string) => boolean)} [props.validate] - The synchronous validation function.
+ * it returns true when the validation is successful. returns false or throws an error when the validation fails.
+ * @param {string} [props.validateMessage] - The error message for synchronous validation.
+ * @param {(value: string, signal: AbortSignal) => Promise<boolean>} [props.validateAsync] - The asynchronous validation function.
+ * @param {string} [props.validateAsyncMessage] - The error message for asynchronous validation.
+ * @param {string} props.placeholder - The placeholder text for the input.
+ * @param {function} props.onClick - The function called when the input is clicked.
+ * @return {ReactNode} - The rendered JSX of the ValidationInput component.
+ */
 function ValidationInput({
   children,
   className,
@@ -200,54 +225,77 @@ function ValidationInput({
   type,
   value,
   onChange,
-  pattern,
-  validate,
-  validateAsync,
-  validateAsyncMessage,
-  placeholder,
-  onClick,
+
   minLength,
   minMessage,
+
+  pattern,
+  patternMessage,
+
+  validate,
+  validateMessage,
+
+  validateAsync,
+  validateAsyncMessage,
+
+  placeholder,
+  onClick,
 }) {
+  /**
+   * checkSyncAndMessage - Checks the input value and returns an error message if it is not valid.
+   * @param {string} value
+   * @return {string|undefined}
+   */
+  const checkSyncAndMessage = useCallback(
+    (value) => {
+      if (minLength !== undefined && value.length < minLength) {
+        return minMessage;
+      }
+      if (pattern !== undefined && !pattern.test(value)) {
+        return patternMessage;
+      }
+      try {
+        if (validate !== undefined && !validate(value)) {
+          return validateMessage;
+        }
+      } catch (e) {
+        if (e instanceof Error) {
+          return e.message;
+        } else {
+          throw e;
+        }
+      }
+      return undefined;
+    },
+    [minLength, pattern, validate, validateMessage, minMessage, patternMessage],
+  );
+
   const checkSync = useCallback((value) => {
-    const checklist = [];
-    if (pattern !== undefined) {
-      checklist.push(pattern.test(value));
-    }
-    if (validate) {
-      checklist.push(validate(value));
-    }
-    if (minLength !== undefined) {
-      checklist.push(value.length > minLength);
-    }
-    return checklist.every(x => x);
-  }, [minLength, pattern, validate]);
+    return checkSyncAndMessage(value) === undefined;
+  }, [checkSyncAndMessage]);
 
   const [isValid, setIsValid] = useState(
-    checkSync(value, pattern, validate),
+    checkSync(value),
   );
   const [errorMessage, setErrorMessage] = useState("");
   const isEmpty = value === undefined || value?.length === 0;
 
   useEffect(() => {
-    const v = checkSync(value, pattern, validate);
-    setIsValid(v);
+    const v = checkSyncAndMessage(value);
+    setIsValid(v === undefined);
+    if (v !== undefined) {
+      setErrorMessage(v);
+    }
 
-    //
-    if (minLength && minLength >= value.length) {
-      setErrorMessage(minMessage);
-    }
-    if (pattern && !pattern.test(value)) {
-      setErrorMessage(`타입이 맞지 않습니다.`);
-    }
     // sync check 통과했을 때 validateAsync가 있으면 시도.
-    if (v && validateAsync) {
+    if (v === undefined && !isEmpty && validateAsync) {
       const abortController = new AbortController();
+
       (async () => {
         try {
           const result = await validateAsync(value, abortController.signal);
-          console.log(result);
           setIsValid(result);
+          console.log(result);
           if (!result) {
             setErrorMessage(validateAsyncMessage);
           } else {
@@ -264,20 +312,16 @@ function ValidationInput({
       return () => abortController.abort();
     }
   }, [
-    value,
-    pattern,
-    validate,
+    checkSyncAndMessage,
     validateAsync,
     validateAsyncMessage,
-    minMessage,
-    minLength,
-    setIsValid,
-    checkSync,
+    value,
+    isEmpty,
   ]);
 
   return (
     <>
-      <RegisterLabel>{name}</RegisterLabel>
+      <ValidationInputLabel>{name}</ValidationInputLabel>
       <Form.Control
         className={clsx(className, {
           [classes.label_error]: !isValid && !isEmpty,
@@ -285,7 +329,7 @@ function ValidationInput({
         name={name}
         type={type}
         value={value}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         onClick={onClick}
       >
@@ -298,7 +342,7 @@ function ValidationInput({
   );
 }
 
-function RegisterLabel({ children }) {
+function ValidationInputLabel({ children }) {
   return (
     <Form.Label
       className={classes.label}

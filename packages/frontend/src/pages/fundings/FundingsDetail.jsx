@@ -8,6 +8,7 @@ import { useLoginId } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
 import useFundingDetail from "../../hook/useFundingDetail";
+import { isPSApprovedTag } from "./../../util/tag";
 import Profileimg from "../community/assets/user.png";
 import { InterestButton } from "./component/InterestButton";
 import classes from "./FundingsDetail.module.css";
@@ -101,7 +102,18 @@ const FundingsDetail = function() {
 
       <div className={classes["funding_title"]}>
         <ul className={classes["funding_detail_tags"]}>
-          {funding.tags.map((tag) => <li key={tag.id}>{tag.tag}</li>)}
+          {funding.tags.map((tag) => (
+            <li
+              key={tag.id}
+              className={clsx({
+                [classes["funding_detail_tags_ps_approved"]]: isPSApprovedTag(
+                  tag,
+                ),
+              })}
+            >
+              #{tag.tag}
+            </li>
+          ))}
         </ul>
         <h1>{funding.title}</h1>
       </div>

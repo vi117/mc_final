@@ -13,6 +13,7 @@ import assert from "assert";
 import { Router } from "express";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import sanitize from "sanitize-html";
 import {
   ArticleCommentRepository,
   ArticleReportRepository,
@@ -150,10 +151,14 @@ async function postArticleHandler(req: Request, res: Response) {
       errors: ajv.errors,
     });
   }
-  // TODO(vi117): sanitize content.
+
+  const content = sanitize(body.content, {
+    allowedTags: sanitize.defaults.allowedTags.concat(["img"]),
+  });
+
   const inserted_id = await articleRepository.insert({
     title: body.title,
-    content: body.content,
+    content: content,
     user_id,
     category: body.category,
     related_funding_id: body.related_funding_id,

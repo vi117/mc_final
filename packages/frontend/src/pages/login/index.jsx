@@ -59,19 +59,6 @@ export default function LoginPage() {
               className="d-flex"
               style={{ gap: "5px", justifyContent: "baseline" }}
             >
-              <Form.Check
-                type="checkbox"
-                id="remember-check"
-                style={{ fontSize: "12px" }}
-              >
-              </Form.Check>
-              <Form.Label
-                htmlFor="remember-check"
-                className="text-muted"
-                style={{ fontSize: "12px" }}
-              >
-                자동 로그인
-              </Form.Label>
             </div>
             <NavLink
               to="/forgot-password"

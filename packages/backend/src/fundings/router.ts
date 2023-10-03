@@ -3,6 +3,7 @@ import ajv from "@/util/ajv";
 import { RouterCatch } from "@/util/util";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import sanitize from "sanitize-html";
 
 import { FundingsRepository } from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
@@ -44,6 +45,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
   const interest = queryParams.interest === "true";
   const participated = queryParams.participated === "true";
   const reviewed = parseQueryToString(queryParams?.reviewed);
+  const title = parseQueryToString(queryParams?.title);
 
   assert_param(
     reviewed === undefined || reviewed === "reviewed"
@@ -83,6 +85,7 @@ async function getAllFundingHandler(req: Request, res: Response) {
     interest,
     participated,
     reviewed,
+    title,
   });
   res.json(result).status(StatusCodes.OK);
 }
@@ -329,10 +332,13 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   const { title, content, begin_date, end_date } = req.body;
 
   try {
+    const clean_content = sanitize(content, {
+      allowedTags: sanitize.defaults.allowedTags.concat(["img"]),
+    });
     const insertedId = await requestRepo.insert({
       host_id: user.id,
       title,
-      content,
+      content: clean_content,
       // TODO(vi117): sanitize content html
       begin_date: new Date(begin_date),
       end_date: new Date(end_date),
