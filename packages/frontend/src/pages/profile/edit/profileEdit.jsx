@@ -69,7 +69,7 @@ function ProfileEditPage() {
           value={address}
           onChange={onAddressHandler}
         />
-        <RegisterLabel>Article</RegisterLabel>
+        <RegisterLabel>Introduction</RegisterLabel>
         <input
           name="introduction"
           type="text"
