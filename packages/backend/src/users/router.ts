@@ -323,7 +323,12 @@ export const updateUserById = async (req: Request, res: Response) => {
 
   const userRepository = getUserRepository();
   await userRepository.updateById(id, req.body);
-
+  const user = await userRepository.findById(id);
+  if (!user) {
+    res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
+    return;
+  }
+  setLoginToken(res, user);
   res.status(StatusCodes.OK).json({ message: "success" });
 };
 

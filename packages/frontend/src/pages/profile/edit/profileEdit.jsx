@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
+import { patchUserInfo } from "../../../api/mod";
 import { Button } from "../../../component/Button";
+import { useAlertModal } from "../../../hook/useAlertModal";
 import { useLoginInfo } from "../../../hook/useLogin";
 import classes from "../../register/registerForm.module.css";
 
@@ -25,6 +27,7 @@ import classes from "../../register/registerForm.module.css";
 
 function ProfileEditPage() {
   const loginInfo = useLoginInfo();
+  const { showAlertModal, AlertModal } = useAlertModal();
 
   const formRef = useRef(null);
   const [phone, setPhone] = useState(loginInfo.phone);
@@ -49,6 +52,7 @@ function ProfileEditPage() {
         alignItems: "center",
       }}
     >
+      <AlertModal />
       <form
         ref={formRef}
         style={{ display: "flex", flexDirection: "column" }}
@@ -81,7 +85,7 @@ function ProfileEditPage() {
         <Button
           id="form-controls"
           type="submit"
-          onClick={onSubmitHandler}
+          onClick={(e) => onSubmitHandler(e)}
           className={classes.button_submit}
         >
           수정 완료
@@ -90,25 +94,21 @@ function ProfileEditPage() {
     </div>
   );
 
-  function onSubmitHandler(e) {
+  async function onSubmitHandler(e) {
     e.preventDefault();
     e.stopPropagation();
-
-    fetch(`/api/v1/users/${loginInfo.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      await patchUserInfo(loginInfo.id, {
         phone,
         address,
         introduction,
-      }),
-    }).then((res) => {
-      if (res.status === 200) {
-        alert("success");
-      }
-    });
+      });
+      await showAlertModal("프로파일 정보 수정", "성공");
+    } catch (e) {
+      console.log(e);
+      await showAlertModal("프로파일 정보 수정", e.message);
+    }
+
     // if (
     //   !Phone || !Address
     // ) {

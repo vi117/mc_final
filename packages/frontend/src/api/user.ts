@@ -142,3 +142,22 @@ export async function send_reset_password(email: string) {
   }
   return true;
 }
+
+export async function patchUserInfo(id: number, body: {
+  phone?: string;
+  address?: string;
+  introduction?: string;
+}) {
+  const res = await fetch(`/api/v1/users/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new APIError("token expired or invalid");
+  }
+  loginRevalidate();
+  return await res.json();
+}
