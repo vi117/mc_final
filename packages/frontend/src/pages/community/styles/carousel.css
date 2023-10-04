@@ -1,14 +1,12 @@
+
 .bestitem-container{
-    background-color: var(--border);
-    padding:20px;
-    height:375px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
+  width:100%;
+  max-width: var(--max-content-width);
+  padding: 0px 10px 10px 10px;
+  margin: 0 auto;
 }
 
 .community-carousel-wrap{
-    max-width: 1080px;
     background-color: var(--white);
     border-radius: 20px;
     border: 1px solid var(--secondary);
@@ -22,7 +20,8 @@
 
 .community-carousel-wrap > h1{
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   margin-bottom: 20px;
 }
 
@@ -138,12 +137,7 @@ justify-content: space-between;
 
 /*반응형*/
 @media screen and (max-width: 768px) {
-  .bestitem-container{
-    padding:10px;
-    height:350px;
-}
-
-
+ 
   .community-carousel-wrap{
     padding:20px;
     height:300px;
