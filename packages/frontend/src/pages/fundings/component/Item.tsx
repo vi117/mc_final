@@ -34,6 +34,7 @@ export function FundingItem({
           <ul className={classes["funding_tags_area"]}>
             {x.tags.map((t) => (
               <li
+                key={t.id}
                 className={clsx(classes["funding_item_tags"], {
                   [classes["funding_item_tags_emphasis"]]: is_empahsis_tag(
                     t.tag,
