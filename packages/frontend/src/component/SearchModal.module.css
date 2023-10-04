@@ -7,7 +7,6 @@
     display: flex;
     align-items: center;
     background: var(--border);
-    z-index: 101;
 }
 
 .search_bar_area{

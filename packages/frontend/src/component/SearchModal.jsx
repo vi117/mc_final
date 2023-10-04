@@ -1,29 +1,13 @@
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { NavLink, useNavigate } from "react-router-dom";
 import classes from "./SearchModal.module.css";
 import SearchModalBasic from "./SearchModalBasic";
 
 function SearchModal() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
 
   const openModal = () => {
     setModalOpen(true);
-  };
-
-  const performSearch = () => {
-    if (searchTerm) {
-      navigate(`/fundings?title=${searchTerm}`);
-      setModalOpen(false); // 모달 창 닫기
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      performSearch();
-    }
   };
 
   return (
@@ -33,15 +17,12 @@ function SearchModal() {
           className={classes["search_bar"]}
           placeholder="검색어를 입력하세요."
           onClick={openModal}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-          }}
-          onKeyDown={handleKeyDown}
         />
 
-        <NavLink to="#" onClick={performSearch}>
-          <FiSearch className={classes["search_bar_button"]} />
-        </NavLink>
+        <FiSearch
+          className={classes["search_bar_button"]}
+          onClick={openModal}
+        />
       </div>
       {modalOpen && <SearchModalBasic setModalOpen={setModalOpen} />}
     </div>
