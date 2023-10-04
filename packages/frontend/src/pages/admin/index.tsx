@@ -6,6 +6,10 @@ import useAlertModal from "../../../src/hook/useAlertModal";
 import useFundingRequest from "../../hook/useFundingRequest";
 import classes from "./admin.module.css";
 
+function getStateTextFromFundingState(funding_state: number) {
+  return ["승인 대기", "승인됨", "승인 거부"][funding_state];
+}
+
 export default function AdminPage() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const { data, error, isLoading, mutate } = useFundingRequest();
@@ -16,6 +20,7 @@ export default function AdminPage() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+
   return (
     <Container>
       <AlertModal />
@@ -29,7 +34,7 @@ export default function AdminPage() {
               )}
               <div className={classes["Fundingthumbnail"]}>
                 <img src={funding.thumbnail}></img>
-                <div>{funding.funding_state}</div>
+                <div>{getStateTextFromFundingState(funding.funding_state)}</div>
                 <h1 style={{ fontSize: "16px", textAlign: "left" }}>
                   {funding.title}
                 </h1>
