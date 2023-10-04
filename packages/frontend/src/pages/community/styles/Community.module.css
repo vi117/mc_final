@@ -142,7 +142,7 @@ outline:none;
   border: none;
   border-radius: 7px;
   padding: 7px 15px;
-  background-color: var(--green);  
+  background-color: var(--green); 
 }
 
 .closebtn:hover, .filteron:hover{
