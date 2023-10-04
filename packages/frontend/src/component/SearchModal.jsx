@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import classes from "./SearchModal.module.css";
 import SearchModalBasic from "./SearchModalBasic";
 
 function SearchModal() {
   const [modalOpen, setModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const openModal = () => {
     setModalOpen(true);
@@ -14,7 +15,7 @@ function SearchModal() {
 
   const performSearch = () => {
     if (searchTerm) {
-      window.location.href = `/fundings?title=${searchTerm}`;
+      navigate(`/fundings?title=${searchTerm}`);
     }
   };
 

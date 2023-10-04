@@ -5,15 +5,17 @@ import classes from "./Upload.module.css";
 
 const Upload = ({
   imageFile,
+  initial_preview_URL,
 }: {
   imageFile: React.MutableRefObject<File | null>;
+  initial_preview_URL?: string;
 }) => {
   const [image, setImage] = useState<{
     image_file: File | null;
     preview_URL: string;
   }>({
     image_file: null,
-    preview_URL: "",
+    preview_URL: initial_preview_URL ?? "",
   });
 
   const inputRef = useRef<HTMLInputElement>(null);

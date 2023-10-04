@@ -1,23 +1,7 @@
 import { useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
-async function googleLogin(code: string) {
-  const res = await fetch("/api/v1/users/google-login", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      code,
-    }),
-  });
-  if (!res.ok) {
-    return null;
-  }
-  const resJson = await res.json();
-  return resJson;
-}
+import { googleLogin } from "../../api/user";
 
 const usedCode = new Set();
 
@@ -29,18 +13,22 @@ export function GoogleLogin() {
   useEffect(() => {
     if (code) {
       if (usedCode.has(code)) {
+        console.log("already used");
         return;
       }
       googleLogin(code).then((res) => {
-        if (res === null) {
+        if (
+          res.code === "invalid_request" || res.code === "token_error"
+          || res.code === "payload_error"
+        ) {
           console.log("internal server error");
           return;
         }
-        if (res.message === "success") {
-          navigate("/login");
+        if (res.code === "success") {
+          navigate("/");
         } else {
           navigate("/register", {
-            state: res,
+            state: res.data,
           });
         }
       }).finally(() => {

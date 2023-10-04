@@ -88,7 +88,7 @@ function ProfileEditPage() {
         <Button
           id="form-controls"
           type="submit"
-          onClick={(e) => onSubmitHandler(e)}
+          onClick={() => onSubmitHandler()}
           className={classes.button_submit}
         >
           수정 완료
@@ -97,9 +97,7 @@ function ProfileEditPage() {
     </div>
   );
 
-  async function onSubmitHandler(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  async function onSubmitHandler() {
     try {
       await patchUserInfo(loginInfo.id, {
         phone,

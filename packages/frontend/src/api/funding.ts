@@ -127,3 +127,56 @@ export async function fundingParticipate(id: number, reward_id: number, body: {
     throw new APIError(data.message);
   }
 }
+
+export async function postFundingRequest({
+  title,
+  content,
+  contentThumbnails,
+  targetValue,
+  thumbnail,
+  startDate,
+  endDate,
+  tags,
+  rewards,
+}: {
+  title: string;
+  content: string;
+  thumbnail: File;
+  contentThumbnails: File[];
+  targetValue: number;
+  startDate: Date;
+  endDate: Date;
+  tags: string[];
+  rewards: {
+    title: string;
+    content: string;
+    price: number;
+    reward_count: number;
+  }[];
+}) {
+  const url = new URL("/api/v1/fundings/request", window.location.href);
+
+  const formData = new FormData();
+
+  formData.append("title", title);
+  formData.append("thumbnail", thumbnail);
+  [...contentThumbnails].forEach((file) => {
+    formData.append("content_thumbnail", file);
+  });
+  formData.append("content", content);
+  formData.append("target_value", targetValue.toString());
+  formData.append("begin_date", startDate.toISOString());
+  formData.append("end_date", endDate.toISOString());
+  formData.append("tags", tags.toString());
+  formData.append("rewards", JSON.stringify(rewards));
+
+  const r = await fetch(url.href, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!r.ok) {
+    const data = await r.json();
+    throw new APIError(data.message);
+  }
+}

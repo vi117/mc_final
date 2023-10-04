@@ -18,6 +18,7 @@ export async function googleLogin(req: Request, res: Response) {
   if (!v) {
     res.status(StatusCodes.BAD_REQUEST).json({
       message: "유효하지 않은 요청입니다.",
+      code: "invalid_request",
       errors: ajv.errors,
     });
     return;
@@ -29,6 +30,7 @@ export async function googleLogin(req: Request, res: Response) {
   if (!token.ok) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: "서버 에러: ",
+      code: "token_error",
     });
     debug(await token.text());
     return;
@@ -45,6 +47,7 @@ export async function googleLogin(req: Request, res: Response) {
   if (!id_token_payload) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: "서버 에러",
+      code: "payload_error",
     });
     debug("token error!", id_token);
     return;
@@ -60,7 +63,11 @@ export async function googleLogin(req: Request, res: Response) {
     res.status(StatusCodes.OK).json({
       message: "회원가입이 필요합니다.",
       code: "need_signup",
-      token,
+      data: {
+        token,
+        email,
+        thumbnail: id_token_payload.picture,
+      },
     });
     return;
   }

@@ -14,7 +14,7 @@ import assert from "assert";
 import debug_fn from "debug";
 import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
-import { getAuthCodeRepository } from "./authCodeRepo";
+import { getAuthCodeRepository, getOauthCodeRepository } from "./authCodeRepo";
 import { googleLogin } from "./googleLogin";
 import {
   checkLogin,
@@ -85,6 +85,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
       address: { type: "string" },
       address_detail: { type: "string" },
       phone: { type: "string" },
+      token: { type: "string" },
     },
     required: ["nickname", "email", "password", "address", "phone"],
   }, req.body);
@@ -102,6 +103,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
     address_detail,
+    token,
   } = req.body;
   const userRepository = getUserRepository();
   let user_id: number | undefined;
@@ -132,6 +134,30 @@ export async function signup(req: Request, res: Response): Promise<void> {
       throw e;
     }
   }
+  if (token) {
+    const verifyEmail = getOauthCodeRepository().verify(token);
+    if (!verifyEmail) {
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        message: "인증코드가 만료되거나 잘못되었습니다.",
+      });
+      return;
+    }
+    if (verifyEmail !== email) {
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        message: "인증 이메일과 입력이메일이 동일해야합니다.",
+      });
+      return;
+    }
+    await userRepository.approveByEmail(email);
+    res.status(StatusCodes.OK).json({
+      message: "회원가입 성공",
+      user: {
+        user_id,
+        password: null,
+      },
+    });
+    return;
+  }
   const verificationCode = getAuthCodeRepository().createVerificationCode(
     email,
   );
@@ -139,7 +165,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
 
   res.status(StatusCodes.CREATED).json({
     message: "회원가입 성공",
-    user: user_id === undefined ? null : {
+    user: {
       user_id,
       password: null,
     },
