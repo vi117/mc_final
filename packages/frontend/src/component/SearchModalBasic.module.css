@@ -62,13 +62,6 @@
   color:var(--green);
 }
 
-
-
-
-
-
-
-
 .search_bar_container{
   width: 85%;
   height: 35px;
@@ -103,9 +96,8 @@
 }
 
   
-@media screen and (max-width: 576px) {
+/* @media screen and (max-width: 576px) {
   .container {
     width: 150px;
   }
-
-}
+} */
