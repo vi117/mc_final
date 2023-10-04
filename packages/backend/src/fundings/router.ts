@@ -385,9 +385,26 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   assert(!isNaN(id));
 
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      reason: { type: "string" },
+    },
+    required: ["reason"],
+  }, req.body);
+
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+
   const requestRepo = new FundingRequestsRepository(getDB());
   requestRepo.updateById(id, {
     funding_state: 2,
+    reason: req.body.reason,
     deleted_at: new Date(),
   });
 

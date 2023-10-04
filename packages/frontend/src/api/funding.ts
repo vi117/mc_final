@@ -64,15 +64,22 @@ export async function fundingApprove(id: number) {
  * Rejects a funding request with the given ID.
  *
  * @param {number} id - The ID of the funding request to reject.
+ * @param {string} [reason] - The reason for rejecting the request.
  * @return {Promise<void>} - A promise that resolves when the request is successfully rejected.
  */
-export async function fundingReject(id: number) {
+export async function fundingReject(id: number, reason?: string) {
   const url = new URL(
     `/api/v1/fundings/request/${id}/reject`,
     window.location.origin,
   );
   const res = await fetch(url.href, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      reason: reason ?? "",
+    }),
   });
   if (!res.ok) {
     const data = await res.json();
