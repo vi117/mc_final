@@ -1,10 +1,10 @@
-import { Accordion, Alert, Button, Form } from "react-bootstrap";
+import { Accordion, Alert, Button, Container, Form } from "react-bootstrap";
 import Logo from "../../component/Logo";
 import classes from "./withdrawal.module.css";
 
 export default function WithdrawalPage() {
   return (
-    <div className={classes["container"]}>
+    <Container className={classes["container"]}>
       <h1 style={{ color: "#0C0002" }}>회원 탈퇴</h1>
       <div className={classes["Alert"]}>
         <Alert variant="danger">
@@ -40,6 +40,6 @@ export default function WithdrawalPage() {
         <Button variant="danger">탈퇴하기</Button>
         <Button variant="secondary">취소</Button>
       </div>
-    </div>
+    </Container>
   );
 }

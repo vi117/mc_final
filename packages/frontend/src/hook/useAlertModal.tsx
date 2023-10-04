@@ -1,6 +1,24 @@
 import { useRef, useState } from "react";
 import AlertModal from "../component/AlertModal";
 
+/**
+ * Creates and returns an alert modal hook.
+ *
+ * @return {{AlertModal: () => JSX.Element, showAlertModal: (title: string, msg: string) => Promise<void>}} An object containing the AlertModal component and the showAlertModal function.
+ * @example
+ * ```tsx
+ * const { AlertModal, showAlertModal } = useAlertModal();
+ * ...
+ * return <>
+ *   <AlertModal />
+ *   ...
+ *   <button onClick={async ()=>{
+ *      showAlertModal("title", "msg")
+ *    }}/>
+ * </>
+ * ```
+ */
+
 export function useAlertModal() {
   const [showModal, setShowModal] = useState(false);
   const [msg, setMsg] = useState("");

@@ -13,9 +13,13 @@
 
 .btn_svg {
     color: var(--gray);
-      fill:var(--gray);
+    fill: var(--gray);
     width:24px;
     height:24px;
+}
+.svg_active {
+    color: var(--yellow);
+    fill:var(--yellow);
 }
 
 .interest_btn:hover > .btn_svg {

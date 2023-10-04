@@ -263,13 +263,13 @@ margin-bottom: 10px;
     color: var(--white);
 }
 
-hr{
+.hr{
     display:none;
 }
 
 
 
-  @media screen and (max-width: 1024px) {
+@media screen and (max-width: 1024px) {
 
     .funding_write_wrap h1 {
         font-size: 18px;
@@ -297,7 +297,7 @@ hr{
         border: 1px solid var(--beige);
         margin: 30px 0px;
     }
-    hr{
+    .hr{
         border-color:var(--gray);
         margin-bottom: 30px !important;
         display:block;
@@ -334,13 +334,13 @@ hr{
         display:none;
     }
     .profile_container{
-    height:auto;
-    padding:20px 7px;
-    position: sticky;
-    width:100%;
-    flex-direction: row !important;
-    align-items: center;
-    justify-content: center;
+        height:auto;
+        padding:20px 7px;
+        position: sticky;
+        width:100%;
+        flex-direction: row !important;
+        align-items: center;
+        justify-content: center;
     }
     .funding_write_container{
         margin-left: 0px;
@@ -369,21 +369,21 @@ hr{
     }
 
    .item_container, .item_container_title{
-    height:auto;
+        height:auto;
+    }
+    .reward_item_area{
+        background-color: var(--beige);
+    }
 }
-.reward_item_area{
-    background-color: var(--beige);
-}
-  }
   
-  @media screen and (max-width: 620px){
-.date_area{
-    display:contents;
-}
-.date_item{
+@media screen and (max-width: 620px){
+    .date_area{
+        display:contents;
+    }
+    .date_item{
     margin-top: 10px;
     align-items: center;
     width: 100%;
     display:flex;
+    }
 }
-  }

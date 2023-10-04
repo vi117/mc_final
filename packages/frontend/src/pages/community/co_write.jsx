@@ -10,6 +10,8 @@ import "./styles/tags.css";
 import Cowritemodal from "./components/co_writemodal";
 import "./styles/editor.css";
 import { GoArrowLeft } from "react-icons/go";
+import { postArticle } from "../../api/article";
+import { useAlertModal } from "../../hook/useAlertModal";
 
 const selectList = ANIMAL_CATEGORY.map((v) => ({
   value: v,
@@ -39,8 +41,8 @@ const CommunityWrite = () => {
   const [category, setCategory] = useState("");
   const [tagSelected, setSelected] = useState(["QnA"]);
   const [showModal, setShowModal] = useState(true);
-
   const [reviewedFunding, setReviewedFunding] = useState(undefined);
+  const { AlertModal, showAlertModal } = useAlertModal();
 
   const backToList = () => {
     const userConfirmed = window.confirm(
@@ -61,6 +63,7 @@ const CommunityWrite = () => {
 
   return (
     <div className={classes["write-container"]}>
+      <AlertModal />
       {
         <Cowritemodal
           show={showModal}
@@ -146,26 +149,18 @@ const CommunityWrite = () => {
   );
 
   async function sendRequest() {
-    const url = new URL("/api/v1/articles/", window.location.href);
-    const r = await fetch(url.href, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      await postArticle({
         title,
         content,
         category,
-        related_funding_id: reviewedFunding?.id,
-      }),
-    });
-
-    if (r.status === 201) {
-      // TODO(vi117): navigate
-      alert("요청이 접수되었습니다.");
+        reviewedFundingId: reviewedFunding?.id,
+      });
+      await showAlertModal("success", "요청이 접수되었습니다.");
       navigate("/community");
-    } else {
-      alert("요청이 실패했습니다.");
+    } catch (e) {
+      console.log(e);
+      await showAlertModal("fail", "요청이 실패했습니다.");
     }
   }
 };

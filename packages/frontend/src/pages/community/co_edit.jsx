@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
-import useSWR from "swr";
+import { patchArticle } from "../../api/article";
 import { Editor } from "../../component/Editor";
+import { useAlertModal } from "../../hook/useAlertModal";
 import { ANIMAL_CATEGORY } from "./constant";
 import baseClasses from "./styles/Co_base.module.css";
 import classes from "./styles/Co_write.module.css";
@@ -21,7 +22,6 @@ const TagWrite = ({
       <TagsInput
         value={selected}
         onChange={onChange}
-        name="fruits"
         placeHolder="태그를 입력해주세요"
       />
     </div>
@@ -29,21 +29,26 @@ const TagWrite = ({
 };
 
 const CommunityEdit = () => {
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [tagSelected, setSelected] = useState(["QnA"]);
-
-  const { id } = useParams();
-  const {
-    data: fetcherData,
-    error: fetcherError,
-    isLoading: fetcherIsLoading,
-  } = useSWR(
-    `/api/v1/articles/${id}`,
-    (url) => fetch(url).then((res) => res.json()),
+  const location = useLocation();
+  const item = location.state;
+  const [content, setContent] = useState(item?.content ?? "");
+  const [title, setTitle] = useState(item?.title ?? "");
+  const [category, setCategory] = useState(item?.category ?? "");
+  const [tagSelected, setSelected] = useState(
+    item?.tags?.map((v) => v.tag) ?? [],
   );
-  const item = fetcherData;
+  const navigate = useNavigate();
+  const { AlertModal, showAlertModal } = useAlertModal();
+
+  const backToList = () => {
+    const userConfirmed = window.confirm(
+      "지금까지 작성한 내용이 모두 사라집니다.",
+    );
+
+    if (userConfirmed) {
+      navigate("/community");
+    }
+  };
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -52,18 +57,12 @@ const CommunityEdit = () => {
     }
   };
 
-  if (fetcherIsLoading) {
-    return <div>로딩중...</div>;
-  }
-  if (fetcherError) {
-    return <div>에러가 발생했습니다.</div>;
-  }
-
   return (
     <div className={classes["write-container"]}>
+      <AlertModal />
       <div className={classes["write-wrap"]}>
         <div className={classes["write-header"]}>
-          <h4>커뮤니티 글 작성</h4>
+          <h4>커뮤니티 글 수정</h4>
         </div>
         <Form.Select
           className={classes["catSelect"]}
@@ -100,7 +99,7 @@ const CommunityEdit = () => {
           type="text"
           name="title"
           placeholder="제목을 입력해주세요"
-          value={item.title}
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
           style={{ marginBottom: "-2px" }}
         />
@@ -110,11 +109,11 @@ const CommunityEdit = () => {
             onChange={(v) => {
               setContent(v);
             }}
-            value={item.content}
+            value={content}
           />
         </div>
         <div className={classes["submitbutton"]}>
-          <button>돌아가기</button>
+          <button onClick={backToList}>돌아가기</button>
           <button onClick={sendRequest}>글 등록</button>
         </div>
       </div>
@@ -122,24 +121,17 @@ const CommunityEdit = () => {
   );
 
   async function sendRequest() {
-    const url = new URL("/api/v1/articles/request", window.location.href);
-
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("category", category);
-    formData.append("tags", tagSelected.toString());
-
-    const r = await fetch(url.href, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (r.status === 201) {
-      alert("요청이 접수되었습니다.");
-    } else {
-      alert("요청이 실패했습니다.");
+    try {
+      await patchArticle(item.id, {
+        title,
+        content,
+        category,
+        tags: tagSelected,
+      });
+      await showAlertModal("success", "요청이 접수되었습니다.");
+    } catch (e) {
+      console.log(e);
+      await showAlertModal("fail", "요청이 실패했습니다.");
     }
   }
 };

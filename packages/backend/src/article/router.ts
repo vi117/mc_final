@@ -213,10 +213,13 @@ async function updateArticleHandler(req: Request, res: Response) {
     },
   }, req.body);
   if (!v) {
-    res.status(StatusCodes.OK)
-      .json({ message: "success" });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
   }
-
+  // TODO(vi117): support tag
   await articleRepository.update(id, {
     title: req.body.title,
     content: req.body.content,
