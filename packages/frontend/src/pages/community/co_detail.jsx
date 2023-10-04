@@ -45,7 +45,7 @@ export function CommunityDetail() {
         <div className={classes["titleArea"]}>
           <div className={classes["selectedTitle"]}>{item.title}</div>
           <div className={classes["detailbtn"]}>
-            <Link to={`/community/${item.id}/edit`}>
+            <Link to={`/community/${item.id}/edit`} state={item}>
               <button className={classes["editbtn"]}>수정</button>
             </Link>
             <button onClick={deleteArticleAction}>삭제</button>

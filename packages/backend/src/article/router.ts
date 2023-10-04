@@ -219,7 +219,7 @@ async function updateArticleHandler(req: Request, res: Response) {
     });
     return;
   }
-
+  // TODO(vi117): support tag
   await articleRepository.update(id, {
     title: req.body.title,
     content: req.body.content,
