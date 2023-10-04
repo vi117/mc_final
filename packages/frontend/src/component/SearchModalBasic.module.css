@@ -54,3 +54,14 @@
 .recommendlist > li:hover{
   color:var(--green);
 }
+
+
+
+
+  
+@media screen and (max-width: 576px) {
+  .container {
+    width: 150px;
+  }
+
+}
