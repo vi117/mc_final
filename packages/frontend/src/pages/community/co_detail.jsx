@@ -20,6 +20,14 @@ export function CommunityDetail() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const params = useParams();
   const id = parseInt(params.id);
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}.${month}.${day}`;
+  }
+
   const {
     data: fetcherData,
     error: fetcherError,
@@ -39,7 +47,7 @@ export function CommunityDetail() {
 
   const liked = user_id === item.like_user_id;
   return (
-    <div className={classes["coDetailWrap"]}>
+    <div>
       <AlertModal />
       <div className={classes["container"]}>
         <div className={classes["titleArea"]}>
@@ -60,8 +68,8 @@ export function CommunityDetail() {
             <div className={classes["createdBy"]}>{item.author_nickname}</div>
           </NavLink>
           <div className={classes["dateArea"]}>
-            <div className={classes["date"]}>{item.created_at}</div>
-            <div className={classes["views"]}>조회수:{item.view_count}</div>
+            <div className={classes["date"]}>{formatDate(item.created_at)}</div>
+            <div className={classes["views"]}>조회수: {item.view_count}</div>
           </div>
         </div>
         {item.related_funding_id && (
@@ -69,7 +77,7 @@ export function CommunityDetail() {
             to={`/fundings/${item.related_funding_id}`}
             className={classes["related_funding_linkto"]}
           >
-            펀딩 | {`${item.related_funding.title}`}
+            <b>펀딩후기</b> | {`${item.related_funding.title}`}
           </Link>
         )}
         <div className={classes["contentArea"]}>

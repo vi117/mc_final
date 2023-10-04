@@ -21,10 +21,10 @@
 }
 
 .co_h1 {
+  text-align: left;
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.02px;
-  margin: 0 auto;
   margin-bottom: 15px;
 }
 
