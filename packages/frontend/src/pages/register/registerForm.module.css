@@ -9,15 +9,6 @@
     width: 100%;
 }
 
-.label {
-    color: var(--teritary);
-    transition: all 0.3s;
-}
-
-.label_error {
-    box-shadow: 0 0 0 .25rem #ED4B5E;
-}
-
 .button_submit {
     padding: 10px 50px;
     background-color: #ED4B5E;
