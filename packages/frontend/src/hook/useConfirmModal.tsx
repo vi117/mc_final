@@ -8,7 +8,7 @@ import ConfirmModal from "../component/ConfirmModal";
  * An object containing the AlertModal component and the showAlertModal function.
  * @example
  * ```tsx
- * const { ConfirmModal, showConfirmModal } = useAlertModal();
+ * const { ConfirmModal, showConfirmModal } = useConfirmModal();
  * ...
  * return <>
  *   <ConfirmModal />
