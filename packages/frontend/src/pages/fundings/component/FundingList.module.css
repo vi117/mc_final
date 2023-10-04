@@ -1,0 +1,14 @@
+.no_tagresult{
+    margin: 0 auto;
+    font-size: 16px;
+    /* min-width:600px; */
+    font-weight: 500;
+    padding-left: 10px;
+  }
+
+.no_tagresult > div{
+    font-weight: 400;
+    margin-top: 10px;
+    border-radius: 7px;
+    color:var(--teritary);
+}
