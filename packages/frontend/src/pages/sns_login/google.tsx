@@ -1,36 +1,7 @@
 import { useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
-async function googleLogin(code: string): Promise<{
-  message: string;
-  code:
-    | "need_signup"
-    | "success"
-    | "invalid_request"
-    | "token_error"
-    | "payload_error";
-  data?: {
-    token: string;
-    email: string;
-    name: string;
-  };
-}> {
-  const res = await fetch("/api/v1/users/google-login", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      code,
-    }),
-  });
-  if (!res.ok) {
-    return await res.json();
-  }
-  const resJson = await res.json();
-  return resJson;
-}
+import { googleLogin } from "../../api/user";
 
 const usedCode = new Set();
 
