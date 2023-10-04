@@ -213,8 +213,11 @@ async function updateArticleHandler(req: Request, res: Response) {
     },
   }, req.body);
   if (!v) {
-    res.status(StatusCodes.OK)
-      .json({ message: "success" });
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
   }
 
   await articleRepository.update(id, {
