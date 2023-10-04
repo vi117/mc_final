@@ -1,3 +1,4 @@
+import useFundingRequest from "@/hook/useFundingRequest";
 import { Accordion, Badge, Placeholder } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useFundings from "../../hook/useFundings";
@@ -92,6 +93,79 @@ function UserInterestedFundings() {
 function UserParticipatedFundings() {
   const { data, error, isLoading } = useFundings({ participated: true });
   return <FundingTable data={data} isLoading={isLoading} error={error} />;
+}
+
+function UserFundingRequests() {
+  const { data, error, isLoading } = useFundingRequest({
+    limit: 50,
+  });
+  if (isLoading) {
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">번호</th>
+          <th scope="col">상태</th>
+          <th scope="col">제목</th>
+          <th scope="col">사유</th>
+        </tr>
+      </thead>
+      <tbody>
+        {[1, 2, 3].map((key) => (
+          <tr key={key}>
+            <th scope="row">
+              <Placeholder animation="glow">
+                <Placeholder style={{ width: "20px" }} />
+              </Placeholder>
+            </th>
+            <td>
+              <Placeholder animation="glow">
+                <Placeholder style={{ width: "30px" }} />
+              </Placeholder>
+            </td>
+            <td>
+              <Placeholder animation="glow">
+                <Placeholder style={{ width: "200px" }} />
+              </Placeholder>
+            </td>
+            <td>
+              <Placeholder animation="glow">
+                <Placeholder style={{ width: "100px" }} />
+              </Placeholder>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>;
+  }
+  if (error) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">번호</th>
+          <th scope="col">상태</th>
+          <th scope="col">제목</th>
+          <th scope="col">사유</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data?.map((fr) => (
+          <tr key={fr.id}>
+            <th scope="row">{fr.id}</th>
+            <td>
+              {["pending", "accepted", "rejected"][fr.funding_state]}
+            </td>
+            <td>
+              {fr.title}
+            </td>
+            <td>{fr.reason}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
 function LikedArticlesList() {
@@ -202,6 +276,12 @@ function AccordionList() {
         <Accordion.Header>후원한 펀딩</Accordion.Header>
         <Accordion.Body>
           <UserParticipatedFundings />
+        </Accordion.Body>
+      </Accordion.Item>
+      <Accordion.Item eventKey="4">
+        <Accordion.Header>올린 펀딩 요청</Accordion.Header>
+        <Accordion.Body>
+          <UserFundingRequests />
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>

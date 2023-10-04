@@ -17,6 +17,11 @@ export class FundingRequestsRepository {
   async findAll({
     limit = 50,
     offset = 0,
+    user_id = undefined,
+  }: {
+    limit?: number;
+    offset?: number;
+    user_id?: number;
   }): Promise<FundingRequestObject[]> {
     const ret = await this.db.selectFrom("funding_requests")
       .innerJoin("users as host", "funding_requests.host_id", "host.id")
@@ -26,8 +31,13 @@ export class FundingRequestsRepository {
         "host.email as host_email",
       ])
       .selectAll("funding_requests")
+      .$if(
+        user_id !== undefined,
+        (qb) => qb.where("funding_requests.host_id", "=", user_id as number),
+      )
       .limit(limit)
       .offset(offset)
+      .orderBy("funding_requests.created_at", "desc")
       .execute();
     return ret.map((x) => ({
       ...x,

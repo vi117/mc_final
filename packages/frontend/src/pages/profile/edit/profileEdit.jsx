@@ -5,26 +5,6 @@ import { useAlertModal } from "../../../hook/useAlertModal";
 import { useLoginInfo } from "../../../hook/useLogin";
 import classes from "../../register/registerForm.module.css";
 
-/**
- * @param formElem{HTMLFormElement}
- */
-// async function edit(formElem) {
-//   const formData = new FormData(formElem);
-
-//   const r = await fetch("/api/v1/users", {
-//     method: "POST",
-//     body: formData,
-//   });
-
-//   if (r.status === 201) {
-//     /// 내정보 수정 성공!
-//     return true;
-//   } else {
-//     /// 내정보 수정 실패!
-//     return false;
-//   }
-// }
-
 function ProfileEditPage() {
   const loginInfo = useLoginInfo();
   const { showAlertModal, AlertModal } = useAlertModal();

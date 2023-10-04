@@ -9,7 +9,9 @@ import {
 } from "../../api/article";
 import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
+import { useConfirmModal } from "../../hook/useConfirmModal";
 import { useLoginId } from "../../hook/useLogin";
+import { formatDate } from "../../util/date";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
@@ -20,6 +22,8 @@ export function CommunityDetail() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const params = useParams();
   const id = parseInt(params.id);
+  const { ConfirmModal, showConfirmModal } = useConfirmModal();
+
   const {
     data: fetcherData,
     error: fetcherError,
@@ -39,8 +43,9 @@ export function CommunityDetail() {
 
   const liked = user_id === item.like_user_id;
   return (
-    <div className={classes["coDetailWrap"]}>
+    <div>
       <AlertModal />
+      <ConfirmModal />
       <div className={classes["container"]}>
         <div className={classes["titleArea"]}>
           <div className={classes["selectedTitle"]}>{item.title}</div>
@@ -60,8 +65,8 @@ export function CommunityDetail() {
             <div className={classes["createdBy"]}>{item.author_nickname}</div>
           </NavLink>
           <div className={classes["dateArea"]}>
-            <div className={classes["date"]}>{item.created_at}</div>
-            <div className={classes["views"]}>조회수:{item.view_count}</div>
+            <div className={classes["date"]}>{formatDate(item.created_at)}</div>
+            <div className={classes["views"]}>조회수: {item.view_count}</div>
           </div>
         </div>
         {item.related_funding_id && (
@@ -69,7 +74,7 @@ export function CommunityDetail() {
             to={`/fundings/${item.related_funding_id}`}
             className={classes["related_funding_linkto"]}
           >
-            펀딩 | {`${item.related_funding.title}`}
+            <b>펀딩후기</b> | {`${item.related_funding.title}`}
           </Link>
         )}
         <div className={classes["contentArea"]}>
@@ -111,14 +116,14 @@ export function CommunityDetail() {
     </div>
   );
   async function deleteArticleAction() {
-    if (confirm("정말로 삭제하시겠습니까?") == true) {
+    if (await showConfirmModal("글 삭제", "정말로 삭제하시겠습니까?")) {
       try {
         await deleteArticle(id);
-        alert("삭제가 완료되었습니다.");
+        showAlertModal("글 삭제", "삭제가 완료되었습니다.");
         navigate("/community");
       } catch (e) {
         if (e instanceof Error) {
-          alert("삭제이 실패했습니다.");
+          showAlertModal("글 삭제", "삭제가 실패했습니다.");
         } else throw e;
       }
     } else {

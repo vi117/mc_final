@@ -1,10 +1,9 @@
 import { logout } from "@/api/user";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { BiMenu } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { useLoginId, useLoginInfo } from "../../hook/useLogin";
+import Profileimg from "../../pages/community/assets/user.png";
 import LogoSvg from "../Logo";
 import SearchModal from "../SearchModal";
 import classes from "./Header.module.css";
@@ -19,14 +18,9 @@ function LoginButton() {
       <NavLink to={"/"} onClick={logout}>
         <span className={classes.header_login_btn}>
           <FiLogOut
-            color="#555555"
-            style={{
-              marginRight: "5px",
-              width: "16px",
-              height: "16px",
-            }}
+            className={classes.login_svg}
           />
-          로그아웃
+          <span className={classes.login_text}>로그아웃</span>
         </span>
       </NavLink>
     )
@@ -34,15 +28,9 @@ function LoginButton() {
       <NavLink to={"/login"}>
         <span className={classes.header_login_btn}>
           <FiLogIn
-            color="#6d6d6d"
-            style={{
-              color: "#6d6d6d",
-              marginRight: "5px",
-              width: "16px",
-              height: "16px",
-            }}
+            className={classes.login_svg}
           />
-          로그인
+          <span className={classes.login_text}>로그인</span>
         </span>
       </NavLink>
     );
@@ -64,13 +52,15 @@ export function Header() {
                 </LogoSvg>
               </Navbar.Brand>
             </NavLink>
-            <Navbar.Toggle
+            {
+              /* <Navbar.Toggle
               aria-controls="basic-navbar-nav"
               className={classes.sb}
             >
               <BiMenu className={classes.sb_icon}></BiMenu>
-            </Navbar.Toggle>
-            <Navbar.Collapse className="justify-content-end gap-3 ">
+            </Navbar.Toggle> */
+            }
+            <Navbar.Brand style={{ display: "flex" }}>
               <Nav>
                 <span className={classes.header_logo_nav}>
                   <LoginButton></LoginButton>
@@ -80,47 +70,56 @@ export function Header() {
               {userInfo !== null && (
                 // TODO: 유저닉네임 노출
                 <Nav>
-                  <nav
+                  {
+                    /* <div
                     style={{
-                      marginTop: "6px",
+                      alignItems:"center",
+                      display:"flex",
                       fontFamily: "Noto Sans KR, sans-serif",
                     }}
                   >
                     {userInfo.nickname}
-                  </nav>
+                  </div> */
+                  }
+
                   <NavLink to={`/profile`}>
                     <span className={classes.header_logo_nav}>
-                      <CgProfile
+                      <img
+                        src={userInfo.profile_image ?? Profileimg}
+                        className={classes.user}
+                        alt="Profile"
+                      />
+                      {
+                        /* <CgProfile
                         color="#555555"
                         style={{
                           marginRight: "5px",
                           width: "20px",
                           height: "20px",
-                          marginLeft: "10px",
                         }}
-                      />
-                      <span style={{ fontSize: "12px" }}>
-                        내 정보
+                      /> */
+                      }
+                      <span className={classes.user_nickname}>
+                        {userInfo.nickname}
                       </span>
                     </span>
                   </NavLink>
                 </Nav>
               )}
-            </Navbar.Collapse>
+            </Navbar.Brand>
           </Container>
         </Navbar>
         <Navbar bg="transparent" data-bs-theme="light">
           <Nav variant="underline" className={classes.header_nav_container}>
             <div className={classes.left}>
-              <div className={classes.left_home}>
-                <NavLink
-                  className={"nav-link"}
-                  to={"/"}
-                  style={{ paddingLeft: "0px" }}
-                >
-                  홈
-                </NavLink>
-              </div>
+              <NavLink
+                className={"nav-link"}
+                to={"/"}
+                style={{ paddingLeft: "0px" }}
+              >
+                홈
+              </NavLink>
+
               <NavLink className={"nav-link"} to={"/fundings"}>펀딩</NavLink>
               <NavLink className={"nav-link"} to={"/community"}>
                 커뮤니티

@@ -12,7 +12,8 @@
     object-position: center center;
 }
 
-.carousel-caption {
+.carousel-caption,
+.carousel-item-caption {
     margin:0 auto;
     max-width: 1080px;
     position: absolute;
@@ -21,6 +22,10 @@
     justify-content: start;
     z-index: 2;
     text-align: left;
+}
+
+.carousel-item-caption{
+    top:30%;
 }
 
 .carousel-caption > h3 {
@@ -36,6 +41,34 @@
     font-size: 20px;
     font-weight: 400;
 }
+
+.carousel-item-caption > h3{
+    font-size: 32px;
+}
+
+
+
+.carousel-item-caption > p{
+    margin-bottom: 0px;
+    font-size: 20px;
+}
+
+.carousel-item-caption > h3,
+.carousel-item-caption > p{
+    color: var(--white);
+    font-weight: 300;
+    letter-spacing: -0.02px;
+}
+
+.carousel-item-caption-tags{
+    font-weight: 300;
+    font-size: 16px;
+    word-spacing:7px;
+}
+.carousel-item-caption b{
+  font-weight: 700;
+}
+
 
 .img-overlay::before{
     position: absolute;
@@ -70,7 +103,7 @@
     display:flex;
     align-items: center;
     padding: 20px 0px;
-    color: #191919;
+    color: var(--primary);
     letter-spacing: -0.02px;
     font-size: 20px;
     font-weight: 300;
@@ -84,3 +117,22 @@
 	font-size: 0px;
 	margin: 0px 16px;
 }
+
+
+@media screen and (max-width: 576px) {
+    
+    .carousel-caption > h3 {
+       font-size: 28px;
+    }
+    
+    .carousel-caption > p {
+
+        font-size: 18px;
+    }
+
+    .home-funding-title{
+        font-size:18px;
+    }
+
+}
+

@@ -24,10 +24,6 @@ select {
   flex-direction: column;
 }
 
-.write-wrap h4 {
-  font-weight: 700;
-  text-align: center;
-}
 
 
 .label {

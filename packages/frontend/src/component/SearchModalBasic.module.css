@@ -63,6 +63,12 @@
 }
 
 
+
+
+
+
+
+
 .search_bar_container{
   width: 85%;
   height: 35px;
@@ -94,4 +100,12 @@
   color:var(--teritary);
   width: 20px;
   height: 20px;
+}
+
+  
+@media screen and (max-width: 576px) {
+  .container {
+    width: 150px;
+  }
+
 }
