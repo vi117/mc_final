@@ -1,30 +1,15 @@
+import { logout } from "@/api/user";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { loginRevalidate, useLoginId, useLoginInfo } from "../../hook/useLogin";
+import { useLoginId, useLoginInfo } from "../../hook/useLogin";
 import LogoSvg from "../Logo";
 import SearchModal from "../SearchModal";
 import classes from "./Header.module.css";
 // import SearchBar from "../SearchBar";
 // import SearchBox from "../SearchBox";
 // import AutoSearch from "../AutoSearch";
-
-/**
- * Logs the user out by making a POST request to the "/api/v1/users/logout" endpoint.
- *
- * @return {Promise<void>} Returns a promise that resolves when the logout request is complete.
- */
-async function logout(): Promise<void> {
-  const res = await fetch("/api/v1/users/logout", {
-    method: "POST",
-  });
-  if (res.status !== 200) {
-    console.log("logout fail");
-  }
-  loginRevalidate();
-  console.log("logout success");
-}
 
 function LoginButton() {
   const userId = useLoginId();
@@ -63,10 +48,7 @@ function LoginButton() {
 }
 
 export function Header() {
-  const userId = useLoginId();
   const userInfo = useLoginInfo();
-
-  console.log(userId);
 
   return (
     <>
@@ -89,17 +71,17 @@ export function Header() {
                 </span>
               </Nav>
 
-              {userId !== null && (
+              {userInfo !== null && (
                 // TODO: 유저닉네임 노출
                 <Nav>
-                  <div
+                  <nav
                     style={{
                       marginTop: "6px",
                       fontFamily: "Noto Sans KR, sans-serif",
                     }}
                   >
                     {userInfo.nickname}
-                  </div>
+                  </nav>
                   <NavLink to={`/profile`}>
                     <span className={classes.header_logo_nav}>
                       <CgProfile
