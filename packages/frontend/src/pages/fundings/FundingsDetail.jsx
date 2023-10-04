@@ -16,6 +16,7 @@ import { useLoginId } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
 import useFundingDetail from "../../hook/useFundingDetail";
+import { formatDate } from "./../../util/date";
 import { isPSApprovedTag } from "./../../util/tag";
 import Profileimg from "../community/assets/user.png";
 import { InterestButton } from "./component/InterestButton";
@@ -67,14 +68,6 @@ const FundingsDetail = function() {
   const content_thumbnails = funding.content_thumbnails.length > 0
     ? funding.content_thumbnails
     : [funding.thumbnail];
-
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}.${month}.${day}`;
-  }
 
   function addDaysToEndDate(dateString, daysToAdd) {
     const date = new Date(dateString);

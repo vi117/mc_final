@@ -10,6 +10,7 @@ import { TagsInput } from "react-tag-input-component";
 
 import { GoInfo } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
+import { postFundingRequest } from "../../api/funding";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
 import { Calender } from "./component/Calender";
@@ -45,6 +46,9 @@ const FundingsWrite = function() {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  /**
+   * @type { [string[], (tags: string[])=>void] }
+   */
   const [tagSelected, setSelected] = useState([]);
   const [thumbnail, setThumbnail] = useState([]);
   const [contentThumbnails, setContentThumbnails] = useState([]);
@@ -274,32 +278,22 @@ const FundingsWrite = function() {
   );
 
   async function sendRequest() {
-    const url = new URL("/api/v1/fundings/request", window.location.href);
+    try {
+      await postFundingRequest({
+        title,
+        thumbnail: thumbnail[0],
+        content,
+        contentThumbnails,
+        targetValue: parseInt(targetValue),
+        startDate,
+        endDate,
+        tags: tagSelected,
+        rewards,
+      });
 
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("thumbnail", thumbnail[0]);
-    [...contentThumbnails].forEach((file) => {
-      formData.append("content_thumbnail", file);
-    });
-    formData.append("content", content);
-    formData.append("target_value", parseInt(targetValue));
-    formData.append("begin_date", startDate.toISOString());
-    formData.append("end_date", endDate.toISOString());
-    formData.append("tags", tagSelected.toString());
-    formData.append("rewards", JSON.stringify(rewards));
-
-    const r = await fetch(url.href, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (r.status === 201) {
-      // TODO(vi117): toast 띄우기.
       alert("요청이 접수되었습니다.");
       navigate("/fundings");
-    } else {
+    } catch (e) {
       alert("요청이 실패되었습니다.");
     }
   }

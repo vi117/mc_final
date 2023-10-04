@@ -2,7 +2,9 @@ import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
+import { patchArticle } from "../../api/article";
 import { Editor } from "../../component/Editor";
+import { useAlertModal } from "../../hook/useAlertModal";
 import { ANIMAL_CATEGORY } from "./constant";
 import baseClasses from "./styles/Co_base.module.css";
 import classes from "./styles/Co_write.module.css";
@@ -36,6 +38,7 @@ const CommunityEdit = () => {
     item?.tags?.map((v) => v.tag) ?? [],
   );
   const navigate = useNavigate();
+  const { AlertModal, showAlertModal } = useAlertModal();
 
   const backToList = () => {
     const userConfirmed = window.confirm(
@@ -56,10 +59,8 @@ const CommunityEdit = () => {
 
   return (
     <div className={classes["write-container"]}>
+      <AlertModal />
       <div className={classes["write-wrap"]}>
-        <div className={classes["write-header"]}>
-          <h4>커뮤니티 글 수정</h4>
-        </div>
         <Form.Select
           className={classes["catSelect"]}
           onChange={onChange}
@@ -80,7 +81,7 @@ const CommunityEdit = () => {
           ))}
         </Form.Select>
 
-        <h1 className={baseClasses["co_h1"]} style={{ marginBottom: "10px" }}>
+        <h1 className={baseClasses["co_h1"]}>
           태그 입력
         </h1>
         <div
@@ -97,7 +98,6 @@ const CommunityEdit = () => {
           placeholder="제목을 입력해주세요"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          style={{ marginBottom: "-2px" }}
         />
         <div className={baseClasses["co_textarea"]}>
           <Editor
@@ -117,26 +117,17 @@ const CommunityEdit = () => {
   );
 
   async function sendRequest() {
-    const url = new URL("/api/v1/articles/request", window.location.href);
-
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("category", category);
-    // TODO(vi117): support tag
-    // currently, there is no tag
-    // formData.append("tags", tagSelected.toString());
-
-    const r = await fetch(url.href, {
-      method: "PATCH",
-      body: formData,
-    });
-
-    if (r.ok) {
-      alert("요청이 접수되었습니다.");
-    } else {
-      alert("요청이 실패했습니다.");
+    try {
+      await patchArticle(item.id, {
+        title,
+        content,
+        category,
+        tags: tagSelected,
+      });
+      await showAlertModal("success", "요청이 접수되었습니다.");
+    } catch (e) {
+      console.log(e);
+      await showAlertModal("fail", "요청이 실패했습니다.");
     }
   }
 };

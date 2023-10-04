@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
+import { formatDate } from "../../../util/date";
 import baseClasses from "../styles/Co_base.module.css";
 import classes from "../styles/Co_detail.module.css";
 
@@ -36,36 +37,42 @@ function CommentDetail({
 
   return (
     <div className={classes["oldComment"]}>
-      <div className={classes["commentId"]}>{comment.nickname}</div>
+      <div className={classes["comment_profile"]}>
+        <div className={classes["commentId"]}>{comment.nickname}</div>
+        <div style={{ marginLeft: "auto", display: "flex" }}>
+          <div className={classes["commentDate"]}>
+            {formatDate(comment.created_at)}
+          </div>
+          <div className={classes["moretogglearea"]}>
+            <div
+              onClick={() => {
+                setIsMoreOpen(!isMoreOpen);
+              }}
+              ref={btnRef}
+            >
+              <FiMoreVertical
+                className={classes["morebtn"]}
+                style={{
+                  width: "20px",
+                  stroke: "#A2A2A2",
+                }}
+              />
+            </div>
+            {isMoreOpen && (
+              <ul ref={ref} className={classes["btntoggle"]}>
+                <li>
+                  <a>수정</a>
+                </li>
+                <li>
+                  <a onClick={onDeleteComment}>삭제</a>
+                </li>
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
       <div className={classes["commentContents"]}>
         {comment.content}
-      </div>
-      <div className={classes["commentDate"]}>{comment.created_at}</div>
-      <div className={classes["moretogglearea"]}>
-        <div
-          onClick={() => {
-            setIsMoreOpen(!isMoreOpen);
-          }}
-          ref={btnRef}
-        >
-          <FiMoreVertical
-            className={classes["morebtn"]}
-            style={{
-              width: "20px",
-              stroke: "#9e9e9e",
-            }}
-          />
-        </div>
-        {isMoreOpen && (
-          <ul ref={ref} className={classes["btntoggle"]}>
-            <li>
-              <a>수정</a>
-            </li>
-            <li>
-              <a onClick={onDeleteComment}>삭제</a>
-            </li>
-          </ul>
-        )}
       </div>
     </div>
   );

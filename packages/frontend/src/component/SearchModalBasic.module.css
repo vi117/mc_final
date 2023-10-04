@@ -1,17 +1,22 @@
-/* 모달창을 화면 중앙. 최상단에 노출 */
+.body{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* background-color: white; */
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+}
+
 .container {
   /* 모달창 크기 */
-  margin-top: 50px;
-  width: 206px;
-
-  /* 최상단 위치 */
-  z-index: 100;
-  
-  /* 중앙 배치 */
-  /* top, bottom, left, right 는 브라우저 기준으로 작동한다. */
-  /* translate는 본인의 크기 기준으로 작동한다. */
+  margin-top: 170px;
+  width: 300px;
+  /* 위치 */
   position: absolute;
-  /* transform: translate(-50%, -50%); */
 
   /* 모달창 디자인 */
   background-color: white;
@@ -23,11 +28,11 @@
 /* 모달창 내부 X버튼 */
 .close {
   background-color: white;
-  border: 1px solid var(--secondary);
-  border-radius: 4px;
+  border: 0px solid white;
+  /* border-radius: 4px; */
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 11px;
 }
 
 .recommendtxt >p {
@@ -37,12 +42,14 @@
 }
 
 .recommendtxt{
+  margin: 10px 0px 0px 5px;
   padding-bottom: 10px;
 }
 
 .recommendlist {
   margin-bottom: 0px;
   margin-top: 0px;
+  margin-left: 5px;
   padding-left: 0px;
   letter-spacing: -0.02px;
   font-size: 14px;
@@ -54,3 +61,43 @@
 .recommendlist > li:hover{
   color:var(--green);
 }
+
+.search_bar_container{
+  width: 85%;
+  height: 35px;
+  border-radius: 7px;
+  border: none;
+  padding: 0px 15px;
+  display: flex;
+  align-items: center;
+  background: var(--border);
+}
+
+.search_bar{
+  border: 0px;
+  box-sizing: border-box;
+  outline: none;
+  width: 190px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.search_bar_button {
+  /* margin-left: -40px; */
+  border: 0px solid white;
+  margin-top: -5px;
+}
+
+.search_bar_button_detail{
+  color:var(--teritary);
+  width: 20px;
+  height: 20px;
+}
+
+  
+/* @media screen and (max-width: 576px) {
+  .container {
+    width: 150px;
+  }
+} */

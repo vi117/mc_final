@@ -32,6 +32,7 @@ export async function signUp({
   AddressDetail,
   Article,
   ProfileImage,
+  token,
 }: {
   Email: string;
   Password: string;
@@ -41,6 +42,7 @@ export async function signUp({
   AddressDetail?: string;
   Article: string;
   ProfileImage?: File;
+  token?: string;
 }) {
   const formData = new FormData();
   formData.append("email", Email);
@@ -52,6 +54,7 @@ export async function signUp({
 
   if (AddressDetail) formData.append("address_detail", AddressDetail);
   if (ProfileImage) formData.append("profile", ProfileImage);
+  if (token) formData.append("token", token);
 
   const r = await fetch("/api/v1/users/signup", {
     method: "POST",
@@ -176,4 +179,49 @@ export async function logout(): Promise<void> {
     throw new APIError("token expired or invalid");
   }
   console.log("logout success");
+}
+
+export async function verifyUserEmail(code: string) {
+  const res = await fetch("/api/v1/users/verify", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      code: code,
+    }),
+  });
+  if (!res.ok) {
+    throw new APIError("token expired or invalid");
+  }
+}
+
+export async function googleLogin(code: string): Promise<{
+  message: string;
+  code:
+    | "need_signup"
+    | "success"
+    | "invalid_request"
+    | "token_error"
+    | "payload_error";
+  data?: {
+    token: string;
+    email: string;
+    name: string;
+  };
+}> {
+  const res = await fetch("/api/v1/users/google-login", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      code,
+    }),
+  });
+  if (!res.ok) {
+    return await res.json();
+  }
+  const resJson = await res.json();
+  return resJson;
 }

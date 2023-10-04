@@ -40,43 +40,29 @@
   color:var(--green);
   border: 1px solid var(--green);
   background-color: var(--white);
-margin-left: auto;
+  margin-left: auto;
 }
 
 .funding_createbtn:hover {
   border: 1px solid var(--green);
   color:var(--white);
   background-color: var(--green);
-  moz-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  -moz-transition: all .4s ease-in-out;
 -o-transition: all .4s ease-in-out;
 -webkit-transition: all .4s ease-in-out;
 }
 
 .funding_createbtn:hover .create_svg{
   fill:var(--white);
-  moz-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  -moz-transition: all .4s ease-in-out;
 -o-transition: all .4s ease-in-out;
 -webkit-transition: all .4s ease-in-out;
 }
 
 .create_svg{
   fill:var(--green);
-}
-
-/*태그 검색결과가 0일 때*/
-.no_tagresult{
-  margin: 0 auto;
-  font-size: 16px;
-  min-width:600px;
-  font-weight: 500;
-  padding-left: 10px;
-}
-
-.no_tagresult > div{
-  font-weight: 400;
-  margin-top: 10px;
-  border-radius: 7px;
-  color:var(--teritary);
 }
 
 

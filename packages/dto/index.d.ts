@@ -6,6 +6,9 @@ export interface FundingRequestObject {
   created_at: Date;
   deleted_at: Date | null;
   updated_at: Date;
+  /**
+   * 0: pending, 1: approved, 2: rejected
+   */
   funding_state: number;
   reason: string | null;
   funding_request_id: number | null;

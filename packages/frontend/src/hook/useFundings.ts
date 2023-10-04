@@ -16,6 +16,7 @@ interface UseFundingsOptions {
   end_date?: Date;
   /**
    * include deleted fundings
+   * 삭제된 펀딩도 포함함.
    *
    * admin only
    */

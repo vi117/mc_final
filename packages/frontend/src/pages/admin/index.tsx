@@ -4,11 +4,19 @@ import { fundingApprove, fundingReject } from "../../../src/api/mod";
 import useAlertModal from "../../../src/hook/useAlertModal";
 
 import useFundingRequest from "../../hook/useFundingRequest";
+import { usePromptModal } from "../../hook/usePromptModal";
 import classes from "./admin.module.css";
+
+function getStateTextFromFundingState(funding_state: number) {
+  return ["승인 대기", "승인됨", "승인 거부"][funding_state];
+}
 
 export default function AdminPage() {
   const { AlertModal, showAlertModal } = useAlertModal();
-  const { data, error, isLoading, mutate } = useFundingRequest();
+  const { showPromptModal, PromptModal } = usePromptModal();
+  const { data, error, isLoading, mutate } = useFundingRequest({
+    view_all: true,
+  });
 
   if (isLoading) {
     return <div>로딩중...</div>;
@@ -16,9 +24,11 @@ export default function AdminPage() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
+
   return (
     <Container>
       <AlertModal />
+      <PromptModal placeholder="거부 사유" />
       <h3 className={classes["h3"]}>펀딩 심사 관리</h3>
       <div className={classes["fundingState"]}>
         {data && data.map((funding) => {
@@ -29,7 +39,7 @@ export default function AdminPage() {
               )}
               <div className={classes["Fundingthumbnail"]}>
                 <img src={funding.thumbnail}></img>
-                <div>{funding.funding_state}</div>
+                <div>{getStateTextFromFundingState(funding.funding_state)}</div>
                 <h1 style={{ fontSize: "16px", textAlign: "left" }}>
                   {funding.title}
                 </h1>
@@ -76,8 +86,15 @@ export default function AdminPage() {
     mutate(data?.filter((f) => f.id !== id));
   }
   async function onRejectClick(id: number) {
+    const reason = await showPromptModal(
+      "펀딩 요청 거부",
+      "거부 사유를 입력해주세요",
+    );
+    if (!reason) {
+      return;
+    }
     try {
-      await fundingReject(id);
+      await fundingReject(id, reason);
     } catch (e) {
       if (e instanceof Error) {
         await showAlertModal("요청 실패", "요청이 실패했습니다." + e.message);

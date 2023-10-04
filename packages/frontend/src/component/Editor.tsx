@@ -1,3 +1,4 @@
+import { uploadFile as UploadImage } from "@/api/upload";
 import { useMemo, useRef } from "react";
 import ReactQuill from "react-quill";
 
@@ -24,22 +25,6 @@ function ImageHandler(): Promise<string> {
         reject(error);
       }
     });
-  });
-}
-
-function getFileArrayBuffer(file: File): Promise<ArrayBuffer> {
-  const reader = new FileReader();
-  return new Promise((resolve, reject) => {
-    reader.addEventListener("load", function() {
-      if (typeof reader.result === "string") {
-        resolve(new ArrayBuffer(reader.result.length));
-      }
-      if (typeof reader.result === "object") {
-        resolve(reader.result as ArrayBuffer);
-      }
-      reject();
-    }, false);
-    reader.readAsArrayBuffer(file);
   });
 }
 
@@ -74,14 +59,6 @@ export const Editor = ({
           });
         },
       },
-      // imageUploader: {
-      //   upload: (file: File) => {
-      //     console.log(file);
-      //     return UploadImage(file).then((url) => {
-      //       return url;
-      //     });
-      //   },
-      // },
     },
   }), []);
 
@@ -94,19 +71,3 @@ export const Editor = ({
     />
   );
 };
-
-async function UploadImage(file: File) {
-  const formData = new FormData();
-  const buf = await getFileArrayBuffer(file);
-  const blob = new Blob([buf], { type: file.type });
-  formData.append("file", blob, file.name);
-  const url = new URL("/api/v1/upload", window.location.origin);
-  const res = await fetch(url.href, {
-    method: "POST",
-    body: formData,
-  });
-  if (!res.ok) {
-    throw new Error("server error");
-  }
-  return (await res.json()).url;
-}
