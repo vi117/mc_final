@@ -180,3 +180,18 @@ export async function logout(): Promise<void> {
   }
   console.log("logout success");
 }
+
+export async function verifyUserEmail(code: string) {
+  const res = await fetch("/api/v1/users/verify", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      code: code,
+    }),
+  });
+  if (!res.ok) {
+    throw new APIError("token expired or invalid");
+  }
+}

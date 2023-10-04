@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { verifyUserEmail } from "../../api/user";
+import { useAlertModal } from "../../hooks/useAlertModal";
 import classes from "./approve.module.css";
 
 export default function ApproveEmailPage() {
@@ -8,9 +10,11 @@ export default function ApproveEmailPage() {
   const [searchParams, _] = useSearchParams();
   const [code, setCode] = useState(searchParams.get("code") ?? "");
   const navigate = useNavigate();
+  const { showAlertModal, AlertModal } = useAlertModal();
 
   return (
     <div className={classes["container"]}>
+      <AlertModal />
       <h3>코드 입력</h3>
       <p>
         입력된 코드를 바로 전송해주세요.
@@ -41,22 +45,21 @@ export default function ApproveEmailPage() {
     </div>
   );
   async function verifyPassword(code: string) {
-    const res = await fetch("/api/v1/users/verify", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        code: code,
-      }),
-    });
-    if (!res.ok) {
-      console.log("error!");
+    try {
+      await verifyUserEmail(code);
+      await showAlertModal(
+        "Success",
+        "인증 단계가 완료되었습니다. 로그인해주세요.",
+      );
+      navigate("/login");
+    } catch {
+      console.log("error");
+      await showAlertModal(
+        "Error",
+        "인증 단계가 완료되지 않았습니다. 다시 시도해주세요.",
+      );
+      return;
     }
-    // TODO(vi117): 모달을 띄우도록 함.
-    alert("success");
-    console.log("success");
-    navigate("/login");
   }
 }
 
