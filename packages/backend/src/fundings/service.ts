@@ -201,3 +201,22 @@ export async function withdrawFunding({
     fundingRepo.addCurrentValue(funding_id, -reward.price);
   });
 }
+
+/**
+ * Soft-deletes a funding record by its ID and refunds the users.
+ *
+ * @param {number} funding_id - The ID of the funding record to delete.
+ * @return {Promise<void>} A promise that resolves when the funding record is successfully deleted.
+ */
+export async function deleteFunding({ funding_id }: { funding_id: number }) {
+  return await safeTransaction(async (db) => {
+    const fundingRepo = new FundingsRepository(db);
+    const fundingUserRepo = new FundingUsersRepository(db);
+    await fundingRepo.softDelete(funding_id);
+    // refunding funding
+    await fundingUserRepo.deleteByFundingId(funding_id);
+    await fundingRepo.updateById(funding_id, {
+      current_value: 0,
+    });
+  });
+}

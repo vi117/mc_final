@@ -442,6 +442,11 @@ export class FundingUsersRepository {
       .where("funding_users.funding_id", "=", funding_id)
       .executeTakeFirstOrThrow();
   }
+  async deleteByFundingId(funding_id: number) {
+    await this.db.deleteFrom("funding_users")
+      .where("funding_users.funding_id", "=", funding_id)
+      .executeTakeFirstOrThrow();
+  }
 }
 
 export class FundingTagRepo {

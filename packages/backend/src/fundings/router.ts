@@ -23,6 +23,7 @@ import {
 import assert from "assert";
 import {
   approveFundingRequest,
+  deleteFunding,
   FundingApproveError,
   FundingUsersError,
   participateFunding,
@@ -154,8 +155,7 @@ async function deleteFundingHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   assert(!isNaN(id));
 
-  const fundingRepo = new FundingsRepository(getDB());
-  await fundingRepo.softDelete(id);
+  await deleteFunding({ funding_id: id });
   res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
