@@ -40,6 +40,12 @@ export async function setFundingInterest(id: number, like = true) {
   }
 }
 
+/**
+ * Approves funding request with the given ID.
+ *
+ * @param {number} id - The ID of the funding request to be approved.
+ * @return {Promise<void>} - A promise that resolves with no value.
+ */
 export async function fundingApprove(id: number) {
   const url = new URL(
     `/api/v1/fundings/request/${id}/approve`,
@@ -54,6 +60,12 @@ export async function fundingApprove(id: number) {
   }
 }
 
+/**
+ * Rejects a funding request with the given ID.
+ *
+ * @param {number} id - The ID of the funding request to reject.
+ * @return {Promise<void>} - A promise that resolves when the request is successfully rejected.
+ */
 export async function fundingReject(id: number) {
   const url = new URL(
     `/api/v1/fundings/request/${id}/reject`,
@@ -68,6 +80,13 @@ export async function fundingReject(id: number) {
   }
 }
 
+/**
+ * Soft-deletes a funding record by ID.
+ * 펀딩
+ *
+ * @param {number} id - The ID of the funding record to delete.
+ * @return {Promise<void>} - A promise that resolves with no value.
+ */
 export async function fundingDelete(id: number) {
   const url = new URL(
     `/api/v1/fundings/${id}`,
