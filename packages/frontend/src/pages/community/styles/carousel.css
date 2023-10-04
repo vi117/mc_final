@@ -52,6 +52,7 @@
 
 .community-carousel-wrap .carousel .carousel-control-prev,
 .community-carousel-wrap .carousel .carousel-control-next{
+  color:var(--primary);
     border: 1px solid var(--secondary);
     width:36px;
     height:36px;
