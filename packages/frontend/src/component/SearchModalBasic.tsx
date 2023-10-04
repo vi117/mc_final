@@ -1,5 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FiSearch } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
+import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./SearchModalBasic.module.css";
 
 function SearchModalBasic({ setModalOpen }: PropsType) {
@@ -30,28 +32,80 @@ function SearchModalBasic({ setModalOpen }: PropsType) {
     };
   });
 
-  return (
-    // <div className={styles.container}>
-    <div ref={modalRef} className={styles.container}>
-      <button className={styles.close} onClick={closeModal}>
-        <IoMdClose />
-      </button>
-      <div className={styles.recommendtxt}>
-        <p>추천 검색어</p>
-        <ul className={styles.recommendlist}>
-          <li>검색어1</li>
-          <li>검색어2</li>
-          <li>검색어3</li>
-        </ul>
-      </div>
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
-      <div className={styles.recommendtxt}>
-        <p>연관 검색어</p>
-        <ul className={styles.recommendlist}>
-          <li>연관어1</li>
-          <li>연관어2</li>
-          <li>연관어3</li>
-        </ul>
+  const performSearch = () => {
+    if (searchTerm) {
+      navigate(`/fundings?title=${searchTerm}`);
+      setModalOpen(false); // 모달 창 닫기
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      performSearch();
+    }
+  };
+
+  return (
+    <div className={styles.body}>
+      <div ref={modalRef} className={styles.container}>
+        <button className={styles.close} onClick={closeModal}>
+          <IoMdClose />
+        </button>
+
+        <div className={styles.search_bar_container}>
+          <input
+            autoFocus
+            className={styles.search_bar}
+            placeholder="검색어를 입력하세요."
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+            }}
+            onKeyDown={handleKeyDown}
+          />
+          <button className={styles.search_bar_button} onClick={performSearch}>
+            <FiSearch className={styles.search_bar_button_detail} />
+          </button>
+        </div>
+        <div className={styles.recommendtxt}>
+          <p>추천 검색어</p>
+          <ul className={styles.recommendlist}>
+            <li>
+              <NavLink to="fundings?title=강아지" onClick={closeModal}>
+                강아지
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="fundings?title=고양이" onClick={closeModal}>
+                고양이
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="fundings?title=소형조" onClick={closeModal}>
+                소형조
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+
+        <div className={styles.recommendtxt}>
+          <p>추천 태그</p>
+          <ul className={styles.recommendlist}>
+            <li>
+              <NavLink to="fundings?tag=PS 인증" onClick={closeModal}>
+                PS 인증
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="fundings?tag=앵무새" onClick={closeModal}>
+                앵무새
+              </NavLink>
+            </li>
+            <li>연관어3</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

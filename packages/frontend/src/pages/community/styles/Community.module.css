@@ -369,7 +369,7 @@ margin-bottom: 7px;
 
 .control > button:hover, 
 .control > button:active{
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: var(--border);
 }
 

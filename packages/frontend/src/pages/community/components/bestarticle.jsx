@@ -12,7 +12,7 @@ const BestArticle = () => {
           <h1>
             <AiOutlineThunderbolt className="thunder_svg">
             </AiOutlineThunderbolt>
-            금주의 베스트 게시물
+            금주의 <b>베스트</b> 게시물
           </h1>
           <Carousel
             data-bs-theme="dark"

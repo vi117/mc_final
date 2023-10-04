@@ -18,8 +18,8 @@
     height:24px;
 }
 .svg_active {
-    color: var(--yellow);
-    fill:var(--yellow);
+   color: var(--gray);
+    fill: var(--gray);
 }
 
 .interest_btn:hover > .btn_svg {
