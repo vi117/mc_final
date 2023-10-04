@@ -143,7 +143,6 @@ const browserRouter = createBrowserRouter([
 ]);
 
 function App() {
-  console.log("VITE_KAKAO_API_KEY", import.meta.env.VITE_KAKAO_API_KEY);
   return <RouterProvider router={browserRouter}></RouterProvider>;
 }
 
