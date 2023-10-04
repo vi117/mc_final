@@ -9,7 +9,7 @@ select {
 .write-container {
   width:100%;
   max-width: var(--max-content-width);
-  padding: 0px 7px 50px 7px;
+  padding: 0px 10px 50px 10px;
   margin: 0 auto;
 }
 
@@ -38,6 +38,7 @@ select {
 }
 
 .submitbutton {
+  margin-top: 30px;
   position: relative;
   display: flex;
   align-items: center;

@@ -1,7 +1,7 @@
 
 /*베스트 밑 게시판 전체 영역*/
 .list-wrap {
-  padding: 10px 7px 50px 7px;
+  padding: 10px 10px 50px 10px;
   justify-content: center;
   align-items: center;
   max-width: 1080px;
@@ -127,21 +127,10 @@ background-color: var(--green-dark);
 
 
 /*필터링, 좋아요, 최신순 정렬*/
-.nav {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-.nav img {
-  margin-right: 5px;
-}
 
 .writebtn {
   display: flex;
-  margin-left: auto !important;
+  justify-content: end;
 }
 
 .writebtn-button {
@@ -151,11 +140,9 @@ background-color: var(--green-dark);
   align-items: center;
   background-color: var(--white);
   border: 1px solid var(--green);
-  height: 32px;
   font-size: 14px;
-  border-radius: 4px;
-  padding: 0px 10px;
-  line-height: 32px;
+  border-radius: 7px;
+  padding: 7px 15px;
   margin: 0px 5px 0px 0px;
   moz-transition: all .4s ease-in-out;
   -o-transition: all .4s ease-in-out;
@@ -183,6 +170,7 @@ background-color: var(--green-dark);
 
 
 .control {
+  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
   margin-right: 0;
@@ -198,16 +186,6 @@ background-color: var(--green-dark);
   justify-content: center;
 }
 
-.togglemenu {
-  display: inline-flex;
-  border: 1px solid var(--teritary);
-  height: 32px;
-  font-size: 14px;
-  border-radius: 4px;
-  padding: 0px 10px;
-  line-height: 32px;
-  margin-right: 5px;
-}
 
 .control > button {
   color: var(--teritary);
@@ -216,7 +194,7 @@ background-color: var(--green-dark);
   border: 1px solid var(--teritary);
   height: 32px;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 7px;
   padding: 0px 10px;
   line-height: 32px;
   margin: 0px 5px 0px 0px;
@@ -229,8 +207,8 @@ background-color: var(--green-dark);
 /*글 목록 테이블*/
 .board {
   width: 100% !important;
-  margin: 0 !important;
-  height: 650px;
+  margin: 30px 0px;
+  height: 580px;
 }
 
 table {
@@ -331,4 +309,48 @@ table {
   margin-top: 20px;
   width: 100%;
   justify-content: center;
+}
+
+
+@media screen and (max-width: 576px/* sm - small screens */) {
+.control{
+  display:flex;
+  width:100%;
+  justify-content: center;
+}
+
+.board-table .th-num,
+.board-table .td-num {
+  display:none;
+}
+
+.board-table .th-views,
+.board-table .td-views {
+  display:none;
+}
+
+.control > button {
+  line-height: 25px;
+  width: calc((100% - (4 * 7px)) / 4);
+  border: transparent;
+height:auto;
+display:flex;
+justify-content: center;
+align-items: center;
+margin-right: 7px;
+word-break:  keep-all;
+margin-bottom: 7px;
+}
+
+.control > button:hover, 
+.control > button:active{
+  border-radius: 20px;
+  background-color: var(--border);
+}
+
+.writebtn {
+  display: flex;
+  margin-left: 0px;
+}
+
 }

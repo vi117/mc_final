@@ -1,6 +1,6 @@
 /*전체 페이지- padding값 모든 페이지 공통*/
 .funding_container{
-  padding: 0px 7px 50px 7px;
+  padding: 10px 10px 50px 10px;
   margin:0 auto;
   width:100%;
   max-width: var(--max-content-width);
@@ -106,12 +106,27 @@ margin-left: auto;
 }
 
 @media screen and (max-width: 576px/* sm - small screens */) {
+
   .funding_itemarea{
     padding: 0px;
     grid-template-columns: repeat(1, 1fr);
     width:100%;
   }
-}
 
+  .funding_navarea{
+    flex-direction: column;
+  }
+  
+  .funding_tagsearch{
+    border-radius: 5px;
+    width:100%;
+    margin-bottom: 10px;
+  }
+
+  .funding_createbtn{
+    border-radius: 5px;
+    width:100%;
+  }
+}
 
 

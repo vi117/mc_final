@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import {
   BiLogoFacebookCircle,
@@ -7,27 +6,13 @@ import {
 } from "react-icons/bi";
 import { GoLink, GoX } from "react-icons/go";
 import { useLocation } from "react-router-dom";
+import { useKakaoSDK } from "../../hook/useKakao";
+import { shareKakao } from "../../util/shareKakaoLink";
 import classes from "./FundingsDetail.module.css";
 
 const FundingDetailModal = ({ show, handleClose }) => {
   const location = useLocation();
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://developers.kakao.com/sdk/js/kakao.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      // Kakao SDK 스크립트가 로드된 후에 실행할 코드
-      // 이곳에서 Kakao.init()을 호출하고 카카오 SDK를 초기화할 수 있습니다.
-      // Kakao.init("c9d8ac937059236e6e3f7a56267a28e4");  **kakao 정의가 안되고 있음
-    };
-
-    // 컴포넌트가 언마운트될 때 스크립트를 제거하는 것이 좋습니다.
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  useKakaoSDK();
 
   const handleCopyClipBoard = async (text) => {
     try {
@@ -50,27 +35,6 @@ const FundingDetailModal = ({ show, handleClose }) => {
       "https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl,
     );
   }
-
-  // function shareKakao() {
-
-  //   // 사용할 앱의 JavaScript 키 설정
-  //   // Kakao.init("c9d8ac937059236e6e3f7a56267a28e4");
-
-  //   // 카카오링크 버튼 생성
-  // //   Kakao.Link.createDefaultButton({
-  // //     container: '#btnKakao', // 카카오공유버튼ID
-  // //     objectType: 'feed',
-  // //     content: {
-  // //       title: "개발새발", // 보여질 제목
-  // //       description: "개발새발 블로그입니다", // 보여질 설명
-  // //       imageUrl: "devpad.tistory.com/", // 콘텐츠 URL
-  // //       link: {
-  // //          mobileWebUrl: "devpad.tistory.com/",
-  // //          webUrl: "devpad.tistory.com/"
-  // //       }
-  // //     }
-  // //   });
-  // // }
 
   return (
     <>
@@ -98,6 +62,9 @@ const FundingDetailModal = ({ show, handleClose }) => {
             >
               <BiSolidMessageRounded
                 className={classes.modal_icon_kakao}
+                onClick={() => {
+                  shareKakao("http://localhost:5173/fundings/3", "title");
+                }}
               >
               </BiSolidMessageRounded>
             </div>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Form, Modal, Spinner } from "react-bootstrap";
+import { BiSolidPencil } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useArticles from "../../../hook/useArticles";
 import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
@@ -38,6 +40,11 @@ const Board = () => {
   const endPageoffset = offset + itemsPerPage * Math.floor(itemsRange / 2);
   const limit = endPageoffset - offset;
 
+  const navigate = useNavigate();
+  const goWrite = () => {
+    navigate("/community/:id/post");
+  };
+
   const {
     data: fetcherData,
     error: fetcherError,
@@ -69,17 +76,16 @@ const Board = () => {
         }}
       />
 
+      <Category
+        selectCategoryFilter={(c) => {
+          setCategoryFiltered([c]);
+        }}
+        selectOrderBy={(o) => {
+          setOrderBy(o);
+        }}
+        setIsModalOpen={setIsModalOpen}
+      />
       <div className={classes["board"]}>
-        <div className={classes["category"]}></div>
-        <Category
-          selectCategoryFilter={(c) => {
-            setCategoryFiltered([c]);
-          }}
-          selectOrderBy={(o) => {
-            setOrderBy(o);
-          }}
-          setIsModalOpen={setIsModalOpen}
-        />
         <table className={classes["board-table"]}>
           <thead>
             <tr>
@@ -117,11 +123,19 @@ const Board = () => {
                     {item.author_nickname}
                   </Link>
                 </td>
-                <td>{item.view_count}</td>
+                <td className={classes["td-views"]}>{item.view_count}</td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+      <div className={classes["writebtn"]}>
+        <button className={classes["writebtn-button"]} onClick={goWrite}>
+          <BiSolidPencil
+            className={classes["pencil-svg"]}
+          />
+          글쓰기
+        </button>
       </div>
       <div className={classes["pagination"]}>
         <Page

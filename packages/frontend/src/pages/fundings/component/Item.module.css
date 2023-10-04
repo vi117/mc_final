@@ -123,3 +123,12 @@
       margin-left: 15px;
     }
 }
+
+@media screen and (max-width: 412px/* galaxy s20 ultra */) {
+
+  .progress_currentvalue {
+    display: none;
+  }
+
+  
+}
