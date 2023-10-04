@@ -31,27 +31,28 @@ function SearchModalBasic({ setModalOpen }: PropsType) {
   });
 
   return (
-    // <div className={styles.container}>
-    <div ref={modalRef} className={styles.container}>
-      <button className={styles.close} onClick={closeModal}>
-        <IoMdClose />
-      </button>
-      <div className={styles.recommendtxt}>
-        <p>추천 검색어</p>
-        <ul className={styles.recommendlist}>
-          <li>검색어1</li>
-          <li>검색어2</li>
-          <li>검색어3</li>
-        </ul>
-      </div>
+    <div className={styles.body}>
+      <div ref={modalRef} className={styles.container}>
+        <button className={styles.close} onClick={closeModal}>
+          <IoMdClose />
+        </button>
+        <div className={styles.recommendtxt}>
+          <p>추천 검색어</p>
+          <ul className={styles.recommendlist}>
+            <li>검색어1</li>
+            <li>검색어2</li>
+            <li>검색어3</li>
+          </ul>
+        </div>
 
-      <div className={styles.recommendtxt}>
-        <p>연관 검색어</p>
-        <ul className={styles.recommendlist}>
-          <li>연관어1</li>
-          <li>연관어2</li>
-          <li>연관어3</li>
-        </ul>
+        <div className={styles.recommendtxt}>
+          <p>연관 검색어</p>
+          <ul className={styles.recommendlist}>
+            <li>연관어1</li>
+            <li>연관어2</li>
+            <li>연관어3</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

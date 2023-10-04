@@ -16,6 +16,7 @@ function SearchModal() {
   const performSearch = () => {
     if (searchTerm) {
       navigate(`/fundings?title=${searchTerm}`);
+      setModalOpen(false); // 모달 창 닫기
     }
   };
 
