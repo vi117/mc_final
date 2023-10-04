@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { verifyUserEmail } from "../../api/user";
-import { useAlertModal } from "../../hooks/useAlertModal";
+import { useAlertModal } from "../../hook/useAlertModal";
 import classes from "./approve.module.css";
 
 export default function ApproveEmailPage() {
