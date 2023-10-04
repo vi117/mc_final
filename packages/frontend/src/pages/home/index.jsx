@@ -50,8 +50,19 @@ export function HomePage() {
             <Carousel indicators={false} className={classes["home-carousel2"]}>
               <Carousel.Item>
                 <Link to={"/fundings/"}>
+                  <Carousel.Caption
+                    className={classes["carousel-item-caption"]}
+                  >
+                    <p>지구를 지키는 댕댕이</p>
+                    <h3>
+                      <b>비건 한지가죽 하네스</b>
+                    </h3>
+                    <span className={classes["carousel-item-caption-tags"]}>
+                      #산책용품 #유기견후원
+                    </span>
+                  </Carousel.Caption>
                   <img
-                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIgGrfevQhicyAFH9OQJ0-rtlQi3Al6uzthfS9SBfJx1yzgH7YQSmOZ67k7uqnyBxbxPdLEBiACRiyXXghnuPK9M_633_P6F_3LNT98Xf9NxgzL6idMJmC0JJb2Fkyd3zWi-7raV8AMwHMT_3AKmT9sWdm6bIt231Qu-UdjGw869T_kn6BOZYU0IAGRq0b/s1178/funding1.jpg"
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjRZROZcwGUl0NbZmJeifWuLN0MI3EPMJD2YyGm5zdLo9wedlt6Njzgd76T4gMq9imONJNKO356iPeDWnSTcp7hDPYbzv6sOXyVnQdM4ggNPw8uH8A82bdAfBjaj7PjwcSlMB98bf-g5vsdRl6ziwDQFs72PKdFJacthpG9YLmWdGmxmqBQ8l_A9M3fhuvM/s1178/banner4.jpg"
                     className={classes["carousel_img"]}
                   >
                   </img>
@@ -59,8 +70,19 @@ export function HomePage() {
               </Carousel.Item>
               <Carousel.Item>
                 <Link to={"/fundings/2"}>
+                  <Carousel.Caption
+                    className={classes["carousel-item-caption"]}
+                  >
+                    <p>크리스마스, 함께 즐겨요</p>
+                    <h3>
+                      육지거북 <b>꼬마 모자</b>
+                    </h3>
+                    <span className={classes["carousel-item-caption-tags"]}>
+                      #패션소품
+                    </span>
+                  </Carousel.Caption>
                   <img
-                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaCXnYJqJV0CWbJumvp_dlYSf6p9D0uzCGho7vbgVeOk26dksQuyOxdhtM-hEXHRJiugXNKBStP2x4ykZ11cSU5raxTtfYIOXsEZJ1kPKDO60lNy6MiF7-gb9LwJGRL8Ujg2JVOskPbjpTLJHN2h3i5GTHlSthkSuFNQDuV2QPm_PVOCnGbl3PXLVEnJeJ/s1178/funding4.jpg"
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhkMhWkfOIhGjTT_wtDjGSL9KXdEFjCXKAtxMKb4GSOgi4FhkOfvrSaH-U2rnhsdxPJpDQITyzvMNYApiF3cGqy1grck3N84TJa-TpcUAxfjKgDh5QUYj7M-ggEKr0K3moNAMAshpbCSdh9AEUKrGhLwczXxCjqiB7-FC9Qyhe2m-5PlNk_s_Tgs9OQ2SF5/s1178/banner1.jpg"
                     className={classes["carousel_img"]}
                   >
                   </img>
@@ -78,8 +100,19 @@ export function HomePage() {
             <Carousel indicators={false} className={classes["home-carousel2"]}>
               <Carousel.Item>
                 <Link to={"/fundings/1"}>
+                  <Carousel.Caption
+                    className={classes["carousel-item-caption"]}
+                  >
+                    <p>아이들을 생각한</p>
+                    <h3>
+                      궁극의 <b>고양이 유산균</b>
+                    </h3>
+                    <span className={classes["carousel-item-caption-tags"]}>
+                      #건강식품 #유기묘후원
+                    </span>
+                  </Carousel.Caption>
                   <img
-                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDYY2BzEkLZHTGqetYKSuN2lhSLl0fYmmGt6Og0YZLtQQpv4XrDyHgZE-9NmvfCmNW0-CevCQXEm8iD3CbBAyTMxGdRS_s-24EIVaDNUU3IS-ixaGRgnb_YMa2iNwdf4OIn5Er3GqVQSxY-vYP1oXntv8yZ71OAIJlzw2oLcVABXfngSsLLyJNglocE1PQ/s1178/funding2.jpg"
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUO63r5KdeMjbn-6j_JaNULRZWjb9p8b6PLnYmHhBDGCcNUdsjdePCcWdZho6VVqRkzKFJm6jrcHDctrrXTHaXF0cetPjoXQ49bGOP44mHoJDLzb2qnH9tJ_UUT0zpAvUY77_SN9K5RiH-5C9SNUgUivAIj4mtjCxPKgwFuMmV4rszuEPUzN_KxAJ85lq3/s1178/banner3.jpg"
                     className={classes["carousel_img"]}
                   >
                   </img>
@@ -87,8 +120,19 @@ export function HomePage() {
               </Carousel.Item>
               <Carousel.Item>
                 <Link to={"/fundings/3"}>
+                  <Carousel.Caption
+                    className={classes["carousel-item-caption"]}
+                  >
+                    <p>소형조 전용!</p>
+                    <h3>
+                      면역력 향상 <b>영양 모이</b>
+                    </h3>
+                    <span className={classes["carousel-item-caption-tags"]}>
+                      #건강식품
+                    </span>
+                  </Carousel.Caption>
                   <img
-                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSObSVrzZy97-7DzmzA1db8c4vhSMZvrdioiDLRMC8BFv7Bh6diebLP1mdP41IBDKjspey2INOTnQ9Q5Rt6iZQBbKYvCbWC3yCldufr780bHzNa0HVnLR8I41_g45bkF-wXMqafSv85tLGR16kppPP02kOsd3dpkL9QYUZcHVPTjpidKB1hiBY07dGbUCW/s1178/funding3.jpg"
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjo9562GJx8IrkwUhOUs-jgj3koB8lHQOX-ulPxdd5UAj6bxKi0ceq48E1Nb3CcfXSUbFo12GXFIvaeZ-rJcDGx0GFyqEvRrbhl4srlVb1EpUGIsuxBKLYpSNZFaz090xxjlkV1eNBv6efmB9sCtyC8xApMBdjsVP7U0XK-AymnAQ_dIkQuQZntnoDPpRJq/s1178/banner2.jpg"
                     className={classes["carousel_img"]}
                   >
                   </img>

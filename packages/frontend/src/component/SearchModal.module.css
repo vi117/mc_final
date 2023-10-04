@@ -1,5 +1,5 @@
 .search_bar_container{
-    width: 100%;
+    margin-left: auto;
     height: 35px;
     border-radius: 7px;
     border: none;
@@ -35,4 +35,17 @@
     color:var(--teritary);
     width: 20px;
     height: 20px;
+    margin-left: 3px;
+  
+}
+
+@media screen and (max-width: 576px) {
+    .search_bar{
+        width: 100px;
+    }
+    .search_bar::placeholder{
+       display:none;
+       width:0px
+    }
+
 }

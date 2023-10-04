@@ -61,9 +61,6 @@ const CommunityEdit = () => {
     <div className={classes["write-container"]}>
       <AlertModal />
       <div className={classes["write-wrap"]}>
-        <div className={classes["write-header"]}>
-          <h4>커뮤니티 글 수정</h4>
-        </div>
         <Form.Select
           className={classes["catSelect"]}
           onChange={onChange}
@@ -84,7 +81,7 @@ const CommunityEdit = () => {
           ))}
         </Form.Select>
 
-        <h1 className={baseClasses["co_h1"]} style={{ marginBottom: "10px" }}>
+        <h1 className={baseClasses["co_h1"]}>
           태그 입력
         </h1>
         <div
@@ -101,7 +98,6 @@ const CommunityEdit = () => {
           placeholder="제목을 입력해주세요"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          style={{ marginBottom: "-2px" }}
         />
         <div className={baseClasses["co_textarea"]}>
           <Editor
