@@ -100,3 +100,30 @@ export async function fundingDelete(id: number) {
     throw new APIError(data.message);
   }
 }
+
+export async function fundingParticipate(id: number, reward_id: number, body: {
+  address: string;
+  addressDetail: string;
+  recipient: string;
+  phone: string;
+}) {
+  const url = new URL(
+    `/api/v1/fundings/${id}/rewards/${reward_id}/participate`,
+    window.location.href,
+  );
+  const r = await fetch(url.href, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      address: body.address + body.addressDetail,
+      recipient: body.recipient,
+      phone: body.phone,
+    }),
+  });
+  if (!r.ok) {
+    const data = await r.json();
+    throw new APIError(data.message);
+  }
+}

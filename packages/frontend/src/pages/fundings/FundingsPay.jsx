@@ -3,7 +3,9 @@ import clsx from "clsx";
 import { useState } from "react";
 import { Accordion, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import { fundingParticipate } from "../../api/funding";
 import MyButton from "../../component/Button";
+import { useAlertModal } from "../../hook/useAlertModal";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";
 
@@ -16,6 +18,7 @@ export default function FundingsPay() {
     addressDetail: userInfo?.address_detail ?? "",
     name: "",
   });
+  const { AlertModal, showAlertModal } = useAlertModal();
 
   if (!userInfo) {
     return <div>로그인이 필요합니다.</div>;
@@ -28,6 +31,7 @@ export default function FundingsPay() {
 
   return (
     <Container>
+      <AlertModal />
       <div className="d-flex flex-wrap" style={{ gap: "15px" }}>
         <div
           className={classes["ImgArea"]}
@@ -136,28 +140,18 @@ export default function FundingsPay() {
     </Container>
   );
   async function participate() {
-    const url = new URL(
-      `/api/v1/fundings/${funding.id}/rewards/${selectedReward.id}/participate`,
-      window.location.href,
-    );
-    const r = await fetch(url.href, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        address: shippingInfo.address + shippingInfo.addressDetail,
+    try {
+      await fundingParticipate(funding.id, selectedReward.id, {
+        address: shippingInfo.address,
+        addressDetail: shippingInfo.addressDetail,
         recipient: shippingInfo.name,
         phone: userInfo.phone,
-      }),
-    });
-    if (!r.ok) {
-      // TODO(vi117): show error message modal
-      alert("요청이 실패했습니다.");
-      return null;
+      });
+      await showAlertModal("success", "펀딩 후원을 해주었습니다.");
+      navigate(`/fundings/${funding.id}`);
+    } catch (err) {
+      await showAlertModal("error", err.message);
     }
-    // TODO(vi117): navigate funding
-    alert("요청이 접수되었습니다.");
   }
 }
 
