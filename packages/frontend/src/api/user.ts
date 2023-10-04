@@ -32,6 +32,7 @@ export async function signUp({
   AddressDetail,
   Article,
   ProfileImage,
+  token,
 }: {
   Email: string;
   Password: string;
@@ -41,6 +42,7 @@ export async function signUp({
   AddressDetail?: string;
   Article: string;
   ProfileImage?: File;
+  token?: string;
 }) {
   const formData = new FormData();
   formData.append("email", Email);
@@ -52,6 +54,7 @@ export async function signUp({
 
   if (AddressDetail) formData.append("address_detail", AddressDetail);
   if (ProfileImage) formData.append("profile", ProfileImage);
+  if (token) formData.append("token", token);
 
   const r = await fetch("/api/v1/users/signup", {
     method: "POST",

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Container, Form } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
 import Upload from "../../component/UploadImage";
 import RegisterArgee from "./registerArgeeModal";
@@ -21,14 +21,17 @@ window.emailPattern = emailPattern;
 function RegisterPage() {
   const navigate = useNavigate();
   const DaumPostcodePopup = useDaumPostcodePopup();
+  const location = useLocation(null);
+  // console.log(location.state);
 
-  const profileImageRef = useRef(null);
-  const [Email, setEmail] = useState("");
+  const profileImageRef = useRef();
+
+  const [Email, setEmail] = useState(location.state?.email ?? "");
   // const [Name, setName] = useState("");
   const [Password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [NickName, setNickName] = useState("");
-  const [Phone, setPhone] = useState("");
+  const [Phone, setPhone] = useState();
   const [Address, setAddress] = useState("");
   const [AddressDetail, setAddressDetail] = useState("");
   const [Article, setArticle] = useState("");
@@ -61,7 +64,11 @@ function RegisterPage() {
           handleClose={() => navigate("/login")}
         >
         </RegisterArgee>
-        <Upload imageFile={profileImageRef}></Upload>
+        <Upload
+          imageFile={profileImageRef}
+          initial_preview_URL={location.state?.thumbnail ?? ""}
+        >
+        </Upload>
 
         <ValidationInput
           name="Email"
@@ -182,6 +189,7 @@ function RegisterPage() {
       AddressDetail,
       Article,
       ProfileImage: profileImageRef.current,
+      token: location.state?.token,
     });
     if (result) {
       // TODO(vi117): 이메일을 확인하라는 모달을 띄우고 나서 navigate
