@@ -12,7 +12,9 @@ function getStateTextFromFundingState(funding_state: number) {
 
 export default function AdminPage() {
   const { AlertModal, showAlertModal } = useAlertModal();
-  const { data, error, isLoading, mutate } = useFundingRequest();
+  const { data, error, isLoading, mutate } = useFundingRequest({
+    view_all: true,
+  });
 
   if (isLoading) {
     return <div>로딩중...</div>;
