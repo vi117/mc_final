@@ -67,3 +67,17 @@ export async function fundingReject(id: number) {
     throw new APIError(data.message);
   }
 }
+
+export async function fundingDelete(id: number) {
+  const url = new URL(
+    `/api/v1/fundings/${id}`,
+    window.location.origin,
+  );
+  const res = await fetch(url.href, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError(data.message);
+  }
+}
