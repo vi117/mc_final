@@ -1,6 +1,14 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { Button, Carousel, ListGroup, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Carousel,
+  FloatingLabel,
+  Form,
+  ListGroup,
+  Modal,
+  Spinner,
+} from "react-bootstrap";
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
@@ -290,7 +298,8 @@ const FundingsDetail = function() {
               />펀딩에 문제가 있나요?
             </span>
             <span className={classes.report_right}>
-              <GoChevronRight className={classes.report_svg} />신고하기
+              <GoChevronRight className={classes.report_svg} />
+              <Report />
             </span>
           </div>
           <div className={classes.rewardtitle}>
@@ -423,4 +432,76 @@ function SelectablRewardList(
   );
 }
 
+function Report() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button
+        variant="outline-danger"
+        style={{ fontSize: "13px" }}
+        onClick={handleShow}
+      >
+        신고하기
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ fontWeight: "bold" }}>
+            펀딩 신고
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className={classes["ReportModal"]}>
+            신고 사유를 선택하고 상세 사유와 URL을 작성해주세요.
+            <br></br>
+            관련한 증빙자료를 첨부해주시면 더욱 빠른 확인이 가능합니다.
+            <br></br>
+            <p>신고 사유</p>
+          </div>
+          <Form.Select
+            aria-label="Default select example"
+            style={{ marginBottom: "10px", fontSize: "14px" }}
+          >
+            <option>옵션을 선택해주세요</option>
+            <option value="1">이용약관 또는 펀딩 심사 기준 위반</option>
+            <option value="2">커뮤니티 운영원칙 위반</option>
+            <option value="3">개인정보 보호 권리 침해</option>
+            <option value="4">지식재산권 침해</option>
+            <option value="5">펀딩 이행 문제 관련</option>
+            <option value="6">기타/사유를 자세히 기재해주세요</option>
+          </Form.Select>
+          <FloatingLabel
+            controlId="floatingTextarea2"
+            label="자세한 신고 사유와 문제가 되는 펀딩의 URL을 작성해주세요"
+            style={{ fontSize: "14px" }}
+          >
+            <Form.Control
+              as="textarea"
+              placeholder="Leave a comment here"
+              style={{ height: "100px" }}
+            />
+          </FloatingLabel>
+          <Form.Group controlId="formFileMultiple" className="mb-3">
+            <Form.Label style={{ marginTop: "10px", fontSize: "13px" }}>
+              첨부파일(선택)
+            </Form.Label>
+            <Form.Control type="file" multiple />
+          </Form.Group>
+          <p>* 신고내용이 허위 사실인 경우, 이용에 제재를 받을 수 있습니다.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            취소
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            제출
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
 export default FundingsDetail;
