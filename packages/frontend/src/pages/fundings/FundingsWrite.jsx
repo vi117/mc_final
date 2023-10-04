@@ -55,6 +55,7 @@ const FundingsWrite = function() {
   const [targetValue, setTargetValue] = useState(0);
   const [content, setContent] = useState("");
   const [rewards, setRewards] = useState([]);
+
   const navigate = useNavigate();
   const userInfo = useLoginInfo();
   const infoAreaRef = useRef(null);
@@ -102,8 +103,10 @@ const FundingsWrite = function() {
 
         <div className={classes.funding_write_container}>
           <div className={classes.item_container_title} ref={infoAreaRef}>
+            <h1>기본 정보</h1>
+
             <div className={classes.info_area}>
-              <h1>카테고리 태그 선택</h1>
+              <h2>카테고리 태그 선택</h2>
               <p>
                 펀딩과 가장 잘 어울리는 태그를 입력해 주세요.
                 <br />적합하지 않을 경우 운영자에 의해 조정될 수 있습니다.
@@ -112,7 +115,7 @@ const FundingsWrite = function() {
             </div>
 
             <Form.Group className={classes.info_area}>
-              <h1>펀딩 제목</h1>
+              <h2>펀딩 제목</h2>
               <p>
                 펀딩의 주제, 창작물의 특징이 드러나는 멋진 제목을 붙여주세요.
               </p>
@@ -126,7 +129,7 @@ const FundingsWrite = function() {
             </Form.Group>
 
             <Form.Group className={classes.info_area}>
-              <h1>개설기간</h1>
+              <h2>개설기간</h2>
               <p>설정한 일시가 되면 펀딩이 자동 시작됩니다.</p>
               <Calender
                 startDate={startDate}
@@ -139,7 +142,7 @@ const FundingsWrite = function() {
             </Form.Group>
 
             <Form.Group className={classes.info_area}>
-              <h1>목표금액</h1>
+              <h2>목표금액</h2>
               <p>프로젝트를 완수하기 위해 필요한 금액을 설정해주세요.</p>
               <TargetValueGuide />
               <div className={classes.value_input}>
@@ -149,7 +152,16 @@ const FundingsWrite = function() {
                   placeholder="목표금액(숫자만)"
                   pattern="[0-9]*"
                   value={targetValue}
-                  onChange={(e) => setTargetValue(parseInt(e.target.value))}
+                  onChange={(e) => {
+                    /**
+                     * @type {string}
+                     */
+                    const value = e.target.value;
+                    const num_value = parseInt(value);
+                    setTargetValue(
+                      isNaN(num_value) ? 0 : num_value,
+                    );
+                  }}
                 />
                 <span>원</span>
               </div>
@@ -161,8 +173,9 @@ const FundingsWrite = function() {
             className={classes.item_container}
             ref={StoryAreaRef}
           >
+            <h1>스토리 작성</h1>
             <div className={classes.story_area}>
-              <h1>썸네일</h1>
+              <h2>썸네일</h2>
               <Form.Group controlId="formFileMultiple" className="mb-3">
                 <Form.Control
                   type="file"
@@ -178,7 +191,7 @@ const FundingsWrite = function() {
               controlId="formFileMultiple"
               className={classes.story_area}
             >
-              <h1>콘텐츠 썸네일</h1>
+              <h2>콘텐츠 썸네일</h2>
               <p>콘텐츠 썸네일 사진을 업로드해주세요.</p>
               <Form.Control
                 type="file"
@@ -191,7 +204,7 @@ const FundingsWrite = function() {
             </Form.Group>
 
             <div className={classes.story_area_editor}>
-              <h1>펀딩 스토리</h1>
+              <h2>펀딩 스토리</h2>
               <p>무엇을 만들기 위한 프로젝트인지 분명히 알려주세요.</p>
               <StoryTipGuide />
               <Editor
@@ -208,7 +221,15 @@ const FundingsWrite = function() {
             className={classes.item_container}
             ref={RewardAreaRef}
           >
+            <h1>리워드 설계</h1>
             <div>
+              <p>
+                선물은 후원자에게 프로젝트의 가치를 전달하는 수단입니다.<br>
+                </br>
+                다양한 금액대로 여러 개의 선물을 만들어주세요. <br></br>
+                펀딩 성공률이 높아지고, 더 많은 후원 금액을 모금할 수 있어요.
+              </p>
+              <RewardTipGuide />
               <RewardItemList
                 onChange={(v) => {
                   setRewards(v);
@@ -223,8 +244,9 @@ const FundingsWrite = function() {
             style={{ paddingBottom: "50px" }}
             ref={MakerAreaRef}
           >
+            <h1>메이커 정보</h1>
             <div className={classes.maker_area}>
-              <h1>계좌연결</h1>
+              <h2>계좌연결</h2>
               <p>
                 ・ 후원금을 전달받을 계좌를 등록해주세요. 법인사업자는
                 법인계좌로만 정산받을 수 있습니다. <br></br>
@@ -249,7 +271,7 @@ const FundingsWrite = function() {
             </div>
 
             <div className={classes.maker_area}>
-              <h1>증명등록</h1>
+              <h2>증명등록</h2>
               <p>
                 증명등록에 필요한 파일을
                 업로드해주세요.(주민등록증or사업자등록증)(인증서)
@@ -323,13 +345,25 @@ function FundingWriteNavigator({
   );
 }
 
+function RewardTipGuide() {
+  return (
+    <Guide title="리워드 설계 조건">
+      <li>혜택이 좋은 순서대로 등록해 주세요.</li>
+      <li>
+        각 리워드끼리 쉽게 구분될 수 있도록 규칙적이고 정확한 리워드명을 사용해
+        주세요.
+      </li>
+      <li>
+        각 리워드별 제공할 수 있는 수량을 입력해 주세요. 제한된 수량이 모두
+        소진되면 이 리워드를 선택할 수 없어요.
+      </li>
+    </Guide>
+  );
+}
+
 function StoryTipGuide() {
   return (
-    <Guide>
-      <li className={classes.guide_bold}>
-        <GoInfo className={classes.guide_svg}></GoInfo>
-        스토리 작성 TIP
-      </li>
+    <Guide title="스토리 작성 TIP">
       <li>
         이미지로만 구성된 스토리는 이미지 로딩 속도가 느려 방문자가 상세
         페이지를 벗어날 확률이 높아져요.
@@ -346,11 +380,7 @@ function StoryTipGuide() {
 
 function TargetValueGuide() {
   return (
-    <Guide>
-      <li className={classes.guide_bold}>
-        <GoInfo className={classes.guide_svg}></GoInfo>
-        목표 금액 설정 시 꼭 알아두세요!
-      </li>
+    <Guide title="목표 금액 설정 시 꼭 알아두세요!">
       <li>
         종료일까지 목표금액을 달성하지 못하면 후원자 결제가 진행되지 않습니다.
       </li>
@@ -366,9 +396,14 @@ function TargetValueGuide() {
 
 function Guide({
   children,
+  title,
 }) {
   return (
     <ul className={classes.guide}>
+      <li className={classes.guide_bold}>
+        <GoInfo className={classes.guide_svg}></GoInfo>
+        {title}
+      </li>
       {children}
     </ul>
   );
