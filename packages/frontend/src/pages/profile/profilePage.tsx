@@ -42,7 +42,7 @@ export default function Profile() {
           {userInfo.is_admin && (
             <Row>
               <Link to={`/admin`}>
-                Admin
+                관리
               </Link>
             </Row>
           )}
