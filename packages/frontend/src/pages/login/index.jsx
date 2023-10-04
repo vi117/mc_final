@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/user";
+import { Button } from "../../component/Button";
 import { GOOGLE_APP_CLIENT_ID } from "../../config";
+import { useAlertModal } from "../../hook/useAlertModal";
 import classes from "./style.module.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { showAlertModal, AlertModal } = useAlertModal();
 
   const navigate = useNavigate();
 
@@ -18,14 +21,14 @@ export default function LoginPage() {
     if (success) {
       navigate("/");
     } else {
-      // TODO(vi117): use modal to show error
-      alert("로그인에 실패했습니다.");
+      await showAlertModal("Fail", "로그인에 실패했습니다.");
       setPassword("");
     }
   }
 
   return (
     <div className={classes["login-container"]}>
+      <AlertModal />
       <div className={classes["login-wrapper"]}>
         <h1>Login</h1>
         <Form
