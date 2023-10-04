@@ -1,6 +1,13 @@
 import { AiFillHeart } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  deleteArticle,
+  deleteArticleComment,
+  postArticleComment,
+  setArticleLike,
+} from "../../api/article";
+import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useLoginId } from "../../hook/useLogin";
 import Profileimg from "./assets/user.png";
@@ -10,7 +17,9 @@ import classes from "./styles/Co_detail.module.css";
 export function CommunityDetail() {
   const user_id = useLoginId();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { AlertModal, showAlertModal } = useAlertModal();
+  const params = useParams();
+  const id = parseInt(params.id);
   const {
     data: fetcherData,
     error: fetcherError,
@@ -31,6 +40,7 @@ export function CommunityDetail() {
   const liked = user_id === item.like_user_id;
   return (
     <div className={classes["coDetailWrap"]}>
+      <AlertModal />
       <div className={classes["container"]}>
         <div className={classes["titleArea"]}>
           <div className={classes["selectedTitle"]}>{item.title}</div>
@@ -38,7 +48,7 @@ export function CommunityDetail() {
             <Link to={`/community/${item.id}/edit`}>
               <button className={classes["editbtn"]}>수정</button>
             </Link>
-            <button onClick={deleteArticle}>삭제</button>
+            <button onClick={deleteArticleAction}>삭제</button>
           </div>
         </div>
         <div className={classes["createdArea"]}>
@@ -100,94 +110,75 @@ export function CommunityDetail() {
       </div>
     </div>
   );
-  async function deleteArticle() {
+  async function deleteArticleAction() {
     if (confirm("정말로 삭제하시겠습니까?") == true) {
-      const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
-
-      const res = await fetch(url.href, {
-        method: "DELETE",
-      });
-      if (res.status == 200) {
-        alert("삭제이 완료되었습니다.");
+      try {
+        await deleteArticle(id);
+        alert("삭제가 완료되었습니다.");
         navigate("/community");
-        return;
+      } catch (e) {
+        if (e instanceof Error) {
+          alert("삭제이 실패했습니다.");
+        } else throw e;
       }
-      alert("삭제되었습니다"); // 삭제 기능 나중에 구현
     } else {
       return false;
     }
   }
   async function registerComment(c) {
-    const url = new URL(
-      `/api/v1/articles/${id}/comments`,
-      window.location.origin,
-    );
     if (user_id == null) {
-      alert("비회원은 권한이 없습니다. 로그인 해주세요.");
-      location.href = "/login";
+      showAlertModal("error", "비회원은 권한이 없습니다. 로그인이 필요합니다.");
+      navigate("/login");
       return;
     }
-    const res = await fetch(url.href, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: c,
-      }),
-    });
-    const resJson = await res.json();
-    if (res.status == 201) {
+    try {
+      const new_comments = await postArticleComment(id, c);
       mutate({
         ...item,
         comments: [...item.comments, {
-          content: c,
+          content: new_comments.content,
           created_at: new Date().toISOString(),
           user_id,
-          id: resJson.inserted_id,
+          id: new_comments.id,
         }],
       });
-      return true;
+    } catch (e) {
+      if (e instanceof Error) {
+        showAlertModal("요청 실패", "요청이 실패했습니다.");
+      } else throw e;
     }
-    return false;
   }
 
   async function deleteComment(comment) {
-    const url = new URL(
-      `/api/v1/articles/${id}/comments/${comment.id}`,
-      window.location.origin,
-    );
-    const res = await fetch(url.href, {
-      method: "DELETE",
-    });
-    if (res.status == 200) {
+    try {
+      await deleteArticleComment(id, comment.id);
       mutate({
         ...item,
         comments: item.comments.filter((c) => c.id !== comment.id),
       });
-      console.log("삭제되었습니다.");
+    } catch (e) {
+      if (e instanceof Error) {
+        showAlertModal("요청 실패", "요청이 실패했습니다.");
+      } else throw e;
     }
   }
 
   async function setLike(like = true) {
     if (user_id == null) {
-      alert("비회원은 권한이 없습니다. 로그인 해주세요.");
-      location.href = "/login";
+      showAlertModal("error", "비회원은 권한이 없습니다. 로그인이 필요합니다.");
+      navigate("/login");
       return;
     }
-    const url = new URL(`/api/v1/articles/${id}/like`, window.location.origin);
-
-    if (!like) {
-      url.searchParams.append("unlike", "true");
-    }
-    const res = await fetch(url.href, {
-      method: "POST",
-    });
-    if (res.status == 200) {
+    try {
+      await setArticleLike(id, like);
       mutate({
         ...item,
         like_user_id: like ? user_id : null,
       });
+    } catch (e) {
+      if (e instanceof Error) {
+        showAlertModal("요청 실패", "요청이 실패했습니다.");
+      } else throw e;
     }
   }
 }
