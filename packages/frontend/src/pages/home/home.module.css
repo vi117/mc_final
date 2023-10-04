@@ -13,22 +13,26 @@
 }
 
 .carousel-caption {
+    margin:0 auto;
+    max-width: 1080px;
     position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: start;
     z-index: 2;
     text-align: left;
 }
 
 .carousel-caption > h3 {
+    text-align: left;
+    color: var(--white);
     font-weight: 700;
     font-size: 32px;
     letter-spacing: -0.02px;
 }
 
 .carousel-caption > p {
+    color: var(--white);
     font-size: 20px;
     font-weight: 400;
 }

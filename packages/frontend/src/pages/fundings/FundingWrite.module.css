@@ -1,5 +1,5 @@
 .funding_write_wrap{
-    padding: 10px 7px 50px 7px;
+    padding: 10px 10px 50px 10px;
     margin:0 auto;
     max-width: 1080px;
     display:flex;
@@ -269,7 +269,7 @@ hr{
 
 
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1024px) {
 
     .funding_write_wrap h1 {
         font-size: 18px;

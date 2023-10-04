@@ -57,7 +57,9 @@ export function FundingItem({
           <div className={classes["funding_progress_percantage"]}>
             {((x.current_value / x.target_value) * 100).toFixed(0)
               + "%"}달성!
-            <span>{x.current_value} 원</span>
+            <span className={classes["progress_currentvalue"]}>
+              {x.current_value} 원
+            </span>
             <span className={classes["progress_resttime"]}>
               {restTime / (1000 * 60 * 60 * 24) > 0
                 ? (

@@ -1,4 +1,5 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { BiMenu } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
@@ -36,8 +37,8 @@ function LoginButton() {
             color="#555555"
             style={{
               marginRight: "5px",
-              width: "20px",
-              height: "20px",
+              width: "16px",
+              height: "16px",
             }}
           />
           로그아웃
@@ -46,18 +47,18 @@ function LoginButton() {
     )
     : (
       <NavLink to={"/login"}>
-        <p className={classes.header_login_btn}>
+        <span className={classes.header_login_btn}>
           <FiLogIn
             color="#6d6d6d"
             style={{
               color: "#6d6d6d",
               marginRight: "5px",
-              width: "20px",
-              height: "20px",
+              width: "16px",
+              height: "16px",
             }}
           />
           로그인
-        </p>
+        </span>
       </NavLink>
     );
 }
@@ -76,12 +77,17 @@ export function Header() {
             <NavLink to={"/"}>
               <Navbar.Brand>
                 <LogoSvg
-                  style={{ width: "240px", height: "30px" }}
+                  style={{ width: "180px", height: "30px" }}
                 >
                 </LogoSvg>
               </Navbar.Brand>
             </NavLink>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Toggle
+              aria-controls="basic-navbar-nav"
+              className={classes.sb}
+            >
+              <BiMenu className={classes.sb_icon}></BiMenu>
+            </Navbar.Toggle>
             <Navbar.Collapse className="justify-content-end gap-3 ">
               <Nav>
                 <span className={classes.header_logo_nav}>
@@ -124,13 +130,15 @@ export function Header() {
         <Navbar bg="transparent" data-bs-theme="light">
           <Nav variant="underline" className={classes.header_nav_container}>
             <div className={classes.left}>
-              <NavLink
-                className={"nav-link"}
-                to={"/"}
-                style={{ paddingLeft: "0px" }}
-              >
-                홈
-              </NavLink>
+              <div className={classes.left_home}>
+                <NavLink
+                  className={"nav-link"}
+                  to={"/"}
+                  style={{ paddingLeft: "0px" }}
+                >
+                  홈
+                </NavLink>
+              </div>
               <NavLink className={"nav-link"} to={"/fundings"}>펀딩</NavLink>
               <NavLink className={"nav-link"} to={"/community"}>
                 커뮤니티
