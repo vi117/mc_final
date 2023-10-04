@@ -9,7 +9,9 @@ import {
 } from "../../api/article";
 import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
+import { useConfirmModal } from "../../hook/useConfirmModal";
 import { useLoginId } from "../../hook/useLogin";
+import { formatDate } from "../../util/date";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
@@ -20,13 +22,7 @@ export function CommunityDetail() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const params = useParams();
   const id = parseInt(params.id);
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}.${month}.${day}`;
-  }
+  const { ConfirmModal, showConfirmModal } = useConfirmModal();
 
   const {
     data: fetcherData,
@@ -49,6 +45,7 @@ export function CommunityDetail() {
   return (
     <div>
       <AlertModal />
+      <ConfirmModal />
       <div className={classes["container"]}>
         <div className={classes["titleArea"]}>
           <div className={classes["selectedTitle"]}>{item.title}</div>
@@ -119,14 +116,14 @@ export function CommunityDetail() {
     </div>
   );
   async function deleteArticleAction() {
-    if (confirm("정말로 삭제하시겠습니까?") == true) {
+    if (await showConfirmModal("글 삭제", "정말로 삭제하시겠습니까?")) {
       try {
         await deleteArticle(id);
-        alert("삭제가 완료되었습니다.");
+        showAlertModal("글 삭제", "삭제가 완료되었습니다.");
         navigate("/community");
       } catch (e) {
         if (e instanceof Error) {
-          alert("삭제이 실패했습니다.");
+          showAlertModal("글 삭제", "삭제가 실패했습니다.");
         } else throw e;
       }
     } else {

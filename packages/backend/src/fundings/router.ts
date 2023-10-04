@@ -115,10 +115,17 @@ async function getAllFundingRequestHandler(req: Request, res: Response) {
   const queryParams = req.query;
   const limit = parseQueryToNumber(queryParams.limit, 50);
   const offset = parseQueryToNumber(queryParams.offset, 0);
-
+  const viewAll = queryParams.view_all === "true";
+  const user = req.user;
+  assert(user);
+  assert_param(
+    (!viewAll) || user.is_admin,
+    "view_all은 관리자만 조회할 수 있습니다.",
+  );
   const result = await requestRepo.findAll({
     limit,
     offset,
+    user_id: viewAll ? undefined : user.id,
   });
   res.json(result).status(StatusCodes.OK);
 }
@@ -385,9 +392,26 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   assert(!isNaN(id));
 
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      reason: { type: "string" },
+    },
+    required: ["reason"],
+  }, req.body);
+
+  if (!v) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 요청입니다.",
+      errors: ajv.errors,
+    });
+    return;
+  }
+
   const requestRepo = new FundingRequestsRepository(getDB());
   requestRepo.updateById(id, {
     funding_state: 2,
+    reason: req.body.reason,
     deleted_at: new Date(),
   });
 
@@ -404,7 +428,7 @@ router.get(
 
 router.get(
   "/request/",
-  checkLogin({ admin_check: true }),
+  checkLogin(),
   RouterCatch(getAllFundingRequestHandler),
 );
 router.get(

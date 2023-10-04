@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
+import { formatDate } from "../../../util/date";
 import baseClasses from "../styles/Co_base.module.css";
 import classes from "../styles/Co_detail.module.css";
 
@@ -21,13 +22,6 @@ function useToggleMenu(ref, btnRef, handler, condition) {
       };
     }
   }, [handler, ref, btnRef, condition]);
-}
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  return `${year}.${month}.${day}`;
 }
 
 function CommentDetail({
