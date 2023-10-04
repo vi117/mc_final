@@ -11,6 +11,7 @@ import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useConfirmModal } from "../../hook/useConfirmModal";
 import { useLoginId } from "../../hook/useLogin";
+import { formatDate } from "../../util/date";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
 import classes from "./styles/Co_detail.module.css";
@@ -22,14 +23,6 @@ export function CommunityDetail() {
   const params = useParams();
   const id = parseInt(params.id);
   const { ConfirmModal, showConfirmModal } = useConfirmModal();
-
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}.${month}.${day}`;
-  }
 
   const {
     data: fetcherData,
