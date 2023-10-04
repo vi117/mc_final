@@ -13,7 +13,7 @@ import AlertModal from "../component/AlertModal";
  *   <AlertModal />
  *   ...
  *   <button onClick={async ()=>{
- *      showAlertModal("title", "msg")
+ *      await showAlertModal("title", "msg")
  *    }}/>
  * </>
  * ```
