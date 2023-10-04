@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Button } from "react-bootstrap";
 import { BiBookmark, BiSolidBookmark } from "react-icons/bi";
 import classes from "./InterestButton.module.css";
@@ -20,7 +21,7 @@ export function InterestButton({ funding, setInterest }: {
             }}
           >
             <BiSolidBookmark
-              className={classes["btn_svg"]}
+              className={clsx(classes["btn_svg"], classes["svg_active"])}
             />
           </Button>
         )

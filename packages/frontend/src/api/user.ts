@@ -161,3 +161,19 @@ export async function patchUserInfo(id: number, body: {
   loginRevalidate();
   return await res.json();
 }
+
+/**
+ * Logs the user out by making a POST request to the "/api/v1/users/logout" endpoint.
+ *
+ * @return {Promise<void>} Returns a promise that resolves when the logout request is complete.
+ */
+export async function logout(): Promise<void> {
+  const res = await fetch("/api/v1/users/logout", {
+    method: "POST",
+  });
+  loginRevalidate();
+  if (res.status !== 200) {
+    throw new APIError("token expired or invalid");
+  }
+  console.log("logout success");
+}
