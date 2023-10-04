@@ -89,3 +89,24 @@ export async function setArticleLike(id: number, like = true) {
     throw new APIError("setArticleLike failed");
   }
 }
+
+export async function patchArticle(id: number, body: {
+  title?: string;
+  content?: string;
+  category?: string;
+  // TODO(vi117): support tag
+  // currently, there is no tag
+  tags?: string[];
+}) {
+  const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
+  const res = await fetch(url.href, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new APIError("patchArticle failed");
+  }
+}
