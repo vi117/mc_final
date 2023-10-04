@@ -6,11 +6,11 @@
 }
 
 .login-wrapper{
-  width: 500px;
+  width: min(500px, 100vw);
   padding: 40px;
   margin-bottom: 50px;
   box-sizing: border-box;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.);
+  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); */
 }
 
 .login-wrapper > h1{
@@ -84,7 +84,6 @@ border:1px solid var(--green);
 .sns_login_container{
   display: flex;
   justify-content: center;
-  margin-top: 10px;
   gap: 10px;
 }
 
