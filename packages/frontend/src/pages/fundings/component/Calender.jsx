@@ -1,6 +1,6 @@
 import ko from "date-fns/locale/ko";
 import DatePicker from "react-datepicker";
-import classes from "../FundingWrite.module.css";
+import classes from "./Calender.module.css";
 import "./datepicker.css";
 
 export const Calender = ({

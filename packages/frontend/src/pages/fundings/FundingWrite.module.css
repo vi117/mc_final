@@ -124,25 +124,6 @@ padding-bottom: 40px;
     display: flex;
     flex-direction: column;
 }
-.date_area{
-    width:100%;
-    display:flex;
-    align-items: center !important;
-}
-
-.date_item > span{
-    font-weight: 700;
-    font-size: 14px;
-    margin-right: 10px;
-}
-
-.date_picker {
-    border: 1px solid var(--secondary);
-    border-radius: 7px;
-margin-right: 30px;
-height:45px;
-padding:0px 15px;
-}
 
 .profile_container > button > p{
     margin: 0px;
@@ -151,10 +132,6 @@ padding:0px 15px;
 
 .profile_container ul {
     display:none;
-}
-
-.date_picker:focus{
-    border:1px solid var(--green) !important;
 }
 
 .react-datepicker__view-calendar-icon input{
@@ -273,7 +250,7 @@ margin-bottom: 10px;
 
 
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1080px) {
 
     .funding_write_wrap h2 {
         font-size: 18px;
@@ -377,17 +354,5 @@ margin-bottom: 10px;
     }
     .reward_item_area{
         background-color: var(--beige);
-    }
-}
-  
-@media screen and (max-width: 620px){
-    .date_area{
-        display:contents;
-    }
-    .date_item{
-    margin-top: 10px;
-    align-items: center;
-    width: 100%;
-    display:flex;
     }
 }
