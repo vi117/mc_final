@@ -303,6 +303,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       target_value: { type: "string" },
       rewards: { type: "string" },
       tags: { type: "string" },
+      funding_id: { type: "string" },
     },
     required: [
       "title",
@@ -339,6 +340,12 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   }
   const target_value = parseInt(req.body.target_value);
   assert_param(!isNaN(target_value), "타겟 값이 유효하지 않습니다.");
+  const funding_id_str = req.body.funding_id;
+  let funding_id = undefined;
+  if (funding_id_str) {
+    funding_id = parseInt(funding_id_str);
+    assert_param(!isNaN(funding_id), "funding_id가 유효하지 않습니다.");
+  }
 
   const tags = req.body.tags.split(",");
 
@@ -356,6 +363,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       end_date: new Date(end_date),
       target_value,
       thumbnail,
+      funding_request_id: funding_id,
       meta_parsed: ({
         tags: tags,
         rewards: rewards,

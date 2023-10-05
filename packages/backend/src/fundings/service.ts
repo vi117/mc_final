@@ -33,19 +33,64 @@ export async function approveFundingRequest(request_id: number) {
     let result_funding_id: number | undefined;
     if (request.funding_request_id) {
       const funding_id = request.funding_request_id;
-      await requestRepo.updateById(request_id, {
+      const funding = await fundingRepo.findById(funding_id);
+      if (funding === undefined) {
+        throw new FundingApproveError("funding does not exist");
+      }
+      if (funding.end_date.getTime() < Date.now()) {
+        throw new FundingApproveError("funding is expired");
+      }
+      // if (funding.deleted_at !== null) {
+      // throw new FundingApproveError("funding is deleted");
+      // }
+      if (funding.host_id !== request.host_id) {
+        throw new FundingApproveError("host does not match");
+      }
+      // update funding
+      await fundingRepo.updateById(funding_id, {
         title: request.title,
         content: request.content,
         thumbnail: request.thumbnail,
         target_value: request.target_value,
-        // begin_date는 바꿀 수 없다.
-        // begin_date: request.begin_date,
-
-        // 그러나 end_date는 바꿀 수 있다. 연장은 가능하다.
+        begin_date: request.begin_date,
         end_date: request.end_date,
-        host_id: request.host_id,
+        content_thumbnails: meta !== undefined
+          ? JSON.stringify(meta?.content_thumbnails)
+          : undefined,
+        updated_at: new Date(),
       });
-      // TODO(vi117): update  difference of tags.
+      if (meta !== undefined) {
+        // process tags
+        const included_tag = (await fundingTagRepo.intersectTags(meta.tags))
+          .map((
+            t,
+          ) => t.tag);
+        const not_included_tag = meta.tags.filter(
+          (t) => !included_tag.includes(t),
+        );
+        await fundingTagRepo.insert(not_included_tag.map((t) => ({
+          tag: t,
+        })));
+        // add tags and delete tags
+        const funding_tags = funding.tags.map((t) => t.tag);
+        const added_tags = meta.tags.filter((t) => !funding_tags.includes(t));
+        const deleted_tags = funding.tags.filter((t) =>
+          !meta.tags.includes(t.tag)
+        );
+
+        await fundingRepo.insertTagsByName(funding_id, added_tags);
+        await fundingRepo.deleteTags(funding_id, deleted_tags.map((t) => t.id));
+
+        // process rewards
+        // add rewards for funding. add only new rewards
+        await fundingRepo.insertRewards(meta.rewards.map((r) => ({
+          funding_id: funding.id,
+          title: r.title,
+          content: r.content,
+          price: r.price,
+          reward_count: r.reward_count,
+        })));
+      }
       result_funding_id = funding_id;
     } else {
       if (meta === undefined) {
@@ -133,7 +178,7 @@ export async function participateFunding({
     if (funding.deleted_at !== null) {
       throw new FundingUsersError("funding is deleted");
     }
-    if (funding.end_date < new Date()) {
+    if (funding.end_date.getTime() < Date.now()) {
       throw new FundingUsersError("funding is ended");
     }
 
@@ -182,7 +227,7 @@ export async function withdrawFunding({
     if (funding === undefined) {
       throw new FundingUsersError("funding does not exist");
     }
-    if (funding.end_date < new Date()) {
+    if (funding.end_date.getTime() < Date.now()) {
       throw new FundingUsersError("funding is ended");
     }
 
