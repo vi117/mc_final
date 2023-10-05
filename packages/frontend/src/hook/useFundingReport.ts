@@ -2,7 +2,7 @@ import { FundingReportObject } from "dto";
 import useSWR from "swr";
 import { DateToString, fetcher } from "./util";
 
-export default function useFundingRequest({
+export default function useFundingReport({
   offset = 0,
   limit = 50,
 } = {}) {
@@ -16,4 +16,4 @@ export default function useFundingRequest({
   );
 }
 
-export { useFundingRequest };
+export { useFundingReport };
