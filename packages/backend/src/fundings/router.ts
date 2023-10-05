@@ -288,7 +288,14 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   assert_param(thumbnailArr && thumbnailArr.length > 0, "썸네일이 필요합니다.");
   const thumbnail = thumbnailArr[0].url;
 
+  if (!("content_thumbnail" in files)) {
+    // set default thumbnail
+    files["content_thumbnail"] = [thumbnailArr[0]];
+  }
   const content_thumbnails = files["content_thumbnail"].map((file) => file.url);
+  if (!("certificate" in files)) {
+    files["certificate"] = [];
+  }
   const certificate = files["certificate"].map((file) => file.url);
 
   const requestRepo = new FundingRequestsRepository(getDB());

@@ -182,9 +182,10 @@ export async function postFundingRequest({
   formData.append("rewards", JSON.stringify(rewards));
 
   formData.append("account_number", accountNumber);
-  certificateFiles.forEach((file) => {
+  [...certificateFiles].forEach((file) => {
     formData.append("certificate", file);
   });
+  console.log(formData);
 
   const r = await fetch(url.href, {
     method: "POST",

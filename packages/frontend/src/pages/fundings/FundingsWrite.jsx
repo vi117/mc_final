@@ -282,7 +282,10 @@ const FundingsWrite = function() {
             <Form.Control
               type="file"
               multiple
-              onChange={(e) => setCertificateFiles(e.target.files)}
+              onChange={(e) => {
+                console.log(e.target.files);
+                setCertificateFiles(e.target.files);
+              }}
             />
           </div>
         </div>
@@ -305,10 +308,10 @@ const FundingsWrite = function() {
         accountNumber,
         certificateFiles,
       });
-
       alert("요청이 접수되었습니다.");
       navigate("/fundings");
     } catch (e) {
+      console.log(e);
       alert("요청이 실패되었습니다.");
     }
   }

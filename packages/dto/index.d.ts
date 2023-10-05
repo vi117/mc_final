@@ -26,7 +26,13 @@ export interface FundingRequestObject {
     tags: string[];
     rewards: FundingRewardInput[];
     content_thumbnails?: string[];
+    /**
+     * 계좌번호. 계좌 외 다른 방식으로 지급되면 undefined
+     */
     account_number?: string;
+    /**
+     * 증명서들.
+     */
     certificate?: string[];
   } | null;
 }

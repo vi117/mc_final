@@ -1,7 +1,7 @@
 import { GoInfo } from "react-icons/go";
 import classes from "./Guide.module.css";
 
-export default function Guide({
+export function Guide({
   children,
   title,
 }) {
@@ -15,3 +15,5 @@ export default function Guide({
     </ul>
   );
 }
+
+export default Guide;
