@@ -2,7 +2,8 @@ import Button from "@mui/material/Button";
 import clsx from "clsx";
 import { useState } from "react";
 import { Accordion, Col, Container, Form, Modal, Row } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { fundingParticipate } from "../../api/funding";
 import MyButton from "../../component/Button";
 import { useAlertModal } from "../../hook/useAlertModal";
@@ -21,7 +22,7 @@ export default function FundingsPay() {
   const { AlertModal, showAlertModal } = useAlertModal();
 
   if (!userInfo) {
-    return <div>로그인이 필요합니다.</div>;
+    return <Navigate to="/login" />;
   }
 
   const { funding, selectedReward } = location.state;
@@ -36,13 +37,13 @@ export default function FundingsPay() {
         <div
           className={classes["ImgArea"]}
         >
-          <a herf="">
+          <NavLink to={`/fundings/${funding.id}`}>
             <img
               src={funding.thumbnail}
               alt={funding.title}
             >
             </img>
-          </a>
+          </NavLink>
         </div>
         <div className="d-flex flex-column justify-content-between">
           <div className={classes["styled-project"]}>
@@ -50,7 +51,7 @@ export default function FundingsPay() {
               {selectedReward.title} | {funding.host_nickname}
             </span>
             <h3 style={{ marginTop: "10px" }}>
-              <a href="펀딩.url">{funding.title}</a>
+              <NavLink to={`/fundings/${funding.id}`}>{funding.title}</NavLink>
             </h3>
           </div>
           <div className={classes["styled-project"]}>
@@ -63,7 +64,6 @@ export default function FundingsPay() {
               )} %
             </span>
             <span className={classes["state"]}>
-              {/* TODO(vi117): 일, 시간, 분 남음으로 바꾸기. 컴포넌트로 추출하고 setInterval로 실시간 갱신. */}
               {remainingDays.toFixed(2)}일 남음
             </span>
           </div>
@@ -366,6 +366,7 @@ function CardRegister() {
 }
 
 function ShippingInformation({ shippingInfo, setShippingInfo }) {
+  const daumPostcodePopup = useDaumPostcodePopup();
   return (
     <>
       <Form
@@ -415,11 +416,16 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
           <Form.Control
             placeholder="ex) 성남시 분당구 동판교로 115"
             value={shippingInfo.address}
-            onChange={(e) =>
-              setShippingInfo({
-                ...shippingInfo,
-                address: e.target.value,
-              })}
+            onClick={() => {
+              daumPostcodePopup({
+                onComplete: (data) => {
+                  setShippingInfo({
+                    ...shippingInfo,
+                    address: data.address,
+                  });
+                },
+              });
+            }}
           />
         </Form.Group>
 
