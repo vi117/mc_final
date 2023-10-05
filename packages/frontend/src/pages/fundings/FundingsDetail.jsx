@@ -475,7 +475,7 @@ function Report() {
           </Form.Select>
           <FloatingLabel
             controlId="floatingTextarea2"
-            label="자세한 신고 사유와 문제가 되는 펀딩의 URL을 작성해주세요"
+            label="자세한 신고 사유를 작성해주세요"
             style={{ fontSize: "14px" }}
           >
             <Form.Control
