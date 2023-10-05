@@ -52,6 +52,15 @@ export interface Comments {
   user_id: number;
 }
 
+export interface FundingReports {
+  id: Generated<number>;
+  funding_id: number;
+  user_id: number;
+  content: string;
+  meta: string | null;
+  created_at: Generated<Date>;
+}
+
 export interface FundingRequests {
   id: Generated<number>;
   title: string;
@@ -87,6 +96,7 @@ export interface Fundings {
   title: string;
   content: string;
   thumbnail: string;
+  content_thumbnails: Generated<string>;
   created_at: Generated<Date>;
   deleted_at: Date | null;
   updated_at: Generated<Date>;
@@ -95,7 +105,6 @@ export interface Fundings {
   current_value: Generated<number>;
   begin_date: Date;
   end_date: Date;
-  content_thumbnails: Generated<string>;
 }
 
 export interface FundingTagRel {
@@ -115,7 +124,6 @@ export interface FundingUsers {
   reward_id: number;
   address: string;
   created_at: Generated<Date>;
-
   recipient: string;
   phone: string;
 }
@@ -135,12 +143,11 @@ export interface Users {
   is_admin: Generated<number>;
   phone: string;
   address: string;
-  address_detail: string;
-
   password: string;
   introduction: string | null;
   created_at: Generated<Date>;
   deleted_at: Date | null;
+  address_detail: Generated<string>;
 }
 
 export interface DB {
@@ -150,6 +157,7 @@ export interface DB {
   article_tags: ArticleTags;
   articles: Articles;
   comments: Comments;
+  funding_reports: FundingReports;
   funding_requests: FundingRequests;
   funding_rewards: FundingRewards;
   funding_tag_rel: FundingTagRel;

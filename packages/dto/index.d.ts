@@ -87,6 +87,24 @@ export interface FundingObject {
   }[];
 }
 
+export interface FundingReportObject {
+  id: number;
+  funding_id: number;
+  user_id: number;
+  content: string;
+  meta: string | null;
+  created_at: Date;
+  user_nickname: string;
+  user_profile_image: string | null;
+  user_email: string;
+  funding_title: string;
+  funding_thumbnail: string;
+  funding_begin_date: Date;
+  funding_end_date: Date;
+
+  meta_parsed: string[] | null;
+}
+
 export interface UserObject {
   id: number;
   nickname: string;
