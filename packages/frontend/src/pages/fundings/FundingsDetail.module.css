@@ -547,6 +547,9 @@ border-bottom: 1px solid var(--border);
     width:100%;
     display:inline;
     flex-direction: column;
+
+    /* display: flex;
+    align-items: center; */
   }
 
   .content, .content img {
