@@ -24,6 +24,7 @@ import classes from "./FundingsDetail.module.css";
 import FundingDetailModal from "./FundingsDetailModal";
 
 import {
+  postFundingReport,
   setFundingInterest,
   withdrawFunding as withdrawFundingAPI,
 } from "../../api/mod";
@@ -299,7 +300,7 @@ const FundingsDetail = function() {
             </span>
             <span className={classes.report_right}>
               <GoChevronRight className={classes.report_svg} />
-              <Report />
+              <Report funding_id={funding.id} />
             </span>
           </div>
           <div className={classes.rewardtitle}>
@@ -432,8 +433,12 @@ function SelectablRewardList(
   );
 }
 
-function Report() {
+function Report({
+  funding_id,
+}) {
   const [show, setShow] = useState(false);
+  const [content, setContent] = useState("");
+  const [files, setFiles] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -481,13 +486,20 @@ function Report() {
                 as="textarea"
                 placeholder="Leave a comment here"
                 style={{ height: "150px" }}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
               />
             </FloatingLabel>
             <Form.Group controlId="formFileMultiple" className="mb-3">
               <Form.Label style={{ marginTop: "20px", fontSize: "13px" }}>
                 첨부파일(선택)
               </Form.Label>
-              <Form.Control type="file" multiple style={{ fontSize: "14px" }} />
+              <Form.Control
+                type="file"
+                multiple
+                style={{ fontSize: "14px" }}
+                onChange={(e) => setFiles(e.target.files)}
+              />
             </Form.Group>
             <p style={{ fontSize: "11px" }}>
               * 신고내용이 허위 사실인 경우, 이용에 제재를 받을 수 있습니다.
@@ -504,7 +516,10 @@ function Report() {
           </Button>
           <Button
             variant="outline-success"
-            onClick={handleClose}
+            onClick={() => {
+              submitReport();
+              handleClose();
+            }}
           >
             제출
           </Button>
@@ -512,5 +527,19 @@ function Report() {
       </Modal>
     </>
   );
+  async function submitReport() {
+    try {
+      await postFundingReport(funding_id, {
+        content: content,
+        files: files,
+      });
+      // TODO(vi117): show alert
+      alert("전송완료");
+    } catch (error) {
+      console.log(error);
+      // TODO(vi117): show alert
+      alert("전송실패");
+    }
+  }
 }
 export default FundingsDetail;

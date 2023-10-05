@@ -197,3 +197,28 @@ export async function postFundingRequest({
     throw new APIError(data.message);
   }
 }
+
+export async function postFundingReport(funding_id: number, {
+  content,
+}: {
+  content: string;
+  attachment: File[];
+}) {
+  const url = new URL(
+    `/api/v1/fundings/${funding_id}/report`,
+    window.location.href,
+  );
+  const formData = new FormData();
+  formData.append("content", content);
+  [...content].forEach((file) => {
+    formData.append("attachment", file);
+  });
+  const r = await fetch(url.href, {
+    method: "POST",
+    body: formData,
+  });
+  if (!r.ok) {
+    const data = await r.json();
+    throw new APIError(data.message);
+  }
+}

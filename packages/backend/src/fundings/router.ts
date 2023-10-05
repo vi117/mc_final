@@ -5,7 +5,7 @@ import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import sanitize from "sanitize-html";
 
-import { FundingsRepository } from "./funding_model";
+import { FundingReportsRepository, FundingsRepository } from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
 
 import upload from "@/file/multer";
@@ -154,6 +154,20 @@ async function getSingleFundingRequestHandler(req: Request, res: Response) {
   res.json(result).status(StatusCodes.OK);
 }
 
+async function getAllFundingReportsHandler(req: Request, res: Response) {
+  const reportRepo = new FundingReportsRepository(getDB());
+  const queryParams = req.query;
+  const limit = Math.min(parseQueryToNumber(queryParams.limit, 50), 200);
+  const offset = parseQueryToNumber(queryParams.offset, 0);
+
+  const result = await reportRepo.findAll({
+    limit,
+    offset,
+  });
+
+  res.json(result).status(StatusCodes.OK);
+}
+
 async function getFundingRewardsHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   assert(!isNaN(id));
@@ -272,6 +286,48 @@ async function withdrawFundingHandler(req: Request, res: Response) {
       throw error;
     }
   }
+  res.json({ message: "success" }).status(StatusCodes.OK);
+}
+
+async function reportFundingHandler(req: Request, res: Response) {
+  const getUrlFromFiles = () => {
+    const files = req.files;
+    if (!files) {
+      return undefined;
+    }
+    assert(!(files instanceof Array));
+    const p = files["attachment"];
+    if (!p) {
+      return undefined;
+    }
+    return p.map((f) => f.url);
+  };
+  const urls = getUrlFromFiles();
+
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  const user = req.user;
+  assert(user);
+
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      content: { type: "string" },
+    },
+    required: ["content"],
+  }, req.body);
+  assert_param(v, "유효하지 않은 요청입니다.", {
+    errors: ajv.errors,
+  });
+
+  const fundingReportsRepo = new FundingReportsRepository(getDB());
+  await fundingReportsRepo.insert({
+    user_id: user.id,
+    funding_id: id,
+    content: req.body.content,
+    meta_parsed: urls,
+  });
+
   res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
@@ -462,6 +518,12 @@ router.get(
   RouterCatch(getSingleFundingRequestHandler),
 );
 
+router.get(
+  "/reports",
+  checkLogin({ admin_check: true }),
+  RouterCatch(getAllFundingReportsHandler),
+);
+
 router.delete(
   "/:id(\\d+)",
   checkLogin({ admin_check: true }),
@@ -478,6 +540,14 @@ router.post(
   "/:id(\\d+)/rewards/:req_id(\\d+)/withdraw",
   checkLogin(),
   RouterCatch(withdrawFundingHandler),
+);
+router.post(
+  "/:id(\\d+)/report",
+  checkLogin(),
+  upload.fields([
+    { name: "attachment", maxCount: 5 },
+  ]),
+  RouterCatch(reportFundingHandler),
 );
 
 router.post(

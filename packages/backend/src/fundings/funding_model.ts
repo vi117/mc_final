@@ -1,10 +1,10 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
-import { FundingObject, FundingRewards } from "dto";
+import { FundingObject, FundingReportObject, FundingRewards } from "dto";
 import { Insertable, Kysely, Updateable } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
 
-export { FundingObject, FundingRewards };
+export { FundingObject, FundingReportObject, FundingRewards };
 
 const debug = debug_fn("joinify:db");
 
@@ -481,6 +481,60 @@ export class FundingTagRepo {
     return await this.db.selectFrom("funding_tags")
       .where("funding_tags.tag", "in", tag_names)
       .selectAll("funding_tags")
+      .execute();
+  }
+}
+
+export class FundingReportsRepository {
+  db: Kysely<DB>;
+  constructor(db: Kysely<DB>) {
+    this.db = db;
+  }
+  async findAll({
+    limit = 50,
+    offset = 0,
+  }): Promise<FundingReportObject[]> {
+    const result = await this.db.selectFrom("funding_reports")
+      .innerJoin("users", "funding_reports.user_id", "users.id")
+      .innerJoin("fundings", "funding_reports.funding_id", "fundings.id")
+      .select([
+        "funding_reports.id",
+        "funding_reports.content",
+        "funding_reports.meta",
+        "funding_reports.created_at",
+        "funding_reports.user_id",
+        "funding_reports.funding_id",
+      ])
+      .select([
+        "users.nickname as user_nickname",
+        "users.profile_image as user_profile_image",
+        "users.email as user_email",
+        "fundings.title as funding_title",
+        "fundings.thumbnail as funding_thumbnail",
+        "fundings.begin_date as funding_begin_date",
+        "fundings.end_date as funding_end_date",
+      ])
+      .limit(limit)
+      .offset(offset)
+      .orderBy("created_at", "desc")
+      .execute();
+    return result.map((x) => ({
+      ...x,
+      meta_parsed: JSON.parse(x.meta ?? "null"),
+    }));
+  }
+
+  async insert(
+    funding_report: Insertable<DB["funding_reports"]> & {
+      meta_parsed?: string[];
+    },
+  ) {
+    if (funding_report.meta_parsed) {
+      funding_report.meta = JSON.stringify(funding_report.meta_parsed);
+      delete funding_report.meta_parsed;
+    }
+    return await this.db.insertInto("funding_reports")
+      .values(funding_report)
       .execute();
   }
 }
