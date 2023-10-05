@@ -8,12 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { TagsInput } from "react-tag-input-component";
 
-import { GoInfo } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { postFundingRequest } from "../../api/funding";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
 import { Calender } from "./component/Calender";
+import { Guide } from "./component/Guide";
 import { RewardItemList } from "./component/RewardItemList";
 
 /**
@@ -374,21 +374,6 @@ function TargetValueGuide() {
         제작비, 선물 배송비, 인건비, 예비 비용 등을 함께 고려해주세요.
       </li>
     </Guide>
-  );
-}
-
-function Guide({
-  children,
-  title,
-}) {
-  return (
-    <ul className={classes.guide}>
-      <li className={classes.guide_bold}>
-        <GoInfo className={classes.guide_svg}></GoInfo>
-        {title}
-      </li>
-      {children}
-    </ul>
   );
 }
 
