@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "react-bootstrap";
-import { AiOutlineCloudUpload, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 import classes from "./Upload.module.css";
 
 const Upload = ({
@@ -79,10 +78,9 @@ const Upload = ({
       </div>
 
       <div className={classes["upload-button"]}>
-        <Button variant="danger" onClick={deleteImage}>
-          <AiOutlineDelete />
-          Clear
-        </Button>
+        <button onClick={deleteImage}>
+          삭제
+        </button>
       </div>
     </div>
   );

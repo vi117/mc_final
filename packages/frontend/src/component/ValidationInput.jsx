@@ -144,7 +144,7 @@ export function ValidationInput({
         {children}
       </Form.Control>
       {(!isValid && !isEmpty)
-        ? <div className="error-message">#{errorMessage}</div>
+        ? <div className={classes["error_message"]}>{errorMessage}</div>
         : null}
     </>
   );

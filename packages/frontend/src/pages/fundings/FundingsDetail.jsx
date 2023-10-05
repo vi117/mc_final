@@ -445,13 +445,12 @@ function Report({
 
   return (
     <>
-      <Button
-        variant="outline-danger"
-        style={{ fontSize: "13px" }}
+      <div
+        className={classes["go_report"]}
         onClick={handleShow}
       >
         신고하기
-      </Button>
+      </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title style={{ fontWeight: "bold", marginLeft: "10px" }}>

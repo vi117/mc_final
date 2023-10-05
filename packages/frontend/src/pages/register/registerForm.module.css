@@ -1,22 +1,93 @@
-.form input{
-    display: block;
-    margin-bottom: 20px;
-    border: 1px solid #E5E9F5;
-    background-color: #F6F7FA;
+.register_container{
+    border: 1px solid var(--secondary);
+    margin: 0 auto;
+    width:450px;
+    border-radius: 7px;
     padding: 10px;
-    margin-top: 10px;
-    border-radius: 10px;
-    width: 100%;
+    margin-bottom: 50px;
+}
+
+.register_container > p {
+    font-size: 20px;
+    font-weight: 700;
+margin-top: 20px;
+margin-left:25px;
+}
+.form input {
+    display: block;
+    border: 1px solid var(--secondary);
+    background-color: var(--white);
+    padding: 10px;
+    border-radius: 0px;
+    width: 90%;
+    margin:0 auto;
+    margin-bottom: 10px;
+}
+
+
+
+.form_label{
+    margin-left:25px;
+    font-weight: 500;
+    color:var(--primary);
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+.form > label{
+    display:none;
+}
+
+.form input:focus {
+    border: 1px solid var(--green);
+}
+
+.form input::placeholder{
+    color:var(--secondary);
 }
 
 .button_submit {
-    padding: 10px 50px;
-    background-color: #ED4B5E;
-    border-radius: 10px;
+    font-size: 14px;
+    padding: 15px 50px;
+    background-color: var(--green);
+    border: 1px solid var(--green);
     color: white;
-    width: 100%;
+    width: 90%;
+    margin:0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .button_submit:hover {
-    background-color: #ff6678;
+    background-color: var(--green-dark);
+    border: 1px solid var(--green-dark);
+}
+
+
+
+@media screen and (max-width: 576px/* sm - small screens */) {
+    .register_container{
+        border: none;
+       width:100%;
+    }
+
+    .register_container > p {
+    margin-left:0px;
+    }
+
+    .form input {
+     width: 100%;
+    }
+    
+    
+    
+    .form_label{
+        margin-left:0px;
+    }
+
+    .button_submit {
+
+        width: 100%;
+
+    }
 }
