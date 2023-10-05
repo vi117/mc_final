@@ -14,9 +14,7 @@
 /*모달창 ui*/
 
 .title{
-  text-align: center;
   padding:0 !important;
-  margin-top: 20px;
 }
 .title > p {
   font-size: 14px;
@@ -99,19 +97,24 @@
 
 /*Filtering checkbox*/
 .selecttable {
-  padding: 20px 0px;
+  padding: 10px 20px;
+}
+
+.selecttable > p{
+  color:var(--teritary);
+  margin-bottom: 5px;
 }
 
 .mb-3{
   display:flex;
   align-items: center;
-  justify-content: center;
 }
 
 .mb-3 > input{
   margin-bottom: 0px !important;
   margin-right: 10px;
-  border:1px solid var(--green);
+  border:1px solid var(--teritary);
+  accent-color: #2aa971;
 }
 .mb-3 > input:focus{
  box-shadow: none !important;
@@ -131,7 +134,6 @@ outline:none;
 }
 
 .filterbtnarea {
-  margin-bottom: 20px;
   display: flex; 
   justify-content: center;  
 }
@@ -140,13 +142,20 @@ outline:none;
   font-size: 14px;
   color:var(--white);
   border: none;
-  border-radius: 7px;
+  border-radius: 4px !important;
   padding: 7px 15px;
-  background-color: var(--green); 
+  background-color: var(--teritary) !important;
+}
+
+.filteron{
+  background-color: var(--green) !important;
+  color: var(--white) !important;
+  border: 1px solid var(--green) !important;
+  border-radius: 4px !important;
 }
 
 .closebtn:hover, .filteron:hover{
-  transform:scale(1.05);
+  transform:scale(1.01);
   transition: transform 200ms ease;
 }  
 

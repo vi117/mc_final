@@ -1,0 +1,25 @@
+.register{
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.register_all {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.register_modal_container label {
+    margin-left:10px;
+}
+
+.register_modal_container  li{
+    display:flex;
+margin-bottom: 7px;
+align-items: center;
+}
+
+.register_modal_container  li > input{
+    accent-color: #2aa971;
+}
+
+

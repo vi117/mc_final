@@ -1,4 +1,5 @@
 import { useState } from "react";
+import classes from "./registerAgree.module.css";
 
 export interface Agreement {
   termsAgreed: boolean;
@@ -47,8 +48,10 @@ export function TermOfPolicy({
   };
 
   return (
-    <div>
-      <label>회원 정보 입력 및 이용약관 동의</label>
+    <div className={classes["register_modal_container"]}>
+      <label className={classes["register"]} style={{ marginLeft: "0px" }}>
+        회원 정보 입력 및 이용약관 동의
+      </label>
       <ul>
         <li>
           <input
@@ -58,9 +61,11 @@ export function TermOfPolicy({
             checked={allAgreed}
             onChange={handleAllArgeementChange}
           />
-          <label htmlFor="agree_check_all">이용약관 전체동의</label>
+          <label htmlFor="agree_check_all" className={classes["register_all"]}>
+            이용약관 전체동의
+          </label>
         </li>
-        <li>
+        <li className={classes["register_checkbox"]}>
           <input
             type="checkbox"
             id="agree_check_used"

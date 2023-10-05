@@ -169,11 +169,16 @@ function FilterModal(
 
   return (
     <Modal show={isModalOpen}>
-      <div className={classes["title"]}>
-        <p>잠깐! 커뮤니티에 들어가시기 전에</p>
-        <h1>필터링 키워드를 선택해주세요</h1>
-      </div>
+      <Modal.Header>
+        <div className={classes["title"]}>
+          <p>잠깐! 커뮤니티에 들어가시기 전에</p>
+          <h1>필터링 키워드를 선택해주세요</h1>
+        </div>
+      </Modal.Header>
       <div className={classes["selecttable"]}>
+        <p>
+          체크하면 해당 동물 카테고리에 속한 게시물이 홈에서 보이지 않게 됩니다.
+        </p>
         <Form>
           {animals.map((animal, index) => (
             <div key={`filter-${index}`}>
@@ -199,25 +204,27 @@ function FilterModal(
           ))}
         </Form>
       </div>
-      <div className={classes["filterbtnarea"]}>
-        <Button
-          className={classes["closebtn"]}
-          onClick={() => {
-            onApplyFilter([]);
-          }}
-          style={{ marginRight: "5px" }}
-        >
-          그냥 보기
-        </Button>
-        <Button
-          className={classes["filteron"]}
-          onClick={() => {
-            onApplyFilter(selectedAnimals);
-          }}
-        >
-          저장하기
-        </Button>
-      </div>
+      <Modal.Footer>
+        <div className={classes["filterbtnarea"]}>
+          <Button
+            className={classes["closebtn"]}
+            onClick={() => {
+              onApplyFilter([]);
+            }}
+            style={{ marginRight: "10px" }}
+          >
+            그냥 보기
+          </Button>
+          <Button
+            className={classes["filteron"]}
+            onClick={() => {
+              onApplyFilter(selectedAnimals);
+            }}
+          >
+            저장하기
+          </Button>
+        </div>
+      </Modal.Footer>
     </Modal>
   );
 }
