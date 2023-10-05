@@ -7,9 +7,9 @@ import classes from "./ValidationInput.module.css";
  * Generates a function comment for the given function body in a markdown code block with the correct language syntax.
  *
  * @param {Object} props - The input object containing the following properties:
- * @param {ReactNode} props.children - The child components.
  * @param {string} props.className - The CSS class name.
  * @param {string} props.name - The name of the input.
+ * @param {string} [props.label] - The label of the input.
  * @param {string} [props.type] - The type of the input.
  * @param {string} props.value - The value of the input.
  * @param {(value: string)=>void} props.onChange - The function called when the input value changes.
@@ -27,9 +27,12 @@ import classes from "./ValidationInput.module.css";
  * @return {ReactNode} - The rendered JSX of the ValidationInput component.
  */
 export function ValidationInput({
-  children,
   className,
   name,
+  label,
+  labelClassName = "",
+  inputClassName = "",
+
   type,
   value,
   onChange,
@@ -128,12 +131,17 @@ export function ValidationInput({
   ]);
 
   return (
-    <>
-      <ValidationInputLabel>{name}</ValidationInputLabel>
+    <Form.Group className={className}>
+      {label
+        && (
+          <ValidationInputLabel className={labelClassName}>
+            {label}
+          </ValidationInputLabel>
+        )}
       <Form.Control
-        className={clsx(className, {
+        className={clsx(classes.input, {
           [classes.label_error]: !isValid && !isEmpty,
-        })}
+        }, inputClassName)}
         name={name}
         type={type}
         value={value}
@@ -141,19 +149,18 @@ export function ValidationInput({
         placeholder={placeholder}
         onClick={onClick}
       >
-        {children}
       </Form.Control>
       {(!isValid && !isEmpty)
         ? <div className={classes["error_message"]}>{errorMessage}</div>
         : null}
-    </>
+    </Form.Group>
   );
 }
 
-function ValidationInputLabel({ children }) {
+export function ValidationInputLabel({ children, className }) {
   return (
     <Form.Label
-      className={classes.label}
+      className={clsx(classes.label, className)}
     >
       {children}
     </Form.Label>

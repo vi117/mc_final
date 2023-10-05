@@ -1,6 +1,26 @@
 .label {
-    color: var(--teritary);
-    transition: all 0.3s;
+    margin-left:5px;
+    font-weight: 500;
+    color:var(--primary);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.input {
+    display: block;
+    border: 1px solid var(--secondary);
+    background-color: var(--white);
+    padding: 10px;
+    border-radius: 0px;
+    margin:0 auto;
+}
+
+.input:focus {
+    border: 1px solid var(--green);
+}
+
+.input::placeholder{
+    color:var(--secondary);
 }
 
 .label_error {
@@ -8,7 +28,13 @@
 }
 
 .error_message{
-    margin-left: 25px;
+    margin-left: 5px;
     color: #FF0303;
-    margin-bottom: 10px;
+}
+
+
+@media screen and (max-width: 576px/* sm - small screens */) {
+    .label{
+        margin-left:0px;
+    }
 }

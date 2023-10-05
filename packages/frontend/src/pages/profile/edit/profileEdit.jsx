@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
+import { useDaumPostcodePopup } from "react-daum-postcode";
 import { patchUserInfo } from "../../../api/mod";
 import { Button } from "../../../component/Button";
+import { ValidationInput } from "../../../component/ValidationInput";
 import { useAlertModal } from "../../../hook/useAlertModal";
 import { useLoginInfo } from "../../../hook/useLogin";
-import classes from "../../register/registerForm.module.css";
+import classes from "./profileEdit.module.css";
 
 function ProfileEditPage() {
   const loginInfo = useLoginInfo();
@@ -12,16 +14,14 @@ function ProfileEditPage() {
   const formRef = useRef(null);
   const [phone, setPhone] = useState(loginInfo.phone);
   const [address, setAddress] = useState(loginInfo.address);
-  const [introduction, setArticle] = useState(loginInfo.introduction);
+  const [introduction, setIntroduction] = useState(loginInfo.introduction);
+  const daumPostcodePopup = useDaumPostcodePopup();
 
   const onPhoneHandler = (event) => {
     setPhone(event.currentTarget.value);
   };
-  const onAddressHandler = (event) => {
-    setAddress(event.currentTarget.value);
-  };
-  const onArticleHandler = (event) => {
-    setArticle(event.currentTarget.value);
+  const onIntroductionHandler = (event) => {
+    setIntroduction(event.currentTarget.value);
   };
 
   return (
@@ -42,28 +42,36 @@ function ProfileEditPage() {
           e.stopPropagation();
         }}
       >
-        <RegisterLabel>Phone</RegisterLabel>
-        <input
+        <ValidationInput
           name="phone"
+          className="mb-3"
+          label="전화번호"
           type="text"
           value={phone}
           onChange={onPhoneHandler}
         />
-        <RegisterLabel>Address</RegisterLabel>
-        <input
+        <ValidationInput
           name="address"
+          className="mb-3"
+          label="주소"
           type="text"
           value={address}
-          onChange={onAddressHandler}
+          onClick={() => {
+            daumPostcodePopup({
+              onComplete: (data) => {
+                setAddress(data.address);
+              },
+            });
+          }}
         />
-        <RegisterLabel>Introduction</RegisterLabel>
-        <input
+        <ValidationInput
           name="introduction"
+          className="mb-3"
           type="text"
+          label="소개"
           value={introduction}
-          onChange={onArticleHandler}
+          onChange={onIntroductionHandler}
         />
-        <br />
 
         <Button
           id="form-controls"
@@ -108,11 +116,3 @@ function ProfileEditPage() {
 }
 
 export default ProfileEditPage;
-
-function RegisterLabel({ children }) {
-  return (
-    <label className={classes.label}>
-      {children}
-    </label>
-  );
-}

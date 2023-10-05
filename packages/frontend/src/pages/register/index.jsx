@@ -1,10 +1,15 @@
+import clsx from "clsx";
 import { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useLocation, useNavigate } from "react-router-dom";
 import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
+import Button from "../../component/Button";
 import Upload from "../../component/UploadImage";
-import { ValidationInput } from "../../component/ValidationInput";
+import {
+  ValidationInput,
+  ValidationInputLabel,
+} from "../../component/ValidationInput";
 import { useAlertModal } from "../../hook/useAlertModal";
 import RegisterArgee from "./registerArgeeModal";
 import classes from "./registerForm.module.css";
@@ -62,16 +67,20 @@ function RegisterPage() {
             handleClose={() => navigate("/login")}
           >
           </RegisterArgee>
-          <p className={classes["form_label"]}>프로필 사진</p>
-          <Upload
-            imageFile={profileImageRef}
-            initial_preview_URL={location.state?.thumbnail ?? ""}
-          >
-          </Upload>
-          <p className={classes["form_label"]}>이메일</p>
+          <div className={classes.validate_input}>
+            <ValidationInputLabel>
+              프로필 사진
+            </ValidationInputLabel>
+            <Upload
+              imageFile={profileImageRef}
+              initial_preview_URL={location.state?.thumbnail ?? ""}
+            />
+          </div>
           <ValidationInput
             name="Email"
             type="email"
+            label="이메일"
+            className={classes.validate_input}
             value={Email}
             placeholder="이메일 주소를 입력해주세요"
             onChange={(value) => setEmail(value)}
@@ -80,21 +89,25 @@ function RegisterPage() {
             validateAsync={emailCheck}
             validateAsyncMessage={"이미 사용되는 이메일입니다."}
           />
-          <p className={classes["form_label"]}>비밀번호</p>
           <ValidationInput
             name="Password"
+            label="비밀번호"
             type="password"
+            className={classes.validate_input}
             placeholder="비밀번호를 입력해주세요"
             value={Password}
             onChange={(value) => setPassword(value)}
             minLength={6}
             minMessage={"6자리 이상이어야 합니다."}
           />
-
           <ValidationInput
             name="ConfirmPassword"
             type="password"
             placeholder="비밀번호를 확인합니다"
+            className={clsx(
+              classes.validate_input,
+              classes.validate_input_no_label,
+            )}
             value={ConfirmPassword}
             onChange={(value) => setConfirmPassword(value)}
             minLength={6}
@@ -102,30 +115,31 @@ function RegisterPage() {
             validate={(value) => value === Password}
             validateMessage="비밀번호와 비밀번호 확인이 동일해야 합니다."
           />
-
-          <p className={classes["form_label"]}>닉네임</p>
           <ValidationInput
             name="NickName"
+            label="닉네임"
             placeholder="닉네임을 입력해주세요"
+            className={classes.validate_input}
             type="text"
             value={NickName}
             onChange={(value) => setNickName(value)}
             validateAsync={nicknameCheck}
             validateAsyncMessage={"이미 사용 중인 닉네임입니다."}
           />
-          <p className={classes["form_label"]}>전화번호</p>
           <ValidationInput
             name="Phone"
+            label="전화번호"
             placeholder="전화번호를 입력해주세요"
+            className={classes.validate_input}
             type="text"
             value={Phone}
             onChange={(value) => setPhone(value)}
           />
-
-          <p className={classes["form_label"]}>주소</p>
           <ValidationInput
             name="Address"
             type="text"
+            label="주소"
+            className={classes.validate_input}
             placeholder="주소를 입력해주세요"
             value={Address}
             onChange={(value) => setAddress(value)}
@@ -141,23 +155,28 @@ function RegisterPage() {
             name=""
             type="text"
             placeholder="상세주소를 입력해주세요"
+            className={clsx(
+              classes.validate_input,
+              classes.validate_input_no_label,
+            )}
             value={AddressDetail}
             onChange={(value) => setAddressDetail(value)}
           />
-          <p className={classes["form_label"]}>소개말</p>
           <ValidationInput
             name="Introduction"
             type="text"
+            label="소개"
+            className={classes.validate_input}
             placeholder="간단한 한 마디로 나를 소개해주세요"
             value={Article}
             onChange={(value) => setArticle(value)}
           />
-          <button
+          <Button
             className={classes.button_submit}
             onClick={() => onSubmitHandler()}
           >
             회원가입
-          </button>
+          </Button>
         </Form>
       </div>
     </>
