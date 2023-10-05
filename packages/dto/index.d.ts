@@ -156,6 +156,15 @@ export interface ArticleSingleObject extends ArticleObject {
   } | null;
 }
 
+export interface ArticleReportObject {
+  id: number;
+  article_title: string;
+  created_at: Date;
+  article_id: number;
+  user_id: number;
+  content: string;
+}
+
 export interface CommentObject {
   id: number;
   content: string;

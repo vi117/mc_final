@@ -110,3 +110,19 @@ export async function patchArticle(id: number, body: {
     throw new APIError("patchArticle failed");
   }
 }
+
+export async function reportArticle(id: number, reason: string) {
+  const url = new URL(`/api/v1/articles/${id}/report`, window.location.origin);
+  const res = await fetch(url.href, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      reason,
+    }),
+  });
+  if (!res.ok) {
+    throw new APIError("reportArticle failed");
+  }
+}

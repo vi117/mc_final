@@ -59,7 +59,7 @@ async function getAllArticleHandler(req: Request, res: Response) {
     orderBy: orderBy,
     related_funding_id: related_funding_id,
   });
-  res.json(result).status(StatusCodes.OK);
+  res.status(StatusCodes.OK).json(result);
 }
 
 /**
@@ -85,7 +85,7 @@ async function getSingleArticleHandler(req: Request, res: Response) {
     res.status(StatusCodes.NOT_FOUND).json();
     return;
   }
-  res.json(result).status(StatusCodes.OK);
+  res.status(StatusCodes.OK).json(result);
 }
 
 async function getAllCommentsHandler(req: Request, res: Response) {
@@ -94,7 +94,7 @@ async function getAllCommentsHandler(req: Request, res: Response) {
   assert(!isNaN(id));
 
   const result = await commentRepository.findAllByArticleId(id);
-  res.json(result).status(StatusCodes.OK);
+  res.status(StatusCodes.OK).json(result);
 }
 
 async function getAllLikesHandler(req: Request, res: Response) {
@@ -116,7 +116,21 @@ async function getAllLikesHandler(req: Request, res: Response) {
     tags: tags,
     orderBy: orderBy,
   });
-  res.json(result).status(StatusCodes.OK);
+  res.status(StatusCodes.OK).json(result);
+}
+
+async function getAllReportsHandler(req: Request, res: Response) {
+  const articleRepository = new ArticleReportRepository(getDB());
+
+  const offset = parseQueryToNumber(req.query.offset, 0);
+  const limit = parseQueryToNumber(req.query.limit, 50);
+
+  const result = await articleRepository.findAll({
+    offset,
+    limit,
+  });
+
+  res.status(StatusCodes.OK).json(result);
 }
 
 async function postArticleHandler(req: Request, res: Response) {
@@ -275,6 +289,7 @@ async function reportArticleHandler(req: Request, res: Response) {
     user_id,
     content: reason,
   });
+  res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
 async function postCommentHandler(req: Request, res: Response) {
@@ -329,6 +344,7 @@ router.get("/", RouterCatch(getAllArticleHandler));
 router.get("/:id(\\d+)", RouterCatch(getSingleArticleHandler));
 router.get("/:id(\\d+)/comments", RouterCatch(getAllCommentsHandler));
 router.get("/likes", RouterCatch(getAllLikesHandler));
+router.get("/reports", RouterCatch(getAllReportsHandler));
 
 router.post("/", checkLogin(), RouterCatch(postArticleHandler));
 router.delete("/:id(\\d+)", checkLogin(), RouterCatch(deleteArticleHandler));

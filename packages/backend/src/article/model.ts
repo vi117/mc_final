@@ -1,6 +1,11 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
-import { ArticleObject, ArticleSingleObject, CommentObject } from "dto";
+import {
+  ArticleObject,
+  ArticleReportObject,
+  ArticleSingleObject,
+  CommentObject,
+} from "dto";
 import { Insertable, Kysely } from "kysely";
 import { jsonArrayFrom, jsonObjectFrom } from "kysely/helpers/mysql";
 
@@ -486,6 +491,22 @@ export class ArticleReportRepository {
   db: Kysely<DB>;
   constructor(db: Kysely<DB>) {
     this.db = db;
+  }
+  async findAll({
+    offset = 0,
+    limit = 50,
+  }): Promise<ArticleReportObject[]> {
+    const ret = await this.db.selectFrom("article_reports")
+      .selectAll("article_reports")
+      .innerJoin("articles", "article_reports.article_id", "articles.id")
+      .select([
+        "articles.title as article_title",
+      ])
+      .orderBy("created_at", "desc")
+      .offset(offset)
+      .limit(limit)
+      .execute();
+    return ret;
   }
 
   async insert(report: Insertable<DB["article_reports"]>) {
