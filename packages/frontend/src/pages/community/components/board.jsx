@@ -3,6 +3,7 @@ import { Form, Modal, Spinner } from "react-bootstrap";
 import { BiSolidPencil } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../../component/Button";
 import useArticles from "../../../hook/useArticles";
 import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
@@ -30,7 +31,7 @@ function loadCategoryFilter() {
 const Board = () => {
   const [isModalOpen, setIsModalOpen] = useState(loadCategoryFilter() === null);
   const [categoryFiltered, setCategoryFiltered] = useState(
-    getRestAnimals(loadCategoryFilter() ?? []),
+    loadCategoryFilter() ?? [],
   );
   const [orderBy, setOrderBy] = useState("id");
   const itemsPerPage = 10;
@@ -52,7 +53,7 @@ const Board = () => {
   } = useArticles({
     offset: offset,
     limit: limit,
-    categories: categoryFiltered,
+    categories: getRestAnimals(categoryFiltered),
     orderBy,
   });
 
@@ -69,6 +70,7 @@ const Board = () => {
       <FilterModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        categoryFiltered={categoryFiltered}
         onApplyFilter={(v) => {
           setCategoryFiltered(v);
           saveCategoryRepo(v);
@@ -158,9 +160,12 @@ function FilterModal(
   {
     isModalOpen,
     onApplyFilter,
+    categoryFiltered,
   },
 ) {
-  const [selectedAnimals, setSelectedAnimals] = useState([]);
+  const [selectedAnimals, setSelectedAnimals] = useState(
+    categoryFiltered ?? [],
+  );
 
   return (
     <Modal show={isModalOpen}>
@@ -195,7 +200,7 @@ function FilterModal(
         </Form>
       </div>
       <div className={classes["filterbtnarea"]}>
-        <button
+        <Button
           className={classes["closebtn"]}
           onClick={() => {
             onApplyFilter([]);
@@ -203,15 +208,15 @@ function FilterModal(
           style={{ marginRight: "5px" }}
         >
           그냥 보기
-        </button>
-        <button
+        </Button>
+        <Button
           className={classes["filteron"]}
           onClick={() => {
             onApplyFilter(selectedAnimals);
           }}
         >
           저장하기
-        </button>
+        </Button>
       </div>
     </Modal>
   );

@@ -130,6 +130,9 @@ export async function participateFunding({
     if (funding === undefined) {
       throw new FundingUsersError("funding does not exist");
     }
+    if (funding.deleted_at !== null) {
+      throw new FundingUsersError("funding is deleted");
+    }
     if (funding.end_date < new Date()) {
       throw new FundingUsersError("funding is ended");
     }
