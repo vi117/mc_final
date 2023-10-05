@@ -45,11 +45,16 @@ function RegisterArgee(props: {
         <TermOfPolicy onChange={setAgreements}></TermOfPolicy>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button
+          variant="secondary"
+          style={{ backgroundColor: "#A2A2A2", border: "1px solid #A2A2A2" }}
+          onClick={handleClose}
+        >
           취소
         </Button>
         <Button
           variant="primary"
+          style={{ backgroundColor: "#2aa971", border: "1px solid #2aa971" }}
           onClick={() => {
             handleConfirm(agreements);
           }}
