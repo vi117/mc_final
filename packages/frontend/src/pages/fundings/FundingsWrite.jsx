@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { TagsInput } from "react-tag-input-component";
 
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { postFundingRequest } from "../../api/funding";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
@@ -76,6 +76,9 @@ const FundingsWrite = function() {
   const scrollToMakerArea = () => {
     MakerAreaRef.current.scrollIntoView({});
   };
+  if (!userInfo) {
+    return <Navigate to="/login"></Navigate>;
+  }
 
   return (
     <div className={classes.funding_write_wrap}>
@@ -308,6 +311,7 @@ const FundingsWrite = function() {
         accountNumber,
         certificateFiles,
       });
+      // TODO(vi117) : show alert
       alert("요청이 접수되었습니다.");
       navigate("/fundings");
     } catch (e) {

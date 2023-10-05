@@ -32,7 +32,6 @@ const FundingsHome = function() {
               : ""}
           />
         </div>
-
         <div className={classes["funding_createbtn"]}>
           <NavLink to={"/fundings/post"}>
             <GoArrowRight className={classes["create_svg"]}></GoArrowRight>{" "}
