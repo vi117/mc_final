@@ -289,6 +289,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   const thumbnail = thumbnailArr[0].url;
 
   const content_thumbnails = files["content_thumbnail"].map((file) => file.url);
+  const certificate = files["certificate"].map((file) => file.url);
 
   const requestRepo = new FundingRequestsRepository(getDB());
   const user = req.user;
@@ -304,6 +305,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       rewards: { type: "string" },
       tags: { type: "string" },
       funding_id: { type: "string" },
+      account_number: { type: "string" },
     },
     required: [
       "title",
@@ -349,7 +351,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
 
   const tags = req.body.tags.split(",");
 
-  const { title, content, begin_date, end_date } = req.body;
+  const { title, content, begin_date, end_date, account_number } = req.body;
 
   try {
     const clean_content = sanitize(content, {
@@ -368,6 +370,8 @@ async function createFundingRequestHandler(req: Request, res: Response) {
         tags: tags,
         rewards: rewards,
         content_thumbnails: content_thumbnails,
+        account_number: account_number,
+        certificate: certificate,
       }),
     });
     res
@@ -475,6 +479,7 @@ router.post(
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "content_thumbnail", maxCount: 5 },
+    { name: "certificate", maxCount: 5 },
   ]),
   RouterCatch(createFundingRequestHandler),
 );

@@ -55,6 +55,8 @@ const FundingsWrite = function() {
   const [targetValue, setTargetValue] = useState(0);
   const [content, setContent] = useState("");
   const [rewards, setRewards] = useState([]);
+  const [accountNumber, setAccountNumber] = useState("");
+  const [certificateFiles, setCertificateFiles] = useState(null);
 
   const navigate = useNavigate();
   const userInfo = useLoginInfo();
@@ -266,6 +268,8 @@ const FundingsWrite = function() {
               className={classes.title_input}
               type="text"
               placeholder="계좌번호"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
             />
           </div>
 
@@ -275,7 +279,11 @@ const FundingsWrite = function() {
               증명등록에 필요한 파일을
               업로드해주세요.(주민등록증or사업자등록증)(인증서)
             </p>
-            <Form.Control type="file" multiple />
+            <Form.Control
+              type="file"
+              multiple
+              onChange={(e) => setCertificateFiles(e.target.files)}
+            />
           </div>
         </div>
       </div>
@@ -294,6 +302,8 @@ const FundingsWrite = function() {
         endDate,
         tags: tagSelected,
         rewards,
+        accountNumber,
+        certificateFiles,
       });
 
       alert("요청이 접수되었습니다.");

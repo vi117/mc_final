@@ -145,6 +145,8 @@ export async function postFundingRequest({
   endDate,
   tags,
   rewards,
+  accountNumber,
+  certificateFiles,
 }: {
   title: string;
   content: string;
@@ -160,6 +162,8 @@ export async function postFundingRequest({
     price: number;
     reward_count: number;
   }[];
+  accountNumber: string;
+  certificateFiles: File[];
 }) {
   const url = new URL("/api/v1/fundings/request", window.location.href);
 
@@ -176,6 +180,11 @@ export async function postFundingRequest({
   formData.append("end_date", endDate.toISOString());
   formData.append("tags", tags.toString());
   formData.append("rewards", JSON.stringify(rewards));
+
+  formData.append("account_number", accountNumber);
+  certificateFiles.forEach((file) => {
+    formData.append("certificate", file);
+  });
 
   const r = await fetch(url.href, {
     method: "POST",

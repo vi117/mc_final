@@ -26,6 +26,8 @@ export interface FundingRequestObject {
     tags: string[];
     rewards: FundingRewardInput[];
     content_thumbnails?: string[];
+    account_number?: string;
+    certificate?: string[];
   } | null;
 }
 
