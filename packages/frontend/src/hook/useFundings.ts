@@ -6,6 +6,9 @@ interface UseFundingsOptions {
   offset?: number;
   limit?: number;
   tags?: string[];
+  /**
+   * 펀딩의 `host_id`가 같은 펀딩을 찾음.
+   */
   host_id?: number;
   begin_date?: Date;
   /**

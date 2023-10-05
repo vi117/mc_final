@@ -357,6 +357,13 @@ export class FundingsRepository {
             .select(["id", eb.val(funding_id).as("funding_id")]),
       ).execute();
   }
+  async deleteTags(funding_id: number, tag_ids: number[]) {
+    return await this.db.deleteFrom("funding_tag_rel")
+      .where("funding_tag_rel.funding_id", "=", funding_id)
+      .where("funding_tag_rel.tag_id", "in", tag_ids)
+      .executeTakeFirstOrThrow();
+  }
+
   async insertRewards(
     rewards: Insertable<DB["funding_rewards"]>[],
   ) {

@@ -107,6 +107,12 @@ async function getSingleFundingHandler(req: Request, res: Response) {
     });
     return;
   }
+  if (result.deleted_at !== null) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "비공개 된 펀딩입니다.",
+      code: "DELETED",
+    });
+  }
   res.json(result).status(result ? StatusCodes.OK : StatusCodes.NOT_FOUND);
 }
 
@@ -282,7 +288,15 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   assert_param(thumbnailArr && thumbnailArr.length > 0, "썸네일이 필요합니다.");
   const thumbnail = thumbnailArr[0].url;
 
+  if (!("content_thumbnail" in files)) {
+    // set default thumbnail
+    files["content_thumbnail"] = [thumbnailArr[0]];
+  }
   const content_thumbnails = files["content_thumbnail"].map((file) => file.url);
+  if (!("certificate" in files)) {
+    files["certificate"] = [];
+  }
+  const certificate = files["certificate"].map((file) => file.url);
 
   const requestRepo = new FundingRequestsRepository(getDB());
   const user = req.user;
@@ -297,6 +311,8 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       target_value: { type: "string" },
       rewards: { type: "string" },
       tags: { type: "string" },
+      funding_id: { type: "string" },
+      account_number: { type: "string" },
     },
     required: [
       "title",
@@ -333,10 +349,16 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   }
   const target_value = parseInt(req.body.target_value);
   assert_param(!isNaN(target_value), "타겟 값이 유효하지 않습니다.");
+  const funding_id_str = req.body.funding_id;
+  let funding_id = undefined;
+  if (funding_id_str) {
+    funding_id = parseInt(funding_id_str);
+    assert_param(!isNaN(funding_id), "funding_id가 유효하지 않습니다.");
+  }
 
   const tags = req.body.tags.split(",");
 
-  const { title, content, begin_date, end_date } = req.body;
+  const { title, content, begin_date, end_date, account_number } = req.body;
 
   try {
     const clean_content = sanitize(content, {
@@ -350,10 +372,13 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       end_date: new Date(end_date),
       target_value,
       thumbnail,
+      funding_request_id: funding_id,
       meta_parsed: ({
         tags: tags,
         rewards: rewards,
         content_thumbnails: content_thumbnails,
+        account_number: account_number,
+        certificate: certificate,
       }),
     });
     res
@@ -461,6 +486,7 @@ router.post(
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "content_thumbnail", maxCount: 5 },
+    { name: "certificate", maxCount: 5 },
   ]),
   RouterCatch(createFundingRequestHandler),
 );

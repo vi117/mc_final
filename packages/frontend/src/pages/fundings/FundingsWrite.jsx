@@ -8,12 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { TagsInput } from "react-tag-input-component";
 
-import { GoInfo } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { postFundingRequest } from "../../api/funding";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
 import { Calender } from "./component/Calender";
+import { Guide } from "./component/Guide";
 import { RewardItemList } from "./component/RewardItemList";
 
 /**
@@ -55,6 +55,8 @@ const FundingsWrite = function() {
   const [targetValue, setTargetValue] = useState(0);
   const [content, setContent] = useState("");
   const [rewards, setRewards] = useState([]);
+  const [accountNumber, setAccountNumber] = useState("");
+  const [certificateFiles, setCertificateFiles] = useState(null);
 
   const navigate = useNavigate();
   const userInfo = useLoginInfo();
@@ -266,6 +268,8 @@ const FundingsWrite = function() {
               className={classes.title_input}
               type="text"
               placeholder="계좌번호"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
             />
           </div>
 
@@ -275,7 +279,14 @@ const FundingsWrite = function() {
               증명등록에 필요한 파일을
               업로드해주세요.(주민등록증or사업자등록증)(인증서)
             </p>
-            <Form.Control type="file" multiple />
+            <Form.Control
+              type="file"
+              multiple
+              onChange={(e) => {
+                console.log(e.target.files);
+                setCertificateFiles(e.target.files);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -294,11 +305,13 @@ const FundingsWrite = function() {
         endDate,
         tags: tagSelected,
         rewards,
+        accountNumber,
+        certificateFiles,
       });
-
       alert("요청이 접수되었습니다.");
       navigate("/fundings");
     } catch (e) {
+      console.log(e);
       alert("요청이 실패되었습니다.");
     }
   }
@@ -374,21 +387,6 @@ function TargetValueGuide() {
         제작비, 선물 배송비, 인건비, 예비 비용 등을 함께 고려해주세요.
       </li>
     </Guide>
-  );
-}
-
-function Guide({
-  children,
-  title,
-}) {
-  return (
-    <ul className={classes.guide}>
-      <li className={classes.guide_bold}>
-        <GoInfo className={classes.guide_svg}></GoInfo>
-        {title}
-      </li>
-      {children}
-    </ul>
   );
 }
 

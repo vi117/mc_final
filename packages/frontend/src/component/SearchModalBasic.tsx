@@ -69,6 +69,7 @@ function SearchModalBasic({ setModalOpen }: PropsType) {
             <FiSearch className={styles.search_bar_button_detail} />
           </button>
         </div>
+        <hr />
         <div className={styles.recommendtxt}>
           <p>추천 검색어</p>
           <ul className={styles.recommendlist}>
