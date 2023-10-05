@@ -107,6 +107,12 @@ async function getSingleFundingHandler(req: Request, res: Response) {
     });
     return;
   }
+  if (result.deleted_at !== null) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "비공개 된 펀딩입니다.",
+      code: "DELETED",
+    });
+  }
   res.json(result).status(result ? StatusCodes.OK : StatusCodes.NOT_FOUND);
 }
 
