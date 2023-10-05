@@ -4,5 +4,11 @@
 }
 
 .label_error {
-    box-shadow: 0 0 0 .25rem #ED4B5E;
+    border: 1px solid #FF0303 !important;
+}
+
+.error_message{
+    margin-left: 25px;
+    color: #FF0303;
+    margin-bottom: 10px;
 }

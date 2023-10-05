@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Container, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useLocation, useNavigate } from "react-router-dom";
 import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
@@ -42,119 +42,125 @@ function RegisterPage() {
   const handleClose = () => setShow(false);
 
   return (
-    <Container
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-      className="mb-3"
-    >
-      <AlertModal />
-      <Form
-        style={{ display: "flex", flexDirection: "column" }}
-        className={classes.form}
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-      >
-        <RegisterArgee
-          show={show}
-          backdrop="static"
-          keyboard={false}
-          handleConfirm={handleClose}
-          handleClose={() => navigate("/login")}
-        >
-        </RegisterArgee>
-        <Upload
-          imageFile={profileImageRef}
-          initial_preview_URL={location.state?.thumbnail ?? ""}
-        >
-        </Upload>
-
-        <ValidationInput
-          name="Email"
-          type="email"
-          value={Email}
-          onChange={(value) => setEmail(value)}
-          pattern={emailPattern}
-          patternMessage="타입이 맞지 않습니다."
-          validateAsync={emailCheck}
-          validateAsyncMessage={"이미 사용되는 이메일입니다."}
-        />
-
-        <ValidationInput
-          name="Password"
-          type="password"
-          value={Password}
-          onChange={(value) => setPassword(value)}
-          minLength={6}
-          minMessage={"6자리 이상이어야 합니다."}
-        />
-
-        <ValidationInput
-          name="ConfirmPassword"
-          type="password"
-          value={ConfirmPassword}
-          onChange={(value) => setConfirmPassword(value)}
-          minLength={6}
-          minMessage={"6자리 이상이어야 합니다."}
-          validate={(value) => value === Password}
-          validateMessage="비밀번호와 비밀번호 확인이 동일해야 합니다."
-        />
-
-        <ValidationInput
-          name="NickName"
-          type="text"
-          value={NickName}
-          onChange={(value) => setNickName(value)}
-          validateAsync={nicknameCheck}
-          validateAsyncMessage={"닉네임이 중복됩니다."}
-        />
-
-        <ValidationInput
-          name="Phone"
-          type="text"
-          value={Phone}
-          onChange={(value) => setPhone(value)}
-        />
-
-        <ValidationInput
-          name="Address"
-          type="text"
-          value={Address}
-          onChange={(value) => setAddress(value)}
-          onClick={() => {
-            DaumPostcodePopup({
-              onComplete(resultAddress) {
-                setAddress(resultAddress.address);
-              },
-            });
+    <>
+      <div className={classes["register_container"]}>
+        <p>이메일 회원가입</p>
+        <AlertModal />
+        <Form
+          style={{ display: "flex", flexDirection: "column" }}
+          className={classes.form}
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
           }}
-        />
-        <ValidationInput
-          name=""
-          type="text"
-          placeholder="상세주소"
-          value={AddressDetail}
-          onChange={(value) => setAddressDetail(value)}
-        />
-
-        <ValidationInput
-          name="Introduction"
-          type="text"
-          value={Article}
-          onChange={(value) => setArticle(value)}
-        />
-        <button
-          className={classes.button_submit}
-          onClick={() => onSubmitHandler()}
         >
-          회원가입
-        </button>
-      </Form>
-    </Container>
+          <RegisterArgee
+            show={show}
+            backdrop="static"
+            keyboard={false}
+            handleConfirm={handleClose}
+            handleClose={() => navigate("/login")}
+          >
+          </RegisterArgee>
+          <p className={classes["form_label"]}>프로필 사진</p>
+          <Upload
+            imageFile={profileImageRef}
+            initial_preview_URL={location.state?.thumbnail ?? ""}
+          >
+          </Upload>
+          <p className={classes["form_label"]}>이메일</p>
+          <ValidationInput
+            name="Email"
+            type="email"
+            value={Email}
+            placeholder="이메일 주소를 입력해주세요"
+            onChange={(value) => setEmail(value)}
+            pattern={emailPattern}
+            patternMessage="타입이 맞지 않습니다."
+            validateAsync={emailCheck}
+            validateAsyncMessage={"이미 사용되는 이메일입니다."}
+          />
+          <p className={classes["form_label"]}>비밀번호</p>
+          <ValidationInput
+            name="Password"
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            value={Password}
+            onChange={(value) => setPassword(value)}
+            minLength={6}
+            minMessage={"6자리 이상이어야 합니다."}
+          />
+
+          <ValidationInput
+            name="ConfirmPassword"
+            type="password"
+            placeholder="비밀번호를 확인합니다"
+            value={ConfirmPassword}
+            onChange={(value) => setConfirmPassword(value)}
+            minLength={6}
+            minMessage={"6자리 이상이어야 합니다."}
+            validate={(value) => value === Password}
+            validateMessage="비밀번호와 비밀번호 확인이 동일해야 합니다."
+          />
+
+          <p className={classes["form_label"]}>닉네임</p>
+          <ValidationInput
+            name="NickName"
+            placeholder="닉네임을 입력해주세요"
+            type="text"
+            value={NickName}
+            onChange={(value) => setNickName(value)}
+            validateAsync={nicknameCheck}
+            validateAsyncMessage={"이미 사용 중인 닉네임입니다."}
+          />
+          <p className={classes["form_label"]}>전화번호</p>
+          <ValidationInput
+            name="Phone"
+            placeholder="전화번호를 입력해주세요"
+            type="text"
+            value={Phone}
+            onChange={(value) => setPhone(value)}
+          />
+
+          <p className={classes["form_label"]}>주소</p>
+          <ValidationInput
+            name="Address"
+            type="text"
+            placeholder="주소를 입력해주세요"
+            value={Address}
+            onChange={(value) => setAddress(value)}
+            onClick={() => {
+              DaumPostcodePopup({
+                onComplete(resultAddress) {
+                  setAddress(resultAddress.address);
+                },
+              });
+            }}
+          />
+          <ValidationInput
+            name=""
+            type="text"
+            placeholder="상세주소를 입력해주세요"
+            value={AddressDetail}
+            onChange={(value) => setAddressDetail(value)}
+          />
+          <p className={classes["form_label"]}>소개말</p>
+          <ValidationInput
+            name="Introduction"
+            type="text"
+            placeholder="간단한 한 마디로 나를 소개해주세요"
+            value={Article}
+            onChange={(value) => setArticle(value)}
+          />
+          <button
+            className={classes.button_submit}
+            onClick={() => onSubmitHandler()}
+          >
+            회원가입
+          </button>
+        </Form>
+      </div>
+    </>
   );
 
   async function onSubmitHandler() {

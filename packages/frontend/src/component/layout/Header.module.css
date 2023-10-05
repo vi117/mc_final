@@ -97,9 +97,11 @@ display: flex;
     border: 1px solid var(--secondary);
     border-radius: 100%;
    margin-right: 5px;
+   margin-left: 15px;
 }
 
 .user_nickname{
+    
     font-size: 12px;
     font-weight: 500;
 }
@@ -135,7 +137,6 @@ margin-left: auto;
     color:var(--primary);
     border-radius: 7px;
     height:35px;
-    margin-right: 15px;
 }
 
 .right{

@@ -53,13 +53,10 @@ border:1px solid var(--green);
   border: 1px solid var(--green);
   box-shadow: none;
 }
-.login-form-button:hover{
-  background-color: var(--green-dark);
-}
+.login-form-button:hover,
 .login-form-button:active{
-  color: var(--white);
-  background-color: var(--blue);
-  border-color: #0d6efd;
+  border: 1px solid var(--green-dark);
+  background-color: var(--green-dark);
 }
 
 
@@ -118,3 +115,8 @@ border:1px solid var(--green);
   text-decoration: underline;
 }
 
+
+
+@media screen and (max-width: 576px/* sm - small screens */) {
+
+}
