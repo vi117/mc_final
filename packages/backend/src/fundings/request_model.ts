@@ -30,7 +30,26 @@ export class FundingRequestsRepository {
         "host.profile_image as host_profile_image",
         "host.email as host_email",
       ])
-      .selectAll("funding_requests")
+      .select((eb) => [
+        "funding_requests.id",
+        "funding_requests.begin_date",
+        eb.fn<string>("left", [eb.ref("funding_requests.content"), eb.val(100)])
+          .as(
+            "content",
+          ),
+        "funding_requests.created_at",
+        "funding_requests.deleted_at",
+        "funding_requests.end_date",
+        "funding_requests.funding_request_id",
+        "funding_requests.funding_state",
+        "funding_requests.host_id",
+        "funding_requests.meta",
+        "funding_requests.reason",
+        "funding_requests.target_value",
+        "funding_requests.title",
+        "funding_requests.thumbnail",
+        "funding_requests.updated_at",
+      ])
       .$if(
         user_id !== undefined,
         (qb) => qb.where("funding_requests.host_id", "=", user_id as number),
@@ -53,7 +72,8 @@ export class FundingRequestsRepository {
         "host.profile_image as host_profile_image",
         "host.email as host_email",
       ])
-      .where("funding_requests.id", "=", id).selectAll("funding_requests")
+      .where("funding_requests.id", "=", id)
+      .selectAll("funding_requests")
       .executeTakeFirst();
     if (!row) return undefined;
     return ({

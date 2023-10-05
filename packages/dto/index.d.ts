@@ -1,6 +1,11 @@
 export interface FundingRequestObject {
   id: number;
   title: string;
+  /**
+   * findAll() returns the content truncated to 100 characters.
+   * if your content is longer than 100 characters, it will be truncated to 100.
+   * findOne() returns the full content
+   */
   content: string;
   thumbnail: string;
   created_at: Date;
