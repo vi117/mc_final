@@ -15,9 +15,7 @@ import PromptModal from "../component/PromptModal";
  *   ...
  *   <button onClick={async ()=>{
  *      const v = await showPromptModal("title", "msg")
- *      if (v) {
- *        ...
- *      }
+ *      console.log(v)
  *      ...
  *     }}/>
  * </>
