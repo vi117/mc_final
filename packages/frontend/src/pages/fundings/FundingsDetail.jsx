@@ -264,7 +264,7 @@ const FundingsDetail = function() {
                 {
                   <>
                     {user_id === funding.host_id && (
-                      <NavLink to={`/fundings/${id}/edit`}>
+                      <NavLink to={`/fundings/${id}/edit`} state={funding}>
                         <button className={classes.edit_btn}>
                           펀딩<br></br>수정하기
                         </button>
