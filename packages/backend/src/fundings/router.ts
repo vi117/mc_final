@@ -5,7 +5,11 @@ import { Request, Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 import sanitize from "sanitize-html";
 
-import { FundingReportsRepository, FundingsRepository } from "./funding_model";
+import {
+  FundingReportsRepository,
+  FundingsRepository,
+  FundingUsersRepository,
+} from "./funding_model";
 import { FundingRequestsRepository } from "./request_model";
 
 import upload from "@/file/multer";
@@ -177,6 +181,54 @@ async function getFundingRewardsHandler(req: Request, res: Response) {
   // TODO: date check
   const result = await fundingRepo.getFundingRewards(id);
   res.json(result).status(StatusCodes.OK);
+}
+
+async function getFundingUsersHandler(req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  assert(!isNaN(id));
+  const user = req.user;
+  assert(user);
+  const offset = parseQueryToNumber(req.query.offset, 0);
+  const limit = parseQueryToNumber(req.query.limit, 50);
+
+  // if user is not admin, check if user is host
+  const fundingRepo = new FundingsRepository(getDB());
+  const funding = await fundingRepo.findById(id);
+  assert_exists(
+    !!funding,
+    "존재하지 않는 펀딩입니다.",
+  );
+  if (!user.is_admin) {
+    if (funding.host_id !== user.id) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: "호스트만 볼 수 있습니다.",
+      });
+      return;
+    }
+    if (funding.deleted_at !== null) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: "비공개된 펀딩입니다.",
+      });
+      return;
+    }
+    if (
+      // 끝나지 않거나 목표를 달성하지 못한 경우
+      funding.end_date.getTime() > Date.now()
+      || funding.current_value < funding.target_value
+    ) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: "완료되지 않은 펀딩입니다.",
+      });
+      return;
+    }
+  }
+
+  const fundingUserRepo = new FundingUsersRepository(getDB());
+  const fundingUser = await fundingUserRepo.findAllByFundingId(id, {
+    offset,
+    limit,
+  });
+  res.json(fundingUser).status(StatusCodes.OK);
 }
 
 async function deleteFundingHandler(req: Request, res: Response) {
@@ -503,9 +555,14 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
 router.get("/", RouterCatch(getAllFundingHandler));
 router.get("/:id(\\d+)", RouterCatch(getSingleFundingHandler));
 router.get(
-  ":id(\\d+)/rewards",
+  "/:id(\\d+)/rewards",
   checkLogin(),
   RouterCatch(getFundingRewardsHandler),
+);
+router.get(
+  "/:id(\\d+)/users",
+  checkLogin(),
+  RouterCatch(getFundingUsersHandler),
 );
 
 router.get(

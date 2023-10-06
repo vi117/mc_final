@@ -92,6 +92,22 @@ export interface FundingObject {
   }[];
 }
 
+export interface FundingUserObject {
+  user_id: number;
+  phone: string;
+  address: string;
+  created_at: Date;
+  funding_id: number;
+  reward_id: number;
+  recipient: string;
+  user_email: string;
+  user_nickname: string;
+  user_profile_image: string | null;
+  reward_title: string;
+  reward_price: number;
+  reward_content: string;
+}
+
 export interface FundingReportObject {
   id: number;
   funding_id: number;
