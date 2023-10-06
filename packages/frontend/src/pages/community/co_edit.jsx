@@ -90,6 +90,13 @@ const CommunityEdit = () => {
         >
           <TagWrite selected={tagSelected} onChange={setSelected} />
         </div>
+        <h1 className={baseClasses["co_h1"]}>펀딩 후기</h1>
+        <div
+          className={baseClasses["co_input"]}
+        >
+          {(item?.related_funding?.title
+            ?? "") + " | 후기 편경 불가"}
+        </div>
         <h1 className={baseClasses["co_h1"]}>커뮤니티 글 작성</h1>
         <input
           className={baseClasses["co_input"]}

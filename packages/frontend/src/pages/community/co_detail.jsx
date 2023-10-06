@@ -1,6 +1,7 @@
 import { AiFillHeart } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSWRConfig } from "swr";
 import {
   deleteArticle,
   deleteArticleComment,
@@ -23,7 +24,7 @@ export function CommunityDetail() {
   const params = useParams();
   const id = parseInt(params.id);
   const { ConfirmModal, showConfirmModal } = useConfirmModal();
-
+  const { mutate: mutateArticleList } = useSWRConfig();
   const {
     data: fetcherData,
     error: fetcherError,
@@ -120,6 +121,8 @@ export function CommunityDetail() {
       try {
         await deleteArticle(id);
         showAlertModal("글 삭제", "삭제가 완료되었습니다.");
+        // TODO(vi117): make hook for mutate
+        mutateArticleList((key) => key.startsWith("/api/v1/articles"));
         navigate("/community");
       } catch (e) {
         if (e instanceof Error) {
