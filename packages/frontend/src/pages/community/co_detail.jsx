@@ -1,3 +1,4 @@
+import { Container } from "react-bootstrap";
 import { AiFillHeart } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,9 +12,12 @@ import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useConfirmModal } from "../../hook/useConfirmModal";
 import { useLoginId } from "../../hook/useLogin";
+import { useLoginInfo } from "../../hook/useLogin";
+import { FetchError } from "../../hook/util";
 import { formatDate } from "../../util/date";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
+import ReportButton from "./components/report";
 import classes from "./styles/Co_detail.module.css";
 
 export function CommunityDetail() {
@@ -23,6 +27,8 @@ export function CommunityDetail() {
   const params = useParams();
   const id = parseInt(params.id);
   const { ConfirmModal, showConfirmModal } = useConfirmModal();
+  const { data: article, error } = useArticleDetail(id);
+  const userInfo = useLoginInfo();
 
   const {
     data: fetcherData,
@@ -42,6 +48,17 @@ export function CommunityDetail() {
   const item = fetcherData;
 
   const liked = user_id === item.like_user_id;
+
+  if (error) {
+    if (error instanceof FetchError && error.info.code === "DELETED") {
+      return (
+        <Container>
+          <div>삭제된 커뮤니티입니다.</div>
+        </Container>
+      );
+    }
+    return <div>에러가 발생했습니다.</div>;
+  }
   return (
     <div>
       <AlertModal />
@@ -50,10 +67,26 @@ export function CommunityDetail() {
         <div className={classes["titleArea"]}>
           <div className={classes["selectedTitle"]}>{item.title}</div>
           <div className={classes["detailbtn"]}>
-            <Link to={`/community/${item.id}/edit`} state={item}>
-              <button className={classes["editbtn"]}>수정</button>
-            </Link>
-            <button onClick={deleteArticleAction}>삭제</button>
+            {(() => {
+              // 비로그인일때
+              if (!userInfo) {
+                return "";
+              }
+              // 관리자가 아닐 때
+              if (!userInfo.is_admin) {
+                return "";
+              }
+              return (
+                <>
+                  <Link to={`/community/${item.id}/edit`} state={item}>
+                    <button className={classes["editbtn"]}>수정</button>
+                  </Link>
+                  <button onClick={deleteArticleAction}>삭제</button>
+                </>
+              );
+            })()}
+          </div>
+          <div>
           </div>
         </div>
         <div className={classes["createdArea"]}>
@@ -103,7 +136,7 @@ export function CommunityDetail() {
               }}
             />
           </button>
-          <button className={classes["reportbtn"]}>신고</button>
+          <ReportButton article_id={article.id} />
         </div>
         <Comments
           comments={item.comments}
