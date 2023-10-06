@@ -10,9 +10,9 @@ import { TagsInput } from "react-tag-input-component";
 
 import { useNavigate } from "react-router-dom";
 import { postFundingRequest } from "../../api/funding";
+import Calender from "../../component/Calender";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
-import { Calender } from "./component/Calender";
 import { Guide } from "./component/Guide";
 
 /**
