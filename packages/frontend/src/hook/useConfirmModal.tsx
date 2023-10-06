@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import ConfirmModal from "../component/ConfirmModal";
+import { ConfirmModal } from "../component/DialogModal";
 
 /**
  * Creates and returns an confirm modal hook.

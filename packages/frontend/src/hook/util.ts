@@ -4,10 +4,12 @@ export type DateToString<T> = {
   [P in keyof T]: DateToISOString<T[P]>;
 };
 
-class FetchError extends Error {
-  constructor(message: string, public body: unknown) {
+export class FetchError extends Error {
+  public info: unknown;
+  constructor(message: string, body: unknown) {
     super(message);
     this.name = "FetchError";
+    this.info = body;
   }
 }
 

@@ -1,6 +1,11 @@
 import { DB, log_query } from "@/db/util";
 import debug_fn from "debug";
-import { FundingObject, FundingReportObject, FundingRewards } from "dto";
+import {
+  FundingObject,
+  FundingReportObject,
+  FundingRewards,
+  FundingUserObject,
+} from "dto";
 import { Insertable, Kysely, Updateable } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/mysql";
 
@@ -438,6 +443,40 @@ export class FundingUsersRepository {
   constructor(db: Kysely<DB>) {
     this.db = db;
   }
+
+  async findAllByFundingId(funding_id: number, {
+    limit = 50,
+    offset = 0,
+  }: {
+    limit?: number;
+    offset?: number;
+  } = {}): Promise<FundingUserObject[]> {
+    const ret = await this.db.selectFrom("funding_users")
+      .where("funding_users.funding_id", "=", funding_id)
+      .selectAll("funding_users")
+      .innerJoin("users", "users.id", "funding_users.user_id")
+      .select([
+        "users.email as user_email",
+        "users.nickname as user_nickname",
+        "users.profile_image as user_profile_image",
+      ])
+      .innerJoin(
+        "funding_rewards",
+        "funding_rewards.id",
+        "funding_users.reward_id",
+      )
+      .select([
+        "funding_rewards.title as reward_title",
+        "funding_rewards.price as reward_price",
+        "funding_rewards.content as reward_content",
+      ])
+      .limit(limit)
+      .offset(offset)
+      .orderBy("funding_users.created_at", "desc")
+      .execute();
+    return ret;
+  }
+
   async insert(funding_user: Insertable<DB["funding_users"]>) {
     await this.db.insertInto("funding_users")
       .values(funding_user)

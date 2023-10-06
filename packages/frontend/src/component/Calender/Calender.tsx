@@ -7,6 +7,13 @@ export const Calender = ({
   startDate,
   endDate,
   onChange,
+}: {
+  startDate: Date;
+  endDate: Date;
+  onChange: (date: {
+    startDate: Date;
+    endDate: Date;
+  }) => void;
 }) => {
   return (
     <div className={classes.date_area}>
@@ -17,7 +24,7 @@ export const Calender = ({
           selected={startDate}
           onChange={(date) =>
             onChange({
-              startDate: date,
+              startDate: date ?? new Date(),
               endDate,
             })}
           selectsStart
@@ -34,7 +41,7 @@ export const Calender = ({
           selected={endDate}
           onChange={(date) =>
             onChange({
-              endDate: date,
+              endDate: date ?? new Date(),
               startDate,
             })}
           selectsEnd
@@ -48,3 +55,5 @@ export const Calender = ({
     </div>
   );
 };
+
+export default Calender;

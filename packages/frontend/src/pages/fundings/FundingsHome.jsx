@@ -1,9 +1,10 @@
 import { NavLink, useSearchParams } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import classes from "./FundingsHome.module.css";
-import "./progressbar.css";
+
 import "../community/styles/tags.css";
 import { GoArrowRight } from "react-icons/go";
+import { Container } from "../../component/Container";
 import { FundingList } from "./component/FundingList";
 // import FundingsHome_placeholder from "./FundingsHome_placeholder";
 
@@ -12,7 +13,7 @@ const FundingsHome = function() {
   const selected = searchParams.getAll("tag");
 
   return (
-    <div className={classes["funding_container"]}>
+    <Container>
       <div className={classes["funding_navarea"]}>
         <div className={classes["funding_tagsearch"]}>
           <TagsInput
@@ -46,7 +47,7 @@ const FundingsHome = function() {
           title={searchParams.get("title") ?? undefined}
         />
       </div>
-    </div>
+    </Container>
   );
 };
 

@@ -8,12 +8,13 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { TagsInput } from "react-tag-input-component";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { postFundingRequest } from "../../api/funding";
+import Calender from "../../component/Calender";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
-import { Calender } from "./component/Calender";
 import { Guide } from "./component/Guide";
+// import { formatDate } from "./../../util/date";
 
 /**
  * Renders the TagWrite component.
@@ -41,7 +42,11 @@ const TagWrite = ({
   );
 };
 
-const FundingsWrite = function() {
+const FundingsEdit = function() {
+  const location = useLocation();
+  const funding = location.state;
+  console.log(funding);
+
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -115,7 +120,7 @@ const FundingsWrite = function() {
               className={classes.title_input}
               placeholder="제목을 입력해주세요."
               onChange={(e) => setTitle(e.target.value)}
-              value={title}
+              value={funding.title}
             />
           </Form.Group>
 
@@ -176,7 +181,7 @@ const FundingsWrite = function() {
               onChange={(v) => {
                 setContent(v);
               }}
-              value={content}
+              value={funding.content}
             />
           </div>
         </div>
@@ -264,12 +269,13 @@ function FundingWriteNavigator({
   return (
     <nav className={classes.funding_profile_container}>
       <ul className={classes.profile_title}>
-        <li className={classes.list_big}>환영해요,</li>
+        <li className={classes.list_big}>안녕하세요,</li>
         <li className={classes.list_big} style={{ marginBottom: "10px" }}>
           <b>{cutNickname(nickname, 8)}</b> 님!
         </li>
-        <li>해피테일즈에서</li>
-        <li>멋진 프로젝트를 만들어보세요</li>
+        <li>펀딩 수정은</li>
+        <li>리워드 설계는 불가하며,</li>
+        <li>종료일 이내로만 가능합니다.</li>
       </ul>
       <ListGroup
         variant="flush"
@@ -298,4 +304,4 @@ function StoryTipGuide() {
   );
 }
 
-export default FundingsWrite;
+export default FundingsEdit;

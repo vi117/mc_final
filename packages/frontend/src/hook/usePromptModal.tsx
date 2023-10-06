@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import PromptModal from "../component/PromptModal";
+import { PromptModal } from "../component/DialogModal";
 
 /**
  * Creates and returns an confirm modal hook.

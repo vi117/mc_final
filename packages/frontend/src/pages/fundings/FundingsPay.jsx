@@ -1,10 +1,11 @@
-import Button from "@mui/material/Button";
 import clsx from "clsx";
 import { useState } from "react";
-import { Accordion, Col, Container, Form, Modal, Row } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Accordion, Col, Form, Modal, Row } from "react-bootstrap";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { fundingParticipate } from "../../api/funding";
 import MyButton from "../../component/Button";
+import { Container } from "../../component/Container";
 import { useAlertModal } from "../../hook/useAlertModal";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";
@@ -17,11 +18,12 @@ export default function FundingsPay() {
     address: userInfo?.address ?? "",
     addressDetail: userInfo?.address_detail ?? "",
     name: "",
+    phone: userInfo?.phone ?? "",
   });
   const { AlertModal, showAlertModal } = useAlertModal();
 
   if (!userInfo) {
-    return <div>로그인이 필요합니다.</div>;
+    return <Navigate to="/login" />;
   }
 
   const { funding, selectedReward } = location.state;
@@ -36,13 +38,13 @@ export default function FundingsPay() {
         <div
           className={classes["ImgArea"]}
         >
-          <a herf="">
+          <NavLink to={`/fundings/${funding.id}`}>
             <img
               src={funding.thumbnail}
               alt={funding.title}
             >
             </img>
-          </a>
+          </NavLink>
         </div>
         <div className="d-flex flex-column justify-content-between">
           <div className={classes["styled-project"]}>
@@ -50,7 +52,7 @@ export default function FundingsPay() {
               {selectedReward.title} | {funding.host_nickname}
             </span>
             <h3 style={{ marginTop: "10px" }}>
-              <a href="펀딩.url">{funding.title}</a>
+              <NavLink to={`/fundings/${funding.id}`}>{funding.title}</NavLink>
             </h3>
           </div>
           <div className={classes["styled-project"]}>
@@ -63,7 +65,6 @@ export default function FundingsPay() {
               )} %
             </span>
             <span className={classes["state"]}>
-              {/* TODO(vi117): 일, 시간, 분 남음으로 바꾸기. 컴포넌트로 추출하고 setInterval로 실시간 갱신. */}
               {remainingDays.toFixed(2)}일 남음
             </span>
           </div>
@@ -145,7 +146,7 @@ export default function FundingsPay() {
         address: shippingInfo.address,
         addressDetail: shippingInfo.addressDetail,
         recipient: shippingInfo.name,
-        phone: userInfo.phone,
+        phone: shippingInfo.phone,
       });
       await showAlertModal("success", "펀딩 후원을 해주었습니다.");
       navigate(`/fundings/${funding.id}`);
@@ -348,17 +349,17 @@ function CardRegister() {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <MyButton
             variant="outlined"
             color="error"
             style={{ right: "8px" }}
             onClick={handleClose}
           >
             취소
-          </Button>
-          <Button variant="outlined" onClick={handleClose}>
+          </MyButton>
+          <MyButton variant="outlined" onClick={handleClose}>
             등록 완료
-          </Button>
+          </MyButton>
         </Modal.Footer>
       </Modal>
     </>
@@ -366,6 +367,7 @@ function CardRegister() {
 }
 
 function ShippingInformation({ shippingInfo, setShippingInfo }) {
+  const daumPostcodePopup = useDaumPostcodePopup();
   return (
     <>
       <Form
@@ -399,11 +401,11 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
             <Form.Control
               type="number"
               placeholder="연락처를 입력해주세요."
-              value={shippingInfo.number}
+              value={shippingInfo.phone}
               onChange={(e) =>
                 setShippingInfo({
                   ...shippingInfo,
-                  number: e.target.value,
+                  phone: e.target.value,
                 })}
             />
           </Form.Group>
@@ -415,11 +417,16 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
           <Form.Control
             placeholder="ex) 성남시 분당구 동판교로 115"
             value={shippingInfo.address}
-            onChange={(e) =>
-              setShippingInfo({
-                ...shippingInfo,
-                address: e.target.value,
-              })}
+            onClick={() => {
+              daumPostcodePopup({
+                onComplete: (data) => {
+                  setShippingInfo({
+                    ...shippingInfo,
+                    address: data.address,
+                  });
+                },
+              });
+            }}
           />
         </Form.Group>
 
@@ -437,22 +444,6 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
               })}
           />
         </Form.Group>
-
-        <Form.Group className="mb-3" id="formGridCheckbox">
-          <Form.Check
-            type="checkbox"
-            label="기본 배송지로 등록"
-          />
-        </Form.Group>
-        <MyButton
-          variant="outlined"
-          style={{
-            textAlign: "right",
-            alignSelf: "flex-end",
-          }}
-        >
-          등록 완료
-        </MyButton>
       </Form>
     </>
   );

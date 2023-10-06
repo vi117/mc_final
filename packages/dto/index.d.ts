@@ -92,16 +92,38 @@ export interface FundingObject {
   }[];
 }
 
+export interface FundingUserObject {
+  user_id: number;
+  phone: string;
+  address: string;
+  created_at: Date;
+  funding_id: number;
+  reward_id: number;
+  recipient: string;
+  user_email: string;
+  user_nickname: string;
+  user_profile_image: string | null;
+  reward_title: string;
+  reward_price: number;
+  reward_content: string;
+}
+
 export interface FundingReportObject {
   id: number;
   funding_id: number;
   user_id: number;
+  /**
+   * 펀딩 신고 사유
+   */
   content: string;
   meta: string | null;
   created_at: Date;
   user_nickname: string;
   user_profile_image: string | null;
   user_email: string;
+  /**
+   * 신고된 펀딩의 제목
+   */
   funding_title: string;
   funding_thumbnail: string;
   funding_begin_date: Date;

@@ -17,13 +17,6 @@ function ProfileEditPage() {
   const [introduction, setIntroduction] = useState(loginInfo.introduction);
   const daumPostcodePopup = useDaumPostcodePopup();
 
-  const onPhoneHandler = (event) => {
-    setPhone(event.currentTarget.value);
-  };
-  const onIntroductionHandler = (event) => {
-    setIntroduction(event.currentTarget.value);
-  };
-
   return (
     <div
       style={{
@@ -48,7 +41,7 @@ function ProfileEditPage() {
           label="전화번호"
           type="text"
           value={phone}
-          onChange={onPhoneHandler}
+          onChange={(v) => setPhone(v)}
         />
         <ValidationInput
           name="address"
@@ -70,7 +63,7 @@ function ProfileEditPage() {
           type="text"
           label="소개"
           value={introduction}
-          onChange={onIntroductionHandler}
+          onChange={v => setIntroduction(v)}
         />
 
         <Button

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import AlertModal from "../component/AlertModal";
+import { AlertModal } from "../component/DialogModal";
 
 /**
  * Creates and returns an alert modal hook.

@@ -6,7 +6,7 @@ export default function useFundingReport({
   offset = 0,
   limit = 50,
 } = {}) {
-  const url = new URL("/api/v1/fundings/report", window.location.origin);
+  const url = new URL("/api/v1/fundings/reports", window.location.origin);
   url.searchParams.append("offset", offset.toString());
   url.searchParams.append("limit", limit.toString());
 

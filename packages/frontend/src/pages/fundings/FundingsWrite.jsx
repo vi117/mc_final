@@ -10,9 +10,10 @@ import { TagsInput } from "react-tag-input-component";
 
 import { Navigate, useNavigate } from "react-router-dom";
 import { postFundingRequest } from "../../api/funding";
+import Calender from "../../component/Calender";
+import { Container } from "../../component/Container";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
-import { Calender } from "./component/Calender";
 import { Guide } from "./component/Guide";
 import { RewardItemList } from "./component/RewardItemList";
 
@@ -81,7 +82,7 @@ const FundingsWrite = function() {
   }
 
   return (
-    <div className={classes.funding_write_wrap}>
+    <Container className={"d-flex " + classes.funding_write_wrap}>
       <FundingWriteNavigator nickname={userInfo.nickname}>
         <button onClick={() => scrollToInfoArea()}>
           프로젝트 기본 정보
@@ -293,7 +294,7 @@ const FundingsWrite = function() {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 
   async function sendRequest() {

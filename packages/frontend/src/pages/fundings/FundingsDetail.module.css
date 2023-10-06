@@ -2,12 +2,6 @@
   border-color:var(--gray);
 }
 
-.funding_detail_container{
-  padding: 10px 10px 50px 10px;
-  margin:0 auto;
-  width: 1080px;
-}
-
 /*title area*/
 .funding_title{
   text-align: center;
@@ -472,8 +466,6 @@ border-bottom: 1px solid var(--border);
     font-size:24px;
     margin-top: 5px;
   }
-  .funding_detail_container{
-    width:100%;}
   .funding_detail_profilearea{
     display:inline;
     flex-direction: column;
@@ -499,6 +491,9 @@ border-bottom: 1px solid var(--border);
 
   .content-wrapper{
     width:90vw;
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
   }
 
   .funding_detail_value,
@@ -547,18 +542,17 @@ border-bottom: 1px solid var(--border);
     width:100%;
     display:inline;
     flex-direction: column;
-
-    /* display: flex;
-    align-items: center; */
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
   }
 
   .content, .content img {
     width:100%;
+    /* display: flex;
+    align-items: center; */
   }
   .reportbtn{
     margin: 30px 0px !important;
   }
 }
-
-
-
