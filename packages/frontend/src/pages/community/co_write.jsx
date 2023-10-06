@@ -27,7 +27,7 @@ const TagWrite = ({
         value={selected}
         onChange={onChange}
         placeHolder={selected.length === 0
-          ? "태그로 원하는 펀딩을 찾아보세요!"
+          ? "태그를 입력해주세요"
           : ""}
       />
     </div>
