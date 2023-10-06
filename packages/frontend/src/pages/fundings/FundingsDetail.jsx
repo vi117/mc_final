@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Carousel,
+  Container,
   FloatingLabel,
   Form,
   ListGroup,
@@ -12,10 +13,11 @@ import {
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { useLoginId } from "../../hook/useLogin";
+import { useLoginInfo } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
 import useFundingDetail from "../../hook/useFundingDetail";
+import { FetchError } from "../../hook/util";
 import { formatDate } from "./../../util/date";
 import { isPSApprovedTag } from "./../../util/tag";
 import Profileimg from "../community/assets/user.png";
@@ -24,6 +26,7 @@ import classes from "./FundingsDetail.module.css";
 import FundingDetailModal from "./FundingsDetailModal";
 
 import {
+  fundingDelete,
   postFundingReport,
   setFundingInterest,
   withdrawFunding as withdrawFundingAPI,
@@ -40,7 +43,10 @@ const FundingsDetail = function() {
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
   };
-  const user_id = useLoginId();
+
+  const userInfo = useLoginInfo();
+  const user_id = userInfo?.id;
+
   const [selectedReward, setSelectedReward] = useState(null);
   useEffect(() => {
     if (isLoading) return;
@@ -57,6 +63,13 @@ const FundingsDetail = function() {
     return <Spinner />;
   }
   if (error) {
+    if (error instanceof FetchError && error.info.code === "DELETED") {
+      return (
+        <Container>
+          <div>비공개 처리된 펀딩입니다.</div>
+        </Container>
+      );
+    }
     return <div>에러가 발생했습니다.</div>;
   }
 
@@ -262,6 +275,21 @@ const FundingsDetail = function() {
               </div>
             </div>
           </NavLink>
+          {(() => {
+            // 비로그인일때
+            if (!userInfo) {
+              return "";
+            }
+            // 관리자가 아닐 때
+            if (!userInfo.is_admin) {
+              return "";
+            }
+            return (
+              <Button className="mt-3" onClick={softDeleteFunding}>
+                비공개
+              </Button>
+            );
+          })()}
         </div>
       </div>
 
@@ -347,6 +375,15 @@ const FundingsDetail = function() {
     </div>
   );
 
+  async function softDeleteFunding() {
+    try {
+      await fundingDelete(funding.id);
+    } catch (error) {
+      console.log(error);
+      // TODO(vi117): 예쁜 alert 쓰기.
+      alert("비공개하는 것을 실패했습니다.");
+    }
+  }
   async function setInterest(id, like = true) {
     if (!funding) {
       return;

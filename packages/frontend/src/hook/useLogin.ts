@@ -42,6 +42,13 @@ function getLoginUser(): UserInfo | null {
  *               Default is 10000 milliseconds (10 seconds).
  *               if interval is 0 or less, the login information will not be updated.
  *   - updateWhenFocus: Whether the login information should be updated when the user focuses on window. Default is true.
+ * @example
+ * ```js
+ * const userInfo = useLoginInfo();
+ *
+ * console.log(userInfo.is_admin);
+ * console.log(userInfo.email);
+ * ```
  * @return {UserInfo | null} The login information of the user.
  */
 export function useLoginInfo({
