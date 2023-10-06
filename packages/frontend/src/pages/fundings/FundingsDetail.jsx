@@ -103,6 +103,9 @@ const FundingsDetail = function() {
 
   const content = funding.content;
   const wrappedContent = content;
+
+  const participateActive = funding.participated_reward_id !== null
+    && (new Date(funding.end_date).getTime()) < Date.now();
   // const wrappedContent = wrapImages(content);
 
   return (
@@ -357,13 +360,13 @@ const FundingsDetail = function() {
               )
               : (
                 <NavLink
-                  to={`/fundings/${id}/pay/`}
+                  to={participateActive ? `/fundings/${id}/pay/` : false}
                   state={{ funding: funding, selectedReward: selectedReward }}
                 >
                   <Button
                     ref={JoinBtnRef}
                     className={classes["go_funding_btn"]}
-                    disabled={!selectedReward}
+                    disabled={!participateActive}
                   >
                     펀딩 참여하기
                   </Button>
