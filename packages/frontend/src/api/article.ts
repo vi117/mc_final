@@ -111,8 +111,11 @@ export async function patchArticle(id: number, body: {
   }
 }
 
-export async function reportArticle(id: number, reason: string) {
-  const url = new URL(`/api/v1/articles/${id}/report`, window.location.origin);
+export async function reportArticle(article_id: number, reason: string) {
+  const url = new URL(
+    `/api/v1/articles/${article_id}/report`,
+    window.location.origin,
+  );
   const res = await fetch(url.href, {
     method: "POST",
     headers: {
