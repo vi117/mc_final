@@ -101,9 +101,10 @@ async function getSingleFundingHandler(req: Request, res: Response) {
     user_id: user?.id,
   });
   assert_exists(!!result, "존재하지 않는 펀딩입니다.");
-  if (!user?.is_admin && result.begin_date.getTime() >= new Date().getTime()) {
+  if (!user?.is_admin && result.begin_date.getTime() > Date.now()) {
     res.status(StatusCodes.FORBIDDEN).json({
       message: "공개 준비 중인 펀딩입니다.",
+      code: "FUNDING_READY",
     });
     return;
   }

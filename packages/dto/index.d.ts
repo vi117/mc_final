@@ -96,12 +96,18 @@ export interface FundingReportObject {
   id: number;
   funding_id: number;
   user_id: number;
+  /**
+   * 펀딩 신고 사유
+   */
   content: string;
   meta: string | null;
   created_at: Date;
   user_nickname: string;
   user_profile_image: string | null;
   user_email: string;
+  /**
+   * 신고된 펀딩의 제목
+   */
   funding_title: string;
   funding_thumbnail: string;
   funding_begin_date: Date;

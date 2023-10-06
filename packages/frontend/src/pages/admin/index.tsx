@@ -1,9 +1,16 @@
 import Button from "@mui/material/Button";
+import { useState } from "react";
 import { Badge, Container } from "react-bootstrap";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
 import { fundingApprove, fundingReject } from "../../../src/api/mod";
 import useAlertModal from "../../../src/hook/useAlertModal";
+// import useArticleReports from "../../../src/hook/useArticleReports";
 
+import useFundingReports from "../../hook/useFundingReport";
 import useFundingRequest from "../../hook/useFundingRequest";
+
+import { Link } from "react-router-dom";
 import { usePromptModal } from "../../hook/usePromptModal";
 import classes from "./admin.module.css";
 
@@ -11,7 +18,7 @@ function getStateTextFromFundingState(funding_state: number) {
   return ["승인 대기", "승인됨", "승인 거부"][funding_state];
 }
 
-export default function AdminPage() {
+function FundingRequestManageTap() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const { showPromptModal, PromptModal } = usePromptModal();
   const { data, error, isLoading, mutate } = useFundingRequest({
@@ -24,7 +31,6 @@ export default function AdminPage() {
   if (error) {
     return <div>에러가 발생했습니다.</div>;
   }
-
   return (
     <Container>
       <AlertModal />
@@ -39,7 +45,9 @@ export default function AdminPage() {
               )}
               <div className={classes["Fundingthumbnail"]}>
                 <img src={funding.thumbnail}></img>
-                <div>{getStateTextFromFundingState(funding.funding_state)}</div>
+                <div>
+                  {getStateTextFromFundingState(funding.funding_state)}
+                </div>
                 <h1 style={{ fontSize: "16px", textAlign: "left" }}>
                   {funding.title}
                 </h1>
@@ -114,3 +122,64 @@ export default function AdminPage() {
     );
   }
 }
+
+function FundingReportManageTap() {
+  const { data, error, isLoading } = useFundingReports({
+    limit: 50,
+    offset: 0,
+  });
+  if (isLoading) {
+    // TODO(vi117): 멋진 progress bar
+    return <div>로딩중</div>;
+  }
+  if (error) {
+    return <div>에러!</div>;
+  }
+
+  return (
+    <Container>
+      <div>
+        {data === undefined ? undefined : data.map((x) => {
+          return (
+            <div>
+              <Link to={`/fundings/${x.funding_id}`}>
+                {x.funding_title}
+              </Link>
+              {x.content}
+            </div>
+          );
+        })}
+      </div>
+    </Container>
+  );
+}
+
+export default function AdminPage() {
+  const [key, setKey] = useState("request");
+  return (
+    <Container>
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k ?? "request")}
+        className="mb-3"
+      >
+        <Tab eventKey="request" title="펀딩 심사">
+          <FundingRequestManageTap />
+        </Tab>
+        {/* ------------------------------------------------------------------------------------------------------- */}
+        <Tab eventKey="report" title="펀딩 신고 관리">
+          <FundingReportManageTap />
+        </Tab>
+      </Tabs>
+    </Container>
+  );
+}
+
+/**
+ * 펀딩 디테일 페이지에 관리자만 볼 수 있는 비공개 버튼이 있음.
+ * - 이 버튼을 누르면 비공개 됨
+ * // 비공개 처리가 되면 목록에서 안보이도록 함.
+ *
+ * 링크가 이미 공유된 페이지로 가면 비공개 페이지라고 안내를 함.
+ */
