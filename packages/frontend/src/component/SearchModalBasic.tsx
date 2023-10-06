@@ -4,7 +4,9 @@ import { IoMdClose } from "react-icons/io";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./SearchModalBasic.module.css";
 
-function SearchModalBasic({ setModalOpen }: PropsType) {
+function SearchModalBasic(
+  { setModalOpen }: { setModalOpen: (open: boolean) => void },
+) {
   // 모달 끄기
   const closeModal = () => {
     setModalOpen(false);
@@ -16,9 +18,14 @@ function SearchModalBasic({ setModalOpen }: PropsType) {
 
   useEffect(() => {
     // 이벤트 핸들러 함수
-    const handler = () => { // event 매개변수를 추가
+    const handler = (ev: MouseEvent) => { // event 매개변수를 추가
       // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+      if (!ev.target) {
+        setModalOpen(false);
+      } else if (
+        modalRef.current && ev.target instanceof Node
+        && !modalRef.current.contains(ev.target)
+      ) {
         setModalOpen(false);
       }
     };
@@ -42,7 +49,7 @@ function SearchModalBasic({ setModalOpen }: PropsType) {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       performSearch();
     }
