@@ -1,6 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { GoChevronRight } from "react-icons/go";
 import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useLoginInfo } from "../../hook/useLogin";
 import Profileimg from "../community/assets/user.png";
 import AccordionList from "./profileLikeList";
@@ -33,7 +34,10 @@ export default function Profile() {
                 />
               </span>
               <span className={classes["user_profile"]}>
-                <b>{userInfo.nickname}</b> 님 <GoChevronRight />
+                <b>{userInfo.nickname}</b> 님{" "}
+                <NavLink to={`/host-profile/${userInfo.id}`}>
+                  <GoChevronRight />
+                </NavLink>
               </span>
             </div>
           </Row>
