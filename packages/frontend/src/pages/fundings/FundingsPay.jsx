@@ -1,10 +1,11 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { Accordion, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { Accordion, Col, Form, Modal, Row } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { fundingParticipate } from "../../api/funding";
 import MyButton from "../../component/Button";
+import { Container } from "../../component/Container";
 import { useAlertModal } from "../../hook/useAlertModal";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingsPay.module.css";

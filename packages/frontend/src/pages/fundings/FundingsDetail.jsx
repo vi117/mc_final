@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Carousel,
-  Container,
   FloatingLabel,
   Form,
   ListGroup,
@@ -13,6 +12,7 @@ import {
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { Container } from "../../component/Container";
 import { useLoginInfo } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
@@ -106,7 +106,7 @@ const FundingsDetail = function() {
   // const wrappedContent = wrapImages(content);
 
   return (
-    <div className={classes["funding_detail_container"]}>
+    <Container>
       {showModal && (
         <FundingDetailModal
           show={showModal}
@@ -372,7 +372,7 @@ const FundingsDetail = function() {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 
   async function softDeleteFunding() {
