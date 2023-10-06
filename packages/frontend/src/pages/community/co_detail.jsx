@@ -2,6 +2,7 @@ import { Container } from "react-bootstrap";
 import { AiFillHeart } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSWRConfig } from "swr";
 import {
   deleteArticle,
   deleteArticleComment,
@@ -13,7 +14,6 @@ import useArticleDetail from "../../hook/useArticleDetail";
 import { useConfirmModal } from "../../hook/useConfirmModal";
 import { useLoginId } from "../../hook/useLogin";
 import { useLoginInfo } from "../../hook/useLogin";
-import { FetchError } from "../../hook/util";
 import { formatDate } from "../../util/date";
 import Profileimg from "./assets/user.png";
 import Comments from "./components/comments";
@@ -27,38 +27,33 @@ export function CommunityDetail() {
   const params = useParams();
   const id = parseInt(params.id);
   const { ConfirmModal, showConfirmModal } = useConfirmModal();
-  const { data: article, error } = useArticleDetail(id);
+
   const userInfo = useLoginInfo();
 
+  const { mutate: mutateArticleList } = useSWRConfig();
   const {
-    data: fetcherData,
-    error: fetcherError,
-    isLoading: fetcherIsLoading,
+    data: article,
+    error,
+    isLoading,
     mutate,
   } = useArticleDetail(id, {
     with_comments: true,
   });
 
-  if (fetcherIsLoading) {
+  if (isLoading) {
     return <div>로딩중...</div>;
   }
-  if (fetcherError) {
-    return <div>에러가 발생했습니다.</div>;
+  if (error) {
+    return (
+      <Container>
+        <div>삭제된 글입니다.</div>
+      </Container>
+    );
   }
-  const item = fetcherData;
 
+  const item = article;
   const liked = user_id === item.like_user_id;
 
-  if (error) {
-    if (error instanceof FetchError && error.info.code === "DELETED") {
-      return (
-        <Container>
-          <div>삭제된 커뮤니티입니다.</div>
-        </Container>
-      );
-    }
-    return <div>에러가 발생했습니다.</div>;
-  }
   return (
     <div>
       <AlertModal />
@@ -153,6 +148,8 @@ export function CommunityDetail() {
       try {
         await deleteArticle(id);
         showAlertModal("글 삭제", "삭제가 완료되었습니다.");
+        // TODO(vi117): make hook for mutate
+        mutateArticleList((key) => key.startsWith("/api/v1/articles"));
         navigate("/community");
       } catch (e) {
         if (e instanceof Error) {
