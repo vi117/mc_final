@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, FloatingLabel, Form } from "react-bootstrap";
+import { FloatingLabel, Form } from "react-bootstrap";
 import { send_reset_password } from "../../api/user";
 import classes from "./forgot.module.css";
 
@@ -16,20 +16,20 @@ export default function ForgotPasswordPage() {
       <div className={classes["FloatingLabel"]}>
         <FloatingLabel
           controlId="floatingInput"
-          label="Email address"
-          className="mb-3"
+          label="이메일을 입력해주세요"
         >
           <Form.Control
+            className={classes["mb-3"]}
             type="email"
             placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </FloatingLabel>
-        <div className="d-grid gap-2">
-          <Button variant="primary" size="lg" onClick={forgetPassword}>
+        <div className={classes["forgot_button"]}>
+          <button onClick={forgetPassword}>
             전송
-          </Button>
+          </button>
         </div>
       </div>
     </div>

@@ -52,7 +52,7 @@
   margin-bottom: 0px !important;
   margin-right: 10px;
   border:1px solid var(--teritary);
-  accent-color: #2aa971;
+   accent-color: #2aa971;
 }
 .mb-3 > input:focus{
  box-shadow: none !important;

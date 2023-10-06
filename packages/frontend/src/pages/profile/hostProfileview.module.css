@@ -35,5 +35,21 @@
  display:grid;
  justify-content: center;
  grid-template-columns: repeat(3, 1fr);
- column-gap: 20px;
+ column-gap: 25px;
+}
+
+/*반응형*/
+@media screen and (max-width: 768px/* md - medium screens */) {
+  .funding_itemarea {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 576px/* sm - small screens */) {
+
+  .funding_itemarea{
+    padding: 0px;
+    grid-template-columns: repeat(1, 1fr);
+    width:100%;
+  }
 }

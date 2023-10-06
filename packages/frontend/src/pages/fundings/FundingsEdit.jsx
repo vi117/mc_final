@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ListGroup } from "react-bootstrap";
+import { Container, ListGroup } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./FundingWrite.module.css";
@@ -76,7 +76,7 @@ const FundingsEdit = function() {
   };
 
   return (
-    <div className={classes.funding_write_wrap}>
+    <Container className={"d-flex " + classes.funding_write_wrap}>
       <FundingWriteNavigator nickname={userInfo.nickname}>
         <button onClick={() => scrollToInfoArea()}>
           프로젝트 기본 정보
@@ -237,7 +237,7 @@ const FundingsEdit = function() {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 
   async function sendRequest() {

@@ -3,7 +3,6 @@ import { Accordion, Badge, Placeholder } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useFundings from "../../hook/useFundings";
 import useLikedArticles from "../../hook/useLikedArticles";
-import "./Profile.css";
 import { useLoginInfo } from "../../hook/useLogin";
 
 function FundingTable({

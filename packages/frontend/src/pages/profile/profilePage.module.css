@@ -1,0 +1,45 @@
+.user{
+    padding:0px;
+    width: 50px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 100%;
+    border: 1px solid var(--secondary);
+object-fit: cover;
+margin-right: 15px;
+}
+
+.profile_container{
+    padding-left: 15px;
+    display:flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.hr{   
+        background:var(--teritary);
+        height:1px;
+        border:0;
+}
+
+.user_profile{
+    color:var(--teritary);
+    font-weight: 300;
+font-size: 18px;
+}
+
+.user_profile b{
+    color:var(--primary);
+    font-weight: 700;
+}
+
+
+
+.my-3 p {
+    padding:10px 15px;
+}
+
+.my-3 p:hover {
+background-color: var(--border);
+border-radius: 12px;
+}
