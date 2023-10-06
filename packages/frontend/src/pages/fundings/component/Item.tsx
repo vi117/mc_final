@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import { DateToString } from "../../../hook/util";
 import { isPSApprovedTag } from "./../../../util/tag";
 import classes from "./Item.module.css";
+import "./progressbar.css";
 
 export function FundingItem({
   item: x,
@@ -71,12 +72,10 @@ export function FundingItem({
                 : <>종료</>}
             </span>
           </div>
-          <div>
-            <ProgressBar
-              className="funding_progressbar"
-              now={(x.current_value / x.target_value) * 100}
-            />
-          </div>
+          <ProgressBar
+            className="funding_progressbar"
+            now={(x.current_value / x.target_value) * 100}
+          />
         </div>
       </div>
     </Card>

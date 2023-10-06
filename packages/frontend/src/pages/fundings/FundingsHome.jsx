@@ -1,7 +1,7 @@
 import { NavLink, useSearchParams } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import classes from "./FundingsHome.module.css";
-import "./progressbar.css";
+
 import "../community/styles/tags.css";
 import { GoArrowRight } from "react-icons/go";
 import { Container } from "../../component/Container";
