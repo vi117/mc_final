@@ -1,7 +1,10 @@
 import { Col, Container, Row } from "react-bootstrap";
+import { GoChevronRight } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { useLoginInfo } from "../../hook/useLogin";
+import Profileimg from "../community/assets/user.png";
 import AccordionList from "./profileLikeList";
+import classes from "./profilePage.module.css";
 
 export default function Profile() {
   const userInfo = useLoginInfo();
@@ -19,33 +22,44 @@ export default function Profile() {
       style={{ maxWidth: "var(--max-content-width)" }}
     >
       <Row>
-        <Col md={3} className="my-3">
-          <Row>
-            <span>{userInfo.nickname}</span>
+        <Col md={3} className={classes["my-3"]}>
+          <Row className={classes["profile_container"]}>
+            <div>
+              <span>
+                <img
+                  src={Profileimg}
+                  className={classes["user"]}
+                  alt="Profile"
+                />
+              </span>
+              <span className={classes["user_profile"]}>
+                <b>{userInfo.nickname}</b> 님 <GoChevronRight />
+              </span>
+            </div>
           </Row>
-          <hr></hr>
+          <hr className={classes["hr"]}></hr>
           <Row>
             <Link to={`/profile/edit`}>
-              내정보 수정
+              <p>내정보 수정</p>
             </Link>
           </Row>
           <Row>
             <Link to={`/reset-password`}>
-              비밀번호 재설정
-            </Link>
-          </Row>
-          <Row>
-            <Link to={`/withdraw`}>
-              회원탈퇴
+              <p>비밀번호 재설정</p>
             </Link>
           </Row>
           {userInfo.is_admin && (
             <Row>
               <Link to={`/admin`}>
-                관리
+                <p>펀딩 관리</p>
               </Link>
             </Row>
           )}
+          <Row>
+            <Link to={`/withdraw`}>
+              <p>회원탈퇴</p>
+            </Link>
+          </Row>
           <hr className="d-block d-md-none" />
         </Col>
         <Col md={9}>

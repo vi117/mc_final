@@ -20,10 +20,12 @@ const Cowritemodal = ({ show, handleClose, handleSelect }: {
   return (
     <>
       <Modal show={show}>
-        <div className={classes["title"]}>
-          <p>아직 작성하지 않은 펀딩 후기가 있어요 🥺</p>
-          <h1>생생한 이용 후기를 들려주세요</h1>
-        </div>
+        <Modal.Header>
+          <div className={classes["title"]}>
+            <p>아직 작성하지 않은 펀딩 후기가 있어요 🥺</p>
+            <h1>생생한 이용 후기를 들려주세요</h1>
+          </div>
+        </Modal.Header>
         {error && <div>에러가 발생했습니다.</div>}
         {isLoading && <div>로딩중...</div>}
         {!isLoading && !error && (
@@ -53,14 +55,16 @@ const Cowritemodal = ({ show, handleClose, handleSelect }: {
             ))}
           </div>
         )}
-        <div className={classes["filterbtnarea"]}>
-          <button
-            className={classes["closebtn"]}
-            onClick={handleClose}
-          >
-            나중에 쓸게요
-          </button>
-        </div>
+        <Modal.Footer>
+          <div className={classes["filterbtnarea"]}>
+            <button
+              className={classes["closebtn"]}
+              onClick={handleClose}
+            >
+              나중에 쓸게요
+            </button>
+          </div>
+        </Modal.Footer>
       </Modal>
     </>
   );

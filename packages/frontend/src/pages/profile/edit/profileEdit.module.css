@@ -1,5 +1,38 @@
 .button_submit {
-    border-radius: 0;
     font-size: 14px;
     padding: 15px 50px;
+    width: 90%;
+    margin:0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 0;
+}
+
+.profileedit_container{
+    border: 1px solid var(--secondary);
+    margin: 0 auto;
+    width:450px;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 50px;
+}
+
+
+
+.profileedit_container > p {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-left:25px;
+}
+
+.validate_input{
+    width: 90%;
+    margin:0 auto;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.validate_input_no_label{
+    margin-top: 0px;
 }
