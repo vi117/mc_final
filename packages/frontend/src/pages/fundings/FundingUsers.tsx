@@ -16,6 +16,7 @@ export default function FundingUsersPage() {
   }
   return (
     <Container>
+      <a href={`/api/v1/fundings/${id}/users?csv=true`}>csv</a>
       <table className={classes.table}>
         <thead>
           <tr>
