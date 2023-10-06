@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useLoginInfo } from "../../hook/useLogin";
-import classes from "./FundingWrite.module.css";
+import classes from "./FundingsWrite.module.css";
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
