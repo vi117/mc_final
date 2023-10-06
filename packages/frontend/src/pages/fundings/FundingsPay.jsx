@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import clsx from "clsx";
 import { useState } from "react";
 import { Accordion, Col, Container, Form, Modal, Row } from "react-bootstrap";
@@ -18,6 +17,7 @@ export default function FundingsPay() {
     address: userInfo?.address ?? "",
     addressDetail: userInfo?.address_detail ?? "",
     name: "",
+    phone: userInfo?.phone ?? "",
   });
   const { AlertModal, showAlertModal } = useAlertModal();
 
@@ -145,7 +145,7 @@ export default function FundingsPay() {
         address: shippingInfo.address,
         addressDetail: shippingInfo.addressDetail,
         recipient: shippingInfo.name,
-        phone: userInfo.phone,
+        phone: shippingInfo.phone,
       });
       await showAlertModal("success", "펀딩 후원을 해주었습니다.");
       navigate(`/fundings/${funding.id}`);
@@ -348,17 +348,17 @@ function CardRegister() {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <MyButton
             variant="outlined"
             color="error"
             style={{ right: "8px" }}
             onClick={handleClose}
           >
             취소
-          </Button>
-          <Button variant="outlined" onClick={handleClose}>
+          </MyButton>
+          <MyButton variant="outlined" onClick={handleClose}>
             등록 완료
-          </Button>
+          </MyButton>
         </Modal.Footer>
       </Modal>
     </>
@@ -400,11 +400,11 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
             <Form.Control
               type="number"
               placeholder="연락처를 입력해주세요."
-              value={shippingInfo.number}
+              value={shippingInfo.phone}
               onChange={(e) =>
                 setShippingInfo({
                   ...shippingInfo,
-                  number: e.target.value,
+                  phone: e.target.value,
                 })}
             />
           </Form.Group>
@@ -443,22 +443,6 @@ function ShippingInformation({ shippingInfo, setShippingInfo }) {
               })}
           />
         </Form.Group>
-
-        <Form.Group className="mb-3" id="formGridCheckbox">
-          <Form.Check
-            type="checkbox"
-            label="기본 배송지로 등록"
-          />
-        </Form.Group>
-        <MyButton
-          variant="outlined"
-          style={{
-            textAlign: "right",
-            alignSelf: "flex-end",
-          }}
-        >
-          등록 완료
-        </MyButton>
       </Form>
     </>
   );
