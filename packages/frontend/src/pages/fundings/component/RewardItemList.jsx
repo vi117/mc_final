@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Form, ListGroup } from "react-bootstrap";
-import classes from "../FundingWrite.module.css";
+import classes from "../FundingsWrite.module.css";
 
 function AddItemView({
   onAddItem = () => {},
