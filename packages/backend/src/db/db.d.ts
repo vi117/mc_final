@@ -105,6 +105,7 @@ export interface Fundings {
   current_value: Generated<number>;
   begin_date: Date;
   end_date: Date;
+  funding_request_id: number;
 }
 
 export interface FundingTagRel {
