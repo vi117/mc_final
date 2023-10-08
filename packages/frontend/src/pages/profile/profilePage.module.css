@@ -84,14 +84,106 @@ background-color: var(--border);
 
 
 .profile_accordion_container{
-    --bs-accordion-active-bg: var(--border);
-    --bs-accordion-btn-focus-border-color: var(--border);
+    --bs-accordion-active-bg: var(--green-dark);
+    --bs-accordion-btn-focus-border-color: var(--green-dark);
     --bs-accordion-btn-focus-box-shadow: none;
     --bs-accordion-border-radius: none;
-    --bs-accordion-active-color: var(--primary);
+    --bs-accordion-active-color: var(--white);
+    --bs-border-radius: 0px;
 }
 
 .profile_accordion_container > * {
     margin-bottom:20px;
     border: 1px solid var(--secondary) !important;
+}
+
+.accordion_table{
+    text-align: center;
+    width:100%;
+}
+
+.accordion_table > thead *{
+    padding:10px;
+    font-weight: 700;
+    box-shadow: var(--boxshadow);
+    border-bottom: var(--border);
+}
+
+
+.accordion_table td {
+    padding:10px;
+    border-bottom: 1px solid var(--secondary);
+}
+
+.accordion_table > tbody > tr:hover{
+    background-color: var(--border);
+}
+
+
+.accordion_table_title {
+    justify-content: center;
+    text-align: center;
+    width:100%;
+    display:flex;
+}
+
+.accordion_table_title *{
+    margin: 0px;
+   font-weight: 500;
+}
+
+.table_funding_tags{
+    display:flex;
+    color:var(--green);
+    margin-right: 7px;
+}
+
+
+.accordion_table_resttime{
+    margin: 0 auto;
+    width:90px;
+    color:var(--green);
+    border-radius: 4px;
+    background-color: var(--green-light);
+}
+
+.accordion_table_resttime b{
+    font-weight: 500;
+}
+
+.approved{
+    border-radius: 4px;
+    color:var(--green);
+    font-weight: 500;
+}
+
+
+ .rejected {
+    color:var(--red); /* 거부됨 상태일 때 빨간색 */
+  }
+
+
+@media screen and (max-width: 768px/* sm - small screens */) {
+
+
+    .accordion_table_title {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .table_funding_tags {
+        margin:0px;
+    }
+    .accordion_table_title  p,
+    .table_funding_tags {
+        width:100%;
+        justify-content: center;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+    
+    
+
 }
