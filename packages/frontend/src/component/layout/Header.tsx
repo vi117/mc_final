@@ -41,37 +41,38 @@ export function Header() {
 
   return (
     <>
-      <Container as={"header"} className={classes.header_container}>
-        <Navbar expand="sm" className={classes.header_navbar}>
-          <Container className={classes.header_brandcontainer}>
-            <NavLink to={"/"}>
-              <Navbar.Brand>
-                <LogoSvg
-                  style={{ width: "180px", height: "30px" }}
-                >
-                </LogoSvg>
-              </Navbar.Brand>
-            </NavLink>
-            {
-              /* <Navbar.Toggle
+      <div className={classes.header_container}>
+        <Container as={"header"} className={classes.header_area}>
+          <Navbar expand="sm" className={classes.header_navbar}>
+            <Container className={classes.header_brandcontainer}>
+              <NavLink to={"/"}>
+                <Navbar.Brand>
+                  <LogoSvg
+                    style={{ width: "180px", height: "30px" }}
+                  >
+                  </LogoSvg>
+                </Navbar.Brand>
+              </NavLink>
+              {
+                /* <Navbar.Toggle
               aria-controls="basic-navbar-nav"
               className={classes.sb}
             >
               <BiMenu className={classes.sb_icon}></BiMenu>
             </Navbar.Toggle> */
-            }
-            <Navbar.Brand style={{ display: "flex" }}>
-              <Nav>
-                <span className={classes.header_logo_nav}>
-                  <LoginButton></LoginButton>
-                </span>
-              </Nav>
-
-              {userInfo !== null && (
-                // TODO: 유저닉네임 노출
+              }
+              <Navbar.Brand style={{ display: "flex" }}>
                 <Nav>
-                  {
-                    /* <div
+                  <span className={classes.header_logo_nav}>
+                    <LoginButton></LoginButton>
+                  </span>
+                </Nav>
+
+                {userInfo !== null && (
+                  // TODO: 유저닉네임 노출
+                  <Nav>
+                    {
+                      /* <div
                     style={{
                       alignItems:"center",
                       display:"flex",
@@ -80,17 +81,17 @@ export function Header() {
                   >
                     {userInfo.nickname}
                   </div> */
-                  }
+                    }
 
-                  <NavLink to={`/profile`}>
-                    <span className={classes.header_logo_nav}>
-                      <img
-                        src={userInfo.profile_image ?? Profileimg}
-                        className={classes.user}
-                        alt="Profile"
-                      />
-                      {
-                        /* <CgProfile
+                    <NavLink to={`/profile`}>
+                      <span className={classes.header_logo_nav}>
+                        <img
+                          src={userInfo.profile_image ?? Profileimg}
+                          className={classes.user}
+                          alt="Profile"
+                        />
+                        {
+                          /* <CgProfile
                         color="#555555"
                         style={{
                           marginRight: "5px",
@@ -98,40 +99,45 @@ export function Header() {
                           height: "20px",
                         }}
                       /> */
-                      }
-                      <span className={classes.user_nickname}>
-                        {userInfo.nickname}
+                        }
+                        <span className={classes.user_nickname}>
+                          {userInfo.nickname}
+                        </span>
                       </span>
-                    </span>
-                  </NavLink>
-                </Nav>
-              )}
-            </Navbar.Brand>
-          </Container>
-        </Navbar>
-        <Navbar bg="transparent" data-bs-theme="light">
-          <Nav variant="underline" className={classes.header_nav_container}>
-            <div className={classes.left}>
-              <NavLink
-                className={"nav-link"}
-                to={"/"}
-                style={{ paddingLeft: "0px" }}
-              >
-                홈
-              </NavLink>
+                    </NavLink>
+                  </Nav>
+                )}
+              </Navbar.Brand>
+            </Container>
+          </Navbar>
+          <Navbar
+            bg="transparent"
+            data-bs-theme="light"
+            className={classes.header_nav_container}
+          >
+            <Nav variant="underline" className={classes.header_nav_underline}>
+              <div className={classes.left}>
+                <NavLink
+                  className={"nav-link"}
+                  to={"/"}
+                  style={{ paddingLeft: "0px" }}
+                >
+                  홈
+                </NavLink>
 
-              <NavLink className={"nav-link"} to={"/fundings"}>펀딩</NavLink>
-              <NavLink className={"nav-link"} to={"/community"}>
-                커뮤니티
-              </NavLink>
-            </div>{" "}
-            <div className={classes.right}>
-              <SearchModal />
-              {/* <AutoSearch/> */}
-            </div>
-          </Nav>
-        </Navbar>
-      </Container>
+                <NavLink className={"nav-link"} to={"/fundings"}>펀딩</NavLink>
+                <NavLink className={"nav-link"} to={"/community"}>
+                  커뮤니티
+                </NavLink>
+              </div>{" "}
+              <div className={classes.right}>
+                <SearchModal />
+                {/* <AutoSearch/> */}
+              </div>
+            </Nav>
+          </Navbar>
+        </Container>
+      </div>
     </>
   );
 }

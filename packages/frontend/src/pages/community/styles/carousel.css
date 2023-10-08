@@ -1,21 +1,22 @@
 
 .bestitem-container{
   width:100%;
-  max-width: var(--max-content-width);
   padding: 0px 10px 10px 10px;
   margin: 0 auto;
+  background-color: var(--border);
+  height:335px;
 }
 
 .community-carousel-wrap{
+  max-width: var(--max-content-width);
     background-color: var(--white);
-    border-radius: 20px;
-    border: 1px solid var(--secondary);
     width:100%;
     margin: 0 auto;
     padding:20px 30px;
     display:flex;
     flex-direction: column;
     height:335px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 10px 30px;
 }
 
 .community-carousel-wrap > h1{

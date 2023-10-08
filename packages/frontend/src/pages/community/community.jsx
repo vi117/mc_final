@@ -5,9 +5,15 @@ import classes from "./styles/Community.module.css";
 export function Community() {
   return (
     <>
-      <BestArticle></BestArticle>
-      <div className={classes["list-wrap"]}>
-        <Board></Board>
+      <BestArticle className={classes["best-wrap"]}></BestArticle>
+      <div
+        style={{
+          backgroundColor: "white",
+        }}
+      >
+        <div className={classes["list-wrap"]}>
+          <Board></Board>
+        </div>
       </div>
     </>
   );
