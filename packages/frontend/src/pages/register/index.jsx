@@ -5,7 +5,7 @@ import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useLocation, useNavigate } from "react-router-dom";
 import { emailCheck, nicknameCheck, signUp } from "../../api/mod";
 import Button from "../../component/Button";
-import Upload from "../../component/UploadImage";
+import Upload from "../../component/UploadAvatar";
 import {
   ValidationInput,
   ValidationInputLabel,
