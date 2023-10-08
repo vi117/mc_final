@@ -26,6 +26,7 @@ import RegisterPage from "./pages/register";
 import ResetpasswordPage from "./pages/reset-password";
 
 import AdminPage from "./pages/admin/index";
+import FundingRequestDetailPage from "./pages/admin/request/index";
 import HostProfile from "./pages/profile/hostProfileview";
 
 import { GoogleLogin } from "./pages/sns_login/google";
@@ -136,6 +137,13 @@ const browserRouter = createBrowserRouter([
       {
         path: "/admin",
         element: <AdminPage />,
+      },
+      /**
+       * admin 펀딩 요청 디테일 페이지
+       */
+      {
+        path: "/fundings/request/:id",
+        element: <FundingRequestDetailPage />,
       },
       // 호스트 프로필 뷰
       {
