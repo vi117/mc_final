@@ -104,7 +104,7 @@ const FundingsDetail = function() {
   const content = funding.content;
   const wrappedContent = content;
 
-  const participateActive = funding.participated_reward_id !== null
+  const participateActive = funding.participated_reward_id === null
     && (new Date(funding.end_date).getTime()) < Date.now();
   // const wrappedContent = wrapImages(content);
 

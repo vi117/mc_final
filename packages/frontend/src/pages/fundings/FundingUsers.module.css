@@ -1,0 +1,6 @@
+.table{
+    border: 1px solid var(--secondary);
+}
+.table td, .table th {
+    border: 1px solid var(--secondary);
+}

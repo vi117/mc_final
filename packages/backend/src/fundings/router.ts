@@ -222,11 +222,51 @@ async function getFundingUsersHandler(req: Request, res: Response) {
       return;
     }
   }
+  const csvMode = req.query.csv === "true";
 
   const fundingUserRepo = new FundingUsersRepository(getDB());
+  if (csvMode) {
+    res.writeHead(200, {
+      "Content-Type": "text/csv",
+      // "Content-Disposition": "attachment; filename=funding_users.csv",
+    });
+    res.write(
+      "user_id,email,nickname,address,phone,created_at,recipient,reward_title,reward_content,reward_price\n",
+    );
+    let i = 0;
+    const chunk = 200;
+    while (i < limit) {
+      const orders = await fundingUserRepo.findAllByFundingId(id, {
+        offset: i,
+        limit: chunk,
+      });
+      i += orders.length;
+      for (const order of orders) {
+        res.write(
+          [
+            order.user_id,
+            order.user_email,
+            order.user_nickname,
+            order.address,
+            order.phone,
+            order.created_at,
+            order.recipient,
+            order.reward_title,
+            order.reward_content,
+            order.reward_price,
+          ].map((v) => `${JSON.stringify(v)}`).join(",") + `\n`,
+        );
+      }
+      if (orders.length < chunk) {
+        break;
+      }
+    }
+    res.end();
+    return;
+  }
   const fundingUser = await fundingUserRepo.findAllByFundingId(id, {
-    offset,
-    limit,
+    offset: offset,
+    limit: Math.min(limit, 200),
   });
   res.json(fundingUser).status(StatusCodes.OK);
 }

@@ -32,6 +32,7 @@ export async function approveFundingRequest(request_id: number) {
 
     let result_funding_id: number | undefined;
     if (request.funding_request_id) {
+      // edit existing funding
       const funding_id = request.funding_request_id;
       const funding = await fundingRepo.findById(funding_id);
       if (funding === undefined) {
@@ -47,6 +48,7 @@ export async function approveFundingRequest(request_id: number) {
         throw new FundingApproveError("host does not match");
       }
       // update funding
+
       await fundingRepo.updateById(funding_id, {
         title: request.title,
         content: request.content,
@@ -58,6 +60,7 @@ export async function approveFundingRequest(request_id: number) {
           ? JSON.stringify(meta?.content_thumbnails)
           : undefined,
         updated_at: new Date(),
+        funding_request_id: request.id,
       });
       if (meta !== undefined) {
         // process tags
@@ -93,6 +96,7 @@ export async function approveFundingRequest(request_id: number) {
       }
       result_funding_id = funding_id;
     } else {
+      // create new funding
       if (meta === undefined) {
         throw new FundingApproveError("meta does not exist");
       }
@@ -107,6 +111,7 @@ export async function approveFundingRequest(request_id: number) {
           end_date: request.end_date,
           host_id: request.host_id,
           content_thumbnails: meta.content_thumbnails,
+          funding_request_id: request.id,
         });
       } catch (error) {
         if (isDuplKeyError(error)) {

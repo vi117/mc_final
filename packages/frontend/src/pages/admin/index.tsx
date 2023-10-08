@@ -7,6 +7,7 @@ import { fundingApprove, fundingReject } from "../../../src/api/mod";
 import useAlertModal from "../../../src/hook/useAlertModal";
 // import useArticleReports from "../../../src/hook/useArticleReports";
 
+import useArticleReports from "../../hook/useArticleReports";
 import useFundingReports from "../../hook/useFundingReport";
 import useFundingRequest from "../../hook/useFundingRequest";
 
@@ -154,6 +155,36 @@ function FundingReportManageTap() {
   );
 }
 
+function CommunityReport() {
+  const { data, error, isLoading } = useArticleReports({
+    limit: 50,
+    offset: 0,
+  });
+
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
+  if (error) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+  return (
+    <Container>
+      <div>
+        {data === undefined ? undefined : data.map((c) => {
+          return (
+            <div>
+              <Link to={`/community/${c.article_id}`}>
+                {c.article_title}
+              </Link>
+              {c.content}
+            </div>
+          );
+        })}
+      </div>
+    </Container>
+  );
+}
+
 export default function AdminPage() {
   const [key, setKey] = useState("request");
   return (
@@ -167,9 +198,11 @@ export default function AdminPage() {
         <Tab eventKey="request" title="펀딩 심사">
           <FundingRequestManageTap />
         </Tab>
-        {/* ------------------------------------------------------------------------------------------------------- */}
         <Tab eventKey="report" title="펀딩 신고 관리">
           <FundingReportManageTap />
+        </Tab>
+        <Tab eventKey="co_report" title="커뮤니티 신고 관리">
+          <CommunityReport />
         </Tab>
       </Tabs>
     </div>

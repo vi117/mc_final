@@ -1,0 +1,108 @@
+.funding_detail_tags{
+    justify-content: center;
+    display:flex;
+    color: var(--teritary);
+    font-size: 16px;
+    list-style: none;
+    padding-left: 0px;
+    margin-bottom: 5px;
+  }
+  
+  .funding_detail_tags > li{
+    margin-right: 7px;
+  }
+  
+  .funding_detail_tags_ps_approved{
+    color: var(--blue);
+  }
+
+.funding_title{
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--boxshadow);
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 45px;
+}
+.funding_title > h1{
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02px;
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+/*thumbnail, resttime, host, ... container */
+.funding_detail_profilearea,
+.content_area {
+  width:100%;
+  display:flex;
+  margin-bottom: 45px;
+}
+
+/*thumbnail*/
+.funding_thumbnail_carousel {
+  width:594px ;
+}
+
+.carousel_thumbnail {
+  width:594px ;
+  height:445px ;
+  object-fit: cover;
+  }
+
+/*resttime, host, value title*/
+.funding_detail_description,
+.reward_area{
+  width:40%;
+  margin-left:45px;
+}  
+
+/*description-table*/
+.funding_profile_table{
+  margin: 30px 0px;
+  font-size: 13px;
+  color: var(--primary);
+  width:100%;
+}
+
+.funding_table_bold{
+  font-weight: 700;
+}
+
+/*host profile*/
+
+.funding_host_profile {
+  margin-top: 20px;
+  width:100%;
+  border: 1px solid var(--secondary);
+  border-radius: 7px ;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.funding_host_profile_h4{
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.user {
+  width: 40px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 1px solid var(--border);
+  margin-right: 10px;
+}
+
+.host_nickname{
+  font-weight: 700;
+}
+
+.content-wrapper {
+  width:594px;
+}
