@@ -462,6 +462,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       tags: { type: "string" },
       funding_id: { type: "string" },
       account_number: { type: "string" },
+      account_bank_name: { type: "string" },
     },
     required: [
       "title",
@@ -507,7 +508,14 @@ async function createFundingRequestHandler(req: Request, res: Response) {
 
   const tags = req.body.tags.split(",");
 
-  const { title, content, begin_date, end_date, account_number } = req.body;
+  const {
+    title,
+    content,
+    begin_date,
+    end_date,
+    account_number,
+    account_bank_name,
+  } = req.body;
 
   try {
     const clean_content = sanitize(content, {
@@ -527,6 +535,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
         rewards: rewards,
         content_thumbnails: content_thumbnails,
         account_number: account_number,
+        account_bank_name: account_bank_name,
         certificate: certificate,
       }),
     });

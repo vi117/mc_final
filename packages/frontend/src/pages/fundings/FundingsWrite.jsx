@@ -56,6 +56,7 @@ const FundingsWrite = function() {
   const [targetValue, setTargetValue] = useState(0);
   const [content, setContent] = useState("");
   const [rewards, setRewards] = useState([]);
+  const [accountBankName, setAccountBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [certificateFiles, setCertificateFiles] = useState(null);
 
@@ -262,11 +263,15 @@ const FundingsWrite = function() {
             <Form.Select
               className={classes.option_form}
               aria-label="Default select example"
+              value={accountBankName}
+              onChange={(e) => {
+                setAccountBankName(e.target.value);
+              }}
             >
               <option>은행명</option>
-              <option value="1">기업</option>
-              <option value="2">국민</option>
-              <option value="3">신한</option>
+              <option value="기업">기업</option>
+              <option value="국민">국민</option>
+              <option value="신한">신한</option>
             </Form.Select>
             <Form.Control
               className={classes.title_input}
@@ -311,6 +316,7 @@ const FundingsWrite = function() {
         rewards,
         accountNumber,
         certificateFiles,
+        accountBankName,
       });
       // TODO(vi117) : show alert
       alert("요청이 접수되었습니다.");
