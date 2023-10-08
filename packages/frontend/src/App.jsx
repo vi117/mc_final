@@ -3,15 +3,17 @@ import { Layout } from "./component/layout/Layout";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import CommunityDetail from "./pages/community/Co_detail";
+import CommunityDetail from "./pages/community/co_detail";
 import CommunityEdit from "./pages/community/co_edit";
-import CommunityWrite from "./pages/community/Co_write";
+import CommunityWrite from "./pages/community/co_write";
 import Community from "./pages/community/community";
 import FundingsDetail from "./pages/fundings/FundingsDetail";
 import FundingsEdit from "./pages/fundings/FundingsEdit";
 import FundingsHome from "./pages/fundings/FundingsHome";
 import FundingsPay from "./pages/fundings/FundingsPay";
 import FundingsWrite from "./pages/fundings/FundingsWrite";
+import FundingUsersPage from "./pages/fundings/FundingUsers";
+
 import HomePage from "./pages/home";
 import LoginPage from "./pages/login";
 import ProfileEdit from "./pages/profile/edit/profileEdit";
@@ -110,6 +112,13 @@ const browserRouter = createBrowserRouter([
        * 펀딩 글 수정 및 삭제
        */
       { path: "/fundings/:id/edit", element: <FundingsEdit /> },
+      /**
+       * 펀딩 참여 유저 확인
+       */
+      {
+        path: "/fundings/:id/users",
+        element: <FundingUsersPage />,
+      },
       /**
        * 펀딩 글 작성
        */

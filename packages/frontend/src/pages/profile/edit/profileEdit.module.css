@@ -1,5 +1,57 @@
+.profileedit_container{
+    border: 1px solid var(--secondary);
+    margin: 0 auto;
+    width:450px;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 50px;
+}
 .button_submit {
-    border-radius: 0;
     font-size: 14px;
     padding: 15px 50px;
+    width: 90%;
+    margin:0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 0;
+}
+
+
+.profile_info{
+    color:var(--teritary);
+    background-color: var(--border);
+    width: 90%;
+    margin:0 auto;
+    padding:20px;
+    border-radius: 7px;
+}
+
+.profile_info p{
+    color:var(--primary);
+   font-weight: 500;
+   margin-bottom:7px;
+}
+
+.profile_link {
+    margin-left: 10px;
+    color: rgb(39, 163, 255);
+    text-decoration: underline;
+}
+
+.profileedit_container > p {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-left:25px;
+}
+
+.validate_input{
+    width: 90%;
+    margin:0 auto;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.validate_input_no_label{
+    margin-top: 0px;
 }

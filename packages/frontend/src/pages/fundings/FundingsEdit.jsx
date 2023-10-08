@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useLoginInfo } from "../../hook/useLogin";
-import classes from "./FundingWrite.module.css";
+import classes from "./FundingsWrite.module.css";
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -11,6 +11,7 @@ import { TagsInput } from "react-tag-input-component";
 import { useLocation, useNavigate } from "react-router-dom";
 import { postFundingRequest } from "../../api/funding";
 import Calender from "../../component/Calender";
+import { Container } from "../../component/Container";
 import { Editor } from "../../component/Editor";
 import { cutNickname } from "../../util/cut";
 import { Guide } from "./component/Guide";
@@ -76,7 +77,7 @@ const FundingsEdit = function() {
   };
 
   return (
-    <div className={classes.funding_write_wrap}>
+    <Container className={"d-flex " + classes.funding_write_wrap}>
       <FundingWriteNavigator nickname={userInfo.nickname}>
         <button onClick={() => scrollToInfoArea()}>
           프로젝트 기본 정보
@@ -237,7 +238,7 @@ const FundingsEdit = function() {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 
   async function sendRequest() {

@@ -191,6 +191,7 @@ export class FundingsRepository {
         "fundings.current_value",
         "fundings.begin_date",
         "fundings.end_date",
+        "fundings.funding_request_id",
       ])
       .select([
         "host.id as host_id",
