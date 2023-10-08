@@ -5,6 +5,7 @@ export function isReward(o: unknown): o is FundingRewardInput {
   ajv.validate({
     properties: {
       "id": { type: "number" },
+      "id": { type: "number" },
       "title": { type: "string" },
       "content": { type: "string" },
       "price": { type: "number" },
@@ -19,6 +20,7 @@ export function isRewardArray(o: unknown): o is FundingRewardInput[] {
   ajv.validate({
     type: "array",
     items: {
+      "id": { type: "number" },
       properties: {
         "id": { type: "number" },
         "title": { type: "string" },

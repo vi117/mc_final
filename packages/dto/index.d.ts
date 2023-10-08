@@ -44,6 +44,7 @@ export interface FundingRequestObject {
 }
 
 export interface FundingRewardInput {
+  id?: number;
   title: string;
   content: string;
   price: number;
