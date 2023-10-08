@@ -9,12 +9,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import { TagsInput } from "react-tag-input-component";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import { postFundingRequest } from "../../api/funding";
+import { postFundingRequestAsJson } from "../../api/funding";
 import Calender from "../../component/Calender";
 import { Container } from "../../component/Container";
 import { Editor } from "../../component/Editor";
+import UploadImage from "./../../component/UploadFile";
+import { useUploadFile } from "../../component/UploadFile/hook";
+import { useFundingRequestById } from "../../hook/useFundingRequestById";
 import { cutNickname } from "../../util/cut";
 import { Guide } from "./component/Guide";
+
 // import { formatDate } from "./../../util/date";
 
 /**
@@ -43,23 +47,63 @@ const TagWrite = ({
   );
 };
 
-const FundingsEdit = function() {
+function FundingEditPage() {
   const location = useLocation();
   const funding = location.state;
-  console.log(funding);
 
-  const [title, setTitle] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const { data, error, isLoading } = useFundingRequestById(
+    funding.funding_request_id,
+  );
+  if (error) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
+  console.log(data);
+  return <FundingsEdit fundingRequest={data} />;
+}
+
+/**
+ * @param {object} props
+ * @param {import("dto").FundingRequestObject} props.fundingRequest
+ * @returns
+ */
+const FundingsEdit = function({
+  fundingRequest,
+}) {
+  const [title, setTitle] = useState(fundingRequest.title);
+  const [startDate, setStartDate] = useState(
+    new Date(fundingRequest.begin_date),
+  );
+  const [endDate, setEndDate] = useState(new Date(fundingRequest.end_date));
   /**
    * @type { [string[], (tags: string[])=>void] }
    */
-  const [tagSelected, setSelected] = useState([]);
-  const [thumbnail, setThumbnail] = useState([]);
-  const [contentThumbnails, setContentThumbnails] = useState([]);
-  const [content, setContent] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [certificateFiles, setCertificateFiles] = useState(null);
+  const [tagSelected, setSelected] = useState(fundingRequest.meta_parsed.tags);
+  const thumbnailState = useUploadFile(
+    [fundingRequest.thumbnail],
+    {
+      onDelete: () => {
+        thumbnailState.resetImage();
+      },
+    },
+  );
+
+  const contentThumbnails = useUploadFile(
+    fundingRequest.meta_parsed.content_thumbnails ?? [],
+  );
+  const [content, setContent] = useState(fundingRequest.content);
+  const [accountNumber, setAccountNumber] = useState(
+    fundingRequest.meta_parsed.account_number ?? "",
+  );
+  const [accountBankName, setAccountBankName] = useState(
+    fundingRequest.meta_parsed.account_bank_name ?? "",
+  );
+  // const [certificateFiles, setCertificateFiles] = useState(null);
+  const certficateFilesState = useUploadFile(
+    fundingRequest.meta_parsed.certificate ?? [],
+  );
 
   const navigate = useNavigate();
   const userInfo = useLoginInfo();
@@ -121,7 +165,7 @@ const FundingsEdit = function() {
               className={classes.title_input}
               placeholder="제목을 입력해주세요."
               onChange={(e) => setTitle(e.target.value)}
-              value={funding.title}
+              value={title}
             />
           </Form.Group>
 
@@ -147,15 +191,7 @@ const FundingsEdit = function() {
           <h1>스토리 작성</h1>
           <div className={classes.story_area}>
             <h2>썸네일</h2>
-            <Form.Group controlId="formFileMultiple" className="mb-3">
-              <Form.Control
-                type="file"
-                onChange={(e) => {
-                  console.log(e.target.files);
-                  setThumbnail(e.target.files);
-                }}
-              />
-            </Form.Group>
+            <UploadImage state={thumbnailState} />
           </div>
 
           <Form.Group
@@ -164,14 +200,7 @@ const FundingsEdit = function() {
           >
             <h2>콘텐츠 썸네일</h2>
             <p>콘텐츠 썸네일 사진을 업로드해주세요.</p>
-            <Form.Control
-              type="file"
-              multiple
-              onChange={(e) => {
-                console.log(e.target.files);
-                setContentThumbnails(e.target.files);
-              }}
-            />
+            <UploadImage state={contentThumbnails} multiple />
           </Form.Group>
 
           <div className={classes.story_area_editor}>
@@ -182,7 +211,7 @@ const FundingsEdit = function() {
               onChange={(v) => {
                 setContent(v);
               }}
-              value={funding.content}
+              value={content}
             />
           </div>
         </div>
@@ -206,11 +235,13 @@ const FundingsEdit = function() {
             <Form.Select
               className={classes.option_form}
               aria-label="Default select example"
+              onChange={(e) => setAccountBankName(e.target.value)}
+              value={accountBankName}
             >
               <option>은행명</option>
-              <option value="1">기업</option>
-              <option value="2">국민</option>
-              <option value="3">신한</option>
+              <option value="기업">기업</option>
+              <option value="국민">국민</option>
+              <option value="신한">신한</option>
             </Form.Select>
             <Form.Control
               className={classes.title_input}
@@ -227,14 +258,7 @@ const FundingsEdit = function() {
               증명등록에 필요한 파일을
               업로드해주세요.(주민등록증or사업자등록증)(인증서)
             </p>
-            <Form.Control
-              type="file"
-              multiple
-              onChange={(e) => {
-                console.log(e.target.files);
-                setCertificateFiles(e.target.files);
-              }}
-            />
+            <UploadImage state={certficateFilesState} multiple />
           </div>
         </div>
       </div>
@@ -243,16 +267,18 @@ const FundingsEdit = function() {
 
   async function sendRequest() {
     try {
-      await postFundingRequest({
+      await postFundingRequestAsJson({
+        funding_id: fundingRequest.funding_id,
         title,
-        thumbnail: thumbnail[0],
+        thumbnail: thumbnailState.images[0],
         content,
-        contentThumbnails,
+        contentThumbnails: contentThumbnails.images,
         startDate,
         endDate,
         tags: tagSelected,
         accountNumber,
-        certificateFiles,
+        certificateFiles: certficateFilesState.images,
+        rewards: fundingRequest.meta_parsed.rewards,
       });
       alert("요청이 접수되었습니다.");
       navigate("/fundings");
@@ -305,4 +331,4 @@ function StoryTipGuide() {
   );
 }
 
-export default FundingsEdit;
+export default FundingEditPage;
