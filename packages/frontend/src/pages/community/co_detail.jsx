@@ -48,6 +48,7 @@ export function CommunityDetail() {
       <ConfirmModal />
       <div className={classes["container"]}>
         <div className={classes["titleArea"]}>
+          <div className={classes["selectedCategory"]}>[{item.category}]</div>
           <div className={classes["selectedTitle"]}>{item.title}</div>
           <div className={classes["detailbtn"]}>
             <Link to={`/community/${item.id}/edit`} state={item}>

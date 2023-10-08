@@ -2,24 +2,33 @@
 
 
 .container{
-  padding: 10px 10px 50px 10px;
+  padding: 10px 0px 50px 0px;
   max-width: 1080px;
   margin: 0 auto;
 }
 
 .titleArea {
+  padding: 0px 10px;
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 10px 0px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--secondary);
 }
 
 .selectedTitle {
-  width: 90%;
   color: var(--primary);
   font-size: 24px;
   font-weight: 700;
 }
+
+.selectedCategory{
+    color: var(--green);
+    font-size: 24px;
+    font-weight: 700;
+    margin-right: 7px;
+}
+
 
 .detailbtn {
   display: flex;
@@ -50,12 +59,11 @@
 }
 
 .createdArea {
+  background-color: var(--border);
   font-size: 16px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--boxshadow);
-  padding:10px 0px;
+  padding:15px 10px;
   margin-bottom: 20px;
 }
 
@@ -65,6 +73,7 @@
 }
 
 .related_funding_linkto{
+  padding: 0px 10px;
   color: var(--teritary);
   letter-spacing: 0.01em;
   font-size: 14px;
@@ -112,7 +121,7 @@
 
 .contentArea {
   width: 100%;
-  padding: 30px 0px;
+  padding: 30px 10px;
   min-height: 400px;
 }
 
@@ -121,7 +130,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid var(--secondary);
 }
 
 .reportArea .Hearticon {
@@ -154,6 +164,10 @@
 
 .commentArea {
   padding: 30px 0px;
+}
+
+.commentArea > p{
+  font-size: 16px;
 }
 
 .oldComment {

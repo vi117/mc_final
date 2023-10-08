@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import useFundings from "../../hook/useFundings";
 import useLikedArticles from "../../hook/useLikedArticles";
 import { useLoginInfo } from "../../hook/useLogin";
+import classes from "./profilePage.module.css";
 
 function FundingTable({
   data,
@@ -53,7 +54,6 @@ function FundingTable({
     <table>
       <thead>
         <tr>
-          <th scope="col">번호</th>
           <th scope="col">태그</th>
           <th scope="col">제목</th>
           <th scope="col">글쓴이</th>
@@ -62,7 +62,6 @@ function FundingTable({
       <tbody>
         {data?.map((article) => (
           <tr key={article.id}>
-            <th scope="row">{article.id}</th>
             <td>
               {article.tags.map((tag) => <Badge key={tag.id}>#{tag.tag}
               </Badge>)}
@@ -252,7 +251,10 @@ function LikedArticlesList() {
 
 function AccordionList() {
   return (
-    <Accordion defaultActiveKey="0">
+    <Accordion
+      defaultActiveKey="0"
+      className={classes["profile_accordion_container"]}
+    >
       <Accordion.Item eventKey="0">
         <Accordion.Header>관심 펀딩리스트</Accordion.Header>
         <Accordion.Body>

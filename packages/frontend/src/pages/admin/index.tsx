@@ -32,7 +32,7 @@ function FundingRequestManageTap() {
     return <div>에러가 발생했습니다.</div>;
   }
   return (
-    <Container>
+    <div className={classes["admin_contents_container"]}>
       <AlertModal />
       <PromptModal placeholder="거부 사유" />
       <h3 className={classes["h3"]}>펀딩 심사 관리</h3>
@@ -80,7 +80,7 @@ function FundingRequestManageTap() {
           );
         })}
       </div>
-    </Container>
+    </div>
   );
   async function onApproveClick(id: number) {
     try {
@@ -157,12 +157,12 @@ function FundingReportManageTap() {
 export default function AdminPage() {
   const [key, setKey] = useState("request");
   return (
-    <Container>
+    <div className={classes["admin_container"]}>
       <Tabs
         id="controlled-tab-example"
         activeKey={key}
         onSelect={(k) => setKey(k ?? "request")}
-        className="mb-3"
+        className={classes["admin_tab_container"]}
       >
         <Tab eventKey="request" title="펀딩 심사">
           <FundingRequestManageTap />
@@ -172,7 +172,7 @@ export default function AdminPage() {
           <FundingReportManageTap />
         </Tab>
       </Tabs>
-    </Container>
+    </div>
   );
 }
 

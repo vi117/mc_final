@@ -1,4 +1,6 @@
-
+.best-wrap{
+  z-index: 1;
+}
 /*베스트 밑 게시판 전체 영역*/
 .list-wrap {
   padding: 10px 10px 50px 10px;
