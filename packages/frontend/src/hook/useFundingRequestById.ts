@@ -5,7 +5,7 @@ import { DateToString, fetcher } from "./util";
 export default function useFundingRequestById(id: number) {
   const url = new URL(`/api/v1/fundings/request/${id}`, window.location.origin);
 
-  return useSWR<DateToString<FundingRequestObject>[]>(
+  return useSWR<DateToString<FundingRequestObject>>(
     url.href,
     fetcher,
   );
