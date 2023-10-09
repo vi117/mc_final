@@ -35,6 +35,7 @@ export interface FundingRequestObject {
      * 계좌번호. 계좌 외 다른 방식으로 지급되면 undefined
      */
     account_number?: string;
+    account_bank_name?: string;
     /**
      * 증명서들.
      */
@@ -43,6 +44,7 @@ export interface FundingRequestObject {
 }
 
 export interface FundingRewardInput {
+  id?: number;
   title: string;
   content: string;
   price: number;

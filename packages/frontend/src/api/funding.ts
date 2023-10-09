@@ -147,6 +147,8 @@ export async function postFundingRequest({
   rewards,
   accountNumber,
   certificateFiles,
+  accountBankName,
+  funding_id,
 }: {
   title: string;
   content: string;
@@ -163,7 +165,9 @@ export async function postFundingRequest({
     reward_count: number;
   }[];
   accountNumber: string;
+  accountBankName: string;
   certificateFiles: File[];
+  funding_id?: number;
 }) {
   const url = new URL("/api/v1/fundings/request", window.location.href);
 
@@ -182,16 +186,68 @@ export async function postFundingRequest({
   formData.append("rewards", JSON.stringify(rewards));
 
   formData.append("account_number", accountNumber);
+  formData.append("account_bank_name", accountBankName);
   [...certificateFiles].forEach((file) => {
     formData.append("certificate", file);
   });
-  console.log(formData);
+  if (funding_id) {
+    formData.append("funding_id", funding_id.toString());
+  }
 
   const r = await fetch(url.href, {
     method: "POST",
     body: formData,
   });
 
+  if (!r.ok) {
+    const data = await r.json();
+    throw new APIError(data.message);
+  }
+}
+
+export async function postFundingRequestAsJson(obj: {
+  funding_id?: number;
+  title: string;
+  content: string;
+  thumbnail: string;
+  contentThumbnails: string[];
+  targetValue: number;
+  startDate: Date;
+  endDate: Date;
+  tags: string[];
+  rewards: {
+    title: string;
+    content: string;
+    price: number;
+    reward_count: number;
+  }[];
+  accountNumber: string;
+  accountBankName: string;
+  certificateFiles: string[];
+}) {
+  const url = new URL("/api/v1/fundings/request", window.location.href);
+
+  const r = await fetch(url.href, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      funding_id: obj.funding_id,
+      title: obj.title,
+      content: obj.content,
+      thumbnail: obj.thumbnail,
+      content_thumbnails: obj.contentThumbnails,
+      target_value: obj.targetValue,
+      begin_date: obj.startDate.toISOString(),
+      end_date: obj.endDate.toISOString(),
+      tags: obj.tags,
+      rewards: obj.rewards,
+      account_number: obj.accountNumber,
+      account_bank_name: obj.accountBankName,
+      certificate: obj.certificateFiles,
+    }),
+  });
   if (!r.ok) {
     const data = await r.json();
     throw new APIError(data.message);

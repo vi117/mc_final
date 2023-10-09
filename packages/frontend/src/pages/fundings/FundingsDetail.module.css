@@ -5,12 +5,12 @@
 /*title area*/
 .funding_title{
   text-align: center;
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--boxshadow);
+  border-bottom: 1px solid var(--secondary);
   display:flex;
   flex-direction: column;
   justify-content: center;
   margin-bottom: 45px;
+  padding-bottom: 10px;
 }
 .funding_title > h1{
   font-size: 36px;

@@ -39,13 +39,13 @@ const Upload = ({
     imageFile.current = null;
     setImage({
       image_file: null,
-      preview_URL: "",
+      preview_URL: initial_preview_URL ?? "",
     });
   };
 
   useEffect(() => {
     return () => {
-      if (image.preview_URL !== "") {
+      if (image.preview_URL !== (initial_preview_URL ?? "")) {
         imageFile.current = null;
         URL.revokeObjectURL(image.preview_URL);
       }

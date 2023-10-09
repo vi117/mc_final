@@ -424,17 +424,15 @@ async function reportFundingHandler(req: Request, res: Response) {
   res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
-async function createFundingRequestHandler(req: Request, res: Response) {
+function getRequestDataFromReq(req: Request) {
   const files = req.files;
-  if (!files) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "파일이 필요합니다.",
-    });
-    return;
-  }
+  assert_param(!!files, "파일이 필요합니다.");
   assert(!(files instanceof Array));
   const thumbnailArr = files["thumbnail"];
-  assert_param(thumbnailArr && thumbnailArr.length > 0, "썸네일이 필요합니다.");
+  assert_param(
+    thumbnailArr && thumbnailArr.length > 0,
+    "썸네일이 필요합니다.",
+  );
   const thumbnail = thumbnailArr[0].url;
 
   if (!("content_thumbnail" in files)) {
@@ -447,9 +445,6 @@ async function createFundingRequestHandler(req: Request, res: Response) {
   }
   const certificate = files["certificate"].map((file) => file.url);
 
-  const requestRepo = new FundingRequestsRepository(getDB());
-  const user = req.user;
-  assert(user, "로그인이 필요합니다.");
   const v = ajv.validate({
     type: "object",
     properties: {
@@ -462,6 +457,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       tags: { type: "string" },
       funding_id: { type: "string" },
       account_number: { type: "string" },
+      account_bank_name: { type: "string" },
     },
     required: [
       "title",
@@ -472,13 +468,9 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       "rewards",
     ],
   }, req.body);
-  if (!v) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: "유효하지 않은 요청입니다.",
-      errors: ajv.errors,
-    });
-    return;
-  }
+  assert_param(v, "유효하지 않은 요청입니다.", {
+    errors: ajv.errors,
+  });
 
   let rewards;
   try {
@@ -507,8 +499,58 @@ async function createFundingRequestHandler(req: Request, res: Response) {
 
   const tags = req.body.tags.split(",");
 
-  const { title, content, begin_date, end_date, account_number } = req.body;
+  const {
+    title,
+    content,
+    begin_date,
+    end_date,
+    account_number,
+    account_bank_name,
+  } = req.body;
 
+  return {
+    title,
+    content,
+    begin_date: new Date(begin_date),
+    end_date: new Date(end_date),
+    target_value,
+    rewards,
+    tags,
+    thumbnail,
+    content_thumbnails,
+    certificate,
+    funding_id,
+    account_number,
+    account_bank_name,
+  };
+}
+
+async function createFundingRequestHandler(req: Request, res: Response) {
+  const user = req.user;
+  assert(user, "로그인이 필요합니다.");
+  const requestRepo = new FundingRequestsRepository(getDB());
+  const {
+    title,
+    content,
+    begin_date,
+    end_date,
+    target_value,
+    thumbnail,
+    funding_id,
+    tags,
+    rewards,
+    content_thumbnails,
+    certificate,
+    account_number,
+    account_bank_name,
+  } = (() => {
+    if (req.is("multipart/form-data")) {
+      return getRequestDataFromReq(req);
+    } else if (req.is("application/json")) {
+      throw new Error("Not implemented.");
+    }
+    throw new BadRequestError("잘못된 요청입니다.");
+  })();
   try {
     const clean_content = sanitize(content, {
       allowedTags: sanitize.defaults.allowedTags.concat(["img"]),
@@ -517,8 +559,8 @@ async function createFundingRequestHandler(req: Request, res: Response) {
       host_id: user.id,
       title,
       content: clean_content,
-      begin_date: new Date(begin_date),
-      end_date: new Date(end_date),
+      begin_date,
+      end_date,
       target_value,
       thumbnail,
       funding_request_id: funding_id,
@@ -527,6 +569,7 @@ async function createFundingRequestHandler(req: Request, res: Response) {
         rewards: rewards,
         content_thumbnails: content_thumbnails,
         account_number: account_number,
+        account_bank_name: account_bank_name,
         certificate: certificate,
       }),
     });
