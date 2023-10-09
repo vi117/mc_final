@@ -1,18 +1,114 @@
 .container > h1{
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  margin-top: 15px;
+  font-size: 32px;
+  font-weight: 300;
   margin-bottom: 20px;
-  font-size: 2em;
+}
+.hr{   
+  background:var(--gray);
+  height:1px;
+  border:0;
+  margin:0px;
+  margin-bottom: 20px;
 }
 
-.img-wrapper {
-  width: 180px;
-  margin: auto;
+.info {
+  padding:10px 0px;
+  color:var(--teritary);
+  margin:0px;
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 20px;
 }
+
+.alert > p{
+  font-size: 16px;
+  color:var(--red);
+}
+
+.container  h4{
+  line-height: 32px;
+  font-weight: 700;
+  margin-top: 30px;
+font-size: 20px;
+}
+
+.alert_box{
+  background-color: var(--border);
+  border: 1px solid var(--secondary);
+  padding:10px 20px 20px 20px;
+  margin:30px 0px 20px 0px;
+}
+
+.alert h1{
+  margin:20px 0px;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.alert li {
+  font-size: 16px;
+  color:var(--teritary);
+  margin-left: 30px;
+  list-style-type: disc;
+}
+
+.info p {
+  margin:0px;
+  font-size: 14px;
+}
+
+.info > ul {
+  margin:0px;
+  display:flex;
+}
+
+.info > ul > li {
+  margin-right: 7px;
+  color:var(--teritary);
+}
+
+.checkboxLabels{
+  display:flex;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.button{
+  margin-left: auto;
+}
+
+.button > button{
+  color:var(--white);
+  font-size: 16px;
+  padding: 10px 40px;
+  background-color: #E74646;
+  border:none;
+}
+
+.button > button:hover{
+  color:var(--secondary);
+}
+
+@media screen and (max-width: 768px/* sm - small screens */) {
+  .checkboxLabels{
+    width:100%;
+    flex-direction: column;
+  }
+
+  .checkboxLabels * {  
+    display:flex;
+    justify-content: center;
+  }
+  .button{
+    width:100%;
+    margin-top: 20px;
+  }
   
-.CheckboxLabels {
+  .button > button{
+    width:50%;
+  }
+}
+/* .CheckboxLabels {
   display: flex;
   justify-content: center; 
   align-items: center;
@@ -20,31 +116,13 @@
   margin-bottom: 50px;
 }
 
-.container > h4{
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  margin-top: 15px;
-  margin-bottom: 20px;
-  font-size: 24px;
-}
 
-.container > p {
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  margin-top: 15px;
-  margin-bottom: 20px;
-  font-size: 15px;
-}
 
 .Alert{
   text-align: center;
 }
 
-.Accordion{
-  font-size: 14px;
-}
+
 
 .Button {
   display: flex;
@@ -53,4 +131,4 @@
   margin-bottom: 100px;
   margin-right: 20px;
   gap: 20px;
-}
+} */
