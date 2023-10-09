@@ -1,4 +1,6 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
+
+import { Container } from "@/component/Container";
 import { GoChevronRight } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -28,7 +30,7 @@ export default function Profile() {
         }}
       >
         <Container
-          style={{ maxWidth: "var(--max-content-width)", minHeight: "650px" }}
+          style={{ minHeight: "650px" }}
         >
           <Row>
             <Col md={3} className={classes["my-3"]}>

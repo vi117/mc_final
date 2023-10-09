@@ -11,6 +11,7 @@ export interface UserInfo {
   is_admin?: boolean;
   address_detail: string;
   introduction?: string;
+  profile_image?: string;
 }
 
 function getLoginUser(): UserInfo | null {

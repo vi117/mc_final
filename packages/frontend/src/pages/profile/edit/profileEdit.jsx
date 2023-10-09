@@ -1,10 +1,14 @@
+import Upload from "@/component/UploadAvatar";
 import clsx from "clsx";
 import { useRef, useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { NavLink } from "react-router-dom";
 import { patchUserInfo } from "../../../api/mod";
 import { Button } from "../../../component/Button";
-import { ValidationInput } from "../../../component/ValidationInput";
+import {
+  ValidationInput,
+  ValidationInputLabel,
+} from "../../../component/ValidationInput";
 import { useAlertModal } from "../../../hook/useAlertModal";
 import { useLoginInfo } from "../../../hook/useLogin";
 import classes from "./profileEdit.module.css";
@@ -19,6 +23,7 @@ function ProfileEditPage() {
   const [addressDetail, setAddressDetail] = useState(loginInfo.address_detail);
   const [introduction, setIntroduction] = useState(loginInfo.introduction);
   const daumPostcodePopup = useDaumPostcodePopup();
+  const profileImageRef = useRef(null);
 
   return (
     <div className={classes["profileedit_container"]}>
@@ -44,6 +49,13 @@ function ProfileEditPage() {
           e.stopPropagation();
         }}
       >
+        <ValidationInputLabel className={classes.validate_input}>
+          프로필 사진
+        </ValidationInputLabel>
+        <Upload
+          imageFile={profileImageRef}
+          initial_preview_URL={loginInfo?.profile_image ?? ""}
+        />
         <ValidationInput
           name="nickname"
           className={classes.validate_input}
@@ -117,7 +129,9 @@ function ProfileEditPage() {
         nickname,
         phone,
         address,
+        address_detail: addressDetail,
         introduction,
+        profile_image: profileImageRef.current ?? undefined,
       });
       await showAlertModal("프로파일 정보 수정", "성공");
     } catch (e) {

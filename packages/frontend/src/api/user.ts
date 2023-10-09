@@ -147,16 +147,26 @@ export async function send_reset_password(email: string) {
 }
 
 export async function patchUserInfo(id: number, body: {
+  nickname?: string;
   phone?: string;
   address?: string;
+  address_detail?: string;
   introduction?: string;
+  profile_image?: File;
 }) {
+  const formData = new FormData();
+  if (body.nickname) formData.append("nickname", body.nickname);
+  if (body.phone) formData.append("phone", body.phone);
+  if (body.address) formData.append("address", body.address);
+  if (body.address_detail) {
+    formData.append("address_detail", body.address_detail);
+  }
+  if (body.introduction) formData.append("introduction", body.introduction);
+  if (body.profile_image) formData.append("profile", body.profile_image);
+
   const res = await fetch(`/api/v1/users/${id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
+    body: formData,
   });
   if (!res.ok) {
     throw new APIError("token expired or invalid");

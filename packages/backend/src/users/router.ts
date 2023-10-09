@@ -335,12 +335,15 @@ export const updateUserById = async (req: Request, res: Response) => {
   if (!req.user?.is_admin && req.user?.id !== id) {
     throw new ForbiddenError("권한이 없습니다.");
   }
+  const profile_image = req.file?.url;
   const v = ajv.validate({
     type: "object",
     properties: {
       nickname: { type: "string" },
       address: { type: "string" },
+      address_detail: { type: "string" },
       phone: { type: "string" },
+      introduction: { type: "string" },
     },
   }, req.body);
   assert_param(v, "유효하지 않은 요청입니다.", {
@@ -348,7 +351,14 @@ export const updateUserById = async (req: Request, res: Response) => {
   });
 
   const userRepository = getUserRepository();
-  await userRepository.updateById(id, req.body);
+  await userRepository.updateById(id, {
+    address: req.body.address,
+    address_detail: req.body.address_detail,
+    nickname: req.body.nickname,
+    phone: req.body.phone,
+    profile_image: profile_image,
+    introduction: req.body.introduction,
+  });
   const user = await userRepository.findById(id);
   if (!user) {
     res.status(StatusCodes.NOT_FOUND).json({ message: "not found" });
@@ -417,7 +427,12 @@ router.post("/logout", RouterCatch(logout));
 router.post("/google-login", RouterCatch(googleLogin));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 router.get("/:id(\\d+)", RouterCatch(queryById));
-router.patch("/:id(\\d+)", checkLogin(), RouterCatch(updateUserById));
+router.patch(
+  "/:id(\\d+)",
+  checkLogin(),
+  upload.single("profile"),
+  RouterCatch(updateUserById),
+);
 router.get("/check-email", RouterCatch(checkEmail));
 router.get("/check-nickname", RouterCatch(checkNickname));
 
