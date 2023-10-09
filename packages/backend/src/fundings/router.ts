@@ -33,7 +33,7 @@ import {
   participateFunding,
   withdrawFunding,
 } from "./service";
-import { isRewardArray } from "./util";
+import { isRewardArray, RewardSchema } from "./util";
 
 const router = Router();
 
@@ -525,6 +525,60 @@ function getRequestDataFromReq(req: Request) {
   };
 }
 
+function getRequestDataFromReqJson(req: Request) {
+  const v = ajv.validate({
+    type: "object",
+    properties: {
+      funding_id: { type: "number" },
+      title: { type: "string" },
+      content: { type: "string" },
+      thumbnail: { type: "string" },
+      content_thumbnails: { type: "array", items: { type: "string" } },
+      target_value: { type: "number" },
+      begin_date: { type: "string", format: "date-time" },
+      end_date: { type: "string", format: "date-time" },
+      tags: { type: "array", items: { type: "string" } },
+      rewards: { type: "array", items: RewardSchema },
+      account_number: { type: "string" },
+      account_bank_name: { type: "string" },
+      certificate: { type: "array", items: { type: "string" } },
+    },
+    required: [
+      "title",
+      "content",
+      "begin_date",
+      "end_date",
+      "target_value",
+      "rewards",
+      "certificate",
+      "thumbnail",
+    ],
+  }, req.body);
+  assert_param(v, "유효하지 않은 요청입니다.", {
+    errors: ajv.errors,
+  });
+  const { title, content, target_value, rewards } = req.body;
+  const tags = req.body.tags ?? [];
+  const content_thumbnails = req.body.content_thumbnails
+    ?? [req.body.thumbnail];
+
+  return {
+    title,
+    content,
+    target_value,
+    rewards,
+    begin_date: new Date(req.body.begin_date),
+    end_date: new Date(req.body.end_date),
+    thumbnail: req.body.thumbnail,
+    content_thumbnails: content_thumbnails,
+    tags: tags,
+    account_number: req.body.account_number,
+    account_bank_name: req.body.account_bank_name,
+    certificate: req.body.certificate,
+    funding_id: req.body.funding_id,
+  };
+}
+
 async function createFundingRequestHandler(req: Request, res: Response) {
   const user = req.user;
   assert(user, "로그인이 필요합니다.");
@@ -547,48 +601,45 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     if (req.is("multipart/form-data")) {
       return getRequestDataFromReq(req);
     } else if (req.is("application/json")) {
-      throw new Error("Not implemented.");
+      return getRequestDataFromReqJson(req);
     }
     throw new BadRequestError("잘못된 요청입니다.");
   })();
-  try {
-    const clean_content = sanitize(content, {
-      allowedTags: sanitize.defaults.allowedTags.concat(["img"]),
-    });
-    const insertedId = await requestRepo.insert({
-      host_id: user.id,
-      title,
-      content: clean_content,
-      begin_date,
-      end_date,
-      target_value,
-      thumbnail,
-      funding_request_id: funding_id,
-      meta_parsed: ({
-        tags: tags,
-        rewards: rewards,
-        content_thumbnails: content_thumbnails,
-        account_number: account_number,
-        account_bank_name: account_bank_name,
-        certificate: certificate,
-      }),
-    });
-    res
-      .status(StatusCodes.CREATED)
-      .json({
-        message: "success",
-        id: insertedId,
-      });
-  } catch (error) {
-    if (isDuplKeyError(error)) {
-      res.status(StatusCodes.CONFLICT).json({
-        message: "이미 존재하는 제목입니다.",
-      });
-      return;
-    }
-    throw error;
+  const fundingRepo = new FundingsRepository(getDB());
+  // check title duplication
+  const funding = await fundingRepo.findByTitle(title);
+  if (funding && funding.id !== funding_id) {
+    throw new BadRequestError("이미 존재하는 제목입니다.");
   }
+  const clean_content = sanitize(content, {
+    allowedTags: sanitize.defaults.allowedTags.concat(["img"]),
+  });
+  const insertedId = await requestRepo.insert({
+    host_id: user.id,
+    title,
+    content: clean_content,
+    begin_date,
+    end_date,
+    target_value,
+    thumbnail,
+    funding_request_id: funding_id,
+    meta_parsed: ({
+      tags: tags,
+      rewards: rewards,
+      content_thumbnails: content_thumbnails,
+      account_number: account_number,
+      account_bank_name: account_bank_name,
+      certificate: certificate,
+    }),
+  });
+  res
+    .status(StatusCodes.CREATED)
+    .json({
+      message: "success",
+      id: insertedId,
+    });
 }
+
 async function approveFundingRequestHandler(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   assert(!isNaN(id));

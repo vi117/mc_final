@@ -324,6 +324,14 @@ export class FundingsRepository {
     };
   }
 
+  async findByTitle(title: string) {
+    const ret = await this.db.selectFrom("fundings")
+      .where("fundings.title", "=", title)
+      .selectAll("fundings")
+      .executeTakeFirst();
+    return ret;
+  }
+
   async getFundingRewards(funding_id: number): Promise<FundingRewards[]> {
     const ret = await this.db.selectFrom("funding_rewards")
       .where("funding_rewards.funding_id", "=", funding_id)
@@ -349,12 +357,18 @@ export class FundingsRepository {
   }
 
   async insertTags(funding_id: number, tag_ids: number[]) {
+    if (tag_ids.length === 0) {
+      return;
+    }
     return await this.db.insertInto("funding_tag_rel")
       .values(tag_ids.map((tag) => ({ tag_id: tag, funding_id })))
       .executeTakeFirstOrThrow();
   }
   async insertTagsByName(funding_id: number, tag_names: string[]) {
-    return await this.db.insertInto("funding_tag_rel")
+    if (tag_names.length === 0) {
+      return;
+    }
+    await this.db.insertInto("funding_tag_rel")
       .columns(["tag_id", "funding_id"])
       .expression(
         (eb) =>
@@ -364,6 +378,9 @@ export class FundingsRepository {
       ).execute();
   }
   async deleteTags(funding_id: number, tag_ids: number[]) {
+    if (tag_ids.length === 0) {
+      return;
+    }
     return await this.db.deleteFrom("funding_tag_rel")
       .where("funding_tag_rel.funding_id", "=", funding_id)
       .where("funding_tag_rel.tag_id", "in", tag_ids)
@@ -373,8 +390,21 @@ export class FundingsRepository {
   async insertRewards(
     rewards: Insertable<DB["funding_rewards"]>[],
   ) {
-    return await this.db.insertInto("funding_rewards")
+    if (rewards.length === 0) {
+      return;
+    }
+    await this.db.insertInto("funding_rewards")
       .values(rewards)
+      .executeTakeFirstOrThrow();
+  }
+
+  async updateReward(
+    reward_id: number,
+    rewards: Updateable<DB["funding_rewards"]>,
+  ) {
+    return await this.db.updateTable("funding_rewards")
+      .set(rewards)
+      .where("funding_rewards.id", "=", reward_id)
       .executeTakeFirstOrThrow();
   }
 
@@ -518,6 +548,9 @@ export class FundingTagRepo {
   }
 
   async intersectTags(tag_names: string[]) {
+    if (tag_names.length === 0) {
+      return [];
+    }
     return await this.db.selectFrom("funding_tags")
       .where("funding_tags.tag", "in", tag_names)
       .selectAll("funding_tags")

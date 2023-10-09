@@ -85,14 +85,32 @@ export async function approveFundingRequest(request_id: number) {
         await fundingRepo.deleteTags(funding_id, deleted_tags.map((t) => t.id));
 
         // process rewards
-        // add rewards for funding. add only new rewards
-        await fundingRepo.insertRewards(meta.rewards.map((r) => ({
-          funding_id: funding.id,
-          title: r.title,
-          content: r.content,
-          price: r.price,
-          reward_count: r.reward_count,
-        })));
+        // add rewards for funding.
+        await fundingRepo.insertRewards(
+          meta.rewards.filter((r) => r.id === undefined).map((r) => ({
+            funding_id: funding.id,
+            title: r.title,
+            content: r.content,
+            price: r.price,
+            reward_count: r.reward_count,
+          })),
+        );
+        // update rewards for funding.
+        await Promise.all(
+          meta.rewards.filter((r): r is { id: number } & typeof r =>
+            r.id !== undefined
+          ).map((r) =>
+            fundingRepo.updateReward(
+              r.id,
+              {
+                title: r.title,
+                content: r.content,
+                price: r.price,
+                reward_count: r.reward_count,
+              },
+            )
+          ),
+        );
       }
       result_funding_id = funding_id;
     } else {

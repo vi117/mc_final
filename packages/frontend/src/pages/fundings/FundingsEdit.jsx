@@ -61,28 +61,31 @@ function FundingEditPage() {
     return <div>로딩중...</div>;
   }
   console.log(data);
-  return <FundingsEdit fundingRequest={data} />;
+  return <FundingsEdit fundingRequest={data} funding={funding} />;
 }
 
 /**
  * @param {object} props
  * @param {import("dto").FundingRequestObject} props.fundingRequest
+ * @param {import("dto").FundingObject} props.funding
  * @returns
  */
 const FundingsEdit = function({
   fundingRequest,
+  funding,
 }) {
-  const [title, setTitle] = useState(fundingRequest.title);
+  console.log(funding, fundingRequest);
+  const [title, setTitle] = useState(funding.title);
   const [startDate, setStartDate] = useState(
-    new Date(fundingRequest.begin_date),
+    new Date(funding.begin_date),
   );
-  const [endDate, setEndDate] = useState(new Date(fundingRequest.end_date));
+  const [endDate, setEndDate] = useState(new Date(funding.end_date));
   /**
    * @type { [string[], (tags: string[])=>void] }
    */
-  const [tagSelected, setSelected] = useState(fundingRequest.meta_parsed.tags);
+  const [tagSelected, setSelected] = useState(funding.tags.map(x => x.tag));
   const thumbnailState = useUploadFile(
-    [fundingRequest.thumbnail],
+    [funding.thumbnail],
     {
       onDelete: () => {
         thumbnailState.resetImage();
@@ -91,7 +94,7 @@ const FundingsEdit = function({
   );
 
   const contentThumbnails = useUploadFile(
-    fundingRequest.meta_parsed.content_thumbnails ?? [],
+    funding.content_thumbnails ?? [],
   );
   const [content, setContent] = useState(fundingRequest.content);
   const [accountNumber, setAccountNumber] = useState(
@@ -268,7 +271,7 @@ const FundingsEdit = function({
   async function sendRequest() {
     try {
       await postFundingRequestAsJson({
-        funding_id: fundingRequest.funding_id,
+        funding_id: funding.id,
         title,
         thumbnail: thumbnailState.images[0],
         content,
@@ -277,8 +280,15 @@ const FundingsEdit = function({
         endDate,
         tags: tagSelected,
         accountNumber,
+        targetValue: funding.target_value,
         certificateFiles: certficateFilesState.images,
-        rewards: fundingRequest.meta_parsed.rewards,
+        rewards: funding.rewards.map((r) => ({
+          id: r.id,
+          title: r.title,
+          content: r.content,
+          price: r.price,
+          reward_count: r.reward_count,
+        })),
       });
       alert("요청이 접수되었습니다.");
       navigate("/fundings");
