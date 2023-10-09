@@ -45,7 +45,7 @@ export default function Profile() {
                   <Row className={classes["profile_container"]}>
                     <span>
                       <img
-                        src={Profileimg}
+                        src={userInfo.profile_image ?? Profileimg}
                         className={classes["user"]}
                         alt="Profile"
                       />
