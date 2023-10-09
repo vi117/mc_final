@@ -5,7 +5,6 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { fundingApprove, fundingReject } from "../../../src/api/mod";
 import useAlertModal from "../../../src/hook/useAlertModal";
-// import useArticleReports from "../../../src/hook/useArticleReports";
 
 import useArticleReports from "../../hook/useArticleReports";
 import useFundingReports from "../../hook/useFundingReport";
@@ -45,13 +44,17 @@ function FundingRequestManageTap() {
                 <div>거부된 펀딩 요청입니다.</div>
               )}
               <div className={classes["Fundingthumbnail"]}>
-                <img src={funding.thumbnail}></img>
+                <Link to={`/fundings/request/${funding.id}`}>
+                  <img src={funding.thumbnail}></img>
+                </Link>
                 <div>
                   {getStateTextFromFundingState(funding.funding_state)}
                 </div>
-                <h1 style={{ fontSize: "16px", textAlign: "left" }}>
-                  {funding.title}
-                </h1>
+                <Link to={`/fundings/request/${funding.id}`}>
+                  <h1 style={{ fontSize: "16px", textAlign: "left" }}>
+                    {funding.title}
+                  </h1>
+                </Link>
                 <div className={classes["FundingHost"]}>
                   {funding.host_email}
                   <div>{funding.host_nickname}</div>

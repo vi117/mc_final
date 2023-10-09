@@ -6,67 +6,27 @@ import { isPSApprovedTag } from "../../../util/tag";
 import classes from "./index.module.css";
 
 import { NavLink, useParams } from "react-router-dom";
-
-const old_data = {
-  "host_nickname": "admin",
-  "host_profile_image": null,
-  "host_email": "admin@gmail.com",
-  "id": 8,
-  "begin_date": "2023-10-05T02:55:42.000Z",
-  "content":
-    "<h3>01. 진행 팀 소개 &amp; 창작 동기</h3><p>안녕하세요? 저희는 거창고등학교 2학년 2반입니다. 저희는 이번에 수업시간에 프로젝트 연구를 시작하면서 다양한 사회문...",
-  "created_at": "2023-10-04T18:02:00.000Z",
-  "deleted_at": null,
-  "end_date": "2023-10-05T02:55:42.000Z",
-  "funding_request_id": 7,
-  // 0이면 승인 대기, 1이면 승인 완료, 2이면 승인 거부
-  "funding_state": 1,
-  "host_id": 1,
-  "meta":
-    "{\"tags\":[\"강아지\"],\"rewards\":[{\"title\":\"선물 없이 후원\",\"content\":\"후원자 명당에서 제외됨\",\"price\":1000,\"reward_count\":9999},{\"title\":\"후원\",\"content\":\"배송비 포함\",\"price\":7000,\"reward_count\":100}],\"content_thumbnails\":[\"https://s3.prelude.duckdns.org/happytail/78c22da1-34cc-4f93-8e35-f4bbc1c4dcb6.webp\"],\"account_number\":\"4654-45654321-45654\",\"certificate\":[\"https://s3.prelude.duckdns.org/happytail/74f8d038-7ff5-4759-9ff0-28564808508c.webp\"]}",
-  "reason": null,
-  "target_value": 1000000,
-  "title": "[Go Dog]강아지를 구하라",
-  "thumbnail":
-    "https://s3.prelude.duckdns.org/happytail/c582cf66-eff0-427c-9f27-ebe2e52834a1.webp",
-  "updated_at": "2023-10-05T03:07:53.000Z",
-  "meta_parsed": {
-    "tags": [
-      "강아지",
-    ],
-    "rewards": [
-      {
-        "title": "선물 없이 후원",
-        "content": "후원자 명당에서 제외됨",
-        "price": 1000,
-        "reward_count": 9999,
-      },
-      {
-        "title": "후원",
-        "content": "배송비 포함",
-        "price": 7000,
-        "reward_count": 100,
-      },
-    ],
-    "content_thumbnails": [
-      "https://s3.prelude.duckdns.org/happytail/78c22da1-34cc-4f93-8e35-f4bbc1c4dcb6.webp",
-    ],
-    // 계좌번호
-    "account_number": "4654-45654321-45654",
-    "certificate": [
-      // 증명 기록 파일 링크
-      "https://s3.prelude.duckdns.org/happytail/74f8d038-7ff5-4759-9ff0-28564808508c.webp",
-    ],
-  },
-};
+import { useFundingRequestById } from "../../../hook/useFundingRequestById";
 
 export default function FundingRequestDetailPage() {
   const params = useParams();
   const id = parseInt(params.id);
-
+  const { data, error, isLoading } = useFundingRequestById(id);
   console.log("id", id);
 
-  const funding = old_data;
+  if (isLoading) {
+    return (
+      <Container>
+        <div>로딩 중 입니다.</div>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return <Container>에러 {error.message}</Container>;
+  }
+
+  const funding = data;
   return (
     <Container>
       <div className={classes["funding_title"]}>
@@ -169,7 +129,7 @@ export default function FundingRequestDetailPage() {
           </div>
         </div>
       </div>
-      <FileDownloadButton />
+      <FileDownloadButton links={funding.meta_parsed?.certificate ?? []} />
     </Container>
   );
 }
@@ -207,15 +167,25 @@ function RewardList(
   );
 }
 
-function FileDownloadButton() {
+function FileDownloadButton({
+  links,
+}) {
+  links ??= [];
   return (
-    <Button variant="outline-primary">
-      <a
-        href="https://s3.prelude.duckdns.org/happytail/74f8d038-7ff5-4759-9ff0-28564808508c.webp"
-        download={"certificate.webp"}
-      >
-        증명서 확인
-      </a>
-    </Button>
+    <>
+      {links.map(link => {
+        return (
+          <Button variant="outline-primary">
+            <a
+              href={link}
+              // for same origin
+              download
+            >
+              증명서 확인
+            </a>
+          </Button>
+        );
+      })}
+    </>
   );
 }
