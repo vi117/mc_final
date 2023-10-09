@@ -8,7 +8,7 @@ import { Button } from "../../../component/Button";
 import {
   ValidationInput,
   ValidationInputLabel,
-} from "../../../component/ValidationInput";
+} from "../../../component/ValidationForm/Input";
 import { useAlertModal } from "../../../hook/useAlertModal";
 import { useLoginInfo } from "../../../hook/useLogin";
 import classes from "./profileEdit.module.css";

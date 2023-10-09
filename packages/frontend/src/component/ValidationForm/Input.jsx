@@ -1,7 +1,8 @@
 import clsx from "clsx";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
-import classes from "./ValidationInput.module.css";
+import { useValidationFormContext } from "./context";
+import classes from "./Input.module.css";
 
 /**
  * Generates a function comment for the given function body in a markdown code block with the correct language syntax.
@@ -13,6 +14,7 @@ import classes from "./ValidationInput.module.css";
  * @param {string} [props.type] - The type of the input.
  * @param {string} props.value - The value of the input.
  * @param {(value: string)=>void} props.onChange - The function called when the input value changes.
+ * @param {boolean} [props.notEmpty] - Whether the input value must not be empty.
  * @param {number} [props.minLength] - The minimum length of the input value.
  * @param {string} [props.minMessage] - The error message for the minimum length validation.
  * @param {RegExp} [props.pattern] - The regular expression to validate the input.
@@ -37,6 +39,8 @@ export function ValidationInput({
   value,
   onChange,
 
+  notEmpty,
+
   minLength,
   minMessage,
 
@@ -52,6 +56,8 @@ export function ValidationInput({
   placeholder,
   onClick,
 }) {
+  const ref = useRef(null);
+  const { addError, removeError } = useValidationFormContext();
   /**
    * checkSyncAndMessage - Checks the input value and returns an error message if it is not valid.
    * @param {string} value
@@ -59,6 +65,9 @@ export function ValidationInput({
    */
   const checkSyncAndMessage = useCallback(
     (value) => {
+      if (notEmpty && value.length === 0) {
+        return "값이 비어있습니다.";
+      }
       if (minLength !== undefined && value.length < minLength) {
         return minMessage;
       }
@@ -78,7 +87,15 @@ export function ValidationInput({
       }
       return undefined;
     },
-    [minLength, pattern, validate, validateMessage, minMessage, patternMessage],
+    [
+      minLength,
+      pattern,
+      validate,
+      validateMessage,
+      minMessage,
+      patternMessage,
+      notEmpty,
+    ],
   );
 
   const checkSync = useCallback((value) => {
@@ -96,6 +113,9 @@ export function ValidationInput({
     setIsValid(v === undefined);
     if (v !== undefined) {
       setErrorMessage(v);
+      addError(name, ref, v);
+    } else {
+      removeError(name);
     }
 
     // sync check 통과했을 때 validateAsync가 있으면 시도.
@@ -106,11 +126,12 @@ export function ValidationInput({
         try {
           const result = await validateAsync(value, abortController.signal);
           setIsValid(result);
-          console.log(result);
           if (!result) {
             setErrorMessage(validateAsyncMessage);
+            addError(name, ref, validateAsyncMessage);
           } else {
             setErrorMessage("");
+            removeError(name);
           }
         } catch (e) {
           if (e instanceof DOMException && e.name === "AbortError") {
@@ -120,7 +141,10 @@ export function ValidationInput({
           }
         }
       })();
-      return () => abortController.abort();
+      return () => {
+        abortController.abort();
+        removeError(name);
+      };
     }
   }, [
     checkSyncAndMessage,
@@ -128,6 +152,9 @@ export function ValidationInput({
     validateAsyncMessage,
     value,
     isEmpty,
+    addError,
+    removeError,
+    name,
   ]);
 
   return (
@@ -139,6 +166,7 @@ export function ValidationInput({
           </ValidationInputLabel>
         )}
       <Form.Control
+        ref={ref}
         className={clsx(classes.input, {
           [classes.label_error]: !isValid && !isEmpty,
         }, inputClassName)}
