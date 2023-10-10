@@ -91,6 +91,7 @@ function RegisterPage() {
               patternMessage="타입이 맞지 않습니다."
               validateAsync={emailCheck}
               validateAsyncMessage={"이미 사용되는 이메일입니다."}
+              required
             />
             <ValidationInput
               name="Password"
@@ -102,6 +103,7 @@ function RegisterPage() {
               onChange={(value) => setPassword(value)}
               minLength={6}
               minMessage={"6자리 이상이어야 합니다."}
+              required
             />
             <ValidationInput
               name="ConfirmPassword"
@@ -117,6 +119,7 @@ function RegisterPage() {
               minMessage={"6자리 이상이어야 합니다."}
               validate={(value) => value === Password}
               validateMessage="비밀번호와 비밀번호 확인이 동일해야 합니다."
+              required
             />
             <ValidationInput
               name="NickName"
@@ -128,7 +131,7 @@ function RegisterPage() {
               onChange={(value) => setNickName(value)}
               validateAsync={nicknameCheck}
               validateAsyncMessage={"이미 사용 중인 닉네임입니다."}
-              notEmpty
+              required
             />
             <ValidationInput
               name="Phone"
@@ -156,7 +159,7 @@ function RegisterPage() {
                   },
                 });
               }}
-              notEmpty
+              required
             />
             <ValidationInput
               name=""

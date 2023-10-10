@@ -26,8 +26,6 @@ export default function ApproveEmailPage() {
           className="mb-3"
         >
           <Form.Control
-            type="email"
-            placeholder="name@example.com"
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />

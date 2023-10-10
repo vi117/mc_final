@@ -104,7 +104,20 @@ export async function resetPassword(password: string, code?: string) {
 export async function login(
   email: string,
   password: string,
-): Promise<[boolean, object]> {
+): Promise<
+  [false, {
+    message: string;
+    code: "not_found" | "not_approved";
+  }] | [
+    true,
+    {
+      message: string;
+      id: number;
+      email: string;
+      nickname: string;
+    },
+  ]
+> {
   const res = await fetch("/api/v1/users/login", {
     method: "POST",
     headers: {
@@ -115,7 +128,7 @@ export async function login(
       password: password,
     }),
   });
-  if (res.status !== 200) {
+  if (!res.ok) {
     const data = await res.json();
     return [false, data];
   }
@@ -129,7 +142,7 @@ export async function login(
  * @param {string} email - The email address to send the reset password email to.
  * @return {Promise<boolean>} - A promise that resolves to true if the reset password email was successfully sent, and false otherwise.
  */
-export async function send_reset_password(email: string) {
+export async function sendResetPassword(email: string) {
   // it equals 'await axios.post("/api/v1/users/send-reset-password", {email});'
   const res = await fetch("/api/v1/users/send-reset-password", {
     method: "POST",
@@ -141,9 +154,25 @@ export async function send_reset_password(email: string) {
     }),
   });
   if (!res.ok) {
-    return false;
+    const data = await res.json();
+    throw new APIError(data.message);
   }
-  return true;
+}
+
+export async function resendVerification(email: string) {
+  const res = await fetch("/api/v1/users/send-verification", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+    }),
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError(data.message);
+  }
 }
 
 export async function patchUserInfo(id: number, body: {

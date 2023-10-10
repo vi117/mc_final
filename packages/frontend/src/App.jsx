@@ -23,6 +23,7 @@ import WithdrawalPage from "./pages/withdrawal";
 import ApproveEmailPage from "./pages/approve-email";
 import ForgotPasswordPage from "./pages/forgot-password";
 import RegisterPage from "./pages/register";
+import ResendVerificationPage from "./pages/resend-verification";
 import ResetpasswordPage from "./pages/reset-password";
 
 import AdminPage from "./pages/admin/index";
@@ -60,6 +61,10 @@ const browserRouter = createBrowserRouter([
       {
         path: "/approve-email",
         element: <ApproveEmailPage></ApproveEmailPage>,
+      },
+      {
+        path: "/send-verification",
+        element: <ResendVerificationPage></ResendVerificationPage>,
       },
       {
         path: "/forgot-password",
