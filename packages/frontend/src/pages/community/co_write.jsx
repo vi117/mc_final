@@ -149,6 +149,15 @@ const CommunityWrite = () => {
   );
 
   async function sendRequest() {
+    if (title === "") {
+      await showAlertModal("fail", "제목을 입력해주세요.");
+      return;
+    }
+    if (category === "") {
+      await showAlertModal("fail", "카테고리를 선택해야 합니다.");
+      return;
+    }
+
     try {
       await postArticle({
         title,
