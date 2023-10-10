@@ -388,8 +388,11 @@ const FundingsDetail = function() {
       await fundingDelete(funding.id);
     } catch (error) {
       console.log(error);
-      // TODO(vi117): 예쁜 alert 쓰기.
-      alert("비공개하는 것을 실패했습니다.");
+      // TODO(vi117): 예쁜 alert 쓰기.(231010 당현진처리)
+      await showAlertModal(
+        "비공개 설정을 실패했습니다.",
+        "계속되는 실패시, 관리자에게 문의해주세요.",
+      );
     }
   }
   async function setInterest(id, like = true) {
@@ -487,9 +490,11 @@ function Report({
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const { showAlertModal, AlertModal } = useAlertModal();
 
   return (
     <>
+      <AlertModal />
       <div
         className={classes["go_report"]}
         onClick={handleShow}
@@ -577,12 +582,18 @@ function Report({
         content: content,
         files: files,
       });
-      // TODO(vi117): show alert
-      alert("전송완료");
+      // TODO(vi117): show alert.(231010 당현진처리)
+      await showAlertModal(
+        "전송완료",
+        "신고 접수되었습니다.",
+      );
     } catch (error) {
       console.log(error);
-      // TODO(vi117): show alert
-      alert("전송실패");
+      // TODO(vi117): show alert.(231010 당현진처리)
+      await showAlertModal(
+        "전송실패",
+        "신고 사유를 작성하시고 다시 시도해주세요.",
+      );
     }
   }
 }
