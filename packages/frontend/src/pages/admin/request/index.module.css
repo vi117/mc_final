@@ -57,6 +57,7 @@
 .reward_area{
   width:40%;
   margin-left:45px;
+  margin-top: -20px;
 }  
 
 /*description-table*/
@@ -105,4 +106,60 @@
 
 .content-wrapper {
   width:594px;
+}
+
+/*reward list */
+.reward_list_area{
+  max-height: 490px;
+  overflow-y: auto;
+  margin-top: -180px;
+ 
+}
+
+.reward_list {
+  background-color: transparent !important;
+  width:100%;
+  border: 1px solid var(--secondary);
+  margin-bottom: 10px;
+  border-spacing: 0;
+  border-radius: 7px !important;
+  padding: 20px 15px;
+  text-align: left;
+}
+
+.rewardtitle{
+  color:var(--primary);
+  font-weight: 700;
+  font-size: 20px;
+  margin-top: -220px;
+  margin-bottom: 15px;
+  position: absolute;
+ 
+
+}
+
+.reward_title , 
+.reward_content {
+  display:flex;
+  align-items: center;
+padding: 10px 0px;
+border-bottom: 1px solid var(--border);
+
+}
+
+.account_number {
+  margin-top: 5px;
+}
+
+.go_funding_btn,
+.joinBtn Button {
+  border: none;
+  height:50px !important;
+  width:100%;
+  transition: all .4s ease-in-out;
+  -moz-transition: all .4s ease-in-out;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  --bs-btn-disabled-bg: var(--gray) !important;
+  --bs-btn-bg: var(--green) !important;
 }
