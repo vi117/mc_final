@@ -104,7 +104,20 @@ export async function resetPassword(password: string, code?: string) {
 export async function login(
   email: string,
   password: string,
-): Promise<[boolean, object]> {
+): Promise<
+  [false, {
+    message: string;
+    code: "not_found" | "not_approved";
+  }] | [
+    true,
+    {
+      message: string;
+      id: number;
+      email: string;
+      nickname: string;
+    },
+  ]
+> {
   const res = await fetch("/api/v1/users/login", {
     method: "POST",
     headers: {
@@ -115,7 +128,7 @@ export async function login(
       password: password,
     }),
   });
-  if (res.status !== 200) {
+  if (!res.ok) {
     const data = await res.json();
     return [false, data];
   }
@@ -132,6 +145,22 @@ export async function login(
 export async function sendResetPassword(email: string) {
   // it equals 'await axios.post("/api/v1/users/send-reset-password", {email});'
   const res = await fetch("/api/v1/users/send-reset-password", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+    }),
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError(data.message);
+  }
+}
+
+export async function resendVerification(email: string) {
+  const res = await fetch("/api/v1/users/send-verification", {
     method: "POST",
     headers: {
       "Content-type": "application/json",

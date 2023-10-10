@@ -49,18 +49,26 @@ export async function login(req: Request, res: Response): Promise<void> {
   const { email, password } = req.body;
 
   const user = await userRepository.findByEmail(email);
-  const err_msg = "비밀번호가 일치하지 않거나 이메일이 없습니다.";
+  const err_msg = "비밀번호가 일치하지 않거나 이메일이 존재하지 않습니다.";
   if (!user) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: err_msg });
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      message: err_msg,
+      code: "not_found",
+    });
     return;
   }
   if (!await verify(user.password, password)) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: err_msg });
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      message: err_msg,
+      // wrong password
+      code: "not_found",
+    });
     return;
   }
   if (!user.email_approved) {
     res.status(StatusCodes.UNAUTHORIZED).json({
       message: "이메일 인증이 되지 않았습니다.",
+      code: "not_approved",
     });
     return;
   }
@@ -196,7 +204,7 @@ export const resendVerificationCode = async (req: Request, res: Response) => {
     });
     return;
   }
-  if (!user.email_approved) {
+  if (user.email_approved === 1) {
     res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
       message: "이미 인증된 이메일입니다.",
     });
@@ -427,7 +435,7 @@ export const checkNickname = async (req: Request, res: Response) => {
 
 router.post("/login", RouterCatch(login));
 router.post("/signup", upload.single("profile"), RouterCatch(signup));
-router.post("/verify_resend", RouterCatch(resendVerificationCode));
+router.post("/send-verification", RouterCatch(resendVerificationCode));
 router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/reset-password", RouterCatch(resetPassword));
 router.post("/send-reset-password", RouterCatch(sendPasswordReset));
