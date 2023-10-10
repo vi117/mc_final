@@ -1,10 +1,11 @@
+import { API_URL } from "@/config";
 import { loginRevalidate } from "../hook/useLogin";
 import { APIError } from "./error";
 
 export async function emailCheck(email: string, signal: AbortSignal) {
   const url = new URL(
     "/api/v1/users/check-email",
-    window.location.origin,
+    API_URL,
   );
   url.searchParams.append("email", email);
 
@@ -15,7 +16,7 @@ export async function emailCheck(email: string, signal: AbortSignal) {
 export async function nicknameCheck(nickname: string, signal: AbortSignal) {
   const url = new URL(
     "/api/v1/users/check-nickname",
-    window.location.origin,
+    API_URL,
   );
   url.searchParams.append("nickname", nickname);
 
@@ -56,7 +57,8 @@ export async function signUp({
   if (ProfileImage) formData.append("profile", ProfileImage);
   if (token) formData.append("token", token);
 
-  const r = await fetch("/api/v1/users/signup", {
+  const url = new URL("/api/v1/users/signup", API_URL);
+  const r = await fetch(url.href, {
     method: "POST",
     body: formData,
   });
@@ -80,7 +82,8 @@ export async function signUp({
  * @throws {APIError} - If the token(`code`) has expired or is invalid
  */
 export async function resetPassword(password: string, code?: string) {
-  const res = await fetch("/api/v1/users/reset-password", {
+  const url = new URL("/api/v1/users/reset-password", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -118,7 +121,8 @@ export async function login(
     },
   ]
 > {
-  const res = await fetch("/api/v1/users/login", {
+  const url = new URL("/api/v1/users/login", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -144,7 +148,8 @@ export async function login(
  */
 export async function sendResetPassword(email: string) {
   // it equals 'await axios.post("/api/v1/users/send-reset-password", {email});'
-  const res = await fetch("/api/v1/users/send-reset-password", {
+  const url = new URL("/api/v1/users/send-reset-password", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -160,7 +165,8 @@ export async function sendResetPassword(email: string) {
 }
 
 export async function resendVerification(email: string) {
-  const res = await fetch("/api/v1/users/send-verification", {
+  const url = new URL("/api/v1/users/send-verification", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -193,7 +199,8 @@ export async function patchUserInfo(id: number, body: {
   if (body.introduction) formData.append("introduction", body.introduction);
   if (body.profile_image) formData.append("profile", body.profile_image);
 
-  const res = await fetch(`/api/v1/users/${id}`, {
+  const url = new URL(`/api/v1/users/${id}`, API_URL);
+  const res = await fetch(url.href, {
     method: "PATCH",
     body: formData,
   });
@@ -210,7 +217,8 @@ export async function patchUserInfo(id: number, body: {
  * @return {Promise<void>} Returns a promise that resolves when the logout request is complete.
  */
 export async function logout(): Promise<void> {
-  const res = await fetch("/api/v1/users/logout", {
+  const url = new URL("/api/v1/users/logout", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
   });
   loginRevalidate();
@@ -221,7 +229,8 @@ export async function logout(): Promise<void> {
 }
 
 export async function verifyUserEmail(code: string) {
-  const res = await fetch("/api/v1/users/verify", {
+  const url = new URL("/api/v1/users/verify", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -249,7 +258,8 @@ export async function googleLogin(code: string): Promise<{
     name: string;
   };
 }> {
-  const res = await fetch("/api/v1/users/google-login", {
+  const url = new URL("/api/v1/users/google-login", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
     headers: {
       "content-type": "application/json",

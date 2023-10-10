@@ -1,4 +1,3 @@
-import { Container } from "react-bootstrap";
 import { AiFillHeart } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,6 +8,7 @@ import {
   postArticleComment,
   setArticleLike,
 } from "../../api/article";
+import { Container, ErrorPage, LoadingPage } from "../../component";
 import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useConfirmModal } from "../../hook/useConfirmModal";
@@ -41,14 +41,10 @@ export function CommunityDetail() {
   });
 
   if (isLoading) {
-    return <div>로딩중...</div>;
+    return <LoadingPage />;
   }
   if (error) {
-    return (
-      <Container>
-        <div>삭제된 글입니다.</div>
-      </Container>
-    );
+    return <ErrorPage error={error} />;
   }
 
   const item = article;
@@ -58,7 +54,7 @@ export function CommunityDetail() {
     <div>
       <AlertModal />
       <ConfirmModal />
-      <div className={classes["container"]}>
+      <Container>
         <div className={classes["titleArea"]}>
           <div className={classes["selectedCategory"]}>[{item.category}]</div>
           <div className={classes["selectedTitle"]}>{item.title}</div>
@@ -141,7 +137,7 @@ export function CommunityDetail() {
           onDeleteComment={deleteComment}
         >
         </Comments>
-      </div>
+      </Container>
     </div>
   );
   async function deleteArticleAction() {

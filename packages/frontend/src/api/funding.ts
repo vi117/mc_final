@@ -1,9 +1,10 @@
+import { API_URL } from "@/config";
 import { APIError } from "./error";
 
 export async function withdrawFunding(id: number, selectedReward_id: number) {
   const url = new URL(
     `/api/v1/fundings/${id}/rewards/${selectedReward_id}/withdraw`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
@@ -20,7 +21,7 @@ export async function withdrawFunding(id: number, selectedReward_id: number) {
 export async function setFundingInterest(id: number, like = true) {
   const url = new URL(
     `/api/v1/fundings/${id}/interest`,
-    window.location.origin,
+    API_URL,
   );
   url.searchParams.append("disset", (!like) ? "true" : "false");
   const res = await fetch(url.href, {
@@ -49,7 +50,7 @@ export async function setFundingInterest(id: number, like = true) {
 export async function fundingApprove(id: number) {
   const url = new URL(
     `/api/v1/fundings/request/${id}/approve`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
@@ -70,7 +71,7 @@ export async function fundingApprove(id: number) {
 export async function fundingReject(id: number, reason?: string) {
   const url = new URL(
     `/api/v1/fundings/request/${id}/reject`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
@@ -97,7 +98,7 @@ export async function fundingReject(id: number, reason?: string) {
 export async function fundingDelete(id: number) {
   const url = new URL(
     `/api/v1/fundings/${id}`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "DELETE",
@@ -116,7 +117,7 @@ export async function fundingParticipate(id: number, reward_id: number, body: {
 }) {
   const url = new URL(
     `/api/v1/fundings/${id}/rewards/${reward_id}/participate`,
-    window.location.href,
+    API_URL,
   );
   const r = await fetch(url.href, {
     method: "POST",
@@ -169,7 +170,7 @@ export async function postFundingRequest({
   certificateFiles: File[];
   funding_id?: number;
 }) {
-  const url = new URL("/api/v1/fundings/request", window.location.href);
+  const url = new URL("/api/v1/fundings/request", API_URL);
 
   const formData = new FormData();
 
@@ -225,7 +226,7 @@ export async function postFundingRequestAsJson(obj: {
   accountBankName: string;
   certificateFiles: string[];
 }) {
-  const url = new URL("/api/v1/fundings/request", window.location.href);
+  const url = new URL("/api/v1/fundings/request", API_URL);
 
   const r = await fetch(url.href, {
     method: "POST",
@@ -262,7 +263,7 @@ export async function postFundingReport(funding_id: number, {
 }) {
   const url = new URL(
     `/api/v1/fundings/${funding_id}/report`,
-    window.location.href,
+    API_URL,
   );
   const formData = new FormData();
   formData.append("content", content);

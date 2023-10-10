@@ -7,17 +7,17 @@ import {
   Form,
   ListGroup,
   Modal,
-  Spinner,
 } from "react-bootstrap";
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { Container } from "../../component/Container";
+import { Container, ErrorPage, LoadingPage } from "../../component";
 import { useLoginInfo } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
 import useFundingDetail from "../../hook/useFundingDetail";
 import { FetchError } from "../../hook/util";
+
 import { formatDate } from "./../../util/date";
 import { isPSApprovedTag } from "./../../util/tag";
 import Profileimg from "../community/assets/user.png";
@@ -58,19 +58,25 @@ const FundingsDetail = function() {
     setSelectedReward(reward);
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
+  // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
   if (isLoading) {
-    // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
-    return <Spinner />;
+    return <LoadingPage />;
   }
+
   if (error) {
     if (error instanceof FetchError && error.info.code === "DELETED") {
       return (
         <Container>
-          <div>비공개 처리된 펀딩입니다.</div>
+          <ErrorPage
+            error={{
+              message: "비공개 처리된 펀딩입니다.",
+            }}
+          >
+          </ErrorPage>
         </Container>
       );
     }
-    return <div>에러가 발생했습니다.</div>;
+    return <ErrorPage error={error} />;
   }
 
   const handleOpenModal = () => {

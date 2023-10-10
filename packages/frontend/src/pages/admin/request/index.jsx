@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Button, Carousel, ListGroup } from "react-bootstrap";
-import { Container } from "../../../component/Container";
+import { Container, ErrorPage, LoadingPage } from "../../../component";
 import { formatDate } from "../../../util/date";
 import { isPSApprovedTag } from "../../../util/tag";
 import Profileimg from "../../community/assets/user.png";
@@ -16,15 +16,11 @@ export default function FundingRequestDetailPage() {
   console.log("id", id);
 
   if (isLoading) {
-    return (
-      <Container>
-        <div>로딩 중 입니다.</div>
-      </Container>
-    );
+    return <LoadingPage />;
   }
 
   if (error) {
-    return <Container>에러 {error.message}</Container>;
+    return <ErrorPage error={error} />;
   }
 
   const funding = data;
@@ -183,6 +179,8 @@ function FileDownloadButton({
               href={link}
               // for same origin
               download
+              target="_blank"
+              rel="noreferrer"
             >
               증명서 확인
             </a>

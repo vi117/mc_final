@@ -1,3 +1,4 @@
+import { API_URL } from "@/config";
 import { ArticleObject } from "dto";
 import useSWR from "swr";
 import { ANIMAL_CATEGORY } from "../pages/community/constant";
@@ -26,7 +27,7 @@ export default function useArticles({
   include_deleted = false,
   related_funding_id = undefined,
 }: UseArticleOptions = {}) {
-  const url = new URL("/api/v1/articles", window.location.href);
+  const url = new URL("/api/v1/articles", API_URL);
   url.searchParams.append("offset", offset.toString());
   url.searchParams.append("limit", limit.toString());
 

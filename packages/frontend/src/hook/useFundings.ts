@@ -1,3 +1,4 @@
+import { API_URL } from "@/config";
 import { FundingObject } from "dto";
 import useSWR from "swr";
 import { DateToString, fetcher } from "./util";
@@ -57,7 +58,7 @@ export default function useFundings({
   reviewed = undefined,
   title = undefined,
 }: UseFundingsOptions = {}) {
-  const url = new URL("/api/v1/fundings", window.location.href);
+  const url = new URL("/api/v1/fundings", API_URL);
   url.searchParams.append("offset", offset.toString());
   url.searchParams.append("limit", limit.toString());
   if (host_id !== undefined) {

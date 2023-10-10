@@ -1,3 +1,4 @@
+import { API_URL } from "@/config";
 import { APIError } from "./error";
 
 export async function postArticle({
@@ -11,7 +12,7 @@ export async function postArticle({
   category: string;
   reviewedFundingId?: number;
 }) {
-  const url = new URL("/api/v1/articles/", window.location.href);
+  const url = new URL("/api/v1/articles/", API_URL);
   const r = await fetch(url.href, {
     method: "POST",
     headers: {
@@ -31,7 +32,7 @@ export async function postArticle({
 }
 
 export async function deleteArticle(id: number) {
-  const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
+  const url = new URL(`/api/v1/articles/${id}`, API_URL);
   const res = await fetch(url.href, {
     method: "DELETE",
   });
@@ -43,7 +44,7 @@ export async function deleteArticle(id: number) {
 export async function postArticleComment(id: number, content: string) {
   const url = new URL(
     `/api/v1/articles/${id}/comments`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
@@ -67,7 +68,7 @@ export async function postArticleComment(id: number, content: string) {
 export async function deleteArticleComment(id: number, commentId: number) {
   const url = new URL(
     `/api/v1/articles/${id}/comments/${commentId}`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "DELETE",
@@ -78,7 +79,7 @@ export async function deleteArticleComment(id: number, commentId: number) {
 }
 
 export async function setArticleLike(id: number, like = true) {
-  const url = new URL(`/api/v1/articles/${id}/like`, window.location.origin);
+  const url = new URL(`/api/v1/articles/${id}/like`, API_URL);
   if (!like) {
     url.searchParams.append("unlike", "true");
   }
@@ -98,7 +99,7 @@ export async function patchArticle(id: number, body: {
   // currently, there is no tag
   tags?: string[];
 }) {
-  const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
+  const url = new URL(`/api/v1/articles/${id}`, API_URL);
   const res = await fetch(url.href, {
     method: "PATCH",
     headers: {
@@ -114,7 +115,7 @@ export async function patchArticle(id: number, body: {
 export async function reportArticle(article_id: number, reason: string) {
   const url = new URL(
     `/api/v1/articles/${article_id}/report`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",

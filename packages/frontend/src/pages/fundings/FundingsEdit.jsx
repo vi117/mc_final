@@ -10,8 +10,8 @@ import { TagsInput } from "react-tag-input-component";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { postFundingRequestAsJson } from "../../api/funding";
+import { Container, ErrorPage, LoadingPage } from "../../component";
 import Calender from "../../component/Calender";
-import { Container } from "../../component/Container";
 import { Editor } from "../../component/Editor";
 import UploadImage from "./../../component/UploadFile";
 import { useUploadFile } from "../../component/UploadFile/hook";
@@ -55,10 +55,10 @@ function FundingEditPage() {
     funding.funding_request_id,
   );
   if (error) {
-    return <div>에러가 발생했습니다.</div>;
+    return <ErrorPage error={error}></ErrorPage>;
   }
   if (isLoading) {
-    return <div>로딩중...</div>;
+    return <LoadingPage />;
   }
   console.log(data);
   return <FundingsEdit fundingRequest={data} funding={funding} />;

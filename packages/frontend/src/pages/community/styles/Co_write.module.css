@@ -6,13 +6,6 @@ select {
   appearance: none;
 }
 
-.write-container {
-  width:100%;
-  max-width: var(--max-content-width);
-  padding: 0px 10px 50px 10px;
-  margin: 0 auto;
-}
-
 .write-wrap {
   background-color: #f9f9f9;
   border-radius: 7px;
