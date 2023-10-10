@@ -8,7 +8,7 @@ import {
   postArticleComment,
   setArticleLike,
 } from "../../api/article";
-import { ErrorPage, LoadingPage } from "../../component";
+import { Container, ErrorPage, LoadingPage } from "../../component";
 import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useConfirmModal } from "../../hook/useConfirmModal";
@@ -54,7 +54,7 @@ export function CommunityDetail() {
     <div>
       <AlertModal />
       <ConfirmModal />
-      <div className={classes["container"]}>
+      <Container>
         <div className={classes["titleArea"]}>
           <div className={classes["selectedCategory"]}>[{item.category}]</div>
           <div className={classes["selectedTitle"]}>{item.title}</div>
@@ -137,7 +137,7 @@ export function CommunityDetail() {
           onDeleteComment={deleteComment}
         >
         </Comments>
-      </div>
+      </Container>
     </div>
   );
   async function deleteArticleAction() {
