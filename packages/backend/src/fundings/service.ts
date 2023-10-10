@@ -98,7 +98,7 @@ export async function approveFundingRequest(request_id: number) {
         // update rewards for funding.
         await Promise.all(
           meta.rewards.filter((r): r is { id: number } & typeof r =>
-            r.id !== undefined
+            r.id !== undefined && funding.rewards.some((f) => f.id === r.id)
           ).map((r) =>
             fundingRepo.updateReward(
               r.id,
