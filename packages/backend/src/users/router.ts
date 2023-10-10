@@ -309,6 +309,12 @@ export async function resetPassword(req: Request, res: Response) {
   }
 
   await userRepository.resetPassword(email, req.body.password);
+
+  // delete cookie
+  deleteAccessTokenFromCookie(res);
+  deleteRefreshTokenFromCookie(res);
+  res.clearCookie("login_user_id");
+
   res.status(StatusCodes.OK).json({
     message: "success",
   });

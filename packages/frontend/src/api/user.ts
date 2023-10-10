@@ -96,6 +96,7 @@ export async function resetPassword(password: string, code?: string) {
   if (!res.ok) {
     throw new APIError("token expired or invalid");
   }
+  loginRevalidate();
 }
 /**
  * Authenticates a user by sending a login request to the server.
