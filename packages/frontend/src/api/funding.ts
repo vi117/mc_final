@@ -8,6 +8,7 @@ export async function withdrawFunding(id: number, selectedReward_id: number) {
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -26,6 +27,7 @@ export async function setFundingInterest(id: number, like = true) {
   url.searchParams.append("disset", (!like) ? "true" : "false");
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -54,6 +56,7 @@ export async function fundingApprove(id: number) {
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
   });
   if (!res.ok) {
     const data = await res.json();
@@ -75,6 +78,7 @@ export async function fundingReject(id: number, reason?: string) {
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -102,6 +106,7 @@ export async function fundingDelete(id: number) {
   );
   const res = await fetch(url.href, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!res.ok) {
     const data = await res.json();
@@ -121,6 +126,7 @@ export async function fundingParticipate(id: number, reward_id: number, body: {
   );
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -197,6 +203,7 @@ export async function postFundingRequest({
 
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     body: formData,
   });
 
@@ -230,6 +237,7 @@ export async function postFundingRequestAsJson(obj: {
 
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -272,6 +280,7 @@ export async function postFundingReport(funding_id: number, {
   });
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     body: formData,
   });
   if (!r.ok) {

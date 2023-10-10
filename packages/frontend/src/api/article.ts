@@ -15,6 +15,7 @@ export async function postArticle({
   const url = new URL("/api/v1/articles/", API_URL);
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -35,6 +36,7 @@ export async function deleteArticle(id: number) {
   const url = new URL(`/api/v1/articles/${id}`, API_URL);
   const res = await fetch(url.href, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!res.ok) {
     throw new APIError("deleteArticle failed");
@@ -48,6 +50,7 @@ export async function postArticleComment(id: number, content: string) {
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -72,6 +75,7 @@ export async function deleteArticleComment(id: number, commentId: number) {
   );
   const res = await fetch(url.href, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!res.ok) {
     throw new APIError("deleteArticleComment failed");
@@ -85,6 +89,7 @@ export async function setArticleLike(id: number, like = true) {
   }
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
   });
   if (!res.ok) {
     throw new APIError("setArticleLike failed");
@@ -102,6 +107,7 @@ export async function patchArticle(id: number, body: {
   const url = new URL(`/api/v1/articles/${id}`, API_URL);
   const res = await fetch(url.href, {
     method: "PATCH",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -119,6 +125,7 @@ export async function reportArticle(article_id: number, reason: string) {
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },

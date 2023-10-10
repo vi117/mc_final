@@ -85,6 +85,7 @@ export async function resetPassword(password: string, code?: string) {
   const url = new URL("/api/v1/users/reset-password", API_URL);
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -125,6 +126,7 @@ export async function login(
   const url = new URL("/api/v1/users/login", API_URL);
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -152,6 +154,7 @@ export async function sendResetPassword(email: string) {
   const url = new URL("/api/v1/users/send-reset-password", API_URL);
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -169,6 +172,7 @@ export async function resendVerification(email: string) {
   const url = new URL("/api/v1/users/send-verification", API_URL);
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -203,6 +207,7 @@ export async function patchUserInfo(id: number, body: {
   const url = new URL(`/api/v1/users/${id}`, API_URL);
   const res = await fetch(url.href, {
     method: "PATCH",
+    credentials: "include",
     body: formData,
   });
   if (!res.ok) {
@@ -221,6 +226,7 @@ export async function logout(): Promise<void> {
   const url = new URL("/api/v1/users/logout", API_URL);
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
   });
   loginRevalidate();
   if (res.status !== 200) {
@@ -233,6 +239,7 @@ export async function verifyUserEmail(code: string) {
   const url = new URL("/api/v1/users/verify", API_URL);
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -262,6 +269,7 @@ export async function googleLogin(code: string): Promise<{
   const url = new URL("/api/v1/users/google-login", API_URL);
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
