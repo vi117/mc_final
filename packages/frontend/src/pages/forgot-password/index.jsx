@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { FloatingLabel, Form } from "react-bootstrap";
-import { send_reset_password } from "../../api/user";
+import { APIError } from "../../api/error";
+import { sendResetPassword } from "../../api/user";
+import { useAlertModal } from "../../hook/useAlertModal";
 import classes from "./forgot.module.css";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState();
+  const { showAlertModal, AlertModal } = useAlertModal();
 
   return (
     <div className={classes["container"]}>
+      <AlertModal />
       <h3>비밀번호 찾기</h3>
       <p>
         가입하신 이메일 주소를 입력하시면 <br></br>
@@ -35,12 +39,16 @@ export default function ForgotPasswordPage() {
     </div>
   );
   async function forgetPassword() {
-    const res = await send_reset_password(email);
-    if (!res.ok) {
-      console.log("error!");
+    try {
+      await sendResetPassword(email);
+      await showAlertModal("Success", "메일을 전송했습니다.");
+    } catch (error) {
+      if (error instanceof APIError) {
+        await showAlertModal("Fail", error.message);
+      } else {
+        throw error;
+      }
     }
-    console.log("success");
-    // TODO(vi117): 모달을 띄우도록 함.
   }
 }
 

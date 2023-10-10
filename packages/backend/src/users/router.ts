@@ -246,7 +246,7 @@ export async function sendPasswordReset(req: Request, res: Response) {
   const v = ajv.validate({
     type: "object",
     properties: {
-      email: { type: "string" },
+      email: { type: "string", format: "email" },
     },
     required: ["email"],
   }, req.body);
@@ -258,9 +258,17 @@ export async function sendPasswordReset(req: Request, res: Response) {
     return;
   }
   const email = req.body.email;
+  const userRepository = getUserRepository();
+
+  const user = await userRepository.findByEmail(email);
+  if (!user) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      message: "존재하지 않는 이메일입니다.",
+    });
+    return;
+  }
   const resetCode = getAuthCodeRepository().createVerificationCode(email, "1h");
   await sendResetMail(email, resetCode);
-  console.log(resetCode);
 
   res.status(StatusCodes.OK).json({
     message: "코드를 보냈습니다.",

@@ -129,7 +129,7 @@ export async function login(
  * @param {string} email - The email address to send the reset password email to.
  * @return {Promise<boolean>} - A promise that resolves to true if the reset password email was successfully sent, and false otherwise.
  */
-export async function send_reset_password(email: string) {
+export async function sendResetPassword(email: string) {
   // it equals 'await axios.post("/api/v1/users/send-reset-password", {email});'
   const res = await fetch("/api/v1/users/send-reset-password", {
     method: "POST",
@@ -141,9 +141,9 @@ export async function send_reset_password(email: string) {
     }),
   });
   if (!res.ok) {
-    return false;
+    const data = await res.json();
+    throw new APIError(data.message);
   }
-  return true;
 }
 
 export async function patchUserInfo(id: number, body: {
