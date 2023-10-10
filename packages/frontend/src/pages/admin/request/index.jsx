@@ -180,6 +180,8 @@ function FileDownloadButton({
               href={link}
               // for same origin
               download
+              target="_blank"
+              rel="noreferrer"
             >
               증명서 확인
             </a>
