@@ -117,6 +117,9 @@
   padding: 30px 10px;
   min-height: 400px;
 }
+.contentArea img{
+  max-width: calc(100vw - 40px);
+}
 
 .reportArea {
   width: 100%;
