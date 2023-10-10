@@ -45,7 +45,7 @@ box-sizing: border-box;
 }
 
 .hr{   
-        background:var(--teritary);
+        background:var(--gray);
         height:1px;
         border:0;
         margin:0px;
