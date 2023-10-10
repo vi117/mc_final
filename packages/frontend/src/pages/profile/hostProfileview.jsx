@@ -36,10 +36,10 @@ const HostProfile = function() {
   return (
     <>
       <div className={classes["funding_container"]}>
-        <div style={{ display: "flex" }}>
+        <div className={classes["user_profile"]}>
           <img
             src={user.profile_image ?? Profileimg}
-            className={classes["user"]}
+            className={classes["user_profile_img"]}
           />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span className={classes["host_nickname"]}>
