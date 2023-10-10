@@ -1,4 +1,10 @@
-export const template = ({ frontendUrl }: { frontendUrl: string }) =>
+export const template = (
+  { frontendUrl, title, body }: {
+    frontendUrl: string;
+    title: string;
+    body: string;
+  },
+) =>
   `<!DOCTYPE HTML
 PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -251,7 +257,7 @@ style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #e7
 
                             <h1 class="v-text-align v-font-size"
                               style="margin: 0px; line-height: 100%; text-align: left; word-wrap: break-word; font-size: 23px; font-weight: 400;">
-                              이메일 주소 확인</h1>
+                              ${title}</h1>
 
                           </td>
                         </tr>
@@ -324,7 +330,7 @@ style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #e7
 
                             <div class="v-text-align v-font-size"
                               style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                              <p style="line-height: 140%;">아래 링크를 클릭해서 인증해주세요.</p>
+                              <p style="line-height: 140%;">${body}</p>
                             </div>
 
                           </td>
