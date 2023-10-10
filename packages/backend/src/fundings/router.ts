@@ -217,7 +217,7 @@ async function getFundingUsersHandler(req: Request, res: Response) {
       || funding.current_value < funding.target_value
     ) {
       res.status(StatusCodes.FORBIDDEN).json({
-        message: "완료되지 않은 펀딩입니다.",
+        message: "끝나지 않거나 목표를 달성하지 못한 펀딩입니다.",
       });
       return;
     }

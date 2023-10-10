@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Button, Carousel, ListGroup } from "react-bootstrap";
-import { Container } from "../../../component/Container";
+import { Container, LoadingPage } from "../../../component";
 import { formatDate } from "../../../util/date";
 import { isPSApprovedTag } from "../../../util/tag";
 import classes from "./index.module.css";
@@ -15,11 +15,7 @@ export default function FundingRequestDetailPage() {
   console.log("id", id);
 
   if (isLoading) {
-    return (
-      <Container>
-        <div>로딩 중 입니다.</div>
-      </Container>
-    );
+    return <LoadingPage />;
   }
 
   if (error) {

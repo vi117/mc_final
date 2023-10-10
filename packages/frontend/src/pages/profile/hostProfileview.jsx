@@ -1,12 +1,11 @@
+import { useParams } from "react-router-dom";
+
+import { LoadingPage } from "../../component";
+import useFundings from "../../hook/useFundings";
+import useUserInfo from "../../hook/useUser";
 import Profileimg from "../community/assets/user.png";
 import FundingItem from "../fundings/component/Item";
 import classes from "./hostProfileview.module.css";
-// import { useState } from "react";
-import { useParams } from "react-router-dom";
-import useFundings from "../../hook/useFundings";
-import useUserInfo from "../../hook/useUser";
-// import { useLoginInfo } from "../../hook/useLogin";
-// import { UserObject } from "../";
 
 const HostProfile = function() {
   const { id } = useParams();
@@ -26,7 +25,7 @@ const HostProfile = function() {
   });
 
   if (IsFundingsLoading || isUserLoading) {
-    return <div>로딩 중..</div>;
+    return <LoadingPage />;
   }
 
   if (fetcherError || error) {

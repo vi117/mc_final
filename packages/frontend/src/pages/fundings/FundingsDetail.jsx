@@ -7,12 +7,11 @@ import {
   Form,
   ListGroup,
   Modal,
-  Spinner,
 } from "react-bootstrap";
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { Container } from "../../component/Container";
+import { Container, LoadingPage } from "../../component";
 import { useLoginInfo } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
@@ -58,10 +57,11 @@ const FundingsDetail = function() {
     setSelectedReward(reward);
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
+  // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
   if (isLoading) {
-    // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
-    return <Spinner />;
+    return <LoadingPage />;
   }
+
   if (error) {
     if (error instanceof FetchError && error.info.code === "DELETED") {
       return (

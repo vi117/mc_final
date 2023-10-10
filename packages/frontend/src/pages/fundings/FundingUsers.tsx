@@ -1,4 +1,4 @@
-import { Container } from "@/component/Container";
+import { Container, LoadingPage } from "@/component";
 import useFundingUsers from "@/hook/useFundingUsers";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { useParams } from "react-router-dom";
@@ -12,9 +12,9 @@ export default function FundingUsersPage() {
   if (error) {
     return <div>에러! : {error.message}</div>;
   }
+  // TODO(vi117): 멋진 progress bar
   if (isLoading) {
-    // TODO(vi117): 멋진 progress bar
-    return <div>로딩중</div>;
+    return <LoadingPage />;
   }
   return (
     <Container style={{ overflowX: "auto" }}>
