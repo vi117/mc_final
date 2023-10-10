@@ -1,0 +1,59 @@
+.container{
+  border: 1px solid var(--secondary);
+  margin: 0 auto;
+  width:450px;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 50px;
+}
+
+.container > h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-left:25px;
+}
+
+.FloatingLabel{
+width:90%;
+margin:0 auto;
+
+}
+.mb-3{
+  margin-top: 100px;
+  width: 100%;
+  border-radius: 0px;
+  border: 1px solid var(--secondary);
+}
+
+.mb-3:focus{
+  border: 1px solid var(--green);
+}
+.container > p {
+  margin-left:25px;
+  margin-top: 20px;
+}
+
+
+.button > button{
+  font-size: 14px;
+  padding: 15px 50px;
+  background-color: var(--green);
+  border: 1px solid var(--green);
+  color: white;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+.button > button:hover,
+.button > button:active{
+background-color: var(--green-dark);
+border: 1px solid var(--green-dark)
+}
+
+
+@media screen and (max-width: 576px/* sm - small screens */) {
+
+}

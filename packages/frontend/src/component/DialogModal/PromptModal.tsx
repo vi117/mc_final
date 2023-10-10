@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
+import { Button } from "../Button";
 
 export default function PromptModal({
   showModal,

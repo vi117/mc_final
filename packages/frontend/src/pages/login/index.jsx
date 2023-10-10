@@ -16,12 +16,19 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   async function onLoginClick() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [success, _v] = await login(email, password);
+    const [success, v] = await login(email, password);
     if (success) {
       navigate("/");
     } else {
-      await showAlertModal("Fail", "로그인에 실패했습니다.");
+      if (v.code === "not_approved") {
+        await showAlertModal("Fail", "이메일 인증이 되지 않은 계정입니다.");
+        navigate(`/send-verification?email=${email}`);
+        return;
+      }
+      await showAlertModal(
+        "Fail",
+        "로그인에 실패했습니다. 패스워드나 이메일이 올바른지 확인해주세요.",
+      );
       setPassword("");
     }
   }

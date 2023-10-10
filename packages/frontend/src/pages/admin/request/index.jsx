@@ -126,10 +126,12 @@ export default function FundingRequestDetailPage() {
           </div>
           <div className={classes["account_number"]}>
             <p>후원자 계좌번호 : {funding.meta_parsed.account_number}</p>
+            <FileDownloadButton
+              links={funding.meta_parsed?.certificate ?? []}
+            />
           </div>
         </div>
       </div>
-      <FileDownloadButton links={funding.meta_parsed?.certificate ?? []} />
     </Container>
   );
 }
@@ -175,7 +177,7 @@ function FileDownloadButton({
     <>
       {links.map(link => {
         return (
-          <Button variant="outline-primary">
+          <Button className={classes["go_funding_btn"]}>
             <a
               href={link}
               // for same origin

@@ -14,7 +14,7 @@ import classes from "./Input.module.css";
  * @param {string} [props.type] - The type of the input.
  * @param {string} props.value - The value of the input.
  * @param {(value: string)=>void} props.onChange - The function called when the input value changes.
- * @param {boolean} [props.notEmpty] - Whether the input value must not be empty.
+ * @param {boolean} [props.required] - Whether the input value must not be empty.
  * @param {number} [props.minLength] - The minimum length of the input value.
  * @param {string} [props.minMessage] - The error message for the minimum length validation.
  * @param {RegExp} [props.pattern] - The regular expression to validate the input.
@@ -39,7 +39,7 @@ export function ValidationInput({
   value,
   onChange,
 
-  notEmpty,
+  required,
 
   minLength,
   minMessage,
@@ -65,7 +65,7 @@ export function ValidationInput({
    */
   const checkSyncAndMessage = useCallback(
     (value) => {
-      if (notEmpty && value.length === 0) {
+      if (required && value.length === 0) {
         return "값이 비어있습니다.";
       }
       if (minLength !== undefined && value.length < minLength) {
@@ -94,7 +94,7 @@ export function ValidationInput({
       validateMessage,
       minMessage,
       patternMessage,
-      notEmpty,
+      required,
     ],
   );
 
