@@ -1,4 +1,5 @@
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import logger from "morgan";
 
@@ -14,15 +15,12 @@ testDBConnection();
 // disable etag
 app.set("etag", false);
 
-app.use((req, res, next) => {
-  // TODO: add cors
-  res.set("access-control-allow-origin", "*");
-  res.set("access-control-allow-methods", "*");
-  res.set("access-control-allow-headers", "content-type, authorization, *");
-  res.set("access-control-credentials", "true");
-
-  next();
-});
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    process.env["SERVER_URL"] ?? "http://localhost:3000",
+  ],
+}));
 
 app.use(logger("dev"));
 app.use(express.static("public"));
