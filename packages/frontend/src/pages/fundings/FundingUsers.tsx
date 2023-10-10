@@ -26,7 +26,7 @@ export default function FundingUsersPage() {
           className={classes.logo_excel}
         />
         <span className={classes.a}>
-          엑셀 파일로 출력
+          csv 파일로 출력
         </span>
       </a>
       <table className={classes.table}>
