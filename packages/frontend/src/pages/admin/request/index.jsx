@@ -86,7 +86,7 @@ export default function FundingRequestDetailPage() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <img
-                    // TODO(vi117): set default profile image
+                    // TODO(vi117): set default profile image(231010 당현진처리)
                     src={funding.host_profile_image ?? Profileimg}
                     className={classes["user"]}
                     alt="Profile"
