@@ -1,6 +1,8 @@
 import { Container } from "@/component/Container";
 import useFundingUsers from "@/hook/useFundingUsers";
+import { RiFileExcel2Line } from "react-icons/ri";
 import { useParams } from "react-router-dom";
+
 import classes from "./FundingUsers.module.css";
 
 export default function FundingUsersPage() {
@@ -15,18 +17,28 @@ export default function FundingUsersPage() {
     return <div>로딩중</div>;
   }
   return (
-    <Container>
-      <a href={`/api/v1/fundings/${id}/users?csv=true`}>csv</a>
+    <Container style={{ overflowX: "auto" }}>
+      <a
+        href={`/api/v1/fundings/${id}/users?csv=true`}
+        download="참여자 정보.csv"
+      >
+        <RiFileExcel2Line
+          className={classes.logo_excel}
+        />
+        <span className={classes.a}>
+          엑셀 파일로 출력
+        </span>
+      </a>
       <table className={classes.table}>
         <thead>
           <tr>
-            <th>email</th>
-            <th>nickname</th>
-            <th>address</th>
-            <th>phone</th>
-            <th>recipient</th>
-            <th>reward</th>
-            <th>reward price</th>
+            <th>메일주소</th>
+            <th>닉네임</th>
+            <th>배송주소</th>
+            <th>연락처</th>
+            <th>받는사람</th>
+            <th>선택 리워드</th>
+            <th>리워드 금액</th>
           </tr>
         </thead>
         <tbody>

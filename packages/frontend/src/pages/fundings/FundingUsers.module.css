@@ -1,6 +1,36 @@
+.logo_excel{
+  color:var(--primary);
+  margin-right: 5px;
+  width:30px;
+  height:30px;
+}
+
+.a{
+
+}
+
 .table{
-    border: 1px solid var(--secondary);
+  margin-top: 10px;
+  border: 1px solid var(--secondary);
 }
 .table td, .table th {
-    border: 1px solid var(--secondary);
+  border: 1px solid var(--secondary);
+  padding: 10px;
+}
+
+.table > thead *{
+  white-space: nowrap;
+  font-weight: 700;
+  box-shadow: var(--boxshadow);
+  border-bottom: var(--border);
+}
+
+.c{
+  
+}
+.d{
+  
+}
+.e{
+  
 }

@@ -95,7 +95,7 @@ const CommunityEdit = () => {
           className={baseClasses["co_input"]}
         >
           {(item?.related_funding?.title
-            ?? "") + " | 후기 편경 불가"}
+            ?? "") + " | 후기 변경 불가"}
         </div>
         <h1 className={baseClasses["co_h1"]}>커뮤니티 글 작성</h1>
         <input

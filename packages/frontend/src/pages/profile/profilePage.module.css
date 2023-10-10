@@ -132,6 +132,17 @@ background-color: var(--border);
    font-weight: 500;
 }
 
+.funding_user{
+  height: 46px;
+  justify-content: center;
+  display:flex;
+}
+
+.funding_user_icon{
+  width: 20px;
+  height: 20px;
+}
+
 .table_funding_tags{
     display:flex;
     color:var(--green);
@@ -184,6 +195,11 @@ background-color: var(--border);
         white-space:nowrap;
     }
     
-    
+    /* .funding_user{
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    } */
 
 }
