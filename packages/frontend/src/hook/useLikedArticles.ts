@@ -1,3 +1,4 @@
+import { API_URL } from "@/config";
 import { ArticleObject } from "dto";
 import useSWR from "swr";
 import { DateToString, fetcher } from "./util";
@@ -13,7 +14,7 @@ export default function useLikedArticles({
   limit = 50,
   tags = undefined,
 }: UseArticleOptions = {}) {
-  const url = new URL("/api/v1/articles/likes", window.location.href);
+  const url = new URL("/api/v1/articles/likes", API_URL);
   url.searchParams.append("offset", offset.toString());
   url.searchParams.append("limit", limit.toString());
 
