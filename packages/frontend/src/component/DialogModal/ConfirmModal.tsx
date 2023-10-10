@@ -34,12 +34,12 @@ export default function ConfirmModal({
         <Button
           onClick={onConfirm}
         >
-          Confirm
+          네
         </Button>
         <Button
           onClick={onCancel}
         >
-          Cancel
+          아니오
         </Button>
       </Modal.Footer>
     </Modal>

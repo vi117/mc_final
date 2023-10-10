@@ -15,6 +15,7 @@ import { Container, ErrorPage, LoadingPage } from "../../component";
 import { useLoginInfo } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
+import { useConfirmModal } from "../../hook/useConfirmModal";
 import useFundingDetail from "../../hook/useFundingDetail";
 import { FetchError } from "../../hook/util";
 
@@ -39,6 +40,7 @@ const FundingsDetail = function() {
   const [isMoreView, setIsMoreView] = useState(false);
   const JoinBtnRef = useRef(null);
   const { AlertModal, showAlertModal } = useAlertModal();
+  const { ConfirmModal, showConfirmModal } = useConfirmModal();
   const navigate = useNavigate();
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
@@ -122,6 +124,7 @@ const FundingsDetail = function() {
         />
       )}
       <AlertModal />
+      <ConfirmModal />
 
       <div className={classes["funding_title"]}>
         <ul className={classes["funding_detail_tags"]}>
@@ -353,7 +356,7 @@ const FundingsDetail = function() {
 
           <div className={classes.joinBtn}>
             {funding.participated_reward_id
-              // TODO(vi117): 환불 창 추가
+              // TODO(vi117): 환불 창 추가 (231010 당현진처리,환불페이지는 아니고 취소 확인창)
               ? (
                 <Button
                   ref={JoinBtnRef}
@@ -417,17 +420,26 @@ const FundingsDetail = function() {
   }
 
   async function withdrawFunding() {
-    if (!selectedReward) {
-      // unreachable
-      throw new Error("not selected reward");
+    if (await showConfirmModal("펀딩 참여취소", "정말로 취소하시겠습니까?")) {
+      try {
+        await withdrawFundingAPI(funding.id, selectedReward.id);
+        showAlertModal(
+          "펀딩 참여 취소 완료",
+          "취소 처리되었습니다. 환불 관련 문의는 관리자에게 문의해주세요.",
+        );
+      } catch (e) {
+        if (e instanceof Error) {
+          showAlertModal(
+            "펀딩 참여 취소 실패",
+            "로그인 후 다시 시도해보시고, 연속 실패시 관리자에게 문의해주세요.",
+          );
+          console.log(e);
+        } else throw e;
+      }
+    } else {
+      return false;
     }
-    try {
-      await withdrawFundingAPI(funding.id, selectedReward.id);
-    } catch (e) {
-      console.log(e);
-      await showAlertModal("withdraw error", e.message);
-      return;
-    }
+
     mutate({
       ...funding,
       participated_reward_id: null,
@@ -592,7 +604,7 @@ function Report({
       // TODO(vi117): show alert.(231010 당현진처리)
       await showAlertModal(
         "전송실패",
-        "신고 사유를 작성하시고 다시 시도해주세요.",
+        "로그인 되었는지 확인하시고, 신고 사유를 작성하시어 다시 시도해주세요.",
       );
     }
   }
