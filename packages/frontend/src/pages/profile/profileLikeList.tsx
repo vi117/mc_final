@@ -56,9 +56,9 @@ function FundingTable({
     <table className={classes["accordion_table"]}>
       <thead>
         <tr>
-          <th className={classes["accordion_th_tags"]} scope="col">펀딩</th>
+          <th scope="col">펀딩</th>
           <th scope="col">창작자</th>
-          <th className={classes["accordion_th_time"]} scope="col">기한</th>
+          <th scope="col">기한</th>
         </tr>
       </thead>
       <tbody>
@@ -67,20 +67,23 @@ function FundingTable({
             - new Date().getTime();
           return (
             <tr key={article.id}>
-              <Link to={`/fundings/${article.id}`}>
-                <td className={classes["accordion_table_title"]}>
+              <td>
+                <Link
+                  to={`/fundings/${article.id}`}
+                  className={classes["accordion_table_title"]}
+                >
                   <div className={classes["table_funding_tags"]}>
                     {article.tags.slice(0, 3).map((tag) => (
                       <div key={tag.id}>[{tag.tag}]</div>
                     ))}
                   </div>
                   <p>{article.title}</p>
-                </td>
-              </Link>
-              <td className={classes["accordion_table_created"]}>
+                </Link>
+              </td>
+              <td>
                 {article.host_nickname}
               </td>
-              <td className={classes["accordion_table_time"]}>
+              <td>
                 {restTime / (1000 * 60 * 60 * 24) > 0
                   ? (
                     <>
@@ -92,7 +95,7 @@ function FundingTable({
                   )
                   : (
                     <>
-                      <div className={classes["accordion_table_end"]}>
+                      <div>
                         종료
                       </div>
                     </>
@@ -150,8 +153,8 @@ function UserOpenedFundings() {
     <table className={classes["accordion_table"]}>
       <thead>
         <tr>
-          <th className={classes["accordion_th_tags"]} scope="col">펀딩</th>
-          <th className={classes["accordion_th_time"]} scope="col">기한</th>
+          <th scope="col">펀딩</th>
+          <th scope="col">기한</th>
           <th scope="col">후원자 관리</th>
         </tr>
       </thead>
@@ -161,18 +164,21 @@ function UserOpenedFundings() {
             - new Date().getTime();
           return (
             <tr key={article.id}>
-              <Link to={`/fundings/${article.id}`}>
-                <td className={classes["accordion_table_title"]}>
+              <td>
+                <Link
+                  to={`/fundings/${article.id}`}
+                  className={classes["accordion_table_title"]}
+                >
                   <div className={classes["table_funding_tags"]}>
                     {article.tags.slice(0, 3).map((tag) => (
                       <div key={tag.id}>[{tag.tag}]</div>
                     ))}
                   </div>
                   <p>{article.title}</p>
-                </td>
-              </Link>
-              <td className={classes["accordion_table_time"]}>
-                {restTime / (1000 * 60 * 60 * 24) > 0
+                </Link>
+              </td>
+              <td>
+                {restTime > 0
                   ? (
                     <>
                       <div className={classes["accordion_table_resttime"]}>
@@ -183,19 +189,19 @@ function UserOpenedFundings() {
                   )
                   : (
                     <>
-                      <div className={classes["accordion_table_end"]}>
+                      <div>
                         종료
                       </div>
                     </>
                   )}
               </td>
-              <Link to={`/fundings/${article.id}/users`}>
-                <td className={classes["funding_user"]}>
+              <td>
+                <Link to={`/fundings/${article.id}/users`}>
                   <HiOutlineClipboardDocumentList
                     className={classes["funding_user_icon"]}
                   />
-                </td>
-              </Link>
+                </Link>
+              </td>
             </tr>
           );
         })}
@@ -273,18 +279,8 @@ function UserFundingRequests() {
         {data?.map((fr) => (
           <tr key={fr.id}>
             <td scope="row">{fr.id}</td>
-            <td
-              className={classes[
-                fr.funding_state === 0
-                  ? "pending"
-                  : fr.funding_state === 1
-                  ? "approved"
-                  : fr.funding_state === 2
-                  ? "rejected"
-                  : ""
-              ]}
-            >
-              <div className={classes["funding_state_container"]}>
+            <td>
+              <div>
                 {["보류", "승인", "거부됨"][fr.funding_state]}
               </div>
             </td>

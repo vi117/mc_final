@@ -37,10 +37,10 @@
   margin-left: 0px !important;
   margin-right: 0px !important;
   padding: 30px 0px;
- display:grid;
- justify-content: center;
- grid-template-columns: repeat(3, 1fr);
- column-gap: 25px;
+  display:grid;
+  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 25px;
 }
 
 /*반응형*/
