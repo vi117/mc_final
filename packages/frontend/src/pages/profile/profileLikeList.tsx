@@ -1,4 +1,5 @@
 import useFundingRequest from "@/hook/useFundingRequest";
+import { useLoginInfo } from "@/hook/useLogin";
 import { Accordion, Placeholder } from "react-bootstrap";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { Link } from "react-router-dom";
@@ -106,8 +107,9 @@ function FundingTable({
 }
 
 function UserOpenedFundings() {
+  const userInfo = useLoginInfo();
   const { data, error, isLoading } = useFundings({
-    limit: 50,
+    host_id: userInfo?.id,
   });
   if (isLoading) {
     return (
