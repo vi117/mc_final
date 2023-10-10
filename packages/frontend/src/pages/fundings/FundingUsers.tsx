@@ -1,4 +1,4 @@
-import { Container, LoadingPage } from "@/component";
+import { Container, ErrorPage, LoadingPage } from "@/component";
 import useFundingUsers from "@/hook/useFundingUsers";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { useParams } from "react-router-dom";
@@ -10,7 +10,7 @@ export default function FundingUsersPage() {
   const id = parseInt(params.id ?? "NaN");
   const { data: plist, error, isLoading } = useFundingUsers(id);
   if (error) {
-    return <div>에러! : {error.message}</div>;
+    return <ErrorPage error={error} />;
   }
   // TODO(vi117): 멋진 progress bar
   if (isLoading) {

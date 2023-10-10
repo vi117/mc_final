@@ -1,4 +1,3 @@
-import { Container } from "react-bootstrap";
 import { AiFillHeart } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,6 +8,7 @@ import {
   postArticleComment,
   setArticleLike,
 } from "../../api/article";
+import { ErrorPage, LoadingPage } from "../../component";
 import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
 import { useConfirmModal } from "../../hook/useConfirmModal";
@@ -41,14 +41,10 @@ export function CommunityDetail() {
   });
 
   if (isLoading) {
-    return <div>로딩중...</div>;
+    return <LoadingPage />;
   }
   if (error) {
-    return (
-      <Container>
-        <div>삭제된 글입니다.</div>
-      </Container>
-    );
+    return <ErrorPage error={error} />;
   }
 
   const item = article;

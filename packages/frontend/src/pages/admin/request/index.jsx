@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Button, Carousel, ListGroup } from "react-bootstrap";
-import { Container, LoadingPage } from "../../../component";
+import { Container, ErrorPage, LoadingPage } from "../../../component";
 import { formatDate } from "../../../util/date";
 import { isPSApprovedTag } from "../../../util/tag";
 import classes from "./index.module.css";
@@ -19,7 +19,7 @@ export default function FundingRequestDetailPage() {
   }
 
   if (error) {
-    return <Container>에러 {error.message}</Container>;
+    return <ErrorPage error={error} />;
   }
 
   const funding = data;

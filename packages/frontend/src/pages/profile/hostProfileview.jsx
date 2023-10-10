@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import { LoadingPage } from "../../component";
+import { ErrorPage, LoadingPage } from "../../component";
 import useFundings from "../../hook/useFundings";
 import useUserInfo from "../../hook/useUser";
 import Profileimg from "../community/assets/user.png";
@@ -29,7 +29,7 @@ const HostProfile = function() {
   }
 
   if (fetcherError || error) {
-    return <div>에러가 발생했습니다.</div>;
+    return <ErrorPage error={fetcherError || error} />;
   }
 
   return (
