@@ -20,6 +20,7 @@ app.use(cors({
     "http://localhost:3000",
     process.env["SERVER_URL"] ?? "http://localhost:3000",
   ],
+  credentials: true,
 }));
 
 app.use(logger("dev"));
