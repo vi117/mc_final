@@ -1,4 +1,5 @@
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
+import { Button } from "../Button";
 
 export default function AlertModal({
   showModal,
