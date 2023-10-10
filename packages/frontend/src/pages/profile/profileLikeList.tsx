@@ -1,9 +1,10 @@
 import useFundingRequest from "@/hook/useFundingRequest";
 import { Accordion, Placeholder } from "react-bootstrap";
+import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import useFundings from "../../hook/useFundings";
 import useLikedArticles from "../../hook/useLikedArticles";
-import { useLoginInfo } from "../../hook/useLogin";
+
 import classes from "./profilePage.module.css";
 
 function FundingTable({
@@ -105,9 +106,100 @@ function FundingTable({
 }
 
 function UserOpenedFundings() {
-  const userInfo = useLoginInfo();
-  const { data, error, isLoading } = useFundings({ host_id: userInfo?.id });
-  return <FundingTable data={data} isLoading={isLoading} error={error} />;
+  const { data, error, isLoading } = useFundings({
+    limit: 50,
+  });
+  if (isLoading) {
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">번호</th>
+            <th scope="col">태그</th>
+            <th scope="col">제목</th>
+            <th scope="col">글쓴이</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[1, 2, 3].map((index) => (
+            <tr key={index}>
+              <Placeholder as="th" scope="row" animation="glow">
+                <Placeholder style={{ width: "20px" }} />
+              </Placeholder>
+              <Placeholder as="td" animation="glow">
+                <Placeholder style={{ width: "50px" }} />
+              </Placeholder>
+              <Placeholder as="td" animation="glow">
+                <Placeholder style={{ width: "100px" }} />
+              </Placeholder>
+              <Placeholder as="td" animation="glow">
+                <Placeholder style={{ width: "50px" }} />
+              </Placeholder>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  }
+  if (error) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+  return (
+    <table className={classes["accordion_table"]}>
+      <thead>
+        <tr>
+          <th className={classes["accordion_th_tags"]} scope="col">펀딩</th>
+          <th className={classes["accordion_th_time"]} scope="col">기한</th>
+          <th scope="col">후원자 관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data?.map((article) => {
+          const restTime = new Date(article.end_date).getTime()
+            - new Date().getTime();
+          return (
+            <tr key={article.id}>
+              <Link to={`/fundings/${article.id}`}>
+                <td className={classes["accordion_table_title"]}>
+                  <div className={classes["table_funding_tags"]}>
+                    {article.tags.slice(0, 3).map((tag) => (
+                      <div key={tag.id}>[{tag.tag}]</div>
+                    ))}
+                  </div>
+                  <p>{article.title}</p>
+                </td>
+              </Link>
+              <td className={classes["accordion_table_time"]}>
+                {restTime / (1000 * 60 * 60 * 24) > 0
+                  ? (
+                    <>
+                      <div className={classes["accordion_table_resttime"]}>
+                        <b>{(restTime / (1000 * 60 * 60 * 24)).toFixed(0)}</b>
+                        일 남음
+                      </div>
+                    </>
+                  )
+                  : (
+                    <>
+                      <div className={classes["accordion_table_end"]}>
+                        종료
+                      </div>
+                    </>
+                  )}
+              </td>
+              <Link to={`/fundings/${article.id}/users`}>
+                <td className={classes["funding_user"]}>
+                  <HiOutlineClipboardDocumentList
+                    className={classes["funding_user_icon"]}
+                  />
+                </td>
+              </Link>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
 }
 
 function UserInterestedFundings() {
