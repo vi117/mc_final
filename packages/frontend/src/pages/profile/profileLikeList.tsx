@@ -280,7 +280,17 @@ function UserFundingRequests() {
           <tr key={fr.id}>
             <td scope="row">{fr.id}</td>
             <td>
-              <div>
+              <div
+                className={classes[
+                  fr.funding_state === 0
+                    ? "pending"
+                    : fr.funding_state === 1
+                    ? "approved"
+                    : fr.funding_state === 2
+                    ? "rejected"
+                    : ""
+                ]}
+              >
                 {["보류", "승인", "거부됨"][fr.funding_state]}
               </div>
             </td>

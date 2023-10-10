@@ -1,10 +1,9 @@
-import Button from "@mui/material/Button";
 import { useState } from "react";
-import { Badge, Container } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import { fundingApprove, fundingReject } from "../../../src/api/mod";
 import useAlertModal from "../../../src/hook/useAlertModal";
+import { formatDate } from "./../../util/date";
 
 import useArticleReports from "../../hook/useArticleReports";
 import useFundingReports from "../../hook/useFundingReport";
@@ -15,7 +14,7 @@ import { usePromptModal } from "../../hook/usePromptModal";
 import classes from "./admin.module.css";
 
 function getStateTextFromFundingState(funding_state: number) {
-  return ["승인 대기", "승인됨", "승인 거부"][funding_state];
+  return ["승인 대기", "승인됨", "승인 거부됨"][funding_state];
 }
 
 function FundingRequestManageTap() {
@@ -35,50 +34,86 @@ function FundingRequestManageTap() {
     <div className={classes["admin_contents_container"]}>
       <AlertModal />
       <PromptModal placeholder="거부 사유" />
-      <h3 className={classes["h3"]}>펀딩 심사 관리</h3>
+      <h3>펀딩 심사 관리</h3>
+      <hr></hr>
       <div className={classes["fundingState"]}>
         {data && data.map((funding) => {
           return (
-            <div key={funding.id}>
+            <div className={classes["fundingState_item"]} key={funding.id}>
+              {
+                /* <div className={classes["fundingState_value"]}>
               {funding.deleted_at !== null && (
                 <div>거부된 펀딩 요청입니다.</div>
               )}
-              <div className={classes["Fundingthumbnail"]}>
+              </div> */
+              }
+              <div>
                 <Link to={`/fundings/request/${funding.id}`}>
                   <img src={funding.thumbnail}></img>
                 </Link>
-                <div>
+              </div>
+              <div className={classes["fundingState_textarea"]}>
+                <div
+                  className={classes[
+                    funding.funding_state === 2
+                      ? "rejected"
+                      : "fundingState_value"
+                  ]}
+                >
                   {getStateTextFromFundingState(funding.funding_state)}
                 </div>
                 <Link to={`/fundings/request/${funding.id}`}>
-                  <h1 style={{ fontSize: "16px", textAlign: "left" }}>
+                  <div className={classes["FundingTitle"]}>
+                    {funding.meta_parsed?.tags
+                      && funding.meta_parsed.tags.some(tag => tag.trim() !== "")
+                      && (
+                        funding.meta_parsed.tags.map((tag) => (
+                          <div className={classes["FundingTag"]} key={tag}>
+                            [{tag}]
+                          </div>
+                        ))
+                      )}
                     {funding.title}
-                  </h1>
+                  </div>
                 </Link>
-                <div className={classes["FundingHost"]}>
-                  {funding.host_email}
-                  <div>{funding.host_nickname}</div>
-                  목표 {funding.target_value}원
-                </div>
-                <div className={classes["FundingTag"]}>
-                  {funding.meta_parsed?.tags.map((tag) => (
-                    <Badge key={tag}>{tag}</Badge>
-                  ))}
-                </div>
-                <Button
-                  variant="outlined"
+                <table className={classes["funding_profile_table"]}>
+                  <tbody>
+                    <tr>
+                      <td>호스트</td>
+                      <td>{funding.host_nickname} ({funding.host_email})</td>
+                    </tr>
+                    <tr>
+                      <td>목표</td>
+                      <td>{funding.target_value}원</td>
+                    </tr>
+                    <tr>
+                      <td>펀딩기간</td>
+                      <td>
+                        {formatDate(funding.begin_date)} ~{" "}
+                        {formatDate(funding.end_date)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>신청일</td>
+                      <td>{formatDate(funding.created_at)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className={classes["button_area"]}>
+                <button
+                  className={classes["button_approve"]}
                   onClick={() => onApproveClick(funding.id)}
                 >
                   승인
-                </Button>
-                <Button
-                  variant="outlined"
+                </button>
+                <button
                   color="error"
                   style={{ left: "5px" }}
                   onClick={() => onRejectClick(funding.id)}
                 >
                   거부
-                </Button>
+                </button>
               </div>
             </div>
           );
@@ -141,20 +176,34 @@ function FundingReportManageTap() {
   }
 
   return (
-    <Container>
-      <div>
+    <div className={classes["admin_contents_container"]}>
+      <h3>펀딩 신고 관리</h3>
+      <hr></hr>
+      <table className={classes["report_table"]}>
+        <thead>
+          <tr>
+            <th className={classes["table_num"]}>번호</th>
+            <th className={classes["table_title"]}>펀딩 제목</th>
+            <th className={classes["table_reason"]}>신고 사유</th>
+          </tr>
+        </thead>
         {data === undefined ? undefined : data.map((x) => {
           return (
-            <div>
-              <Link to={`/fundings/${x.funding_id}`}>
-                {x.funding_title}
-              </Link>
-              {x.content}
-            </div>
+            <tbody key={x.id}>
+              <tr>
+                <td>{x.id}</td>
+                <td>
+                  <Link to={`/fundings/${x.funding_id}`}>
+                    {x.funding_title}
+                  </Link>
+                </td>
+                <td className={classes["reason_content"]}>{x.content}</td>
+              </tr>
+            </tbody>
           );
         })}
-      </div>
-    </Container>
+      </table>
+    </div>
   );
 }
 
@@ -171,20 +220,34 @@ function CommunityReport() {
     return <div>에러가 발생했습니다.</div>;
   }
   return (
-    <Container>
-      <div>
+    <div className={classes["admin_contents_container"]}>
+      <h3>커뮤니티 신고 관리</h3>
+      <hr></hr>
+      <table className={classes["report_table"]}>
+        <thead>
+          <tr>
+            <th className={classes["table_num"]}>번호</th>
+            <th className={classes["table_title"]}>펀딩 제목</th>
+            <th className={classes["table_reason"]}>신고 사유</th>
+          </tr>
+        </thead>
         {data === undefined ? undefined : data.map((c) => {
           return (
-            <div>
-              <Link to={`/community/${c.article_id}`}>
-                {c.article_title}
-              </Link>
-              {c.content}
-            </div>
+            <tbody key={c.id}>
+              <tr>
+                <td>{c.id}</td>
+                <td>
+                  <Link to={`/community/${c.article_id}`}>
+                    {c.article_title}
+                  </Link>
+                </td>
+                <td>{c.content}</td>
+              </tr>
+            </tbody>
           );
         })}
-      </div>
-    </Container>
+      </table>
+    </div>
   );
 }
 
