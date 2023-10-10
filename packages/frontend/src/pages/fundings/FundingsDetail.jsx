@@ -423,17 +423,16 @@ const FundingsDetail = function() {
     if (await showConfirmModal("펀딩 참여취소", "정말로 취소하시겠습니까?")) {
       try {
         await withdrawFundingAPI(funding.id, selectedReward.id);
-        showAlertModal(
+        await showAlertModal(
           "펀딩 참여 취소 완료",
           "취소 처리되었습니다. 환불 관련 문의는 관리자에게 문의해주세요.",
         );
       } catch (e) {
         if (e instanceof Error) {
-          showAlertModal(
+          await showAlertModal(
             "펀딩 참여 취소 실패",
             "로그인 후 다시 시도해보시고, 연속 실패시 관리자에게 문의해주세요.",
           );
-          console.log(e);
         } else throw e;
       }
     } else {
