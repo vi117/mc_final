@@ -384,6 +384,14 @@ export class ArticleCommentRepository {
   constructor(db: Kysely<DB>) {
     this.db = db;
   }
+  async findById(id: number) {
+    const ret = await this.db.selectFrom("comments")
+      .where("comments.id", "=", id)
+      .selectAll("comments")
+      .executeTakeFirst();
+    return ret;
+  }
+
   async findAllByArticleId(article_id: number): Promise<CommentObject[]> {
     const ret = await this.db.selectFrom("comments")
       .innerJoin("users as author", "comments.user_id", "author.id")

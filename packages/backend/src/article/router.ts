@@ -329,13 +329,20 @@ async function deleteCommentHandler(req: Request, res: Response) {
   assert(!isNaN(id));
   const user = req.user;
   assert(user);
-  const exists = await commentRepository.deleteById(id);
-  if (!exists) {
+  const comment = await commentRepository.findById(id);
+  if (!comment) {
     res.status(StatusCodes.NOT_FOUND).json({
       message: "댓글이 존재하지 않습니다.",
     });
     return;
   }
+  if (!user.is_admin && comment.user_id !== user.id) {
+    res.status(StatusCodes.FORBIDDEN).json({
+      message: "게시글 소유자가 아닙니다.",
+    });
+    return;
+  }
+  await commentRepository.deleteById(id);
   res.json({ message: "success" }).status(StatusCodes.OK);
 }
 
