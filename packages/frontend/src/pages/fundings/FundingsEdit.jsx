@@ -308,11 +308,14 @@ const FundingsEdit = function({
           reward_count: r.reward_count,
         })),
       });
-      alert("요청이 접수되었습니다.");
+      await showAlertModal("요청완료", "관리자의 승인을 기다려주세요.");
       navigate("/fundings");
     } catch (e) {
       console.log(e);
-      alert("요청이 실패되었습니다.");
+      await showAlertModal(
+        "요청 실패",
+        "계속되는 실패시, 관리자에게 문의해주세요.",
+      );
     }
   }
 };

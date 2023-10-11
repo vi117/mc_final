@@ -348,7 +348,6 @@ const FundingsWrite = function() {
         certificateFiles,
         accountBankName,
       });
-      // TODO(vi117) : show alert.(231010 당현진처리)
       await showAlertModal("요청완료", "관리자의 승인을 기다려주세요.");
       navigate("/fundings");
     } catch (e) {
