@@ -510,7 +510,7 @@ function PrecautionForm() {
             label="후원 유의사항 확인"
             name="group1"
             type={type}
-            id={`inline-${type}-1`}
+            id={`inline-${type}-2`}
           />
         </div>
       ))}
