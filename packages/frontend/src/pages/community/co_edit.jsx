@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import { patchArticle } from "../../api/article";
-import { Editor } from "../../component/Editor";
+import { Container, Editor } from "../../component";
 import { useAlertModal } from "../../hook/useAlertModal";
 import { ANIMAL_CATEGORY } from "./constant";
 import baseClasses from "./styles/Co_base.module.css";
@@ -58,7 +58,7 @@ const CommunityEdit = () => {
   };
 
   return (
-    <div className={classes["write-container"]}>
+    <Container>
       <AlertModal />
       <div className={classes["write-wrap"]}>
         <Form.Select
@@ -120,7 +120,7 @@ const CommunityEdit = () => {
           <button onClick={sendRequest}>글 등록</button>
         </div>
       </div>
-    </div>
+    </Container>
   );
 
   async function sendRequest() {

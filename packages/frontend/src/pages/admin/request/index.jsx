@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import { Button, Carousel, ListGroup } from "react-bootstrap";
-import { Container } from "../../../component/Container";
+import { Container, ErrorPage, LoadingPage } from "../../../component";
 import { formatDate } from "../../../util/date";
 import { isPSApprovedTag } from "../../../util/tag";
+import Profileimg from "../../community/assets/user.png";
 import classes from "./index.module.css";
 
 import { NavLink, useParams } from "react-router-dom";
@@ -15,15 +16,11 @@ export default function FundingRequestDetailPage() {
   console.log("id", id);
 
   if (isLoading) {
-    return (
-      <Container>
-        <div>로딩 중 입니다.</div>
-      </Container>
-    );
+    return <LoadingPage />;
   }
 
   if (error) {
-    return <Container>에러 {error.message}</Container>;
+    return <ErrorPage error={error} />;
   }
 
   const funding = data;
@@ -89,8 +86,8 @@ export default function FundingRequestDetailPage() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <img
-                    // TODO(vi117): set default profile image
-                    src={funding.host_profile_image ?? ""}
+                    // TODO(vi117): set default profile image(231010 당현진처리)
+                    src={funding.host_profile_image ?? Profileimg}
                     className={classes["user"]}
                     alt="Profile"
                   />
@@ -182,6 +179,8 @@ function FileDownloadButton({
               href={link}
               // for same origin
               download
+              target="_blank"
+              rel="noreferrer"
             >
               증명서 확인
             </a>

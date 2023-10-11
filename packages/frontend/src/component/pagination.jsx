@@ -1,5 +1,5 @@
 import Pagination from "react-bootstrap/Pagination";
-import "../styles/pagination.css";
+import "./pagination.css";
 
 const Page = ({
   activePage,
@@ -10,7 +10,7 @@ const Page = ({
   const start = Math.max(activePage - Math.floor(range / 2), 1);
   const last = Math.min(start + range, endPage);
   const pageItems = [];
-  console.log(start, endPage);
+
   for (let pageNumber = start; pageNumber <= last; pageNumber++) {
     pageItems.push(
       <Pagination.Item

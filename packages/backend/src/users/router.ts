@@ -93,6 +93,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
       address: { type: "string" },
       address_detail: { type: "string" },
       phone: { type: "string" },
+      introduction: { type: "string" },
+      profile_url: { type: "string" },
       token: { type: "string" },
     },
     required: ["nickname", "email", "password", "address", "phone"],
@@ -111,6 +113,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
     address_detail,
+    introduction,
+    profile_url,
     token,
   } = req.body;
   const userRepository = getUserRepository();
@@ -123,7 +127,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
       password,
       address,
       phone,
-      profile_image: file?.url,
+      introduction,
+      profile_image: file?.url ?? profile_url,
       address_detail: address_detail ?? "",
     });
     if (user_id === undefined) {
@@ -309,6 +314,12 @@ export async function resetPassword(req: Request, res: Response) {
   }
 
   await userRepository.resetPassword(email, req.body.password);
+
+  // delete cookie
+  deleteAccessTokenFromCookie(res);
+  deleteRefreshTokenFromCookie(res);
+  res.clearCookie("login_user_id");
+
   res.status(StatusCodes.OK).json({
     message: "success",
   });
@@ -319,6 +330,29 @@ export const logout = (_req: Request, res: Response) => {
   deleteRefreshTokenFromCookie(res);
   res.clearCookie("login_user_id");
   res.status(StatusCodes.OK).json({ message: "로그아웃 성공" });
+  return;
+};
+
+export const withdraw = async (req: Request, res: Response) => {
+  const userRepository = getUserRepository();
+  const user = req.user;
+  assert(user);
+
+  await userRepository.updateById(user.id, {
+    deleted_at: new Date(),
+    password: "",
+    address: "",
+    address_detail: "",
+    phone: "",
+    email: null,
+    introduction: null,
+    profile_image: null,
+  });
+
+  deleteAccessTokenFromCookie(res);
+  deleteRefreshTokenFromCookie(res);
+  res.clearCookie("login_user_id");
+  res.status(StatusCodes.OK).json({ message: "success" });
   return;
 };
 
@@ -440,6 +474,7 @@ router.post("/verify", RouterCatch(verifyWithCode));
 router.post("/reset-password", RouterCatch(resetPassword));
 router.post("/send-reset-password", RouterCatch(sendPasswordReset));
 router.post("/logout", RouterCatch(logout));
+router.post("/withdraw", checkLogin(), RouterCatch(withdraw));
 router.post("/google-login", RouterCatch(googleLogin));
 router.get("/", checkLogin({ admin_check: true }), RouterCatch(queryAll));
 router.get("/:id(\\d+)", RouterCatch(queryById));

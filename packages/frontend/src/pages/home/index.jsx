@@ -49,7 +49,7 @@ export function HomePage() {
           <div className={classes["home-funding-banner"]}>
             <Carousel indicators={false} className={classes["home-carousel2"]}>
               <Carousel.Item>
-                <Link to={"/fundings/"}>
+                <Link to={"/fundings/8"}>
                   <Carousel.Caption
                     className={classes["carousel-item-caption"]}
                   >

@@ -67,17 +67,16 @@ font-size: 18px;
     min-height: 500px;
 }
 
-.my-3 {
-    padding:0px 10px;
+.left_col {
     height:390px;
 }
 
-.my-3 p {
+.left_col p {
     padding: 10px 15px;
 
 }
 
-.my-3 p:hover {
+.left_col p:hover {
 background-color: var(--border);
 }
 
@@ -125,17 +124,12 @@ background-color: var(--border);
     text-align: center;
     width:100%;
     display:flex;
+    flex-wrap: wrap;
 }
 
 .accordion_table_title *{
     margin: 0px;
    font-weight: 500;
-}
-
-.funding_user{
-  height: 46px;
-  justify-content: center;
-  display:flex;
 }
 
 .funding_user_icon{

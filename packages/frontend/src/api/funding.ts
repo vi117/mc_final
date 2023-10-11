@@ -1,30 +1,33 @@
+import { API_URL } from "@/config";
 import { APIError } from "./error";
 
 export async function withdrawFunding(id: number, selectedReward_id: number) {
   const url = new URL(
     `/api/v1/fundings/${id}/rewards/${selectedReward_id}/withdraw`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
 export async function setFundingInterest(id: number, like = true) {
   const url = new URL(
     `/api/v1/fundings/${id}/interest`,
-    window.location.origin,
+    API_URL,
   );
   url.searchParams.append("disset", (!like) ? "true" : "false");
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -49,14 +52,15 @@ export async function setFundingInterest(id: number, like = true) {
 export async function fundingApprove(id: number) {
   const url = new URL(
     `/api/v1/fundings/request/${id}/approve`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -70,10 +74,11 @@ export async function fundingApprove(id: number) {
 export async function fundingReject(id: number, reason?: string) {
   const url = new URL(
     `/api/v1/fundings/request/${id}/reject`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -83,7 +88,7 @@ export async function fundingReject(id: number, reason?: string) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -97,14 +102,15 @@ export async function fundingReject(id: number, reason?: string) {
 export async function fundingDelete(id: number) {
   const url = new URL(
     `/api/v1/fundings/${id}`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -116,10 +122,11 @@ export async function fundingParticipate(id: number, reward_id: number, body: {
 }) {
   const url = new URL(
     `/api/v1/fundings/${id}/rewards/${reward_id}/participate`,
-    window.location.href,
+    API_URL,
   );
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -131,7 +138,7 @@ export async function fundingParticipate(id: number, reward_id: number, body: {
   });
   if (!r.ok) {
     const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
 }
 
@@ -169,7 +176,7 @@ export async function postFundingRequest({
   certificateFiles: File[];
   funding_id?: number;
 }) {
-  const url = new URL("/api/v1/fundings/request", window.location.href);
+  const url = new URL("/api/v1/fundings/request", API_URL);
 
   const formData = new FormData();
 
@@ -196,12 +203,13 @@ export async function postFundingRequest({
 
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     body: formData,
   });
 
   if (!r.ok) {
     const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
 }
 
@@ -225,10 +233,11 @@ export async function postFundingRequestAsJson(obj: {
   accountBankName: string;
   certificateFiles: string[];
 }) {
-  const url = new URL("/api/v1/fundings/request", window.location.href);
+  const url = new URL("/api/v1/fundings/request", API_URL);
 
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -248,10 +257,14 @@ export async function postFundingRequestAsJson(obj: {
       certificate: obj.certificateFiles,
     }),
   });
+  const data = await r.json();
   if (!r.ok) {
-    const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
+  return data as {
+    message: "success";
+    id: number;
+  };
 }
 
 export async function postFundingReport(funding_id: number, {
@@ -262,7 +275,7 @@ export async function postFundingReport(funding_id: number, {
 }) {
   const url = new URL(
     `/api/v1/fundings/${funding_id}/report`,
-    window.location.href,
+    API_URL,
   );
   const formData = new FormData();
   formData.append("content", content);
@@ -271,10 +284,11 @@ export async function postFundingReport(funding_id: number, {
   });
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     body: formData,
   });
   if (!r.ok) {
     const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
 }

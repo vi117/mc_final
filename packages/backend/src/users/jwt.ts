@@ -42,7 +42,8 @@ export function createTokenFromUser(
     id: user.id,
     nickname: user.nickname,
     is_admin: user.is_admin == 1,
-    email: user.email,
+    // it assert email is not null.
+    email: user.email as string,
     email_approved: user.email_approved == 1,
   }, refresh);
 }

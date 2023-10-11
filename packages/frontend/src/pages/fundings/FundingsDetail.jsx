@@ -7,17 +7,18 @@ import {
   Form,
   ListGroup,
   Modal,
-  Spinner,
 } from "react-bootstrap";
 import { BiShareAlt } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { Container } from "../../component/Container";
+import { Container, ErrorPage, LoadingPage } from "../../component";
 import { useLoginInfo } from "../../hook/useLogin";
 
 import { useAlertModal } from "../../hook/useAlertModal";
+import { useConfirmModal } from "../../hook/useConfirmModal";
 import useFundingDetail from "../../hook/useFundingDetail";
 import { FetchError } from "../../hook/util";
+
 import { formatDate } from "./../../util/date";
 import { isPSApprovedTag } from "./../../util/tag";
 import Profileimg from "../community/assets/user.png";
@@ -39,7 +40,9 @@ const FundingsDetail = function() {
   const [isMoreView, setIsMoreView] = useState(false);
   const JoinBtnRef = useRef(null);
   const { AlertModal, showAlertModal } = useAlertModal();
+  const { ConfirmModal, showConfirmModal } = useConfirmModal();
   const navigate = useNavigate();
+
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
   };
@@ -58,19 +61,25 @@ const FundingsDetail = function() {
     setSelectedReward(reward);
   }, [isLoading, error, funding?.participated_reward_id, funding?.rewards]);
 
+  // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
   if (isLoading) {
-    // TODO(vi117): spinner 대신 Bootstrap.Placeholder 띄우기.
-    return <Spinner />;
+    return <LoadingPage />;
   }
+
   if (error) {
     if (error instanceof FetchError && error.info.code === "DELETED") {
       return (
         <Container>
-          <div>비공개 처리된 펀딩입니다.</div>
+          <ErrorPage
+            error={{
+              message: "비공개 처리된 펀딩입니다.",
+            }}
+          >
+          </ErrorPage>
         </Container>
       );
     }
-    return <div>에러가 발생했습니다.</div>;
+    return <ErrorPage error={error} />;
   }
 
   const handleOpenModal = () => {
@@ -116,6 +125,7 @@ const FundingsDetail = function() {
         />
       )}
       <AlertModal />
+      <ConfirmModal />
 
       <div className={classes["funding_title"]}>
         <ul className={classes["funding_detail_tags"]}>
@@ -347,7 +357,7 @@ const FundingsDetail = function() {
 
           <div className={classes.joinBtn}>
             {funding.participated_reward_id
-              // TODO(vi117): 환불 창 추가
+              // TODO(vi117): 환불 창 추가 (231010 당현진처리,환불페이지는 아니고 취소 확인창)
               ? (
                 <Button
                   ref={JoinBtnRef}
@@ -382,8 +392,11 @@ const FundingsDetail = function() {
       await fundingDelete(funding.id);
     } catch (error) {
       console.log(error);
-      // TODO(vi117): 예쁜 alert 쓰기.
-      alert("비공개하는 것을 실패했습니다.");
+      // TODO(vi117): 예쁜 alert 쓰기.(231010 당현진처리)
+      await showAlertModal(
+        "비공개 설정을 실패했습니다.",
+        "계속되는 실패시, 관리자에게 문의해주세요.",
+      );
     }
   }
   async function setInterest(id, like = true) {
@@ -408,17 +421,25 @@ const FundingsDetail = function() {
   }
 
   async function withdrawFunding() {
-    if (!selectedReward) {
-      // unreachable
-      throw new Error("not selected reward");
+    if (await showConfirmModal("펀딩 참여취소", "정말로 취소하시겠습니까?")) {
+      try {
+        await withdrawFundingAPI(funding.id, selectedReward.id);
+        await showAlertModal(
+          "펀딩 참여 취소 완료",
+          "취소 처리되었습니다. 환불 관련 문의는 관리자에게 문의해주세요.",
+        );
+      } catch (e) {
+        if (e instanceof Error) {
+          await showAlertModal(
+            "펀딩 참여 취소 실패",
+            "로그인 후 다시 시도해보시고, 연속 실패시 관리자에게 문의해주세요.",
+          );
+        } else throw e;
+      }
+    } else {
+      return false;
     }
-    try {
-      await withdrawFundingAPI(funding.id, selectedReward.id);
-    } catch (e) {
-      console.log(e);
-      await showAlertModal("withdraw error", e.message);
-      return;
-    }
+
     mutate({
       ...funding,
       participated_reward_id: null,
@@ -478,12 +499,15 @@ function Report({
   const [show, setShow] = useState(false);
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
+  const [category, setCategory] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const { showAlertModal, AlertModal } = useAlertModal();
 
   return (
     <>
+      <AlertModal />
       <div
         className={classes["go_report"]}
         onClick={handleShow}
@@ -506,14 +530,24 @@ function Report({
             <Form.Select
               aria-label="Default select example"
               style={{ marginBottom: "10px", fontSize: "14px" }}
+              onChange={(e) => setCategory(e.target.value)}
+              value={category}
             >
               <option>옵션을 선택해주세요</option>
-              <option value="1">이용약관 또는 펀딩 심사 기준 위반</option>
-              <option value="2">커뮤니티 운영원칙 위반</option>
-              <option value="3">개인정보 보호 권리 침해</option>
-              <option value="4">지식재산권 침해</option>
-              <option value="5">펀딩 이행 문제 관련</option>
-              <option value="6">기타/ 자세한 사유를 기재해주세요</option>
+              <option value="이용약관 또는 펀딩 심사 기준 위반">
+                이용약관 또는 펀딩 심사 기준 위반
+              </option>
+              <option value="커뮤니티 운영원칙 위반">
+                커뮤니티 운영원칙 위반
+              </option>
+              <option value="개인정보 보호 권리 침해">
+                개인정보 보호 권리 침해
+              </option>
+              <option value="지식재산권 침해">지식재산권 침해</option>
+              <option value="펀딩 이행 문제 관련">펀딩 이행 문제 관련</option>
+              <option value="기타">
+                기타/ 자세한 사유를 기재해주세요
+              </option>
             </Form.Select>
             <FloatingLabel
               controlId="floatingTextarea2"
@@ -568,15 +602,21 @@ function Report({
   async function submitReport() {
     try {
       await postFundingReport(funding_id, {
-        content: content,
+        content: `#${category}\n${content}`,
         files: files,
       });
-      // TODO(vi117): show alert
-      alert("전송완료");
+      // TODO(vi117): show alert.(231010 당현진처리)
+      await showAlertModal(
+        "전송완료",
+        "신고 접수되었습니다.",
+      );
     } catch (error) {
       console.log(error);
-      // TODO(vi117): show alert
-      alert("전송실패");
+      // TODO(vi117): show alert.(231010 당현진처리)
+      await showAlertModal(
+        "전송실패",
+        "로그인 되었는지 확인하시고, 신고 사유를 작성하시어 다시 시도해주세요.",
+      );
     }
   }
 }

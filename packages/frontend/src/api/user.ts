@@ -1,10 +1,11 @@
+import { API_URL } from "@/config";
 import { loginRevalidate } from "../hook/useLogin";
 import { APIError } from "./error";
 
 export async function emailCheck(email: string, signal: AbortSignal) {
   const url = new URL(
     "/api/v1/users/check-email",
-    window.location.origin,
+    API_URL,
   );
   url.searchParams.append("email", email);
 
@@ -15,7 +16,7 @@ export async function emailCheck(email: string, signal: AbortSignal) {
 export async function nicknameCheck(nickname: string, signal: AbortSignal) {
   const url = new URL(
     "/api/v1/users/check-nickname",
-    window.location.origin,
+    API_URL,
   );
   url.searchParams.append("nickname", nickname);
 
@@ -32,6 +33,7 @@ export async function signUp({
   AddressDetail,
   Article,
   ProfileImage,
+  ProfileImageUrl,
   token,
 }: {
   Email: string;
@@ -42,6 +44,7 @@ export async function signUp({
   AddressDetail?: string;
   Article: string;
   ProfileImage?: File;
+  ProfileImageUrl?: string;
   token?: string;
 }) {
   const formData = new FormData();
@@ -54,9 +57,13 @@ export async function signUp({
 
   if (AddressDetail) formData.append("address_detail", AddressDetail);
   if (ProfileImage) formData.append("profile", ProfileImage);
+  else {
+    if (ProfileImageUrl) formData.append("profile_url", ProfileImageUrl);
+  }
   if (token) formData.append("token", token);
 
-  const r = await fetch("/api/v1/users/signup", {
+  const url = new URL("/api/v1/users/signup", API_URL);
+  const r = await fetch(url.href, {
     method: "POST",
     body: formData,
   });
@@ -80,8 +87,10 @@ export async function signUp({
  * @throws {APIError} - If the token(`code`) has expired or is invalid
  */
 export async function resetPassword(password: string, code?: string) {
-  const res = await fetch("/api/v1/users/reset-password", {
+  const url = new URL("/api/v1/users/reset-password", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -91,8 +100,10 @@ export async function resetPassword(password: string, code?: string) {
     }),
   });
   if (!res.ok) {
-    throw new APIError("token expired or invalid");
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
+  loginRevalidate();
 }
 /**
  * Authenticates a user by sending a login request to the server.
@@ -118,8 +129,10 @@ export async function login(
     },
   ]
 > {
-  const res = await fetch("/api/v1/users/login", {
+  const url = new URL("/api/v1/users/login", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -144,8 +157,10 @@ export async function login(
  */
 export async function sendResetPassword(email: string) {
   // it equals 'await axios.post("/api/v1/users/send-reset-password", {email});'
-  const res = await fetch("/api/v1/users/send-reset-password", {
+  const url = new URL("/api/v1/users/send-reset-password", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -155,13 +170,15 @@ export async function sendResetPassword(email: string) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
 export async function resendVerification(email: string) {
-  const res = await fetch("/api/v1/users/send-verification", {
+  const url = new URL("/api/v1/users/send-verification", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -171,7 +188,7 @@ export async function resendVerification(email: string) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -193,12 +210,15 @@ export async function patchUserInfo(id: number, body: {
   if (body.introduction) formData.append("introduction", body.introduction);
   if (body.profile_image) formData.append("profile", body.profile_image);
 
-  const res = await fetch(`/api/v1/users/${id}`, {
+  const url = new URL(`/api/v1/users/${id}`, API_URL);
+  const res = await fetch(url.href, {
     method: "PATCH",
+    credentials: "include",
     body: formData,
   });
   if (!res.ok) {
-    throw new APIError("token expired or invalid");
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
   loginRevalidate();
   return await res.json();
@@ -210,19 +230,24 @@ export async function patchUserInfo(id: number, body: {
  * @return {Promise<void>} Returns a promise that resolves when the logout request is complete.
  */
 export async function logout(): Promise<void> {
-  const res = await fetch("/api/v1/users/logout", {
+  const url = new URL("/api/v1/users/logout", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
   });
   loginRevalidate();
-  if (res.status !== 200) {
-    throw new APIError("token expired or invalid");
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
   console.log("logout success");
 }
 
 export async function verifyUserEmail(code: string) {
-  const res = await fetch("/api/v1/users/verify", {
+  const url = new URL("/api/v1/users/verify", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -231,7 +256,20 @@ export async function verifyUserEmail(code: string) {
     }),
   });
   if (!res.ok) {
-    throw new APIError("token expired or invalid");
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
+  }
+}
+
+export async function withdrawUser() {
+  const url = new URL("/api/v1/users/withdraw", API_URL);
+  const res = await fetch(url.href, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
 }
 
@@ -249,8 +287,10 @@ export async function googleLogin(code: string): Promise<{
     name: string;
   };
 }> {
-  const res = await fetch("/api/v1/users/google-login", {
+  const url = new URL("/api/v1/users/google-login", API_URL);
+  const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },

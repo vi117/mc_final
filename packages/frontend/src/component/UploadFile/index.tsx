@@ -23,7 +23,7 @@ export function Upload({
 }) {
   const { images, uploading, handleUploadFile, removeImage } = state;
   const inputRef = useRef<HTMLInputElement>(null);
-  console.log(images, multiple);
+
   return (
     <>
       <div

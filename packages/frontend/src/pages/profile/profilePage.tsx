@@ -32,8 +32,8 @@ export default function Profile() {
         <Container
           style={{ minHeight: "650px" }}
         >
-          <Row>
-            <Col md={3} className={classes["my-3"]}>
+          <Row className={"gx-0 gy-4"}>
+            <Col md={3} className={classes["left_col"] + " gx-2"}>
               <div
                 style={{
                   border: "1px solid var(--secondary)",
@@ -81,10 +81,9 @@ export default function Profile() {
                     <p>회원탈퇴</p>
                   </Link>
                 </Row>
-                <hr className="d-block d-md-none" />
               </div>
             </Col>
-            <Col md={9} className={classes["accordion"]}>
+            <Col md={9} className={"gx-2"}>
               <AccordionList />
             </Col>
           </Row>

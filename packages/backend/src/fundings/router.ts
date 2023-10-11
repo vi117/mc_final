@@ -217,7 +217,7 @@ async function getFundingUsersHandler(req: Request, res: Response) {
       || funding.current_value < funding.target_value
     ) {
       res.status(StatusCodes.FORBIDDEN).json({
-        message: "완료되지 않은 펀딩입니다.",
+        message: "끝나지 않거나 목표를 달성하지 못한 펀딩입니다.",
       });
       return;
     }
@@ -555,6 +555,7 @@ function getRequestDataFromReqJson(req: Request) {
     ],
   }, req.body);
   assert_param(v, "유효하지 않은 요청입니다.", {
+    code: "INVALID_REQUEST_FORMAT",
     errors: ajv.errors,
   });
   const { title, content, target_value, rewards } = req.body;
@@ -603,13 +604,20 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     } else if (req.is("application/json")) {
       return getRequestDataFromReqJson(req);
     }
-    throw new BadRequestError("잘못된 요청입니다.");
+    throw new BadRequestError(
+      "multipart/form-data나 application/json가 아닌 요청입니다.",
+      {
+        code: "INVALID_REQUEST_FORMAT",
+      },
+    );
   })();
   const fundingRepo = new FundingsRepository(getDB());
   // check title duplication
   const funding = await fundingRepo.findByTitle(title);
   if (funding && funding.id !== funding_id) {
-    throw new BadRequestError("이미 존재하는 제목입니다.");
+    throw new BadRequestError("이미 존재하는 제목입니다.", {
+      code: "DUPLICATED_TITLE",
+    });
   }
   const clean_content = sanitize(content, {
     allowedTags: sanitize.defaults.allowedTags.concat(["img"]),
@@ -677,6 +685,15 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
   }
 
   const requestRepo = new FundingRequestsRepository(getDB());
+  const request = await requestRepo.findById(id);
+  assert_exists(!!request, "존재하지 않는 ID");
+  if (request.funding_state !== 0) {
+    res.status(StatusCodes.CONFLICT).json({
+      message: "이미 승인, 거절된 요청입니다.",
+    });
+    return;
+  }
+
   requestRepo.updateById(id, {
     funding_state: 2,
     reason: req.body.reason,

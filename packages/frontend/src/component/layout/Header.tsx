@@ -69,20 +69,7 @@ export function Header() {
                 </Nav>
 
                 {userInfo !== null && (
-                  // TODO: 유저닉네임 노출
                   <Nav>
-                    {
-                      /* <div
-                    style={{
-                      alignItems:"center",
-                      display:"flex",
-                      fontFamily: "Noto Sans KR, sans-serif",
-                    }}
-                  >
-                    {userInfo.nickname}
-                  </div> */
-                    }
-
                     <NavLink to={`/profile`}>
                       <span className={classes.header_logo_nav}>
                         <img
@@ -90,16 +77,6 @@ export function Header() {
                           className={classes.user}
                           alt="Profile"
                         />
-                        {
-                          /* <CgProfile
-                        color="#555555"
-                        style={{
-                          marginRight: "5px",
-                          width: "20px",
-                          height: "20px",
-                        }}
-                      /> */
-                        }
                         <span className={classes.user_nickname}>
                           {userInfo.nickname}
                         </span>

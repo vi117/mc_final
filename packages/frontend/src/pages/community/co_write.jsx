@@ -11,6 +11,7 @@ import Cowritemodal from "./components/co_writemodal";
 import "./styles/editor.css";
 import { GoArrowLeft } from "react-icons/go";
 import { postArticle } from "../../api/article";
+import { Container } from "../../component";
 import { useAlertModal } from "../../hook/useAlertModal";
 
 const selectList = ANIMAL_CATEGORY.map((v) => ({
@@ -62,7 +63,7 @@ const CommunityWrite = () => {
   };
 
   return (
-    <div className={classes["write-container"]}>
+    <Container>
       <AlertModal />
       {
         <Cowritemodal
@@ -145,10 +146,19 @@ const CommunityWrite = () => {
           <button onClick={sendRequest}>글 등록</button>
         </div>
       </div>
-    </div>
+    </Container>
   );
 
   async function sendRequest() {
+    if (title === "") {
+      await showAlertModal("fail", "제목을 입력해주세요.");
+      return;
+    }
+    if (category === "") {
+      await showAlertModal("fail", "카테고리를 선택해야 합니다.");
+      return;
+    }
+
     try {
       await postArticle({
         title,

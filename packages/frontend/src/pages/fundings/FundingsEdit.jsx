@@ -9,12 +9,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import { TagsInput } from "react-tag-input-component";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { APIError } from "../../api/error";
 import { postFundingRequestAsJson } from "../../api/funding";
+import { Container, ErrorPage, LoadingPage } from "../../component";
 import Calender from "../../component/Calender";
-import { Container } from "../../component/Container";
 import { Editor } from "../../component/Editor";
 import UploadImage from "./../../component/UploadFile";
 import { useUploadFile } from "../../component/UploadFile/hook";
+import useAlertModal from "../../hook/useAlertModal";
 import { useFundingRequestById } from "../../hook/useFundingRequestById";
 import { cutNickname } from "../../util/cut";
 import { Guide } from "./component/Guide";
@@ -55,12 +57,11 @@ function FundingEditPage() {
     funding.funding_request_id,
   );
   if (error) {
-    return <div>에러가 발생했습니다.</div>;
+    return <ErrorPage error={error}></ErrorPage>;
   }
   if (isLoading) {
-    return <div>로딩중...</div>;
+    return <LoadingPage />;
   }
-  console.log(data);
   return <FundingsEdit fundingRequest={data} funding={funding} />;
 }
 
@@ -92,7 +93,6 @@ const FundingsEdit = function({
       },
     },
   );
-
   const contentThumbnails = useUploadFile(
     funding.content_thumbnails ?? [],
   );
@@ -113,6 +113,8 @@ const FundingsEdit = function({
   const infoAreaRef = useRef(null);
   const StoryAreaRef = useRef(null);
   const MakerAreaRef = useRef(null);
+  const { AlertModal, showAlertModal } = useAlertModal();
+
   const scrollToInfoArea = () => {
     document.body.scrollIntoView();
   };
@@ -125,6 +127,7 @@ const FundingsEdit = function({
 
   return (
     <Container className={"d-flex " + classes.funding_write_wrap}>
+      <AlertModal />
       <FundingWriteNavigator nickname={userInfo.nickname}>
         <button onClick={() => scrollToInfoArea()}>
           프로젝트 기본 정보
@@ -202,7 +205,7 @@ const FundingsEdit = function({
             className={classes.story_area}
           >
             <h2>콘텐츠 썸네일</h2>
-            <p>콘텐츠 썸네일 사진을 업로드해주세요.</p>
+            <p>콘텐츠 썸네일 사진(내부 썸내일 사진)을 업로드해주세요.</p>
             <UploadImage state={contentThumbnails} multiple />
           </Form.Group>
 
@@ -269,6 +272,22 @@ const FundingsEdit = function({
   );
 
   async function sendRequest() {
+    if (title === "") {
+      await showAlertModal("제목", "제목을 입력해주세요.");
+      return;
+    }
+    if (content === "") {
+      await showAlertModal("내용", "내용을 입력해주세요.");
+      return;
+    }
+    if (thumbnailState.images.length === 0) {
+      await showAlertModal("썸네일", "썸네일을 업로드해주세요.");
+      return;
+    }
+    if (contentThumbnails.images.length === 0) {
+      await showAlertModal("썸네일", "콘텐츠 썸네일을 업로드해주세요.");
+      return;
+    }
     try {
       await postFundingRequestAsJson({
         funding_id: funding.id,
@@ -290,11 +309,20 @@ const FundingsEdit = function({
           reward_count: r.reward_count,
         })),
       });
-      alert("요청이 접수되었습니다.");
+      await showAlertModal("요청완료", "관리자의 승인을 기다려주세요.");
       navigate("/fundings");
     } catch (e) {
       console.log(e);
-      alert("요청이 실패되었습니다.");
+      if (e instanceof APIError) {
+        if (e.data.code == "DUPLICATED_TITLE") {
+          await showAlertModal("요청 실패", "제목이 중복되었습니다.");
+          return;
+        }
+      }
+      await showAlertModal(
+        "요청 실패",
+        "계속되는 실패시, 관리자에게 문의해주세요.",
+      );
     }
   }
 };

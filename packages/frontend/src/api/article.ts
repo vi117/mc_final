@@ -1,3 +1,4 @@
+import { API_URL } from "@/config";
 import { APIError } from "./error";
 
 export async function postArticle({
@@ -11,9 +12,10 @@ export async function postArticle({
   category: string;
   reviewedFundingId?: number;
 }) {
-  const url = new URL("/api/v1/articles/", window.location.href);
+  const url = new URL("/api/v1/articles/", API_URL);
   const r = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -26,27 +28,31 @@ export async function postArticle({
   });
 
   if (!r.ok) {
-    throw new APIError("postArticle failed");
+    const data = await r.json();
+    throw new APIError("postArticle failed", r.status, data);
   }
 }
 
 export async function deleteArticle(id: number) {
-  const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
+  const url = new URL(`/api/v1/articles/${id}`, API_URL);
   const res = await fetch(url.href, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!res.ok) {
-    throw new APIError("deleteArticle failed");
+    const data = await res.json();
+    throw new APIError("deleteArticle failed", res.status, data);
   }
 }
 
 export async function postArticleComment(id: number, content: string) {
   const url = new URL(
     `/api/v1/articles/${id}/comments`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -61,32 +67,37 @@ export async function postArticleComment(id: number, content: string) {
       content,
     };
   }
-  throw new APIError("postArticleComment failed");
+  const data = await res.json();
+  throw new APIError("postArticleComment failed", res.status, data);
 }
 
 export async function deleteArticleComment(id: number, commentId: number) {
   const url = new URL(
     `/api/v1/articles/${id}/comments/${commentId}`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!res.ok) {
-    throw new APIError("deleteArticleComment failed");
+    const data = await res.json();
+    throw new APIError("deleteArticleComment failed", res.status, data);
   }
 }
 
 export async function setArticleLike(id: number, like = true) {
-  const url = new URL(`/api/v1/articles/${id}/like`, window.location.origin);
+  const url = new URL(`/api/v1/articles/${id}/like`, API_URL);
   if (!like) {
     url.searchParams.append("unlike", "true");
   }
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
   });
   if (!res.ok) {
-    throw new APIError("setArticleLike failed");
+    const data = await res.json();
+    throw new APIError("setArticleLike failed", res.status, data);
   }
 }
 
@@ -98,26 +109,29 @@ export async function patchArticle(id: number, body: {
   // currently, there is no tag
   tags?: string[];
 }) {
-  const url = new URL(`/api/v1/articles/${id}`, window.location.origin);
+  const url = new URL(`/api/v1/articles/${id}`, API_URL);
   const res = await fetch(url.href, {
     method: "PATCH",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    throw new APIError("patchArticle failed");
+    const data = await res.json();
+    throw new APIError("patchArticle failed", res.status, data);
   }
 }
 
 export async function reportArticle(article_id: number, reason: string) {
   const url = new URL(
     `/api/v1/articles/${article_id}/report`,
-    window.location.origin,
+    API_URL,
   );
   const res = await fetch(url.href, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -126,6 +140,7 @@ export async function reportArticle(article_id: number, reason: string) {
     }),
   });
   if (!res.ok) {
-    throw new APIError("reportArticle failed");
+    const data = await res.json();
+    throw new APIError("reportArticle failed", res.status, data);
   }
 }

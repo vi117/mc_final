@@ -1,12 +1,11 @@
+import { useParams } from "react-router-dom";
+
+import { ErrorPage, LoadingPage } from "../../component";
+import useFundings from "../../hook/useFundings";
+import useUserInfo from "../../hook/useUser";
 import Profileimg from "../community/assets/user.png";
 import FundingItem from "../fundings/component/Item";
 import classes from "./hostProfileview.module.css";
-// import { useState } from "react";
-import { useParams } from "react-router-dom";
-import useFundings from "../../hook/useFundings";
-import useUserInfo from "../../hook/useUser";
-// import { useLoginInfo } from "../../hook/useLogin";
-// import { UserObject } from "../";
 
 const HostProfile = function() {
   const { id } = useParams();
@@ -26,20 +25,20 @@ const HostProfile = function() {
   });
 
   if (IsFundingsLoading || isUserLoading) {
-    return <div>로딩 중..</div>;
+    return <LoadingPage />;
   }
 
   if (fetcherError || error) {
-    return <div>에러가 발생했습니다.</div>;
+    return <ErrorPage error={fetcherError || error} />;
   }
 
   return (
     <>
       <div className={classes["funding_container"]}>
-        <div style={{ display: "flex" }}>
+        <div className={classes["user_profile"]}>
           <img
             src={user.profile_image ?? Profileimg}
-            className={classes["user"]}
+            className={classes["user_profile_img"]}
           />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span className={classes["host_nickname"]}>

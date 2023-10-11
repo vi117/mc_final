@@ -11,6 +11,7 @@ export default function ResetpasswordPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [param, _] = useSearchParams();
   const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
   const navigate = useNavigate();
   const { AlertModal, showAlertModal } = useAlertModal();
 
@@ -40,6 +41,8 @@ export default function ResetpasswordPage() {
             type="password"
             className={classes["reset_form"]}
             placeholder="Password-check"
+            onChange={(e) => setPasswordCheck(e.target.value)}
+            value={passwordCheck}
           />
         </FloatingLabel>
 
@@ -59,12 +62,35 @@ export default function ResetpasswordPage() {
 
   async function resetPassword() {
     const code = param.get("code");
+    if (password === "") {
+      await showAlertModal(
+        "reset password error",
+        "비밀번호를 입력해야 합니다.",
+      );
+      return;
+    }
+    if (password !== passwordCheck) {
+      await showAlertModal(
+        "reset password error",
+        "비밀번호와 비밀번호 확인는 같아야 합니다.",
+      );
+      return;
+    }
+    if (password.length < 6) {
+      await showAlertModal(
+        "reset password error",
+        "비밀번호는 6자 이상 입력해야 합니다.",
+      );
+      return;
+    }
+
     try {
       await resetPasswordAPI(password, code ?? undefined);
     } catch (error) {
       await showAlertModal("reset password error", error.message);
       return;
     }
+
     // redirect
     navigate("/login");
   }

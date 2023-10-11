@@ -14,7 +14,9 @@ export class FetchError extends Error {
 }
 
 export const fetcher = async (url: string) => {
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    credentials: "include",
+  });
   if (!res.ok) {
     const data = await res.json();
     throw new FetchError(res.statusText, data);

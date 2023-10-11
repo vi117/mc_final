@@ -8,10 +8,10 @@ import { Router } from "express";
 const router = Router();
 
 router.use("/", tokenCheckMiddleware);
-router.use("/api/users", userRouter);
-router.use("/api/fundings", fundingRouter);
-router.use("/api/articles", articleRouter);
-router.use("/api/upload", UploadRouter);
+router.use("/api/v1/users", userRouter);
+router.use("/api/v1/fundings", fundingRouter);
+router.use("/api/v1/articles", articleRouter);
+router.use("/api/v1/upload", UploadRouter);
 
 router.all("/api", (req, res) => {
   res.json({
