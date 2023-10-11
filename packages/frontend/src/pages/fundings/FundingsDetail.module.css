@@ -43,7 +43,7 @@
 .content_area {
   width:100%;
   display:flex;
-  margin-bottom: 45px;
+  margin-bottom: 40px;
 }
 
 /*thumbnail*/
@@ -279,7 +279,7 @@ object-fit: cover;
 
 /*reward list */
 .reward_list_area{
-  max-height: 490px;
+  max-height: 450px;
   overflow-y: auto;
 }
 .reward_list {
@@ -306,6 +306,7 @@ object-fit: cover;
   color:var(--white);
 }
 .rewardtitle{
+  margin-top: 30px;
   color:var(--primary);
   font-weight: 700;
   font-size: 20px;
@@ -331,7 +332,9 @@ border-bottom: 1px solid var(--border);
   margin-left: 5px;
 }
 
-.reportbtn {
+.reportbtn, 
+.hidebtn {
+  border:none;
   font-size: 13px;
   width:100%;
   display:flex;
@@ -340,9 +343,12 @@ border-bottom: 1px solid var(--border);
   background-color: var(--border);
   padding: 10px 15px;
   border-radius: 7px;
-  margin: 30px 0px;
+  margin: 20px 0px;
 }
 
+.hidebtn {
+  background-color: var(--beige);
+}
 .report_svg{
   width:18px;
   height:18px;

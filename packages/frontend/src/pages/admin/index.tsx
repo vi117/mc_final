@@ -71,7 +71,10 @@ function FundingRequestList(props: {
               <tbody>
                 <tr>
                   <td>호스트</td>
-                  <td>{funding.host_nickname} ({funding.host_email})</td>
+                  <td>
+                    {funding.host_nickname}{" "}
+                    ({funding.host_email ?? "N/A(회원 탈퇴)"})
+                  </td>
                 </tr>
                 <tr>
                   <td>목표</td>

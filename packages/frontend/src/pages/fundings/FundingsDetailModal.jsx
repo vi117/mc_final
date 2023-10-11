@@ -13,6 +13,7 @@ import classes from "./FundingsDetail.module.css";
 const FundingDetailModal = ({ show, handleClose }) => {
   const location = useLocation();
   useKakaoSDK();
+  const currentURL = window.location.href;
 
   const handleCopyClipBoard = async (text) => {
     try {
@@ -63,7 +64,7 @@ const FundingDetailModal = ({ show, handleClose }) => {
               <BiSolidMessageRounded
                 className={classes.modal_icon_kakao}
                 onClick={() => {
-                  shareKakao("http://localhost:5173/fundings/3", "title");
+                  shareKakao(currentURL);
                 }}
               >
               </BiSolidMessageRounded>

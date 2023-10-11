@@ -24,7 +24,7 @@ export interface FundingRequestObject {
 
   host_nickname: string;
   host_profile_image: string | null;
-  host_email: string;
+  host_email: string | null;
 
   meta: string | null;
   meta_parsed: {
@@ -83,7 +83,7 @@ export interface FundingObject {
 
   host_nickname: string;
   host_profile_image: string | null;
-  host_email: string;
+  host_email: string | null;
   host_introduction: string | null;
 
   interest_funding_id?: number | null;
@@ -103,7 +103,7 @@ export interface FundingUserObject {
   funding_id: number;
   reward_id: number;
   recipient: string;
-  user_email: string;
+  user_email: string | null;
   user_nickname: string;
   user_profile_image: string | null;
   reward_title: string;
@@ -123,7 +123,7 @@ export interface FundingReportObject {
   created_at: Date;
   user_nickname: string;
   user_profile_image: string | null;
-  user_email: string;
+  user_email: string | null;
   /**
    * 신고된 펀딩의 제목
    */
@@ -139,7 +139,7 @@ export interface UserObject {
   id: number;
   nickname: string;
   profile_image: string | null;
-  email: string;
+  email: string | null;
   email_approved: number;
   is_admin: number;
   phone: string;
@@ -167,7 +167,7 @@ export interface ArticleObject {
   author_id: number;
   author_nickname: string;
   author_profile_image: string | null;
-  author_email: string;
+  author_email: string | null;
 
   like_user_id?: number | null;
   like_created_at?: Date | null;
@@ -204,5 +204,5 @@ export interface CommentObject {
   user_id: number;
   nickname: string;
   profile_image: string | null;
-  email: string;
+  email: string | null;
 }
