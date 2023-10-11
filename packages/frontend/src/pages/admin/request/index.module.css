@@ -1,3 +1,7 @@
+.funding_detail{
+  display: flex;
+}
+
 .funding_detail_tags{
     justify-content: center;
     display:flex;
@@ -36,8 +40,9 @@
 /*thumbnail, resttime, host, ... container */
 .funding_detail_profilearea,
 .content_area {
-  width:100%;
-  display:flex;
+  width: 594px;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 45px;
 }
 
@@ -47,17 +52,18 @@
 }
 
 .carousel_thumbnail {
-  width:594px ;
-  height:445px ;
+  width:594px;
+  height:445px;
   object-fit: cover;
-  }
+}
 
 /*resttime, host, value title*/
-.funding_detail_description,
+.funding_detail_description{
+  margin-left: 40px;
+  width:100%;
+}
 .reward_area{
-  width:40%;
-  margin-left:45px;
-  margin-top: -20px;
+  width:100%;
 }  
 
 /*description-table*/
@@ -104,14 +110,10 @@
   font-weight: 700;
 }
 
-.content-wrapper.expanded {
-  max-height: none;
-  overflow: visible;
+.content{
+  width:594px;
 }
 
-.content img{
-  width:590px;
-}
 .content img{
   width:590px;
 }
@@ -120,8 +122,6 @@
 .reward_list_area{
   max-height: 490px;
   overflow-y: auto;
-  margin-top: -180px;
- 
 }
 
 .reward_list {
@@ -139,11 +139,8 @@
   color:var(--primary);
   font-weight: 700;
   font-size: 20px;
-  margin-top: -220px;
   margin-bottom: 15px;
-  position: absolute;
- 
-
+  margin-top: 20px;
 }
 
 .reward_title , 
@@ -174,13 +171,12 @@ border-bottom: 1px solid var(--border);
 }
 
 @media screen and (max-width: 1080px) {
+  .funding_detail{
+    flex-direction: column;
+  }
   .funding_title > h1{
     font-size:24px;
     margin-top: 5px;
-  }
-  .funding_detail_profilearea{
-    display:inline;
-    flex-direction: column;
   }
   .funding_thumbnail_carousel,
   .carousel_thumbnail, 
@@ -203,6 +199,9 @@ border-bottom: 1px solid var(--border);
     margin-bottom: 40px;
   }
 
+  .funding_detail_profilearea{
+    width:100%;
+  }
   .content_area{
     width:100%;
     display:inline;

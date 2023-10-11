@@ -44,20 +44,32 @@ export default function FundingRequestDetailPage() {
         <h1>{funding.title}</h1>
       </div>
 
-      <div className={classes["funding_detail_profilearea"]}>
-        <Carousel
-          fade
-          className={classes["funding_thumbnail_carousel"]}
-        >
-          {funding.meta_parsed.content_thumbnails.map((thumbnail) => (
-            <Carousel.Item key={thumbnail}>
-              <img
-                src={thumbnail}
-                className={classes["carousel_thumbnail"]}
+      <div className={classes["funding_detail"]}>
+        <div className={classes["funding_detail_profilearea"]}>
+          <Carousel
+            fade
+            className={classes["funding_thumbnail_carousel"]}
+          >
+            {funding.meta_parsed.content_thumbnails.map((thumbnail) => (
+              <Carousel.Item key={thumbnail}>
+                <img
+                  src={thumbnail}
+                  className={classes["carousel_thumbnail"]}
+                />
+              </Carousel.Item>
+            ))}
+          </Carousel>
+          <div className={classes.content_area}>
+            <div
+              className={clsx(classes["content-wrapper"])}
+            >
+              <div
+                className={classes.content}
+                dangerouslySetInnerHTML={{ __html: funding.content }}
               />
-            </Carousel.Item>
-          ))}
-        </Carousel>
+            </div>
+          </div>
+        </div>
 
         <div className={classes["funding_detail_description"]}>
           <table className={classes["funding_profile_table"]}>
@@ -100,32 +112,21 @@ export default function FundingRequestDetailPage() {
               </div>
             </div>
           </NavLink>
-        </div>
-      </div>
-
-      <div className={classes.content_area}>
-        <div>
-          <div
-            className={clsx(classes["content-wrapper"])}
-          >
-            <div
-              className={classes.content}
-              dangerouslySetInnerHTML={{ __html: funding.content }}
-            />
-          </div>
-        </div>
-        <div className={classes.reward_area}>
-          <div className={classes.rewardtitle}>
-            리워드
-          </div>
-          <div className={classes.reward_list_area}>
-            <RewardList rewards={funding.meta_parsed.rewards} />
-          </div>
-          <div className={classes["account_number"]}>
-            <p>후원자 계좌번호 : {funding.meta_parsed.account_number}</p>
-            <FileDownloadButton
-              links={funding.meta_parsed?.certificate ?? []}
-            />
+          <div className={classes.reward_area}>
+            <div className={classes.rewardtitle}>
+              리워드
+            </div>
+            <div className={classes.reward_list_area}>
+              <RewardList rewards={funding.meta_parsed.rewards} />
+            </div>
+            <div className={classes["account_number"]}>
+              <p>
+                후원자 계좌번호 : {funding.meta_parsed.account_number}
+              </p>
+              <FileDownloadButton
+                links={funding.meta_parsed?.certificate ?? []}
+              />
+            </div>
           </div>
         </div>
       </div>
