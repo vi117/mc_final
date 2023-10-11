@@ -478,7 +478,7 @@ function SelectablRewardList(
               variant="success"
               key={reward.id}
               onClick={() => {
-                if (!disabled) {
+                if (!disabled && restItem > 0) {
                   onChange(reward);
                 }
               }}
