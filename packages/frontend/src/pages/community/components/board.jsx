@@ -80,7 +80,7 @@ const Board = () => {
 
       <Category
         selectCategoryFilter={(c) => {
-          setCategoryFiltered([c]);
+          setCategoryFiltered(getRestAnimals([c]));
         }}
         selectOrderBy={(o) => {
           setOrderBy(o);
