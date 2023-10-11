@@ -86,7 +86,11 @@ export function CommunityDetail() {
             to={`/host-profile/${item.author_id}`}
             className={classes["linkto"]}
           >
-            <img src={Profileimg} className={classes["user"]} alt="Profile" />
+            <img
+              src={item.author_profile_image ?? Profileimg}
+              className={classes["user"]}
+              alt="Profile"
+            />
             <div className={classes["createdBy"]}>{item.author_nickname}</div>
           </NavLink>
           <div className={classes["dateArea"]}>
