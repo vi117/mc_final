@@ -104,8 +104,13 @@
   font-weight: 700;
 }
 
-.content-wrapper {
-  width:594px;
+.content-wrapper.expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.content img{
+  width:590px;
 }
 .content img{
   width:590px;

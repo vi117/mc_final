@@ -8,7 +8,7 @@ import {
   ListGroup,
   Modal,
 } from "react-bootstrap";
-import { BiShareAlt } from "react-icons/bi";
+import { BiShareAlt, BiSolidHide } from "react-icons/bi";
 import { GoChevronRight, GoShield } from "react-icons/go";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { Container, ErrorPage, LoadingPage } from "../../component";
@@ -287,21 +287,6 @@ const FundingsDetail = function() {
               </div>
             </div>
           </NavLink>
-          {(() => {
-            // 비로그인일때
-            if (!userInfo) {
-              return "";
-            }
-            // 관리자가 아닐 때
-            if (!userInfo.is_admin) {
-              return "";
-            }
-            return (
-              <Button className="mt-3" onClick={softDeleteFunding}>
-                비공개
-              </Button>
-            );
-          })()}
         </div>
       </div>
 
@@ -331,6 +316,28 @@ const FundingsDetail = function() {
           </div>
         </div>
         <div className={classes.reward_area}>
+          {(() => {
+            // 비로그인일때
+            if (!userInfo) {
+              return "";
+            }
+            // 관리자가 아닐 때
+            if (!userInfo.is_admin) {
+              return "";
+            }
+            return (
+              <button className={classes.hidebtn} onClick={softDeleteFunding}>
+                <BiSolidHide
+                  className={classes.report_svg}
+                  style={{ marginRight: "7px" }}
+                />
+                펀딩 비공개 처리
+                <span className={classes.report_right}>
+                  <GoChevronRight className={classes.report_svg} />
+                </span>
+              </button>
+            );
+          })()}
           <div className={classes.reportbtn}>
             <span>
               <GoShield
@@ -339,8 +346,8 @@ const FundingsDetail = function() {
               />펀딩에 문제가 있나요?
             </span>
             <span className={classes.report_right}>
-              <GoChevronRight className={classes.report_svg} />
               <Report funding_id={funding.id} />
+              <GoChevronRight className={classes.report_svg} />
             </span>
           </div>
           <div className={classes.rewardtitle}>
@@ -389,7 +396,12 @@ const FundingsDetail = function() {
 
   async function softDeleteFunding() {
     try {
-      await fundingDelete(funding.id);
+      if (window.confirm("펀딩을 비공개 처리 하시겠습니까?")) {
+        await fundingDelete(funding.id);
+        alert("완료되었습니다");
+      } else {
+        alert("취소되었습니다");
+      }
     } catch (error) {
       console.log(error);
       // TODO(vi117): 예쁜 alert 쓰기.(231010 당현진처리)
