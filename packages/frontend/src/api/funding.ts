@@ -257,10 +257,14 @@ export async function postFundingRequestAsJson(obj: {
       certificate: obj.certificateFiles,
     }),
   });
+  const data = await r.json();
   if (!r.ok) {
-    const data = await r.json();
     throw new APIError(data.message, r.status, data);
   }
+  return data as {
+    message: "success";
+    id: number;
+  };
 }
 
 export async function postFundingReport(funding_id: number, {
