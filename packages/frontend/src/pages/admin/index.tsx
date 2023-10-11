@@ -237,7 +237,7 @@ function FundingReportManageTap(
           return (
             <tbody key={x.id}>
               <tr>
-                <td>1{x.id}</td>
+                <td>{x.id}</td>
                 <td>
                   <Link to={`/fundings/${x.funding_id}`}>
                     {x.funding_title}
