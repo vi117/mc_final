@@ -685,6 +685,15 @@ async function disapproveFundingRequestHandler(req: Request, res: Response) {
   }
 
   const requestRepo = new FundingRequestsRepository(getDB());
+  const request = await requestRepo.findById(id);
+  assert_exists(!!request, "존재하지 않는 ID");
+  if (request.funding_state !== 0) {
+    res.status(StatusCodes.CONFLICT).json({
+      message: "이미 승인, 거절된 요청입니다.",
+    });
+    return;
+  }
+
   requestRepo.updateById(id, {
     funding_state: 2,
     reason: req.body.reason,

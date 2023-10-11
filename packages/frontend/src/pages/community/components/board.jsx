@@ -4,11 +4,11 @@ import { BiSolidPencil } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../component/Button";
+import Page from "../../../component/pagination";
 import useArticles from "../../../hook/useArticles";
 import { ANIMAL_CATEGORY } from "../constant";
 import classes from "../styles/community.module.css";
 import Category from "./category";
-import Page from "./Pagination";
 
 const animals = ANIMAL_CATEGORY;
 
@@ -80,7 +80,7 @@ const Board = () => {
 
       <Category
         selectCategoryFilter={(c) => {
-          setCategoryFiltered([c]);
+          setCategoryFiltered(getRestAnimals([c]));
         }}
         selectOrderBy={(o) => {
           setOrderBy(o);

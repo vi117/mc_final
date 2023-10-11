@@ -39,11 +39,6 @@ const browserRouter = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage></HomePage> },
       /**
-       * About Page
-       */
-      { path: "/about", element: <h1>About</h1> },
-      { path: "/contact", element: <h1>Contact</h1> },
-      /**
        * 로그인 페이지
        */
       { path: "/login", element: <LoginPage /> },

@@ -8,6 +8,7 @@ function CommunityReport({
 }) {
   const [show, setShow] = useState(false);
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -36,18 +37,26 @@ function CommunityReport({
             <Form.Select
               aria-label="Default select example"
               style={{ marginBottom: "10px", fontSize: "14px" }}
+              onChange={(e) => setCategory(e.target.value)}
+              value={category}
             >
               <option>옵션을 선택해주세요</option>
-              <option value="1">이득을 취할 목적으로 작성한 글</option>
-              <option value="2">커뮤니티 운영원칙 위반</option>
-              <option value="3">개인정보 보호 권리 침해</option>
-              <option value="4">
+              <option value="이득을 취할 목적으로 작성한 글">
+                이득을 취할 목적으로 작성한 글
+              </option>
+              <option value="커뮤니티 운영원칙 위반">
+                커뮤니티 운영원칙 위반
+              </option>
+              <option value="개인정보 보호 권리 침해">
+                개인정보 보호 권리 침해
+              </option>
+              <option value="홍보">
                 직/간접적 상품, 서비스, 사이트, 앱 등 홍보
               </option>
-              <option value="5">
+              <option value="음란성/선정성 이미지, 영상, 텍스트 등의 콘텐츠">
                 음란성/선정성 이미지, 영상, 텍스트 등의 콘텐츠
               </option>
-              <option value="6">기타/ 자세한 사유를 기재해주세요</option>
+              <option value="기타">기타/ 자세한 사유를 기재해주세요</option>
             </Form.Select>
             <FloatingLabel
               controlId="floatingTextarea2"
@@ -90,7 +99,7 @@ function CommunityReport({
   );
   async function submitReport() {
     try {
-      await reportArticle(article_id, content);
+      await reportArticle(article_id, `# ${category}\n${content}`);
       alert("신고완료");
     } catch (error) {
       console.log(error);

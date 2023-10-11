@@ -44,7 +44,7 @@ export default function FundingUsersPage() {
         <tbody>
           {plist?.map((p) => (
             <tr key={p.user_id}>
-              <td>{p.user_email}</td>
+              <td>{p.user_email ?? "N/A(회원탈퇴)"}</td>
               <td>{p.user_nickname}</td>
               <td>{p.address}</td>
               <td>{p.phone}</td>

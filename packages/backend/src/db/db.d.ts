@@ -139,7 +139,7 @@ export interface Users {
   id: Generated<number>;
   nickname: string;
   profile_image: string | null;
-  email: string;
+  email: string | null;
   email_approved: Generated<number>;
   is_admin: Generated<number>;
   phone: string;

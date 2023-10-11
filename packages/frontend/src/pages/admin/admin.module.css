@@ -96,6 +96,7 @@
 
 .FundingTitle{
   display:flex;
+  flex-wrap: wrap;
   font-weight: 700;
   font-size: 20px;
   text-overflow: ellipsis;
