@@ -142,13 +142,14 @@ function FundingRequestManageTap() {
       "거부 사유를 입력해주세요",
     );
     if (!reason) {
+      await showAlertModal("요청 실패", "사유를 입력해주세요.");
       return;
     }
     try {
       await fundingReject(id, reason);
     } catch (e) {
       if (e instanceof Error) {
-        await showAlertModal("요청 실패", "요청이 실패했습니다." + e.message);
+        await showAlertModal("요청 실패", "요청이 실패했습니다. " + e.message);
       } else throw e;
       return;
     }
