@@ -93,6 +93,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
       address: { type: "string" },
       address_detail: { type: "string" },
       phone: { type: "string" },
+      introduction: { type: "string" },
+      profile_url: { type: "string" },
       token: { type: "string" },
     },
     required: ["nickname", "email", "password", "address", "phone"],
@@ -111,6 +113,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
     address,
     phone,
     address_detail,
+    introduction,
+    profile_url,
     token,
   } = req.body;
   const userRepository = getUserRepository();
@@ -123,7 +127,8 @@ export async function signup(req: Request, res: Response): Promise<void> {
       password,
       address,
       phone,
-      profile_image: file?.url,
+      introduction,
+      profile_image: file?.url ?? profile_url,
       address_detail: address_detail ?? "",
     });
     if (user_id === undefined) {

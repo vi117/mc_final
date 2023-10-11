@@ -32,6 +32,9 @@ function RegisterPage() {
   const { showAlertModal, AlertModal } = useAlertModal();
   // console.log(location.state);
 
+  /**
+   * @type { React.MutableRefObject<File | null> }
+   */
   const profileImageRef = useRef();
   const errorsRef = useRef([]);
 
@@ -211,7 +214,8 @@ function RegisterPage() {
       Address,
       AddressDetail,
       Article,
-      ProfileImage: profileImageRef.current,
+      ProfileImage: profileImageRef.current ?? undefined,
+      ProfileImageUrl: location.state?.thumbnail ?? undefined,
       token: location.state?.token,
     });
 

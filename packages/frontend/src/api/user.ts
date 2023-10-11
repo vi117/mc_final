@@ -33,6 +33,7 @@ export async function signUp({
   AddressDetail,
   Article,
   ProfileImage,
+  ProfileImageUrl,
   token,
 }: {
   Email: string;
@@ -43,6 +44,7 @@ export async function signUp({
   AddressDetail?: string;
   Article: string;
   ProfileImage?: File;
+  ProfileImageUrl?: string;
   token?: string;
 }) {
   const formData = new FormData();
@@ -55,6 +57,9 @@ export async function signUp({
 
   if (AddressDetail) formData.append("address_detail", AddressDetail);
   if (ProfileImage) formData.append("profile", ProfileImage);
+  else {
+    if (ProfileImageUrl) formData.append("profile_url", ProfileImageUrl);
+  }
   if (token) formData.append("token", token);
 
   const url = new URL("/api/v1/users/signup", API_URL);
