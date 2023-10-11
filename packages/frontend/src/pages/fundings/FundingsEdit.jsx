@@ -15,6 +15,7 @@ import Calender from "../../component/Calender";
 import { Editor } from "../../component/Editor";
 import UploadImage from "./../../component/UploadFile";
 import { useUploadFile } from "../../component/UploadFile/hook";
+import useAlertModal from "../../hook/useAlertModal";
 import { useFundingRequestById } from "../../hook/useFundingRequestById";
 import { cutNickname } from "../../util/cut";
 import { Guide } from "./component/Guide";
@@ -60,7 +61,6 @@ function FundingEditPage() {
   if (isLoading) {
     return <LoadingPage />;
   }
-  console.log(data);
   return <FundingsEdit fundingRequest={data} funding={funding} />;
 }
 
@@ -92,7 +92,6 @@ const FundingsEdit = function({
       },
     },
   );
-
   const contentThumbnails = useUploadFile(
     funding.content_thumbnails ?? [],
   );
@@ -113,6 +112,8 @@ const FundingsEdit = function({
   const infoAreaRef = useRef(null);
   const StoryAreaRef = useRef(null);
   const MakerAreaRef = useRef(null);
+  const { AlertModal, showAlertModal } = useAlertModal();
+
   const scrollToInfoArea = () => {
     document.body.scrollIntoView();
   };
@@ -125,6 +126,7 @@ const FundingsEdit = function({
 
   return (
     <Container className={"d-flex " + classes.funding_write_wrap}>
+      <AlertModal />
       <FundingWriteNavigator nickname={userInfo.nickname}>
         <button onClick={() => scrollToInfoArea()}>
           프로젝트 기본 정보
@@ -202,7 +204,7 @@ const FundingsEdit = function({
             className={classes.story_area}
           >
             <h2>콘텐츠 썸네일</h2>
-            <p>콘텐츠 썸네일 사진을 업로드해주세요.</p>
+            <p>콘텐츠 썸네일 사진(내부 썸내일 사진)을 업로드해주세요.</p>
             <UploadImage state={contentThumbnails} multiple />
           </Form.Group>
 
@@ -269,6 +271,22 @@ const FundingsEdit = function({
   );
 
   async function sendRequest() {
+    if (title === "") {
+      await showAlertModal("제목", "제목을 입력해주세요.");
+      return;
+    }
+    if (content === "") {
+      await showAlertModal("내용", "내용을 입력해주세요.");
+      return;
+    }
+    if (thumbnailState.images.length === 0) {
+      await showAlertModal("썸네일", "썸네일을 업로드해주세요.");
+      return;
+    }
+    if (contentThumbnails.images.length === 0) {
+      await showAlertModal("썸네일", "콘텐츠 썸네일을 업로드해주세요.");
+      return;
+    }
     try {
       await postFundingRequestAsJson({
         funding_id: funding.id,

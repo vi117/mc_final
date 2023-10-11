@@ -52,6 +52,9 @@ const FundingsWrite = function() {
    * @type { [string[], (tags: string[])=>void] }
    */
   const [tagSelected, setSelected] = useState([]);
+  /**
+   * @type { [File[], (files: File[])=>void] }
+   */
   const [thumbnail, setThumbnail] = useState([]);
   const [contentThumbnails, setContentThumbnails] = useState([]);
   const [targetValue, setTargetValue] = useState(0);
@@ -204,7 +207,7 @@ const FundingsWrite = function() {
               className={classes.story_area}
             >
               <h2>콘텐츠 썸네일</h2>
-              <p>콘텐츠 썸네일 사진을 업로드해주세요.</p>
+              <p>콘텐츠 썸네일 사진(내부 썸내일 사진)을 업로드해주세요.</p>
               <Form.Control
                 type="file"
                 multiple
@@ -245,7 +248,6 @@ const FundingsWrite = function() {
               <RewardItemList
                 onChange={(v) => {
                   setRewards(v);
-                  console.log(v);
                 }}
               />
             </div>
@@ -310,6 +312,27 @@ const FundingsWrite = function() {
   );
 
   async function sendRequest() {
+    if (title === "") {
+      await showAlertModal("제목", "제목을 입력해주세요.");
+      return;
+    }
+    if (content === "") {
+      await showAlertModal("내용", "내용을 입력해주세요.");
+      return;
+    }
+    if (targetValue === "" || isNaN(parseInt(targetValue))) {
+      await showAlertModal("목표금액", "목표금액을 입력해주세요.");
+      return;
+    }
+    if (rewards.length === 0) {
+      await showAlertModal("리워드", "리워드를 입력해주세요.");
+      return;
+    }
+    if (thumbnail.length === 0) {
+      await showAlertModal("썸네일", "썸네일을 업로드해주세요.");
+      return;
+    }
+
     try {
       await postFundingRequest({
         title,
