@@ -91,7 +91,7 @@ function CommunityReport({
   async function submitReport() {
     try {
       await reportArticle(article_id, content);
-      alert("전송완료");
+      alert("신고완료");
     } catch (error) {
       console.log(error);
       alert("전송실패");
