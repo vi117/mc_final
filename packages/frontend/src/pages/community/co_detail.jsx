@@ -179,6 +179,7 @@ export function CommunityDetail() {
         showAlertModal("요청 실패", "요청이 실패했습니다.");
       } else throw e;
     }
+    return true;
   }
 
   async function deleteComment(comment) {
