@@ -147,9 +147,9 @@ color:var(--teritary);
 .report_table{
   table-layout: fixed;
   width:100%;
-  font-size: 16px;
+  word-break: break-all;
+  font-size: 14px;
 }
-
 
 .report_table thead *{
   font-weight: 700;
@@ -158,27 +158,22 @@ color:var(--teritary);
   border-bottom: 1px solid var(--secondary);
 }
 
-.report_table thead > tr > th{
-  padding:10px 0px;
+.report_table thead > tr > th,
+.report_table tbody > tr > td{
+  padding:10px 20px;
 }
 
 .table_num {
   width:70px;
 }
 
-.table_title{
-  width:calc((100% - 70px) /2);
-}
 .report_table tbody > tr > td:nth-child(1){
   text-align: center;
 }
 
-.report_table tbody > tr > td:nth-child(2){
-  padding-left: 30px;
-}
 
-.report_table tbody > tr > td{
-  padding:10px 0px;
+.table_title{
+  width:calc((100% - 70px) /2);
 }
 
 
@@ -189,15 +184,23 @@ color:var(--teritary);
   background-color: var(--border);
 }
 
-/*신고사유*/
-/* .reason_content{
-  width:100%;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-word;
-  max-height:110px;
-   
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-} */
+
+.moreButton {
+  border: none;
+  color:var(--gray);
+  background-color: transparent;
+}
+
+.moreButton > span > b{
+  font-weight: 400;
+  letter-spacing :-0.25em;
+  margin-right: 3px;
+}
+
+@media screen and (max-width: 768px/* sm - small screens */) {
+  .report_table{
+    font-size: 14px;
+  }
+
+  }
+  
