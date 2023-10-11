@@ -5,6 +5,7 @@ export { Editor } from "./Editor";
 export { ErrorPage } from "./ErrorPage";
 export { LoadingPage } from "./LoadingPage";
 export { LogoSvg } from "./Logo";
+export { default as Pagination } from "./pagination";
 export { default as UploadAvatar } from "./UploadAvatar";
 export { default as UploadFile } from "./UploadFile";
 export { Form } from "./ValidationForm/Form";
