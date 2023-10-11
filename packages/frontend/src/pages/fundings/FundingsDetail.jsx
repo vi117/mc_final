@@ -42,6 +42,7 @@ const FundingsDetail = function() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const { ConfirmModal, showConfirmModal } = useConfirmModal();
   const navigate = useNavigate();
+
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
   };
@@ -498,6 +499,7 @@ function Report({
   const [show, setShow] = useState(false);
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
+  const [category, setCategory] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -528,14 +530,24 @@ function Report({
             <Form.Select
               aria-label="Default select example"
               style={{ marginBottom: "10px", fontSize: "14px" }}
+              onChange={(e) => setCategory(e.target.value)}
+              value={category}
             >
               <option>옵션을 선택해주세요</option>
-              <option value="1">이용약관 또는 펀딩 심사 기준 위반</option>
-              <option value="2">커뮤니티 운영원칙 위반</option>
-              <option value="3">개인정보 보호 권리 침해</option>
-              <option value="4">지식재산권 침해</option>
-              <option value="5">펀딩 이행 문제 관련</option>
-              <option value="6">기타/ 자세한 사유를 기재해주세요</option>
+              <option value="이용약관 또는 펀딩 심사 기준 위반">
+                이용약관 또는 펀딩 심사 기준 위반
+              </option>
+              <option value="커뮤니티 운영원칙 위반">
+                커뮤니티 운영원칙 위반
+              </option>
+              <option value="개인정보 보호 권리 침해">
+                개인정보 보호 권리 침해
+              </option>
+              <option value="지식재산권 침해">지식재산권 침해</option>
+              <option value="펀딩 이행 문제 관련">펀딩 이행 문제 관련</option>
+              <option value="기타">
+                기타/ 자세한 사유를 기재해주세요
+              </option>
             </Form.Select>
             <FloatingLabel
               controlId="floatingTextarea2"
@@ -590,7 +602,7 @@ function Report({
   async function submitReport() {
     try {
       await postFundingReport(funding_id, {
-        content: content,
+        content: `#${category}\n${content}`,
         files: files,
       });
       // TODO(vi117): show alert.(231010 당현진처리)
