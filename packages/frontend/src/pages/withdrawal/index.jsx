@@ -1,12 +1,18 @@
+import { withdrawUser } from "@/api/user";
 import { Container } from "@/component/Container";
 import { Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import useAlertModal from "../../hook/useAlertModal";
 import { useLoginInfo } from "../../hook/useLogin";
 import classes from "./withdrawal.module.css";
 
 export default function WithdrawalPage() {
   const userInfo = useLoginInfo();
+  const navigate = useNavigate();
+  const { AlertModal, showAlertModal } = useAlertModal();
   return (
     <Container className={classes["container"]}>
+      <AlertModal />
       <h1>회원 탈퇴</h1>
       <hr className={classes["hr"]}></hr>
 
@@ -39,12 +45,12 @@ export default function WithdrawalPage() {
           <ul>
             <li>
               탈퇴하시면 이용중인 모든 페이지가 폐쇄되며,{" "}
-              <b>모든 데이터는 복구가 불가능합니다.</b>
+              <b>개인 데이터는 복구가 불가능합니다.</b>
             </li>
-            <li>작성한 글, 펀딩, 프로필 등 모든 정보가 삭제됩니다.</li>
+            <li>프로필 등의 모든 개인 정보가 삭제됩니다.</li>
             <li>
-              타인 글의 댓글은 삭제되지 않으니 탈퇴 전 미리 확인 해주시기
-              바랍니다.
+              타인 글의 댓글이나 호스트한 펀딩, 작성한 글 등은 삭제되지 않으니
+              탈퇴 전 미리 확인 해주시기 바랍니다.
             </li>
           </ul>
 
@@ -79,10 +85,19 @@ export default function WithdrawalPage() {
         </Form.Check>
 
         <div className={classes["button"]}>
-          <button>탈퇴하기</button>
+          <button onClick={withdrawalAction}>탈퇴하기</button>
         </div>
       </div>
       <hr className={classes["hr"]}></hr>
     </Container>
   );
+  async function withdrawalAction() {
+    try {
+      await withdrawUser();
+      navigate("/");
+    } catch (e) {
+      console.error(e);
+      await showAlertModal("탈퇴하기", "오류: " + e.message);
+    }
+  }
 }

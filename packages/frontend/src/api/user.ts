@@ -261,6 +261,18 @@ export async function verifyUserEmail(code: string) {
   }
 }
 
+export async function withdrawUser() {
+  const url = new URL("/api/v1/users/withdraw", API_URL);
+  const res = await fetch(url.href, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
+  }
+}
+
 export async function googleLogin(code: string): Promise<{
   message: string;
   code:
