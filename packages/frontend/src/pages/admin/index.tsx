@@ -230,20 +230,20 @@ function FundingReportManageTap(
           <tr>
             <th className={classes["table_num"]}>번호</th>
             <th className={classes["table_title"]}>펀딩 제목</th>
-            <th className={classes["table_reason"]}>신고 사유</th>
+            <th>신고 사유</th>
           </tr>
         </thead>
         {data === undefined ? undefined : data.map((x) => {
           return (
             <tbody key={x.id}>
               <tr>
-                <td className={classes["number"]}>1{x.id}</td>
+                <td>1{x.id}</td>
                 <td>
                   <Link to={`/fundings/${x.funding_id}`}>
                     {x.funding_title}
                   </Link>
                 </td>
-                <td className={classes["reason_content"]}>
+                <td>
                   {expandedContent[x.id]
                     ? x.content
                     : x.content.substring(0, 110)}
@@ -296,7 +296,7 @@ function CommunityReport(
           <tr>
             <th className={classes["table_num"]}>번호</th>
             <th className={classes["table_title"]}>펀딩 제목</th>
-            <th className={classes["table_reason"]}>신고 사유</th>
+            <th>신고 사유</th>
           </tr>
         </thead>
         {data === undefined ? undefined : data.map((c) => {
@@ -309,7 +309,7 @@ function CommunityReport(
                     {c.article_title}
                   </Link>
                 </td>
-                <td className={classes["reason_content"]}>
+                <td>
                   {expandedContent[c.id]
                     ? c.content
                     : c.content.substring(0, 110)}
@@ -349,7 +349,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className={classes["admin_container"]}>
+    <div>
       <Tabs
         id="controlled-tab-example"
         activeKey={searchParams.get("key") ?? "request"}
@@ -377,11 +377,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-/**
- * 펀딩 디테일 페이지에 관리자만 볼 수 있는 비공개 버튼이 있음.
- * - 이 버튼을 누르면 비공개 됨
- * // 비공개 처리가 되면 목록에서 안보이도록 함.
- *
- * 링크가 이미 공유된 페이지로 가면 비공개 페이지라고 안내를 함.
- */
