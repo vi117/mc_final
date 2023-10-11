@@ -555,6 +555,7 @@ function getRequestDataFromReqJson(req: Request) {
     ],
   }, req.body);
   assert_param(v, "유효하지 않은 요청입니다.", {
+    code: "INVALID_REQUEST_FORMAT",
     errors: ajv.errors,
   });
   const { title, content, target_value, rewards } = req.body;
@@ -603,13 +604,20 @@ async function createFundingRequestHandler(req: Request, res: Response) {
     } else if (req.is("application/json")) {
       return getRequestDataFromReqJson(req);
     }
-    throw new BadRequestError("잘못된 요청입니다.");
+    throw new BadRequestError(
+      "multipart/form-data나 application/json가 아닌 요청입니다.",
+      {
+        code: "INVALID_REQUEST_FORMAT",
+      },
+    );
   })();
   const fundingRepo = new FundingsRepository(getDB());
   // check title duplication
   const funding = await fundingRepo.findByTitle(title);
   if (funding && funding.id !== funding_id) {
-    throw new BadRequestError("이미 존재하는 제목입니다.");
+    throw new BadRequestError("이미 존재하는 제목입니다.", {
+      code: "DUPLICATED_TITLE",
+    });
   }
   const clean_content = sanitize(content, {
     allowedTags: sanitize.defaults.allowedTags.concat(["img"]),

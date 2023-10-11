@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { TagsInput } from "react-tag-input-component";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { APIError } from "../../api/error";
 import { postFundingRequestAsJson } from "../../api/funding";
 import { Container, ErrorPage, LoadingPage } from "../../component";
 import Calender from "../../component/Calender";
@@ -312,6 +313,12 @@ const FundingsEdit = function({
       navigate("/fundings");
     } catch (e) {
       console.log(e);
+      if (e instanceof APIError) {
+        if (e.data.code == "DUPLICATED_TITLE") {
+          await showAlertModal("요청 실패", "제목이 중복되었습니다.");
+          return;
+        }
+      }
       await showAlertModal(
         "요청 실패",
         "계속되는 실패시, 관리자에게 문의해주세요.",

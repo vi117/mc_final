@@ -55,7 +55,7 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   }
   console.error("500 error", err);
   res.status(500)
-    .json({ message: "error" });
+    .json({ message: "internal server error" });
 });
 
 export default app;

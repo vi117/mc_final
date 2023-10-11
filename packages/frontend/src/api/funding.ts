@@ -15,7 +15,7 @@ export async function withdrawFunding(id: number, selectedReward_id: number) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -60,7 +60,7 @@ export async function fundingApprove(id: number) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -88,7 +88,7 @@ export async function fundingReject(id: number, reason?: string) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -110,7 +110,7 @@ export async function fundingDelete(id: number) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -138,7 +138,7 @@ export async function fundingParticipate(id: number, reward_id: number, body: {
   });
   if (!r.ok) {
     const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
 }
 
@@ -209,7 +209,7 @@ export async function postFundingRequest({
 
   if (!r.ok) {
     const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
 }
 
@@ -259,7 +259,7 @@ export async function postFundingRequestAsJson(obj: {
   });
   if (!r.ok) {
     const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
 }
 
@@ -285,6 +285,6 @@ export async function postFundingReport(funding_id: number, {
   });
   if (!r.ok) {
     const data = await r.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, r.status, data);
   }
 }

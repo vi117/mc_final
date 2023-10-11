@@ -12,7 +12,8 @@ export async function uploadFile(file: File): Promise<string> {
     body: formData,
   });
   if (!res.ok) {
-    throw new APIError("server error");
+    const data = await res.json();
+    throw new APIError("server error", res.status, data);
   }
   return (await res.json()).url;
 }

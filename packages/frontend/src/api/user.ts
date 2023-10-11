@@ -95,7 +95,8 @@ export async function resetPassword(password: string, code?: string) {
     }),
   });
   if (!res.ok) {
-    throw new APIError("token expired or invalid");
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
   loginRevalidate();
 }
@@ -164,7 +165,7 @@ export async function sendResetPassword(email: string) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -182,7 +183,7 @@ export async function resendVerification(email: string) {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new APIError(data.message);
+    throw new APIError(data.message, res.status, data);
   }
 }
 
@@ -211,7 +212,8 @@ export async function patchUserInfo(id: number, body: {
     body: formData,
   });
   if (!res.ok) {
-    throw new APIError("token expired or invalid");
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
   loginRevalidate();
   return await res.json();
@@ -229,8 +231,9 @@ export async function logout(): Promise<void> {
     credentials: "include",
   });
   loginRevalidate();
-  if (res.status !== 200) {
-    throw new APIError("token expired or invalid");
+  if (!res.ok) {
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
   console.log("logout success");
 }
@@ -248,7 +251,8 @@ export async function verifyUserEmail(code: string) {
     }),
   });
   if (!res.ok) {
-    throw new APIError("token expired or invalid");
+    const data = await res.json();
+    throw new APIError("token expired or invalid", res.status, data);
   }
 }
 

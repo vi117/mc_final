@@ -28,7 +28,8 @@ export async function postArticle({
   });
 
   if (!r.ok) {
-    throw new APIError("postArticle failed");
+    const data = await r.json();
+    throw new APIError("postArticle failed", r.status, data);
   }
 }
 
@@ -39,7 +40,8 @@ export async function deleteArticle(id: number) {
     credentials: "include",
   });
   if (!res.ok) {
-    throw new APIError("deleteArticle failed");
+    const data = await res.json();
+    throw new APIError("deleteArticle failed", res.status, data);
   }
 }
 
@@ -65,7 +67,8 @@ export async function postArticleComment(id: number, content: string) {
       content,
     };
   }
-  throw new APIError("postArticleComment failed");
+  const data = await res.json();
+  throw new APIError("postArticleComment failed", res.status, data);
 }
 
 export async function deleteArticleComment(id: number, commentId: number) {
@@ -78,7 +81,8 @@ export async function deleteArticleComment(id: number, commentId: number) {
     credentials: "include",
   });
   if (!res.ok) {
-    throw new APIError("deleteArticleComment failed");
+    const data = await res.json();
+    throw new APIError("deleteArticleComment failed", res.status, data);
   }
 }
 
@@ -92,7 +96,8 @@ export async function setArticleLike(id: number, like = true) {
     credentials: "include",
   });
   if (!res.ok) {
-    throw new APIError("setArticleLike failed");
+    const data = await res.json();
+    throw new APIError("setArticleLike failed", res.status, data);
   }
 }
 
@@ -114,7 +119,8 @@ export async function patchArticle(id: number, body: {
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    throw new APIError("patchArticle failed");
+    const data = await res.json();
+    throw new APIError("patchArticle failed", res.status, data);
   }
 }
 
@@ -134,6 +140,7 @@ export async function reportArticle(article_id: number, reason: string) {
     }),
   });
   if (!res.ok) {
-    throw new APIError("reportArticle failed");
+    const data = await res.json();
+    throw new APIError("reportArticle failed", res.status, data);
   }
 }
