@@ -34,7 +34,7 @@ const BestArticle = () => {
                       고양이 아이스크림 줘도 되나요?
                     </div>
                     <div className="best-carousel-text-author">
-                      작성자1
+                      admin
                     </div>
                     <div className="best-carousel-text-desc">
                       아이스크림 먹을 때마다 졸래졸래 따라와서 킁킁 냄새맡고
@@ -56,7 +56,7 @@ const BestArticle = () => {
                       궁디팡팡 해주면 좋아하다가 갑자기 콱 깨물어요
                     </div>
                     <div className="best-carousel-text-author">
-                      작성자1
+                      admin
                     </div>
                     <div className="best-carousel-text-desc">
                       궁디팡팡 진짜 살살 해주다가

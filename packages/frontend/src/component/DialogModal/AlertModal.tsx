@@ -32,7 +32,7 @@ export default function AlertModal({
         <Button
           onClick={onHide}
         >
-          Close
+          닫기
         </Button>
       </Modal.Footer>
     </Modal>
