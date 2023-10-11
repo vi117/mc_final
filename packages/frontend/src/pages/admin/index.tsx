@@ -9,7 +9,7 @@ import useArticleReports from "../../hook/useArticleReports";
 import useFundingReports from "../../hook/useFundingReport";
 import useFundingRequest from "../../hook/useFundingRequest";
 
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { usePromptModal } from "../../hook/usePromptModal";
 import classes from "./admin.module.css";
 
@@ -300,7 +300,7 @@ function CommunityReport(
 }
 
 export default function AdminPage() {
-  const [key, setKey] = useState("request");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [expandedContent, setExpandedContent] = useState<
     Record<number, boolean>
   >({});
@@ -316,8 +316,10 @@ export default function AdminPage() {
     <div className={classes["admin_container"]}>
       <Tabs
         id="controlled-tab-example"
-        activeKey={key}
-        onSelect={(k) => setKey(k ?? "request")}
+        activeKey={searchParams.get("key") ?? "request"}
+        onSelect={(k) => {
+          setSearchParams({ key: k ?? "request" });
+        }}
         className={classes["admin_tab_container"]}
       >
         <Tab eventKey="request" title="펀딩 심사">
