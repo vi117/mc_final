@@ -61,9 +61,6 @@ function CommentDetail({
             {isMoreOpen && (
               <ul ref={ref} className={classes["btntoggle"]}>
                 <li>
-                  <a>수정</a>
-                </li>
-                <li>
                   <a onClick={onDeleteComment}>삭제</a>
                 </li>
               </ul>
@@ -108,7 +105,6 @@ export function Comments({
         >
           등록
         </button>
-        <button>비밀글 체크</button>
       </div>
       {comments.map(comment => (
         <CommentDetail
