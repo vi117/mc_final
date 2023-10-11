@@ -36,10 +36,10 @@ export async function approveFundingRequest(request_id: number) {
       const funding_id = request.funding_request_id;
       const funding = await fundingRepo.findById(funding_id);
       if (funding === undefined) {
-        throw new FundingApproveError("funding does not exist");
+        throw new FundingApproveError("수정 요청의 펀딩이 존재하지 않습니다.");
       }
       if (funding.end_date.getTime() < Date.now()) {
-        throw new FundingApproveError("funding is expired");
+        throw new FundingApproveError("수정 요청의 펀딩이 종료된 요청입니다.");
       }
       // if (funding.deleted_at !== null) {
       // throw new FundingApproveError("funding is deleted");
@@ -133,7 +133,7 @@ export async function approveFundingRequest(request_id: number) {
         });
       } catch (error) {
         if (isDuplKeyError(error)) {
-          throw new FundingApproveError("duplicated title");
+          throw new FundingApproveError("제목이 중복됩니다.");
         }
         throw error;
       }
@@ -196,13 +196,13 @@ export async function participateFunding({
 
     const funding = await fundingRepo.findById(funding_id);
     if (funding === undefined) {
-      throw new FundingUsersError("funding does not exist");
+      throw new FundingUsersError("펀딩이 존재하지 않습니다.");
     }
     if (funding.deleted_at !== null) {
-      throw new FundingUsersError("funding is deleted");
+      throw new FundingUsersError("비공개된 펀딩입니다.");
     }
     if (funding.end_date.getTime() < Date.now()) {
-      throw new FundingUsersError("funding is ended");
+      throw new FundingUsersError("기간이 종료된 펀딩입니다.");
     }
 
     try {
@@ -216,17 +216,17 @@ export async function participateFunding({
       });
     } catch (error) {
       if (isDuplKeyError(error)) {
-        throw new FundingUsersError("already participated");
+        throw new FundingUsersError("이미 후원했습니다.");
       }
       throw error;
     }
 
     const reward = await rewardRepo.findById(reward_id);
     if (reward === undefined) {
-      throw new FundingUsersError("reward does not exist");
+      throw new FundingUsersError("리와드가 존재하지 않습니다.");
     }
     if (reward.reward_current_count >= reward.reward_count) {
-      throw new FundingUsersError("reward is full");
+      throw new FundingUsersError("리와드가 매진되었습니다.");
     }
     reward.reward_current_count += 1;
     rewardRepo.updateById(reward_id, reward);
@@ -248,10 +248,10 @@ export async function withdrawFunding({
 
     const funding = await fundingRepo.findById(funding_id);
     if (funding === undefined) {
-      throw new FundingUsersError("funding does not exist");
+      throw new FundingUsersError("펀딩이 존재하지 않습니다.");
     }
     if (funding.end_date.getTime() < Date.now()) {
-      throw new FundingUsersError("funding is ended");
+      throw new FundingUsersError("기간이 종료된 펀딩입니다.");
     }
 
     await new FundingUsersRepository(db).deleteByUserIdAndFundingId(
@@ -261,7 +261,7 @@ export async function withdrawFunding({
     const rewardRepo = new FundingRewardsRepository(db);
     const reward = await rewardRepo.findById(reward_id);
     if (reward === undefined) {
-      throw new FundingUsersError("reward does not exist");
+      throw new FundingUsersError("리와드가 존재하지 않습니다.");
     }
     if (reward.reward_current_count <= 0) {
       throw new FundingUsersError("reward is empty");
