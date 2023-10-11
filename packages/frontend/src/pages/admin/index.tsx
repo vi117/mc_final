@@ -9,6 +9,9 @@ import useArticleReports from "../../hook/useArticleReports";
 import useFundingReports from "../../hook/useFundingReport";
 import useFundingRequest from "../../hook/useFundingRequest";
 
+import { Pagination } from "@/component";
+import { DateToString } from "@/hook/util";
+import { FundingRequestObject } from "dto";
 import { Link, useSearchParams } from "react-router-dom";
 import { usePromptModal } from "../../hook/usePromptModal";
 import classes from "./admin.module.css";
@@ -17,11 +20,109 @@ function getStateTextFromFundingState(funding_state: number) {
   return ["승인 대기", "승인됨", "승인 거부됨"][funding_state];
 }
 
+function FundingRequestList(props: {
+  fundings: DateToString<FundingRequestObject>[];
+  onApproveClick: (id: number) => void;
+  onRejectClick: (id: number) => void;
+}) {
+  const { onApproveClick, onRejectClick, fundings } = props;
+
+  return fundings.map((funding) => {
+    return (
+      <div className={classes["fundingState_item"]} key={funding.id}>
+        {
+          /* <div className={classes["fundingState_value"]}>
+        {funding.deleted_at !== null && (
+          <div>거부된 펀딩 요청입니다.</div>
+        )}
+        </div> */
+        }
+        <div className={classes["fundingState_img"]}>
+          <Link to={`/fundings/request/${funding.id}`}>
+            <img src={funding.thumbnail}></img>
+          </Link>
+        </div>
+        <div className={classes["fundingState_text_wrap"]}>
+          <div className={classes["fundingState_textarea"]}>
+            <div
+              className={classes[
+                funding.funding_state === 2
+                  ? "rejected"
+                  : "fundingState_value"
+              ]}
+            >
+              {getStateTextFromFundingState(funding.funding_state)}
+            </div>
+            <Link to={`/fundings/request/${funding.id}`}>
+              <div className={classes["FundingTitle"]}>
+                {funding.meta_parsed?.tags
+                  && funding.meta_parsed.tags.some(tag => tag.trim() !== "")
+                  && (
+                    funding.meta_parsed.tags.map((tag) => (
+                      <div className={classes["FundingTag"]} key={tag}>
+                        [{tag}]
+                      </div>
+                    ))
+                  )}
+                {funding.title}
+              </div>
+            </Link>
+            <table className={classes["funding_profile_table"]}>
+              <tbody>
+                <tr>
+                  <td>호스트</td>
+                  <td>{funding.host_nickname} ({funding.host_email})</td>
+                </tr>
+                <tr>
+                  <td>목표</td>
+                  <td>{funding.target_value}원</td>
+                </tr>
+                <tr>
+                  <td>펀딩기간</td>
+                  <td>
+                    {formatDate(funding.begin_date)} ~{" "}
+                    {formatDate(funding.end_date)}
+                  </td>
+                </tr>
+                <tr>
+                  <td>신청일</td>
+                  <td>{formatDate(funding.created_at)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className={classes["button_area"]}>
+            <button
+              className={classes["button_approve"]}
+              onClick={() => onApproveClick(funding.id)}
+            >
+              승인
+            </button>
+            <button
+              color="error"
+              style={{ left: "5px" }}
+              onClick={() => onRejectClick(funding.id)}
+            >
+              거부
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  });
+}
+
 function FundingRequestManageTap() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const { showPromptModal, PromptModal } = usePromptModal();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get("offset") ?? "1");
+  const page_range = 2;
+  const item_count = 10;
   const { data, error, isLoading, mutate } = useFundingRequest({
     view_all: true,
+    limit: item_count * page_range,
+    offset: (page - 1) * item_count,
   });
 
   if (isLoading) {
@@ -37,92 +138,24 @@ function FundingRequestManageTap() {
       <h3>펀딩 심사 관리</h3>
       <hr></hr>
       <div className={classes["fundingState"]}>
-        {data && data.map((funding) => {
-          return (
-            <div className={classes["fundingState_item"]} key={funding.id}>
-              {
-                /* <div className={classes["fundingState_value"]}>
-              {funding.deleted_at !== null && (
-                <div>거부된 펀딩 요청입니다.</div>
-              )}
-              </div> */
-              }
-              <div className={classes["fundingState_img"]}>
-                <Link to={`/fundings/request/${funding.id}`}>
-                  <img src={funding.thumbnail}></img>
-                </Link>
-              </div>
-              <div className={classes["fundingState_text_wrap"]}>
-                <div className={classes["fundingState_textarea"]}>
-                  <div
-                    className={classes[
-                      funding.funding_state === 2
-                        ? "rejected"
-                        : "fundingState_value"
-                    ]}
-                  >
-                    {getStateTextFromFundingState(funding.funding_state)}
-                  </div>
-                  <Link to={`/fundings/request/${funding.id}`}>
-                    <div className={classes["FundingTitle"]}>
-                      {funding.meta_parsed?.tags
-                        && funding.meta_parsed.tags.some(tag =>
-                          tag.trim() !== ""
-                        )
-                        && (
-                          funding.meta_parsed.tags.map((tag) => (
-                            <div className={classes["FundingTag"]} key={tag}>
-                              [{tag}]
-                            </div>
-                          ))
-                        )}
-                      {funding.title}
-                    </div>
-                  </Link>
-                  <table className={classes["funding_profile_table"]}>
-                    <tbody>
-                      <tr>
-                        <td>호스트</td>
-                        <td>{funding.host_nickname} ({funding.host_email})</td>
-                      </tr>
-                      <tr>
-                        <td>목표</td>
-                        <td>{funding.target_value}원</td>
-                      </tr>
-                      <tr>
-                        <td>펀딩기간</td>
-                        <td>
-                          {formatDate(funding.begin_date)} ~{" "}
-                          {formatDate(funding.end_date)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>신청일</td>
-                        <td>{formatDate(funding.created_at)}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className={classes["button_area"]}>
-                  <button
-                    className={classes["button_approve"]}
-                    onClick={() => onApproveClick(funding.id)}
-                  >
-                    승인
-                  </button>
-                  <button
-                    color="error"
-                    style={{ left: "5px" }}
-                    onClick={() => onRejectClick(funding.id)}
-                  >
-                    거부
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {data && (
+          <FundingRequestList
+            fundings={data.slice(0, item_count)}
+            onApproveClick={onApproveClick}
+            onRejectClick={onRejectClick}
+          />
+        )}
       </div>
+      <Pagination
+        range={1 + page_range * 2}
+        activePage={page}
+        endPage={page + Math.floor(((data?.length ?? 0) - 1) / item_count)}
+        handlePageChange={(page) =>
+          setSearchParams(s => (Object.fromEntries([
+            ...s.entries(),
+            ["offset", page.toString()],
+          ])))}
+      />
     </div>
   );
   async function onApproveClick(id: number) {
