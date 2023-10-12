@@ -1,4 +1,3 @@
-import { API_URL } from "@/config";
 import { ArticleObject } from "dto";
 import useSWR from "swr";
 import { ANIMAL_CATEGORY } from "../pages/community/constant";
@@ -27,40 +26,40 @@ export default function useArticles({
   include_deleted = false,
   related_funding_id = undefined,
 }: UseArticleOptions = {}) {
-  const url = new URL("/api/v1/articles", API_URL);
-  url.searchParams.append("offset", offset.toString());
-  url.searchParams.append("limit", limit.toString());
+  const searchParams: [string, string][] = [];
+  searchParams.push(["offset", offset.toString()]);
+  searchParams.push(["limit", limit.toString()]);
 
   if (categories && categories.length < ANIMAL_CATEGORY.length) {
     categories.forEach((category) => {
-      url.searchParams.append("categories[]", category);
+      searchParams.push(["categories[]", category]);
     });
   }
   if (tags && tags.length > 0) {
     tags.forEach((tag) => {
-      url.searchParams.append("tags[]", tag);
+      searchParams.push(["tags[]", tag]);
     });
   }
 
   if (["id", "like_count"].includes(orderBy)) {
-    url.searchParams.append("orderBy", orderBy);
+    searchParams.push(["orderBy", orderBy]);
   } else {
     console.error("orderBy value isn't acceptable. value: ", orderBy);
-    url.searchParams.append("orderBy", "id");
+    searchParams.push(["orderBy", "id"]);
   }
 
   if (include_deleted) {
-    url.searchParams.append("include_deleted", "true");
+    searchParams.push(["include_deleted", "true"]);
   }
   if (related_funding_id !== undefined) {
-    url.searchParams.append(
+    searchParams.push([
       "related_funding_id",
       related_funding_id.toString(),
-    );
+    ]);
   }
 
   return useSWR<DateToString<ArticleObject>[]>(
-    url.href,
+    ["/api/v1/articles", searchParams],
     fetcher,
   );
 }

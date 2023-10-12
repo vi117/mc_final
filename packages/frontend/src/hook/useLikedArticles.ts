@@ -1,4 +1,3 @@
-import { API_URL } from "@/config";
 import { ArticleObject } from "dto";
 import useSWR from "swr";
 import { DateToString, fetcher } from "./util";
@@ -14,18 +13,18 @@ export default function useLikedArticles({
   limit = 50,
   tags = undefined,
 }: UseArticleOptions = {}) {
-  const url = new URL("/api/v1/articles/likes", API_URL);
-  url.searchParams.append("offset", offset.toString());
-  url.searchParams.append("limit", limit.toString());
+  const searchParams: [string, string][] = [];
+  searchParams.push(["offset", offset.toString()]);
+  searchParams.push(["limit", limit.toString()]);
 
   if (tags && tags.length > 0) {
     tags.forEach((tag) => {
-      url.searchParams.append("tags[]", tag);
+      searchParams.push(["tags[]", tag]);
     });
   }
 
   return useSWR<DateToString<ArticleObject>[]>(
-    url.href,
+    ["/api/v1/articles/likes", searchParams],
     fetcher,
   );
 }

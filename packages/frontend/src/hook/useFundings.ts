@@ -1,4 +1,3 @@
-import { API_URL } from "@/config";
 import { FundingObject } from "dto";
 import useSWR from "swr";
 import { DateToString, fetcher } from "./util";
@@ -58,42 +57,42 @@ export default function useFundings({
   reviewed = undefined,
   title = undefined,
 }: UseFundingsOptions = {}) {
-  const url = new URL("/api/v1/fundings", API_URL);
-  url.searchParams.append("offset", offset.toString());
-  url.searchParams.append("limit", limit.toString());
+  const searchParams: [string, string][] = [];
+  searchParams.push(["offset", offset.toString()]);
+  searchParams.push(["limit", limit.toString()]);
   if (host_id !== undefined) {
-    url.searchParams.append("host_id", host_id.toString());
+    searchParams.push(["host_id", host_id.toString()]);
   }
   if (begin_date !== undefined) {
-    url.searchParams.append("begin_date", begin_date.toISOString());
+    searchParams.push(["begin_date", begin_date.toISOString()]);
   }
   if (end_date !== undefined) {
-    url.searchParams.append("end_date", end_date.toISOString());
+    searchParams.push(["end_date", end_date.toISOString()]);
   }
   if (interest) {
-    url.searchParams.append("interest", "true");
+    searchParams.push(["interest", "true"]);
   }
   if (include_deleted) {
-    url.searchParams.append("include_deleted", "true");
+    searchParams.push(["include_deleted", "true"]);
   }
   if (participated) {
-    url.searchParams.append("participated", "true");
+    searchParams.push(["participated", "true"]);
   }
   if (reviewed !== undefined) {
-    url.searchParams.append("reviewed", reviewed);
+    searchParams.push(["reviewed", reviewed]);
   }
   if (title !== undefined) {
-    url.searchParams.append("title", title);
+    searchParams.push(["title", title]);
   }
 
   if (tags && tags.length > 0) {
     tags.forEach((tag) => {
-      url.searchParams.append("tags[]", tag);
+      searchParams.push(["tags[]", tag]);
     });
   }
 
   return useSWR<DateToString<FundingObject>[]>(
-    url.href,
+    ["/api/v1/fundings", searchParams],
     fetcher,
   );
 }

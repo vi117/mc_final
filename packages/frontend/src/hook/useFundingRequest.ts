@@ -1,4 +1,3 @@
-import { API_URL } from "@/config";
 import { FundingRequestObject } from "dto";
 import useSWR from "swr";
 import { DateToString, fetcher } from "./util";
@@ -8,15 +7,15 @@ export default function useFundingRequest({
   limit = 50,
   view_all = false,
 } = {}) {
-  const url = new URL("/api/v1/fundings/request", API_URL);
-  url.searchParams.append("offset", offset.toString());
-  url.searchParams.append("limit", limit.toString());
+  const searchParams: [string, string][] = [];
+  searchParams.push(["offset", offset.toString()]);
+  searchParams.push(["limit", limit.toString()]);
   if (view_all) {
-    url.searchParams.append("view_all", "true");
+    searchParams.push(["view_all", "true"]);
   }
 
   return useSWR<DateToString<FundingRequestObject>[]>(
-    url.href,
+    ["/api/v1/fundings/request", searchParams],
     fetcher,
   );
 }

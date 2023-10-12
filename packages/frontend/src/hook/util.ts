@@ -1,3 +1,5 @@
+import { API_URL } from "@/config";
+
 type DateToISOString<T> = T extends Date ? string : T;
 
 export type DateToString<T> = {
@@ -13,8 +15,21 @@ export class FetchError extends Error {
   }
 }
 
-export const fetcher = async (url: string) => {
-  const res = await fetch(url, {
+export const fetcher = async (
+  [pathname, searchParams]: [string, string[][] | Record<string, string>],
+) => {
+  const url = new URL(pathname, API_URL);
+  if (searchParams instanceof Array) {
+    for (const [key, value] of searchParams) {
+      url.searchParams.append(key, value);
+    }
+  } else if (searchParams instanceof Object) {
+    for (const [key, value] of Object.entries(searchParams)) {
+      url.searchParams.append(key, value);
+    }
+  }
+
+  const res = await fetch(url.href, {
     credentials: "include",
   });
   if (!res.ok) {

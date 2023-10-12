@@ -151,7 +151,9 @@ export function CommunityDetail() {
         await deleteArticle(id);
         showAlertModal("글 삭제", "삭제가 완료되었습니다.");
         // TODO(vi117): make hook for mutate
-        mutateArticleList((key) => key.startsWith("/api/v1/articles"));
+        mutateArticleList((key) =>
+          key instanceof Array && key[0].startsWith("/api/v1/articles")
+        );
         navigate("/community");
       } catch (e) {
         if (e instanceof Error) {
