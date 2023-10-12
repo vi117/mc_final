@@ -117,7 +117,13 @@ const Board = () => {
                 <td className={classes["td-cat"]}>{item.category}</td>
                 <td className={classes["td-title"]}>
                   <Link to={`/community/${item.id}`}>
-                    {item.title}
+                    {item.related_funding_id
+                      ? (
+                        <span style={{ color: "var(--green-dark)" }}>
+                          {item.title}
+                        </span>
+                      )
+                      : <span>{item.title}</span>}
                   </Link>
                 </td>
                 <td>
