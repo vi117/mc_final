@@ -5,13 +5,11 @@ import {
   BiSolidMessageRounded,
 } from "react-icons/bi";
 import { GoLink, GoX } from "react-icons/go";
-import { useLocation } from "react-router-dom";
 import { useKakaoSDK } from "../../hook/useKakao";
 import { shareKakao } from "../../util/shareKakaoLink";
 import classes from "./FundingsDetail.module.css";
 
 const FundingDetailModal = ({ show, handleClose }) => {
-  const location = useLocation();
   useKakaoSDK();
   const currentURL = window.location.href;
 
@@ -25,15 +23,17 @@ const FundingDetailModal = ({ show, handleClose }) => {
   };
 
   function shareFacebook() {
-    var sendUrl = "http://localhost:5173/fundings/3"; // 전달할 URL
-    window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
+    const url = new URL("https://www.facebook.com/sharer/sharer.php");
+    url.searchParams.append("u", currentURL);
+    window.open(url.href);
   }
 
   function shareTwitter() {
-    var sendText = "관심있는 펀딩을 공유합니다"; // 전달할 텍스트
-    var sendUrl = "http://localhost:5173/fundings/5/"; // 전달할 URL
+    const url = new URL("https://twitter.com/intent/tweet");
+    url.searchParams.append("url", currentURL); // 전달할 URL
+    url.searchParams.append("text", "관심있는 펀딩을 공유합니다"); // 전달할 텍스트
     window.open(
-      "https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl,
+      url.href,
     );
   }
 
@@ -53,7 +53,7 @@ const FundingDetailModal = ({ show, handleClose }) => {
             <div
               className={classes.modal_icon}
               style={{ backgroundColor: "#d9d9d9" }}
-              onClick={() => handleCopyClipBoard(`${location.pathname}`)}
+              onClick={() => handleCopyClipBoard(currentURL)}
             >
               <GoLink className={classes.modal_icon_link}></GoLink>
             </div>
