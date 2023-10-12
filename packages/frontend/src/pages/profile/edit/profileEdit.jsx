@@ -138,21 +138,6 @@ function ProfileEditPage() {
       console.log(e);
       await showAlertModal("프로파일 정보 수정", e.message);
     }
-
-    // if (
-    //   !Phone || !Address
-    // ) {
-    //   return alert("모든 필수 항목을 입력하세요.");
-    // }
-
-    // const phonePattern = /^01[0-9]\d{3,4}\d{4}$/;
-    // if (!phonePattern.test(Phone)) {
-    //   return alert("올바른 핸드폰 번호를 입력하세요.");
-    // }
-
-    // if (formRef.current) {
-    //   edit(formRef.current);
-    // }
   }
 }
 

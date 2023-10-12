@@ -396,15 +396,14 @@ const FundingsDetail = function() {
 
   async function softDeleteFunding() {
     try {
-      if (window.confirm("펀딩을 비공개 처리 하시겠습니까?")) {
+      if (await showConfirmModal("펀딩을 비공개 처리 하시겠습니까?")) {
         await fundingDelete(funding.id);
-        alert("완료되었습니다");
+        await showAlertModal("완료되었습니다");
       } else {
-        alert("취소되었습니다");
+        await showAlertModal("취소되었습니다");
       }
     } catch (error) {
       console.log(error);
-      // TODO(vi117): 예쁜 alert 쓰기.(231010 당현진처리)
       await showAlertModal(
         "비공개 설정을 실패했습니다.",
         "계속되는 실패시, 관리자에게 문의해주세요.",
@@ -617,14 +616,12 @@ function Report({
         content: `#${category}\n${content}`,
         files: files,
       });
-      // TODO(vi117): show alert.(231010 당현진처리)
       await showAlertModal(
         "전송완료",
         "신고 접수되었습니다.",
       );
     } catch (error) {
       console.log(error);
-      // TODO(vi117): show alert.(231010 당현진처리)
       await showAlertModal(
         "전송실패",
         "로그인 되었는지 확인하시고, 신고 사유를 작성하시어 다시 시도해주세요.",
