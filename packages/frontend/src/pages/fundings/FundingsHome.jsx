@@ -23,6 +23,12 @@ const FundingsHome = function() {
             }}
             value={selected}
             onChange={(v) => {
+              if (
+                selected.length === v.length
+                && selected.every(x => v.includes(x))
+              ) {
+                return;
+              }
               setSearchParams((prev) => (Object.fromEntries([
                 ...prev.entries(),
                 ["tag", v],
