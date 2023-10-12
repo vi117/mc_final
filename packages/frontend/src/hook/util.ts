@@ -19,7 +19,7 @@ export const fetcher = async (url: string) => {
   });
   if (!res.ok) {
     const data = await res.json();
-    throw new FetchError(res.statusText, data);
+    throw new FetchError(data.message, data);
   }
   return res.json();
 };
