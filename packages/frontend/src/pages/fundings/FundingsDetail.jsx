@@ -399,6 +399,7 @@ const FundingsDetail = function() {
       if (await showConfirmModal("펀딩을 비공개 처리 하시겠습니까?")) {
         await fundingDelete(funding.id);
         await showAlertModal("완료되었습니다");
+        navigate("/fundings");
       } else {
         await showAlertModal("취소되었습니다");
       }
