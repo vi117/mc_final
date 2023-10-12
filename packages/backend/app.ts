@@ -18,7 +18,7 @@ app.set("etag", false);
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    process.env["SERVER_URL"] ?? "http://localhost:3000",
+    process.env["FRONTEND_SERVER_URL"] ?? "http://localhost:3000",
   ],
   credentials: true,
 }));

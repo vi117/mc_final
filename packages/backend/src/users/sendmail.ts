@@ -15,11 +15,11 @@ export async function sendVerificationMail(
 ) {
   const transporter = getTransport();
   debug("sendVerificationMail", { email, verificationCode });
-  if (!process.env.SERVER_URL) {
-    debug("SERVER_URL is not set");
+  if (!process.env.FRONTEND_SERVER_URL) {
+    debug("FRONTEND_SERVER_URL is not set");
   }
   const frontendUrl = new URL(
-    process.env.SERVER_URL ?? "http://localhost:5173",
+    process.env.FRONTEND_SERVER_URL ?? "http://localhost:5173",
   );
   frontendUrl.pathname = `/approve-email`;
   frontendUrl.searchParams.set("code", verificationCode);
@@ -44,11 +44,11 @@ export async function sendResetMail(
 ) {
   const transporter = getTransport();
   debug("sendResetMail", { email, resetCode });
-  if (!process.env.SERVER_URL) {
-    debug("SERVER_URL is not set");
+  if (!process.env.FRONTEND_SERVER_URL) {
+    debug("FRONTEND_SERVER_URL is not set");
   }
   const frontendUrl = new URL(
-    process.env.SERVER_URL ?? "http://localhost:5173",
+    process.env.FRONTEND_SERVER_URL ?? "http://localhost:5173",
   );
   frontendUrl.pathname = `/reset-password`;
   frontendUrl.searchParams.set("code", resetCode);
