@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Accordion, Col, Form, Modal, Row } from "react-bootstrap";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useSWRConfig } from "swr";
 import { fundingParticipate } from "../../api/funding";
 import MyButton from "../../component/Button";
 import { Container } from "../../component/Container";
@@ -21,6 +22,7 @@ export default function FundingsPay() {
     phone: userInfo?.phone ?? "",
   });
   const { AlertModal, showAlertModal } = useAlertModal();
+  const { mutate: mutateFunding } = useSWRConfig();
 
   if (!userInfo) {
     return <Navigate to="/login" />;
@@ -148,6 +150,9 @@ export default function FundingsPay() {
         recipient: shippingInfo.name,
         phone: shippingInfo.phone,
       });
+      mutateFunding(key =>
+        key instanceof Array && key[0].startsWith("/api/v1/fundings")
+      );
       await showAlertModal("success", "펀딩 후원을 해주었습니다.");
       navigate(`/fundings/${funding.id}`);
     } catch (err) {

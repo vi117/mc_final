@@ -26,6 +26,8 @@ import { InterestButton } from "./component/InterestButton";
 import classes from "./FundingsDetail.module.css";
 import FundingDetailModal from "./FundingsDetailModal";
 
+import { useSWRConfig } from "swr";
+
 import {
   fundingDelete,
   postFundingReport,
@@ -42,6 +44,7 @@ const FundingsDetail = function() {
   const { AlertModal, showAlertModal } = useAlertModal();
   const { ConfirmModal, showConfirmModal } = useConfirmModal();
   const navigate = useNavigate();
+  const { mutate: mutateFundingList } = useSWRConfig();
 
   const onClickImageMoreViewButton = () => {
     setIsMoreView(!isMoreView);
@@ -399,6 +402,9 @@ const FundingsDetail = function() {
       if (await showConfirmModal("펀딩을 비공개 처리 하시겠습니까?")) {
         await fundingDelete(funding.id);
         await showAlertModal("완료되었습니다");
+        mutateFundingList((key) =>
+          key instanceof Array && key[0].startsWith("/api/v1/fundings")
+        );
         navigate("/fundings");
       } else {
         await showAlertModal("취소되었습니다");

@@ -170,7 +170,17 @@ function FundingRequestManageTap() {
       } else throw e;
       return;
     }
-    mutate(data?.filter((f) => f.id !== id));
+    mutate(
+      data?.map((f) => {
+        if (f.id === id) {
+          return {
+            ...f,
+            funding_state: 1,
+          };
+        }
+        return f;
+      }),
+    );
   }
   async function onRejectClick(id: number) {
     const reason = await showPromptModal(
@@ -194,7 +204,7 @@ function FundingRequestManageTap() {
         if (f.id === id) {
           return {
             ...f,
-            deleted_at: new Date().toISOString(),
+            funding_state: 2,
           };
         }
         return f;
