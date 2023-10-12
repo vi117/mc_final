@@ -166,7 +166,7 @@ function FundingRequestManageTap() {
       await fundingApprove(id);
     } catch (e) {
       if (e instanceof Error) {
-        await showAlertModal("요청 실패", "요청이 실패했습니다." + e.message);
+        await showAlertModal("요청 실패", "요청이 실패했습니다. " + e.message);
       } else throw e;
       return;
     }

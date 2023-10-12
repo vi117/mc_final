@@ -23,6 +23,7 @@ function ImageHandler(): Promise<string> {
         resolve(result);
       } catch (error) {
         console.error("server error", error);
+        alert("이미지를 업로드 할때 문제가 발생했습니다. 다시 시도해주세요.");
         reject(error);
       }
     });
