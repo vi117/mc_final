@@ -3,11 +3,12 @@ import { Link, NavLink } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSWRConfig } from "swr";
 import {
+  APIError,
   deleteArticle,
   deleteArticleComment,
   postArticleComment,
   setArticleLike,
-} from "../../api/article";
+} from "../../api/mod";
 import { Container, ErrorPage, LoadingPage } from "../../component";
 import useAlertModal from "../../hook/useAlertModal";
 import useArticleDetail from "../../hook/useArticleDetail";
@@ -179,8 +180,8 @@ export function CommunityDetail() {
         }],
       });
     } catch (e) {
-      if (e instanceof Error) {
-        showAlertModal("요청 실패", "요청이 실패했습니다.");
+      if (e instanceof APIError) {
+        showAlertModal("요청 실패", "요청이 실패했습니다. " + e.data?.message);
       } else throw e;
     }
     return true;
@@ -194,8 +195,8 @@ export function CommunityDetail() {
         comments: item.comments.filter((c) => c.id !== comment.id),
       });
     } catch (e) {
-      if (e instanceof Error) {
-        showAlertModal("요청 실패", "요청이 실패했습니다.");
+      if (e instanceof APIError) {
+        showAlertModal("요청 실패", "요청이 실패했습니다. " + e.data?.message);
       } else throw e;
     }
   }

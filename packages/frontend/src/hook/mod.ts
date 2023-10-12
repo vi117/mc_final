@@ -9,3 +9,4 @@ export * from "./useFundings";
 export * from "./useLikedArticles";
 export * from "./useLogin";
 export * from "./useUser";
+export * from "./util";
