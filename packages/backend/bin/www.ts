@@ -4,6 +4,15 @@
  * Module dependencies.
  */
 
+import { config } from "dotenv";
+
+config({ path: ".env" });
+// 환경별 .env 파일 로딩
+console.log("NODE_ENV", process.env.NODE_ENV);
+if (process.env.NODE_ENV) {
+  config({ override: true, path: `.env.${process.env.NODE_ENV}` });
+}
+
 if (process.env.DEBUG) {
   debug_fn.enable(process.env.DEBUG);
 }

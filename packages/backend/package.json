@@ -5,7 +5,8 @@
     "coverage": "jest --coverage",
     "format": "dprint fmt",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives --max-warnings 0",
-    "start": "cross-env SWCRC=true node -r @swc-node/register -r dotenv/config ./bin/www",
+    "start": "cross-env SWCRC=true NODE_ENV=development node -r @swc-node/register -r dotenv/config ./bin/www",
+    "start:prod": "cross-env SWCRC=true NODE_ENV=production node -r @swc-node/register -r dotenv/config ./bin/www",
     "dev": "nodemon --ext ts,js,mjs",
     "generate-types": "kysely-codegen --out-file ./dist/db.d.ts",
     "check": "tsc --noEmit"
