@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/user";
 import { Button } from "../../component/Button";
-import { GOOGLE_APP_CLIENT_ID } from "../../config";
+import { GOOGLE_APP_CLIENT_ID, GOOGLE_APP_REDIRECT_URI } from "../../config";
 import { useAlertModal } from "../../hook/useAlertModal";
 import classes from "./style.module.css";
 
@@ -117,7 +117,7 @@ function SNSLogin() {
             );
             url.searchParams.set(
               "redirect_uri",
-              "http://localhost:5173/google-login",
+              GOOGLE_APP_REDIRECT_URI,
             );
             url.searchParams.set("response_type", "code");
             url.searchParams.set("scope", "email profile openid");
