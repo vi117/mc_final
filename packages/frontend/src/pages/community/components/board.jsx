@@ -7,7 +7,7 @@ import { Button } from "../../../component/Button";
 import Page from "../../../component/pagination";
 import useArticles from "../../../hook/useArticles";
 import { ANIMAL_CATEGORY } from "../constant";
-import classes from "../styles/community.module.css";
+import classes from "../styles/Community.module.css";
 import Category from "./category";
 
 const animals = ANIMAL_CATEGORY;
