@@ -116,7 +116,9 @@ const FundingsDetail = function() {
   const content = funding.content;
   const wrappedContent = content;
 
-  const fundingIsOver = (new Date(funding.end_date).getTime()) < Date.now();
+  const fundingIsOver = (new Date(funding.end_date).getTime()) < Date.now()
+    // 호스트가 회원 탈퇴 했을 경우
+    || funding.host_email == null;
   // const wrappedContent = wrapImages(content);
 
   return (
@@ -268,6 +270,7 @@ const FundingsDetail = function() {
                   <div style={{ display: "flex", flexDirection: "column" }}>
                     <span className={classes["host_nickname"]}>
                       {funding.host_nickname}
+                      {funding.host_email == null ? "(회원탈퇴)" : ""}
                     </span>
                     <span className={classes["host_introduce"]}>
                       {funding.host_introduction}
