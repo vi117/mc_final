@@ -65,8 +65,8 @@ export function CommunityDetail() {
               if (!userInfo) {
                 return "";
               }
-              // 관리자가 아닐 때
-              if (!userInfo.is_admin) {
+              // 작성한 사람이 아닐 때
+              if (!userInfo.is_admin && userInfo.id !== item.author_id) {
                 return "";
               }
               return (
