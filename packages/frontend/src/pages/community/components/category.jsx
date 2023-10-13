@@ -1,8 +1,8 @@
 import { Dropdown } from "react-bootstrap";
 import { ANIMAL_CATEGORY } from "../constant";
-import classes from "../styles/community.module.css";
-import CustomMenu from "./Menu";
-import CustomToggle from "./Toggle";
+import classes from "../styles/Community.module.css";
+import CustomMenu from "./menu";
+import CustomToggle from "./toggle";
 
 const animals = ANIMAL_CATEGORY;
 
