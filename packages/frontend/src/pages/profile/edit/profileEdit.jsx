@@ -2,7 +2,7 @@ import Upload from "@/component/UploadAvatar";
 import clsx from "clsx";
 import { useRef, useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { patchUserInfo } from "../../../api/mod";
 import { Button } from "../../../component/Button";
 import {
@@ -24,6 +24,7 @@ function ProfileEditPage() {
   const [introduction, setIntroduction] = useState(loginInfo.introduction);
   const daumPostcodePopup = useDaumPostcodePopup();
   const profileImageRef = useRef(null);
+  const navigate = useNavigate();
 
   return (
     <div className={classes["profileedit_container"]}>
@@ -134,6 +135,7 @@ function ProfileEditPage() {
         profile_image: profileImageRef.current ?? undefined,
       });
       await showAlertModal("프로파일 정보 수정", "성공");
+      navigate(`/profile`);
     } catch (e) {
       console.log(e);
       await showAlertModal("프로파일 정보 수정", e.message);
