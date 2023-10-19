@@ -2,7 +2,7 @@
 
 ## Getting Start
 
-`.env` 파일을 만든다음
+`.env` 파일을 만든 다음
 
 ```bash
 PORT=3000
@@ -30,9 +30,9 @@ SMTP 이메일 서버 설정
   - SMTP_SECURE: SMPT의 TLS 사용 여부
   - SMTP_FROM: 사용자 보내는 주소
 - STORAGE_TYPE: 'minio', 'local', 'local_memory' 중 하나. 기본값은 local_memory
-  - 만약 minio를 선택했으면 S3_ACCESS_KEY, S3_SECRET_KEY, S3_ENDPOINT, S3_BUCKET, S3_USE_SSL룰 설정해야 한다.
+  - 만약 minio를 선택했으면 S3_ACCESS_KEY, S3_SECRET_KEY, S3_ENDPOINT, S3_BUCKET, S3_USE_SSL를 설정해야 합니다.
 
-Google OAuth를 설정할려면 다음 키를 설정한다.
+Google OAuth를 설정할려면 다음 키를 설정하세요.
   - GOOGLE_CLIENT_ID
   - GOOGLE_CLIENT_SECRET
   - GOOGLE_REDIRECT_URI
